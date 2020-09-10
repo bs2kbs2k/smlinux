@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0910-1400
+# 2020-0910-1528
 
 domake(){
 #Here We go & music to build to
@@ -1101,11 +1101,11 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	fi
 	echo
 	echo [4] Applying pre-build modifications...
-	if [ "$UpdateHD" = 1 ]; then
+	if [ "$UpdateHD" = 1 ] && [ "$InstallHD" = 1 ]; then
 		printf "\nUpdating Community Upscale Enhancements...\n\n"
 		dohd
 	elif [ "$SGI" = 1 ]; then
-		printf "\nAdding SGI Models...\n\n"
+		printf "\nSGI Selected, Processing...\n\n"
 		dosgi
 	fi
 	if ([ "$REPO" = "sm64ex" ] && [ "$BRANCH" = "nightly" ] ) || [ "$BRANCH" = "sm64ex_nightly" ] || [ "$REPO" = "render96ex" ] ; then
