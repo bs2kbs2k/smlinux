@@ -25,7 +25,7 @@ Examples:
 		      or 
 	./smlinux ~/roms/n64/sm64.z64
 
-That's Everything. That's all you have to do..
+That's Everything. That's all you have to do.  
 During installation you will be prompted you to approve (or change) smlinux settings, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 (**Do not run smlinux as root; you will be prompted for sudo password automatically if needed.**)
 
