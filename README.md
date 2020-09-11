@@ -1,6 +1,6 @@
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png>  
 
-# &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Super  Mario  Linux  Build  Install  Update
+# &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; smlinux - Super  Mario  Linux  Build  Install  Update
 # 
 1. Installs Required Packages (build tools & dependencies)
 2. Installs latest version of itself to user path 
@@ -13,12 +13,12 @@
 
 ...and! you can use it again later to quickly rebuild and sync to the latest updates from github.
  
-
-**__Download & Installation__**      
-                
+**_Download & Installation_**      
+               
 	wget http://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux
 	chmod +x smlinux
 	./smlinux <romfile>
+	rm smlinux
 Examples: 
 
  	./smlinux "Super Mario 64 (U) [!].z64"
@@ -31,9 +31,9 @@ You'll be asked sudo password to install build tools at the beginning, then it w
 
 You must provide your own legally backed up rom file in Z64 (Big Endian) format for first install. 
 
-smlinux will install itself as 'smlinux' to the first directory in your path, usually something like ~/bin or ~/Applications/.bin. After first running what you save from here, you can delete it, and just type 'smlinux update' without dot-slash from any folder when you want to build or update again.
+smlinux will be installed in the first directory in your path, usually something like ~/bin or ~/Applications/.bin. After initial installation, just type 'smlinux' without dot-slash from any folder when you want to build or update again.
 
-If for some reason the make pauses or hangs, perhaps on single core cpu or system with low memory, then set JOBS=-j1. Without the 1, this switch makes make run multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
+If for some reason the process freezes during compilation, perhaps on single core cpu or system with low memory, then set JOBS=-j1. Without the 1, this switch makes make run multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
