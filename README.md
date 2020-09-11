@@ -86,7 +86,9 @@ On the sm64nx fork only, 60fps is already default, and with InstallHD in additio
 
 On the render96ex fork, the latest Render 96 Model Pack and Render 96 Texture Pack will be applied.  Note these are large so require more download time, game load time, and better comupter to perform well.
 
-Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released.  
+Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released. 
+
+If you initially built without hd and wish to add later, use the --hd option during update.
 
 
 ## **How to update, rebuild, or change build options later?**
@@ -96,7 +98,7 @@ For example:
  
 	smlinux update
 	       or
-	smlinux update --updatehd
+	smlinux update --hd
 	       or
 	smlinux update --config
 		or
