@@ -1,7 +1,4 @@
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png>
-
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Click Here to View](https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Right Click Here - Save Link As to Download](https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux) 
-
 # &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Super  Mario  Linux  Build  Install  Update
 # 
 1. Installs Required Packages (build tools & dependencies)
@@ -16,8 +13,9 @@
 ...and! you can use it again later to quickly rebuild and sync to the latest updates from github.
  
 
-First Time Usage:      
+Download & Installation:      
                 
+	wget http://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux
 	chmod +x smlinux
 	./smlinux <romfile>
 Examples: 
@@ -36,15 +34,9 @@ smlinux will install itself as 'smlinux' to the first directory in your path, us
 
 If for some reason the make pauses or hangs, perhaps on single core cpu or system with low memory, then set JOBS=-j1. Without the 1, this switch makes make run multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Click Here to View](https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Right Click Here - Save Link As to Download](https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux)
-
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot.jpg>
-
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Click Here to View](https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Right Click Here - Save Link As to Download](https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux) 
-
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Click Here to View](https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Right Click Here - Save Link As to Download](https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux) 
 # Frequently Asked Questions
 
 * [<strong>What repository should I use?</strong>](#what-repository-should-i-use)
