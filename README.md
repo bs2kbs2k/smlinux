@@ -1,4 +1,4 @@
-# &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; smlinux - Super  Mario  Linux  Build  Install  Update
+# &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; smlinux - Super  Mario  Linux - Build  Install  Update  Script
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot.jpg>
 
