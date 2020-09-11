@@ -117,7 +117,7 @@ If you want to save your existing build, rename it (anything) before running the
 Note smlinux automatically stores one previous build by adding the suffix .old to its foldername (and restores it if your update fails to build.
 
 ## **How to I configure options like controllers, camera, rumble, etc?**
-*only applies to sm64pc/sm64ex fork*
+*dont not apply to sm64-port repository*
 
 Pause then press R with controller or R_Shift with keyboard. For the controller settings, it is recommended to keep the first column for keyboard controls and using the middle for controller. Use the third column if you want additional keys/buttons assigned to the same function, or for mouse buttons. Be sure to map something to L for use with the camera or cheats. I personally enable mouse control for camera and turn up my aggression and pan up to 100. 
 
@@ -128,7 +128,8 @@ You can also just edit the configuration file with a text editor.
 ~/.local/share/sm64pc smlinux and sm64pc/ex master  
 ~/.local/share/sm64ex sm64ex nightly  
 ~/.local/share/render96ex render96ex *only if launched with shortcut*  
-~/.local/share/sm64ex-coop sm64ex-coop *only if launched with shortcut*   
+~/.local/share/sm64ex-coop sm64ex-coop 
+~/.local/share/cheaterex cheaterex *only if launched with shortcut*    
 ~/.local/share/sm64-port sm64-port *only if launched with shortcut*    
 ~/.local/share/sm64nx sm64nx *smlinux creates links in game dir*  
 
