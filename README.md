@@ -39,7 +39,7 @@ If for some reason the process freezes during compilation, perhaps on single cor
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
 # Frequently Asked Questions
-* [<strong>How to start?</strong>](#download-&-installation-instructions)      
+* [<strong>How to start?</strong>](#download--installation-instructions)      
 * [<strong>What repository should I use?</strong>](#what-repository-should-i-use)
 * [<strong>What branch should I use?</strong>](#what-branch-should-i-use)
 * [<strong>When to use RENDER_API=GL_LEGACY?</strong>](#when-to-use-render_apigl_legacy)
