@@ -1,6 +1,5 @@
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png>  
-
 # &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; smlinux - Super  Mario  Linux  Build  Install  Update
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
 # 
 1. Installs Required Packages (build tools & dependencies)
 2. Installs latest version of itself to user path 
@@ -13,7 +12,7 @@
 
 ...and! you can use it again later to quickly rebuild and sync to the latest updates from github.
  
-**_Download & Installation_**      
+**_Download & Installation Instructions_**      
                
 	wget http://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux
 	chmod +x smlinux
@@ -26,7 +25,7 @@ Examples:
 	./smlinux ~/roms/n64/sm64.z64
 
 That's Everything. That's all you have to do..
-You'll be asked sudo password to install build tools at the beginning, then it will update and intsall itself to the first directory in your path (or create ~/bin if nothing available), and prompt you to approve (or change) the reccommended options before your build starts, then will run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
+During installation you will be prompted you to approve (or change) smlinux settings, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 (**Do not run smlinux as root; you will be prompted for sudo password automatically if needed.**)
 
 You must provide your own legally backed up rom file in Z64 (Big Endian) format for first install. 
@@ -83,6 +82,8 @@ Additionally, on the sm64pc/sm64ex fork upscaled textures will be added to your 
 *Note that precaching these textures will make the game use more memory and increase initial startup time, but may be necessary for some computers.*
 
 On the sm64nx fork only, 60fps is already default, and with InstallHD in addition to the models and textures mentioned above, a few other add-ons are obtained which can be enabled from the in-game menu if you prefer, including SGI models and HD Luigi.
+
+On the render96ex fork, the latest Render 96 Model Pack and Render 96 Texture Pack will be applied.  Note these are large so require more download time, game load time, and better comupter to perform well.
 
 Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released.  
 
