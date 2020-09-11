@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0910-1540
+# 2020-0910-2156
 
 domake(){
 #Here We go & music to build to
@@ -41,7 +41,7 @@ cd "$BASEPATH"/"$REPO"
 time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES "$JOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD > ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/buildlog.txt
 if [ "$REPO" = "sm64-port-android-base/app/jni/src" ]; then
 	if [ "ARMONLY" = 1 ]; then
-		sed -i "s/v8a', 'x86', 'x86_64'/v8a'/g" $HOME/"$REPO"/../../build.gradle
+		sed -i "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$REPO"/../../build.gradle
 	fi
 	if [ "$BRANCH" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ]; then
 		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES "$JOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD > ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/buildlog.txt
@@ -70,7 +70,7 @@ if [ "$REPO" = "sm64-port-android-base/app/jni/src" ]; then
 		rm app/build.gradle
 		git checkout app/build.gradle
 	fi
-	cd $BASEPATH/"$REPO"
+	cd "$BASEPATH"/"$REPO"
 	rm Android.mk
 	git checkout Android.mk
 	if [ "$EXTERNAL_DATA" = 1 ] && [ "$InstallHD" = 1 ]; then
@@ -104,7 +104,7 @@ if [ "$REPO" = "sm64-port-android-base/app/jni/src" ]; then
 	fi
 fi
 if [ "$REPO" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ); then
-	cd $BASEPATH/"$REPO"
+	cd "$BASEPATH"/"$REPO"
 	rm Makefile
 	git checkout Makefile
 fi
@@ -325,14 +325,13 @@ fi
 }
 
 editconfig(){
-EDITORS=kate:leafpad:epad:gedit:notepadqq:bluefish:geany:lime:medit:nano:pico:micro:jed:emacs:vim:vi
+echo Looking for a text editor...
+EDITORS=kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:nano:pico:micro:jed:emacs:vim:vi
 IFS=":"
 for editor in $EDITORS; do
-	if [ -z "$editor" ]; then
-		continue
-	fi
 	$editor ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt
 	if [ $? -eq 0 ]; then
+		echo found $editor
 		return
 	fi
 done
@@ -699,23 +698,23 @@ Categories=Game;'>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desk
 echo Icon=${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 echo Name=Super Mario 64 \("$REPO"\) >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 	if [ "$REPO" = "sm64pc" ] || [ "$REPO" = "sm64ex" ] ; then
-		echo Path=$BASEPATH/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats>>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 	elif [ "$REPO" = "render96ex" ]; then
-		echo Path=$BASEPATH/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO">>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 	elif [ "$REPO" = "cheaterex" ]; then
-		echo Path=$BASEPATH/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO">>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 	elif [ "$REPO" = "sm64ex-coop" ]; then
-		echo Path=$BASEPATH/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 		echo 'Exec=zenity --info --text="Your IP Address is `curl ifconfig.me`  \nServer must provide this address to host." --title="IP Address" --width 300&/home/bodhi/sm64ex-coop/build/us_pc/sm64.us.f3dex2e --cheats --skip-intro --savepath '${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO">>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 	elif [ "$REPO" = "sm64-port" ]; then
 		echo Path=${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 		printf "Exec=sh -c \"" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 		echo \""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e';echo'\" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 	else
-		echo Path=$BASEPATH/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e>>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 	fi
 	if [ -d ${XDG_DESKTOP_DIR:-$HOME/Desktop} ]; then
@@ -787,6 +786,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo
 		echo smlinux configuration file has been reset to default.
 		echo
+		exit
 	elif [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt ]; then
 		echo smlinux configuration file not found, so making a new one...
 		makeconfig
@@ -1052,9 +1052,9 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	echo
 	echo [3] Checking "$REPO" github repository for updates...
 	if [ "$REPO" = "sm64-port-android-base/app/jni/src" ]; then
-		cd $HOME/"$REPO"/../../..
+		cd "$BASEPATH"/"$REPO"/../../..
 	else
-		cd $HOME/"$REPO"
+		cd "$BASEPATH"/"$REPO"
 	fi
 	echo
 	git fetch
