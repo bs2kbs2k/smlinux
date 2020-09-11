@@ -14,7 +14,7 @@
 ...and! you can use it again later to quickly rebuild and sync to the latest updates from github.
  
 
-Download & Installation:      
+**__Download & Installation__**      
                 
 	wget http://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux
 	chmod +x smlinux
