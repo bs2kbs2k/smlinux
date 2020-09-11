@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0910-2156
+# 2020-0910-2233
 
 domake(){
 #Here We go & music to build to
@@ -1024,12 +1024,12 @@ else
 	echo "|  update: Updates source & rebuilds, preserving mods and external resources  |"
 	echo "|  build:  Gets new source from github and builds. (Renames existing folder)  |"
 	echo "|  config: Opens smlinuxcfg.txt in text editor without building               |"
-	echo "|  purge:  Removes all files created by this script, including sm64           |"
 	echo "|  reset:  Resets smlinux configuration file to default settings              |"
+	echo "|  purge:  Removes all files created by this script, including sm64           |"
 	echo "|                                                                             |"
-	echo "| Options: --config   prompt to edit config file before build                 |"
-	echo "|          --depends  reinstall dependencies                                  |"
-	echo "|          --updatehd (re)aquire & apply community upscale enhancements       |"
+	echo "| Options: --depends  reinstall dependencies                                  |"
+	echo "|          --config   prompt to edit configuration file before build          |"
+	echo "|          --hd       aquire & apply upscale enhancements (see FAQ)           |"
 	echo "|          --sgi      aquire and apply Render96 SGI model pack v1.3           |"
 	echo "|                                                                             |"
 	echo "-------------------------------------------------------------------------------"
