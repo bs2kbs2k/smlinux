@@ -1,5 +1,6 @@
 # &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; smlinux - Super  Mario  Linux  Build  Install  Update
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot.jpg>
 
 # 
 1. Installs Required Packages (build tools & dependencies)
@@ -35,7 +36,6 @@ smlinux will be installed in the first directory in your path, usually something
 
 If for some reason the process freezes during compilation, perhaps on single core cpu or system with low memory, then set JOBS=-j1. Without the 1, this switch makes make run multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
 # Frequently Asked Questions
