@@ -1,4 +1,5 @@
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png>
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png>  
+
 # &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Super  Mario  Linux  Build  Install  Update
 # 
 1. Installs Required Packages (build tools & dependencies)
