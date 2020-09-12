@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0910-2233
+# 2020-0911-1816
 
 domake(){
 #Here We go & music to build to
@@ -708,7 +708,7 @@ echo Name=Super Mario 64 \("$REPO"\) >>${XDG_DATA_HOME:-$HOME/.local/share}/appl
 		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO">>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 	elif [ "$REPO" = "sm64ex-coop" ]; then
 		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-		echo 'Exec=zenity --info --text="Your IP Address is `curl ifconfig.me`  \nServer must provide this address to host." --title="IP Address" --width 300&/home/bodhi/sm64ex-coop/build/us_pc/sm64.us.f3dex2e --cheats --skip-intro --savepath '${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO">>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo 'Exec=zenity --info --text="\n`curl ifconfig.me`" --title="Your IP Address" --width 150&/home/bodhi/sm64ex-coop/build/us_pc/sm64.us.f3dex2e --cheats --skip-intro' >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 	elif [ "$REPO" = "sm64-port" ]; then
 		echo Path=${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
 		printf "Exec=sh -c \"" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
@@ -847,7 +847,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			xdg-open https://hack64.net/tools/swapper.php &disown
 			sleep 1
 			exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-			zenity --error --text='ERROR: Your ROM is not valid.\n\nAn original Super Mario 64 ROM in z64 (big endian) format is required to build.\nIf your rom is backed up in v64 or n64 format, try this online converter then run smlinux again.' --title="Your installation is incomplete." --width=640 &disown	
+			zenity --error --text="ERROR: Your ROM is not valid.\n\nAn original Super Mario 64 ROM in z64 (big endian) format is required to build.\nIf your rom is backed up in v64 or n64 format, try this online converter then run smlinux again." --title="Your installation is incomplete." --width=640 &disown	
 			sleep 1			
 			echo
 			echo "ERROR: Your ROM is not valid.  Not even considering transient parents!"
