@@ -51,7 +51,7 @@ If for some reason the process freezes during compilation, perhaps on single cor
 * [<strong>How do I apply external textures?</strong>](#how-do-i-apply-external-textures)
 * [<strong>How to apply a patch?</strong>](#how-to-apply-a-patch)
 * [<strong>How to remove a patch?</strong>](#how-to-remove-a-patch)
-* [<strong>What about distros other than Ubuntu/Debian?</strong>](#what-about-distros-other-than-ubuntudebian)
+* [<strong>What about distros other than Ubuntu?</strong>](#what-about-distros-other-than-ubuntudebian)
 * [<strong>How do I create my rom file?</strong>](#how-do-i-create-my-rom-file)
 * [<strong>How do I remove everything smlinux created during install?</strong>](#how-do-i-remove-everything-smlinux-created-during-install)
 * [<strong>How do I tell smlinux to download sm64 repositories to a folder other than home?</strong>](#how-do-i-tell-smlinux-to-download-sm64-repositories-to-a-folder-other-than-home)
@@ -165,8 +165,8 @@ Put the patch file into ~/sm64pc/enhancements (or specify the path differently w
 	smlinux update
 
 
-## **What about distros other than Ubuntu/Debian?**
-*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian, Arch confirmed on ex/nx, others unconfirmed.*
+## **What about distros other than Ubuntu?**
+*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch also confirmed, others unconfirmed.*
 
 Change your Linux=parameter during first install to one that works with your distro such as those listed below, or just install dependencies first and run smlinux with Linux="" in settings (or just ignore the error from apt).  smlinux only installs dependendencies automatically during the very first installation.  If your distro needs additional dependencies not listed here, please let me know so I can add them.
 
