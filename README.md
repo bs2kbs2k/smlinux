@@ -191,6 +191,9 @@ Solus:
 Void: 
 
 	sudo xbps-install -S base-devel python3 audiofile-devel SDL2-devel glew-devel zstd 
+Alpine:
+
+	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev 
 	
 
 
