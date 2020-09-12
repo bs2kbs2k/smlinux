@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0911-1816
+# 2020-0912-1524
 
 domake(){
 #Here We go & music to build to
@@ -331,7 +331,8 @@ IFS=":"
 for editor in $EDITORS; do
 	$editor ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt
 	if [ $? -eq 0 ]; then
-		echo found $editor
+		echo "${MAPFILE[0]}"/smlinux: line $(($LINENO - 2)): "$editor": command found!!!
+		echo
 		return
 	fi
 done
@@ -815,54 +816,6 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo Creating ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO" folder for game save and configuration.
 		mkdir ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"
 	fi
-	echo Verifying ROM...
-	if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
-		if [ ! -f "$BASEPATH"/"$REPO"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$REPO" ]; then
-			ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/baserom."$VERSION".z64
-		fi
-		echo ROM Available.
-	else
-		cd "$LAUNCH_DIR"
-		if [ -f "$1" ]; then 
-			cp "$1" ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64
-			vettrom
-		fi
-		if [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
-			if [ -f "$BASEPATH"/sm64pc/baserom."$VERSION".z64 ]; then
-				cp "$BASEPATH"/sm64pc/baserom."$VERSION".z64 ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
-				vettrom
-			fi
-			if [ -f "$BASEPATH"/sm64ex/baserom."$VERSION".z64 ] && [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
-				cp "$BASEPATH"/sm64ex/baserom."$VERSION".z64 ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
-				vettrom
-			fi
-			if [ -f "$BASEPATH"/sm64-port/baserom."$VERSION".z64 ] && [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
-				cp "$BASEPATH"/sm64-port/baserom."$VERSION".z64 ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
-			vettrom
-			fi
-		fi
-		if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
-			echo ROM Found and Verified.
-		elif [ -f "$1" ]; then
-			xdg-open https://hack64.net/tools/swapper.php &disown
-			sleep 1
-			exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-			zenity --error --text="ERROR: Your ROM is not valid.\n\nAn original Super Mario 64 ROM in z64 (big endian) format is required to build.\nIf your rom is backed up in v64 or n64 format, try this online converter then run smlinux again." --title="Your installation is incomplete." --width=640 &disown	
-			sleep 1			
-			echo
-			echo "ERROR: Your ROM is not valid.  Not even considering transient parents!"
-			echo "Original Super Mario 64 ROM image in z64 big endian format is required to build."
-			echo If ROM is in v64/n64 format, try this online converter then run smlinux again.
-		elif [ "$1" = "update" ] || [ "$1" = "build" ]; then
-			echo ERROR: ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 not found.
-			echo
-			echo smlinux exiting incomplete.
-			echo
-			exit
-		else	
-			echo WARNING: No ROM file found.  Please specify a romfile when you are ready to build.
-		fi
-	fi
 	echo
 	if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64config.txt ] || [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/CHEATERex_config.txt ]; then
 		echo Configuration file already exists from previous build.
@@ -981,11 +934,9 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f ${XDG_DATA_HOME:-$HOME/.lo
 			if [ "$REPO" = "sm64nx" ] ; then
 				pip3 install pillow zstandard tqdm xxhash
 				gcccheck
-			fi
-			if [ "$ANDROID" = 1 ]; then
+			elif [ "$ANDROID" = 1 ]; then
 				androidsdk
-			fi
-			if [ "$TARGET_WEB" = 1 ]; then
+			elif [ "$TARGET_WEB" = 1 ]; then
 				loademsdk
 			fi
 		elif [ "$REPO" = "sm64nx" ] && [ ! -d "$BASEPATH"/"$REPO/build" ]; then
@@ -1000,6 +951,54 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f ${XDG_DATA_HOME:-$HOME/.lo
 			loademsdk
 		else
 			echo "[1] This is not first build, skipping dependencies..."
+		fi
+		echo Verifying ROM...
+		if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
+			if [ ! -f "$BASEPATH"/"$REPO"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$REPO" ]; then
+				ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/baserom."$VERSION".z64
+			fi
+			echo ROM Available.
+		else
+			cd "$LAUNCH_DIR"
+			if [ -f "$1" ]; then 
+				cp "$1" ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64
+				vettrom
+			fi
+			if [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
+				if [ -f "$BASEPATH"/sm64pc/baserom."$VERSION".z64 ]; then
+					cp "$BASEPATH"/sm64pc/baserom."$VERSION".z64 ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
+					vettrom
+				fi
+				if [ -f "$BASEPATH"/sm64ex/baserom."$VERSION".z64 ] && [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
+					cp "$BASEPATH"/sm64ex/baserom."$VERSION".z64 ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
+					vettrom
+				fi
+				if [ -f "$BASEPATH"/sm64-port/baserom."$VERSION".z64 ] && [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
+					cp "$BASEPATH"/sm64-port/baserom."$VERSION".z64 ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
+				vettrom
+				fi
+			fi
+			if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
+				echo ROM Found and Verified.
+			elif [ -f "$1" ]; then
+				xdg-open https://hack64.net/tools/swapper.php &disown
+				sleep 1
+				exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+				zenity --error --text="ERROR: Your ROM is not valid.\n\nAn original Super Mario 64 ROM in z64 (big endian) format is required to build.\nIf your rom is backed up in v64 or n64 format, try this online converter then run smlinux again." --title="Your installation is incomplete." --width=640 &disown	
+				sleep 1			
+				echo
+				echo "ERROR: Your ROM is not valid.  Not even considering transient parents!"
+				echo "Original Super Mario 64 ROM image in z64 big endian format is required to build."
+				echo If ROM is in v64/n64 format, try this online converter then run smlinux again.
+			elif [ "$1" = "update" ] || [ "$1" = "build" ]; then
+				echo ERROR: ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 not found.
+				echo
+				echo smlinux exiting incomplete.
+				echo
+				exit
+			else	
+				echo WARNING: No ROM file found.  Please specify a romfile when you are ready to build.
+			fi
 		fi
 		echo
 		echo [2] Checking Github for smlinux updates....
@@ -1038,7 +1037,7 @@ else
 	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
 		echo "ERROR: You must specify update, build, config or purge."
 	else 
-		echo "ERROR: Must provide valid path/filename to Z64 formatted romfile."	
+		echo "ERROR: Must provide valid path/filename to romfile."	
 	fi
 	exit
 fi
@@ -1064,6 +1063,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	fi
 	if [ "$?" = "1" ]; then
 		cd "$BASEPATH"/"$REPO"
+		echo Source update attempt failed, removing patches...
 		if [ -f "$BASEPATH"/"$REPO"/enhancements/3d_coin*.patch ]; then
 			git apply -R enhancements/3d_coin*.patch
 		fi
@@ -1078,8 +1078,12 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		fi
 		git merge
 		if [ "$?" = "1" ]; then
-			echo WARNING: Unable to merge source updates from github.
+			echo ERROR: Unable to merge source updates from github.
+			echo Rebuild will continue with existing source.
+		else
+			echo Update Succesful.
 		fi
+		echo Reapplying previously removed patches...
 		if [ -f "$BASEPATH"/"$REPO"/enhancements/3d_coin*.patch ]; then
 			git apply enhancements/3d_coin*.patch
 		fi
@@ -1097,6 +1101,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		git submodule init
 		git submodule update	
 		if [ -d "$BASEPATH"/"$REPO"/../../build ]; then
+			echo Wiping old Android Build...
 			rm -rf "$BASEPATH"/"$REPO"/../../build
 			rm -rf "$BASEPATH"/"$REPO"/../../.externalNativeBuild
 		fi
@@ -1206,6 +1211,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	echo smlinux is complete.  You may exit or close this terminal window.
 	if [ "$TARGET" = "web" ]; then
 		echo Python Webserver will remain running until it is closed.
+		echo Unless you forward a port you cannot connect from outside your local network.
 	fi
 	echo
 	exit
