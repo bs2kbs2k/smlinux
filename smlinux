@@ -3,17 +3,17 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0912-1524
+# 2020-0912-1856
 
 domake(){
 #Here We go & music to build to
-if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/File_Select_64_slowed_down.mp3 ]; then
+if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	if [ -f "$BASEPATH"/"$REPO"/sound/samples/sfx_mario/0C.aiff ]; then
-		sh -c 'mplayer -nolirc -really-quiet '"$BASEPATH"/"$REPO"'/sound/samples/sfx_mario/0C.aiff;mplayer -nolirc -really-quiet -volume 40 -loop 0 '${XDG_DATA_HOME:-$HOME/.local/share}'/sm64pc/File_Select_64_slowed_down.mp3&'
+		sh -c 'mplayer -nolirc -really-quiet '"$BASEPATH"/"$REPO"'/sound/samples/sfx_mario/0C.aiff;mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SHARE"'/sm64pc/File_Select_64_slowed_down.mp3&'
 	elif [ -f "$BASEPATH"/sm64ex/sound/samples/sfx_mario/0C.aiff ]; then
-		sh -c 'mplayer -nolirc -really-quiet '"$BASEPATH"'/sm64ex/sound/samples/sfx_mario/0C.aiff;mplayer -nolirc -really-quiet -volume 40 -loop 0 '${XDG_DATA_HOME:-$HOME/.local/share}'/sm64pc/File_Select_64_slowed_down.mp3&'
+		sh -c 'mplayer -nolirc -really-quiet '"$BASEPATH"'/sm64ex/sound/samples/sfx_mario/0C.aiff;mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SHARE"'/sm64pc/File_Select_64_slowed_down.mp3&'
 	else
-		sh -c 'mplayer -nolirc -really-quiet -volume 40 -loop 0 '${XDG_DATA_HOME:-$HOME/.local/share}'/sm64pc/File_Select_64_slowed_down.mp3&'
+		sh -c 'mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SHARE"'/sm64pc/File_Select_64_slowed_down.mp3&'
 	fi
 fi 
 if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
@@ -34,17 +34,17 @@ fi
 if [ "$REPO" = "sm64nx" ]; then
 	sed -i 's/-no-pie -lpthread -lzstd/-no-pie -lpthread -lzstd -lstdc++fs/g' "$BASEPATH"/"$REPO"/Makefile
 fi
-if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/buildlog.txt ]; then
-	mv -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/buildlog.txt ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/buildlog.old
+if [ -f "$SMLINUX"/buildlog.txt ]; then
+	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
 cd "$BASEPATH"/"$REPO"
-time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES "$JOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD > ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/buildlog.txt
+time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES "$JOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD > "$SMLINUX"/buildlog.txt
 if [ "$REPO" = "sm64-port-android-base/app/jni/src" ]; then
 	if [ "ARMONLY" = 1 ]; then
 		sed -i "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$REPO"/../../build.gradle
 	fi
 	if [ "$BRANCH" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ]; then
-		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES "$JOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD > ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/buildlog.txt
+		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES "$JOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD > "$SMLINUX"/buildlog.txt
 		if [ ! -f "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 			return
 		else
@@ -108,7 +108,7 @@ if [ "$REPO" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ); 
 	rm Makefile
 	git checkout Makefile
 fi
-if [ -f /usr/bin/mplayer ] && [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/File_Select_64_slowed_down.mp3 ]; then
+if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	killall -q -y1h mplayer
 fi
 }
@@ -175,21 +175,57 @@ fi
 }
 
 vettrom(){
+local romfile="$SMLINUX"/baserom."$VERSION"
 if [ "$VERSION" = "us" ]; then
-	HASH=`sha1sum ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 | grep 9bef1128717f958171a4afac3ed78ee2bb4e86ce`
+	hashcheck(){ 
+	HASH=`sha1sum "$romfile".z64 | grep 9bef1128717f958171a4afac3ed78ee2bb4e86ce`
+	}
 elif [ "$VERSION" = "jp" ]; then
-	HASH=`sha1sum ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 | grep 8a20a5c83d6ceb0f0506cfc9fa20d8f438cafe51`
+	hashcheck(){ 
+	HASH=`sha1sum "$romfile".z64 | grep 8a20a5c83d6ceb0f0506cfc9fa20d8f438cafe51`
+	}
 elif [ "$VERSION" = "eu" ]; then
-	HASH=`sha1sum ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 | grep 4ac5721683d0e0b6bbb561b58a71740845dceea9`
+	hashcheck(){
+	HASH=`sha1sum "$romfile".z64 | grep 4ac5721683d0e0b6bbb561b58a71740845dceea9`
+	}
+elif ["$VERSION" = "sh" ]; then
+	hashcheck(){
+	HASH=`sha1sum "$romfile".z64 | grep 3f319ae697533a255a1003d09202379d78d5a2e0`
+	}
 fi
+hashcheck
 if [ "$HASH" = "" ]; then
-	rm ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64
+	echo ROM failed initial hash check - attempting format conversion...
+	cd "$SMLINUX"
+	if [ ! -f "$SMLINUX"/n64swap.py ]; then
+		wget http://github.com/Brawl345/N64Swap/blob/master/n64swap.py
+		pip3 install numpy
+	fi
+	# Try V64
+	mv "$romfile".z64 "$romfile".v64
+	python3 n64swap.py "$romfile".v64 "$romfile".z64
+	hashcheck
+	if [ ! "$HASH" = "" ]; then
+		echo Conversion from V64 succesful.
+	else
+		rm "$romfile".z64
+		# Try N64
+		mv "$romfile".v64 "$romfile".n64
+		python3 n64swap.py "$romfile".v64 "$romfile".z64
+		hashcheck
+		if [ ! "$HASH" = "" ]; then
+			echo Conversion from N64 succesful.
+		else
+			rm "$romfile".*
+			echo Conversion still did not produce correct sha1sum.
+		fi
+	fi
 fi
 }
 
 makeconfig(){
-if [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc ]; then
-	mkdir ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
+if [ ! -d "$SMLINUX" ]; then
+	mkdir "$SMLINUX"
 fi
 echo '# REPO supports sm64-port sm64ex sm64nx render96ex cheaterex
 # also sm64-port-android-base & sm64ex-coop (also set BRANCH=coop)
@@ -227,7 +263,7 @@ AutoUpdate=1
 # Set UpdateHD=0 to prevent smlinux updating addons when rebuilding
 UpdateHD=1
 # Linux must be set to command appropriate to your distribution. See FAQ.
-Linux="sudo apt install -y build-essential git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer"'> ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt
+Linux="sudo apt install -y build-essential git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer"'> "$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
@@ -240,7 +276,7 @@ BASEPATH=$HOME
 ARMONLY=1
 DEBUG=0
 IMMEDIATELOAD=1
-source ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt
+source "$SMLINUX"/smlinuxcfg.txt
 # the next one just for old config file with branch not 
 if [ -z "$BRANCH" ]; then
 	BRANCH="$Branch"
@@ -318,8 +354,8 @@ fi
 }
 
 doconfig(){
-if(whiptail --title "Build Options" --yesno "$(cat ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt)" 28 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
-	whiptail --title "READ THIS NOW - IT WILL NOT REAPPEAR AUTOMATICALLY" --msgbox "The config file will open in a text editor.\n\nWhen you exit your editor, installation will continue.\n\nFor most people, default options which include community enhancements are reccommended.\n\nIf you mess up the config file, delete\n${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt \nand it will be recreated." 16 60
+if(whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 28 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
+	whiptail --title "READ THIS NOW - IT WILL NOT REAPPEAR AUTOMATICALLY" --msgbox "The config file will open in a text editor.\n\nWhen you exit your editor, installation will continue.\n\nFor most people, default options which include community enhancements are reccommended.\n\nIf you mess up the config file, delete\n"$SMLINUX"/smlinuxcfg.txt \nand it will be recreated." 16 60
 editconfig	
 fi
 }
@@ -329,7 +365,7 @@ echo Looking for a text editor...
 EDITORS=kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:nano:pico:micro:jed:emacs:vim:vi
 IFS=":"
 for editor in $EDITORS; do
-	$editor ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt
+	$editor "$SMLINUX"/smlinuxcfg.txt
 	if [ $? -eq 0 ]; then
 		echo "${MAPFILE[0]}"/smlinux: line $(($LINENO - 2)): "$editor": command found!!!
 		echo
@@ -353,12 +389,12 @@ prepnx(){
 mkdir "$BASEPATH"/"$REPO"/build
 mkdir "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"
 mkdir "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/romfs
-ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64.sav "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64.sav 
-ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64.log "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64.log 
-ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/conf.bin "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/conf.bin
-ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/gamepad1.bindings.json "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
-ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/keyboard1.bindings.json "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
-ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
+ln -s "$SHARE"/"$REPO"/sm64.sav "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64.sav 
+ln -s "$SHARE"/"$REPO"/sm64.log "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64.log 
+ln -s "$SHARE"/"$REPO"/conf.bin "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/conf.bin
+ln -s "$SHARE"/"$REPO"/gamepad1.bindings.json "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
+ln -s "$SHARE"/"$REPO"/keyboard1.bindings.json "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
+ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
 cd "$BASEPATH"/"$REPO"/tools
 make "$JOBS"
 cd "$BASEPATH"/"$REPO"/import
@@ -491,9 +527,9 @@ else
 			echo Applying 60fps patch...
 			git apply enhancements/60fps*.patch
 			touch enhancements/60fps
-			if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64config.txt ] && [ -f "$BASEPATH"/"$REPO"/enhancements/60fps ]; then
+			if [ -f "$SHARE"/"$REPO"/sm64config.txt ] && [ -f "$BASEPATH"/"$REPO"/enhancements/60fps ]; then
 				echo Enabling Vsync...
-				sed -i 's/vsync false/vsync true/g' ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64config.txt
+				sed -i 's/vsync false/vsync true/g' "$SHARE"/"$REPO"/sm64config.txt
 			fi
 		fi
 	fi
@@ -545,8 +581,8 @@ if [ -f "$BASEPATH"/"$REPO"/enhancements/60fps ]; then
 	cd "$BASEPATH"/"$REPO"
 	git apply -R enhancements/60fps*.patch
 	rm enhancements/60fps
-	if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64config.txt ]; then
-		sed -i 's/vsync true/vsync false/g' ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64config.txt
+	if [ -f "$SHARE"/"$REPO"/sm64config.txt ]; then
+		sed -i 's/vsync true/vsync false/g' "$SHARE"/"$REPO"/sm64config.txt
 	fi
 fi
 if [ "$REPO" = "render96ex" ] ; then
@@ -571,33 +607,33 @@ echo Applying Render96 SGI Models...
 	
 scriptUpdate(){
 if [ ! -f ~/.smlinuxUpdate ]; then 
-	if [ ! -f "${MAPFILE[0]}"/smlinux ] || [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/.git] ; then
+	if [ ! -f "${MAPFILE[0]}"/smlinux ] || [ ! -d "$SMLINUX"/.git] ; then
 		echo Installing Script... 		
-		if [ -d ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc ]; then
-			if [ -d ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc.baq ]; then
-				rm -rf ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc.baq
+		if [ -d "$SMLINUX" ]; then
+			if [ -d "$SMLINUX".baq ]; then
+				rm -rf "$SMLINUX".baq
 			fi
-			mv -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc.baq
+			mv -f "$SMLINUX" "$SMLINUX".baq
 		fi
-		git clone --single-branch https://github.com/enigma9o7/smlinux.git ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
-		if [ -d ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc.baq ]; then
-			cp -Rn ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc.baq/* ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/
-			rm -rf ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc.baq
+		git clone --single-branch https://github.com/enigma9o7/smlinux.git "$SMLINUX"
+		if [ -d "$SMLINUX".baq ]; then
+			cp -Rn "$SMLINUX".baq/* "$SMLINUX"/
+			rm -rf "$SMLINUX".baq
 		fi
-		if [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/.git] ; then
+		if [ ! -d "$SMLINUX"/.git] ; then
 			echo ERROR: Cannot connect to github. Run without AutoUpdate enabled.  
 			echo smlinux exiting incomplete.
 			exit
 		fi
 		touch ~/.smlinuxUpdate
-		mv ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinux "${MAPFILE[0]}"/
+		mv "$SMLINUX"/smlinux "${MAPFILE[0]}"/
 		if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
 			echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
 			touch "$BASEPATH"/.smlinuxNopath
 			mkdir $HOME/bin
 			export PATH=$HOME/bin:$PATH
 			mapfile -t -d: <<<"$PATH"
-			mv -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinux "${MAPFILE[0]}"/
+			mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
 			if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
 				echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
 				echo smlinux exiting incomplete.
@@ -608,23 +644,23 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		cd "$LAUNCH_DIR"
 		exec smlinux "$@"
 	else
-		cd ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
+		cd "$SMLINUX"
 		git fetch
 		if [ "$(git diff HEAD origin/HEAD -- smlinux)" != "" ]; then
 			git merge
-			if [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinux ]; then
+			if [ ! -f "$SMLINUX"/smlinux ]; then
 				echo "ERROR: Script Update Unsuccesful."
 				echo "Try #help-desk if script udpates continue to fail"
 			else
 				echo 'mapfile -t -d: <<<"$PATH"
-				mv -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinux "${MAPFILE[0]}"/
+				mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
 				if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
 					echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
 					touch "$BASEPATH"/.smlinuxNopath
 					mkdir $HOME/bin
 					export PATH=$HOME/bin:$PATH
 					mapfile -t -d: <<<"$PATH"
-					mv -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinux "${MAPFILE[0]}"/
+					mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
 					if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
 						echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
 						exit
@@ -650,76 +686,76 @@ fi
 }
 
 makedesktop(){
-if [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share}/icons ]; then 
-	mkdir ${XDG_DATA_HOME:-$HOME/.local/share}/icons
+if [ ! -d "$SHARE"/icons ]; then 
+	mkdir "$SHARE"/icons
 fi
-if [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share}/applications ]; then 
-	mkdir ${XDG_DATA_HOME:-$HOME/.local/share}/applications
+if [ ! -d "$SHARE"/applications ]; then 
+	mkdir "$SHARE"/applications
 fi
-if [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".* ]; then
+if [ ! -f "$SHARE"/icons/"$REPO".* ]; then
 	echo Getting Icon...
 	if [ "$REPO" = "sm64ex" ]; then
 		wget -q https://cdn.discordapp.com/attachments/711253314855108629/712146686834638890/sm64.png
-		mv sm64.png ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png
+		mv sm64.png "$SHARE"/icons/"$REPO".png
 	elif [ "$REPO" = "sm64nx" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/711253314855108629/719215654837682226/Super_Mario_64.png
-		mv Super_Mario_64.png ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png
+		mv Super_Mario_64.png "$SHARE"/icons/"$REPO".png
 	elif [ "$REPO" = "render96ex" ]; then 
-		mv ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/r96-icon.png ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png
+		mv "$SMLINUX"/r96-icon.png "$SHARE"/icons/"$REPO".png
 	elif [ "$REPO" = "cheaterex" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745150550382870548/bowser.png
-		mv bowser.png ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png
+		mv bowser.png "$SHARE"/icons/"$REPO".png
 	elif [ "$REPO" = "sm64-port" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745156574334550096/staricon.png
-		mv staricon.png ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png
+		mv staricon.png "$SHARE"/icons/"$REPO".png
 	elif [ "$REPO" = "sm64ex-coop" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/741732375074963556/luigihudicon.png
-		mv luigihudicon.png ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png
+		mv luigihudicon.png "$SHARE"/icons/"$REPO".png
 	elif [ -f "$BASEPATH"/"$REPO"/textures/segment2/segment2.05A00.rgba16.png ]; then
-		cp "$BASEPATH"/"$REPO"/textures/segment2/segment2.05A00.rgba16.png ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png
-		echo 16x16 image from ROM used.  Reccommend replacing ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png
+		cp "$BASEPATH"/"$REPO"/textures/segment2/segment2.05A00.rgba16.png "$SHARE"/icons/"$REPO".png
+		echo 16x16 image from ROM used.  Reccommend replacing "$SHARE"/icons/"$REPO".png
 	else 
 		echo WARNING: No icon found. 
-		echo Reccommend creating ${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png
+		echo Reccommend creating "$SHARE"/icons/"$REPO".png
 	fi	
 else
 	echo Icon already exists...
 fi
-if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/cooplauncher ] && [ "$REPO" = "sm64ex-coop" ] && [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop ]; then
-	rm ${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-	rm ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/cooplauncher
+if [ -f "$SMLINUX"/cooplauncher ] && [ "$REPO" = "sm64ex-coop" ] && [ -f "$SHARE"/applications/"$REPO".desktop ]; then
+	rm "$SHARE"/applications/"$REPO".desktop
+	rm "$SMLINUX"/cooplauncher
 fi
 
-if [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop ]; then
+if [ ! -f "$SHARE"/applications/"$REPO".desktop ]; then
 	echo '[Desktop Entry]
 Encoding=UTF-8
 Type=Application
 StartupNotify=false
-Categories=Game;'>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-echo Icon=${XDG_DATA_HOME:-$HOME/.local/share}/icons/"$REPO".png >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-echo Name=Super Mario 64 \("$REPO"\) >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+Categories=Game;'>"$SHARE"/applications/"$REPO".desktop
+echo Icon="$SHARE"/icons/"$REPO".png >>"$SHARE"/applications/"$REPO".desktop
+echo Name=Super Mario 64 \("$REPO"\) >>"$SHARE"/applications/"$REPO".desktop
 	if [ "$REPO" = "sm64pc" ] || [ "$REPO" = "sm64ex" ] ; then
-		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats>>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$REPO".desktop
+		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats>>"$SHARE"/applications/"$REPO".desktop
 	elif [ "$REPO" = "render96ex" ]; then
-		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO">>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$REPO".desktop
+		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SHARE"/"$REPO">>"$SHARE"/applications/"$REPO".desktop
 	elif [ "$REPO" = "cheaterex" ]; then
-		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO">>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$REPO".desktop
+		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SHARE"/"$REPO">>"$SHARE"/applications/"$REPO".desktop
 	elif [ "$REPO" = "sm64ex-coop" ]; then
-		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-		echo 'Exec=zenity --info --text="\n`curl ifconfig.me`" --title="Your IP Address" --width 150&/home/bodhi/sm64ex-coop/build/us_pc/sm64.us.f3dex2e --cheats --skip-intro' >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$REPO".desktop
+		echo 'Exec=zenity --info --text="\n`curl ifconfig.me`" --title="Your IP Address" --width 150&/home/bodhi/sm64ex-coop/build/us_pc/sm64.us.f3dex2e --cheats --skip-intro' >>"$SHARE"/applications/"$REPO".desktop
 	elif [ "$REPO" = "sm64-port" ]; then
-		echo Path=${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-		printf "Exec=sh -c \"" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-		echo \""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e';echo'\" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$SHARE"/"$REPO" >>"$SHARE"/applications/"$REPO".desktop
+		printf "Exec=sh -c \"" >>"$SHARE"/applications/"$REPO".desktop
+		echo \""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e';echo'\" >>"$SHARE"/applications/"$REPO".desktop
 	else
-		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
-		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e>>${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop
+		echo Path="$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$REPO".desktop
+		echo Exec=\""$BASEPATH"\"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e>>"$SHARE"/applications/"$REPO".desktop
 	fi
 	if [ -d ${XDG_DESKTOP_DIR:-$HOME/Desktop} ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/applications/"$REPO".desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}
+		cp "$SHARE"/applications/"$REPO".desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}
 	fi
 else
 	echo Menu entry desktop file already exists...
@@ -754,8 +790,8 @@ elif [ "$ANDROID"  = 1 ] ; then
 	xdg-open "$BASEPATH"/"$REPO"/../../build/outputs/apk/debug &disown
 elif [ "$REPO"  = "sm64ex-coop" ] ; then
 	cd "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"
-	./sm64.us.f3dex2e --server 27015 --cheats --savepath ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex-coop --skip-intro --configfile sm64config.server-local.txt &disown
-	./sm64.us.f3dex2e --client 127.0.0.1 27015 --cheats --savepath ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex-coop --skip-intro &disown
+	./sm64.us.f3dex2e --server 27015 --cheats --savepath "$SHARE"/sm64ex-coop --skip-intro --configfile sm64config.server-local.txt &disown
+	./sm64.us.f3dex2e --client 127.0.0.1 27015 --cheats --savepath "$SHARE"/sm64ex-coop --skip-intro &disown
 else 
 	gtk-launch "$REPO"&disown
 fi
@@ -763,15 +799,17 @@ fi
 
 ####################################### The Beginning ########################################
 
-# Make sure folders and installer config file exist, if not create them.
-
+SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
+SMLINUX="$SHARE"/sm64pc
 LAUNCH_DIR=$(pwd)
 mapfile -t -d: <<<"$PATH"
+
+# Make sure folders and installer config file exist, if not create them.
 if [ ! -d $HOME/.local ]; then 
 	mkdir $HOME/.local
 fi
-if [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share} ]; then 
-	mkdir ${XDG_DATA_HOME:-$HOME/.local/share}
+if [ ! -d "$SHARE" ]; then 
+	mkdir "$SHARE"
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$1" = "config" ]; then
@@ -782,13 +820,13 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo
 		exit
 	elif [ "$1" = "reset" ]; then
-		rm ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt
+		rm "$SMLINUX"/smlinuxcfg.txt
 		makeconfig
 		echo
 		echo smlinux configuration file has been reset to default.
 		echo
 		exit
-	elif [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt ]; then
+	elif [ ! -f "$SMLINUX"/smlinuxcfg.txt ]; then
 		echo smlinux configuration file not found, so making a new one...
 		makeconfig
 		doconfig
@@ -798,7 +836,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			doconfig
 		fi
 	fi
-	echo Loading ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/smlinuxcfg.txt...
+	echo Loading "$SMLINUX"/smlinuxcfg.txt...
 	loadconfig "$@"
 	#Play a sound clip for no reason - thank you for playing my game.
 	if [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ]; then
@@ -812,66 +850,66 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			sh -c 'mplayer -nolirc -really-quiet "$BASEPATH"/sm64-port/sound/samples/sfx_mario_peach/0D.aiff&'
 		fi
 	fi
-	if [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO" ] && [ ! "$ANDROID" = 1 ]; then
-		echo Creating ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO" folder for game save and configuration.
-		mkdir ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"
+	if [ ! -d "$SHARE"/"$REPO" ] && [ ! "$ANDROID" = 1 ]; then
+		echo Creating "$SHARE"/"$REPO" folder for game save and configuration.
+		mkdir "$SHARE"/"$REPO"
 	fi
 	echo
-	if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64config.txt ] || [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/CHEATERex_config.txt ]; then
+	if [ -f "$SHARE"/"$REPO"/sm64config.txt ] || [ -f "$SHARE"/"$REPO"/CHEATERex_config.txt ]; then
 		echo Configuration file already exists from previous build.
-	elif [ "$REPO" = "sm64-port" ] || [ "$REPO" = "sm64nx" ] || [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO" ]; then
+	elif [ "$REPO" = "sm64-port" ] || [ "$REPO" = "sm64nx" ] || [ ! -d "$SHARE"/"$REPO" ]; then
 		echo No compatible config files for this version, game will create one.
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex/sm64config.txt ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex/sm64config.txt ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"
+	elif [ -f "$SHARE"/sm64ex/sm64config.txt ]; then
+		cp "$SHARE"/sm64ex/sm64config.txt "$SHARE"/"$REPO"
 		echo Copied configuration from sm64ex.
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/sm64config.txt ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/sm64config.txt ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"
+	elif [ -f "$SMLINUX"/sm64config.txt ]; then
+		cp "$SMLINUX"/sm64config.txt "$SHARE"/"$REPO"
 		echo Copied configuration from sm64pc.
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/render96ex/sm64config.txt ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/render96ex/sm64config.txt ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"
+	elif [ -f "$SHARE"/render96ex/sm64config.txt ]; then
+		cp "$SHARE"/render96ex/sm64config.txt "$SHARE"/"$REPO"
 		echo Copied configuration from render96ex
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex-coop/sm64config.txt ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex-coop/sm64config.txt ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"
+	elif [ -f "$SHARE"/sm64ex-coop/sm64config.txt ]; then
+		cp "$SHARE"/sm64ex-coop/sm64config.txt "$SHARE"/"$REPO"
 		echo Copied configuration from sm64ex-coop
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/cheaterex/CHEATERex_config.txt ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/cheaterex/CHEATERex_config.txt ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64config.txt
+	elif [ -f "$SHARE"/cheaterex/CHEATERex_config.txt ]; then
+		cp "$SHARE"/cheaterex/CHEATERex_config.txt "$SHARE"/"$REPO"/sm64config.txt
 		echo Copied configuration from CHEATERex
 	else
 		echo No compatible configuration file found, game will create one.
 	fi
-	if [ "$REPO" = "cheaterex" ] && [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64config.txt ]; then
-		mv ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64config.txt ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/CHEATERex_config.txt
+	if [ "$REPO" = "cheaterex" ] && [ -f "$SHARE"/"$REPO"/sm64config.txt ]; then
+		mv "$SHARE"/"$REPO"/sm64config.txt "$SHARE"/"$REPO"/CHEATERex_config.txt
 	fi
-	if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64_save_file.bin ] || [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/CHEATERex_save_file.bin ] || [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64.sav ]; then
+	if [ -f "$SHARE"/"$REPO"/sm64_save_file.bin ] || [ -f "$SHARE"/"$REPO"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$REPO"/sm64.sav ]; then
 		echo Save file already exists from previous build.
-	elif [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO" ] || [ "TEXTSAVES" = 1 ]; then
+	elif [ ! -d "$SHARE"/"$REPO" ] || [ "TEXTSAVES" = 1 ]; then
 		echo No compatible save files for this version.
-	elif [ "$REPO" = "sm64-port" ] && [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64nx/sm64.sav ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64nx/sm64.sav ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64_save_file.bin
+	elif [ "$REPO" = "sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
+		cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$REPO"/sm64_save_file.bin
 		echo Copied save file from sm64nx.
-	elif [ "$REPO" = "sm64nx" ] && [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64-port/sm64_save_file.bin ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64-port/sm64_save_file.bin ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64.sav
+	elif [ "$REPO" = "sm64nx" ] && [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
+		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SHARE"/"$REPO"/sm64.sav
 		echo Copied save file from sm64-port.
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex/sm64_save_file.bin ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex/sm64_save_file.bin ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"
+	elif [ -f "$SHARE"/sm64ex/sm64_save_file.bin ]; then
+		cp "$SHARE"/sm64ex/sm64_save_file.bin "$SHARE"/"$REPO"
 		echo Copied save file from sm64ex.
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64-port/sm64_save_file.bin ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64-port/sm64_save_file.bin ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"
+	elif [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
+		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SHARE"/"$REPO"
 		echo Copied save file from sm64-port.
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/sm64_save_file.bin ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/sm64_save_file.bin ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"
+	elif [ -f "$SMLINUX"/sm64_save_file.bin ]; then
+		cp "$SMLINUX"/sm64_save_file.bin "$SHARE"/"$REPO"
 		echo Copied save file from sm64pc.
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/cheaterex/CHEATERex_save_file.bin ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/cheaterex/CHEATERex_save_file.bin ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64_save_file.bin
+	elif [ -f "$SHARE"/cheaterex/CHEATERex_save_file.bin ]; then
+		cp "$SHARE"/cheaterex/CHEATERex_save_file.bin "$SHARE"/"$REPO"/sm64_save_file.bin
 		echo Copied save file from cheaterex
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64nx/sm64.sav ]; then
-		cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64nx/sm64.sav ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64_save_file.bin
+	elif [ -f "$SHARE"/sm64nx/sm64.sav ]; then
+		cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$REPO"/sm64_save_file.bin
 		echo Copied save file from sm64nx.
 	else
 		No compatible save file found.
 	fi
-	if [ "$REPO" = "cheaterex" ] && [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64_save_file.bin ]; then
-		mv ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64_save_file.bin ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/CHEATERex_save_file.bin
+	if [ "$REPO" = "cheaterex" ] && [ -f "$SHARE"/"$REPO"/sm64_save_file.bin ]; then
+		mv "$SHARE"/"$REPO"/sm64_save_file.bin "$SHARE"/"$REPO"/CHEATERex_save_file.bin
 	fi
 else
 	loadconfig "$@"
@@ -896,19 +934,19 @@ if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
 	rm -rf "$BASEPATH"/cheaterex.old
 	rm -rf "$BASEPATH"/sm64ex-coop.old
 	rm -rf "$BASEPATH"/sm64-port-android.base.old
-	rm -rf ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
-	rm -rf ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex	
-	rm -rf ${XDG_DATA_HOME:-$HOME/.local/share}/sm64-port
-	rm -rf ${XDG_DATA_HOME:-$HOME/.local/share}/sm64nx
-	rm -rf ${XDG_DATA_HOME:-$HOME/.local/share}/render96ex
-	rm -rf ${XDG_DATA_HOME:-$HOME/.local/share}/cheaterex
-	rm -rf ${XDG_DATA_HOME:-$HOME/.local/share}/sm64ex-coop
-	rm ${XDG_DATA_HOME:-$HOME/.local/share}/icons/sm64*
-	rm ${XDG_DATA_HOME:-$HOME/.local/share}/icons/render96ex*
-	rm ${XDG_DATA_HOME:-$HOME/.local/share}/icons/cheaterex*
-	rm ${XDG_DATA_HOME:-$HOME/.local/share}/applications/sm64*
-	rm ${XDG_DATA_HOME:-$HOME/.local/share}/applications/render96ex*
-	rm ${XDG_DATA_HOME:-$HOME/.local/share}/applications/cheaterex*
+	rm -rf "$SMLINUX"
+	rm -rf "$SHARE"/sm64ex	
+	rm -rf "$SHARE"/sm64-port
+	rm -rf "$SHARE"/sm64nx
+	rm -rf "$SHARE"/render96ex
+	rm -rf "$SHARE"/cheaterex
+	rm -rf "$SHARE"/sm64ex-coop
+	rm "$SHARE"/icons/sm64*
+	rm "$SHARE"/icons/render96ex*
+	rm "$SHARE"/icons/cheaterex*
+	rm "$SHARE"/applications/sm64*
+	rm "$SHARE"/applications/render96ex*
+	rm "$SHARE"/applications/cheaterex*
 	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/sm64*.desktop
 	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/render96ex*.desktop
 	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/cheaterex*.desktop
@@ -919,13 +957,13 @@ if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
         exit
 fi
 
-if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ] && ( [ "$1" = "build" ] || [ "$1" = "update" ]  )); then
+if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSION".z64 ] && ( [ "$1" = "build" ] || [ "$1" = "update" ]  )); then
 	echo
 	if [ -f ~/.smlinuxUpdate ]; then 
 		rm ~/.smlinuxUpdate
 		echo Script Update Complete.
 	else	# Fresh Build
-		if [ ! -d ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/.git ] || [ "$DEPENDS" = 1 ]; then
+		if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ]; then
 			echo "[1] Installing required build tools..."
 			if [ -f /usr/bin/apt ]; then
 				sudo apt update
@@ -953,47 +991,45 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f ${XDG_DATA_HOME:-$HOME/.lo
 			echo "[1] This is not first build, skipping dependencies..."
 		fi
 		echo Verifying ROM...
-		if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
+		if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 			if [ ! -f "$BASEPATH"/"$REPO"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$REPO" ]; then
-				ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/baserom."$VERSION".z64
+				ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/baserom."$VERSION".z64
 			fi
 			echo ROM Available.
 		else
 			cd "$LAUNCH_DIR"
 			if [ -f "$1" ]; then 
-				cp "$1" ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64
+				cp "$1" "$SMLINUX"/baserom."$VERSION".z64
 				vettrom
 			fi
-			if [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
+			if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 				if [ -f "$BASEPATH"/sm64pc/baserom."$VERSION".z64 ]; then
-					cp "$BASEPATH"/sm64pc/baserom."$VERSION".z64 ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
+					cp "$BASEPATH"/sm64pc/baserom."$VERSION".z64 "$SMLINUX"
 					vettrom
 				fi
-				if [ -f "$BASEPATH"/sm64ex/baserom."$VERSION".z64 ] && [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
-					cp "$BASEPATH"/sm64ex/baserom."$VERSION".z64 ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
+				if [ -f "$BASEPATH"/sm64ex/baserom."$VERSION".z64 ] && [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+					cp "$BASEPATH"/sm64ex/baserom."$VERSION".z64 "$SMLINUX"
 					vettrom
 				fi
-				if [ -f "$BASEPATH"/sm64-port/baserom."$VERSION".z64 ] && [ ! -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
-					cp "$BASEPATH"/sm64-port/baserom."$VERSION".z64 ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc
+				if [ -f "$BASEPATH"/sm64-port/baserom."$VERSION".z64 ] && [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+					cp "$BASEPATH"/sm64-port/baserom."$VERSION".z64 "$SMLINUX"
 				vettrom
 				fi
 			fi
-			if [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
-				echo ROM Found and Verified.
+			if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+				echo ROM Located and Verified.
 			elif [ -f "$1" ]; then
-				xdg-open https://hack64.net/tools/swapper.php &disown
-				sleep 1
 				exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-				zenity --error --text="ERROR: Your ROM is not valid.\n\nAn original Super Mario 64 ROM in z64 (big endian) format is required to build.\nIf your rom is backed up in v64 or n64 format, try this online converter then run smlinux again." --title="Your installation is incomplete." --width=640 &disown	
+				zenity --error --text="ERROR: Your ROM is not valid.\n\nAn original Super Mario 64 ROM is required to build.\n" --title="Your installation is incomplete." --width=640 &disown	
 				sleep 1			
 				echo
 				echo "ERROR: Your ROM is not valid.  Not even considering transient parents!"
-				echo "Original Super Mario 64 ROM image in z64 big endian format is required to build."
-				echo If ROM is in v64/n64 format, try this online converter then run smlinux again.
+				echo "Original Super Mario 64 ROM image is required to build."
+				exit
 			elif [ "$1" = "update" ] || [ "$1" = "build" ]; then
-				echo ERROR: ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 not found.
+				echo "ERROR: Must provide valid path/filename to Super Mario 64 romfile."	
 				echo
-				echo smlinux exiting incomplete.
+				echo smlinux exiting incomplete.  Please specify romfile.
 				echo
 				exit
 			else	
@@ -1005,7 +1041,8 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f ${XDG_DATA_HOME:-$HOME/.lo
 		if [ "$AutoUpdate" = 1 ]; then
 			scriptUpdate "$@"
 		else
-			echo "WARNING: AutoUpdate Disabled in Config File! You might be using an old version!"
+			echo "WARNING: AutoUpdate Disabled. You might be using an old version of smlinux!"
+			echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 		fi
 	fi
 else
@@ -1015,7 +1052,7 @@ else
 	echo "|                                                                             |"
 	echo "| Installation & First Build: ./smlinux <romfile>                             |"
 	echo "|  for example:                                                               |"
-	echo "|   ./smlinux ~/roms/n64/sm64.z64  or  ./smlinux \"Super Mario 64 (U) [!].z64\" |"
+	echo "|   ./smlinux ~/roms/n64/sm64.n64  or  ./smlinux \"Super Mario 64 (U) [!].z64\" |"
 	echo "|                                                                             |"
 	echo "| Normal Usage: smlinux <command> <options>                                   |"
 	echo "|                                                                             |"
@@ -1034,10 +1071,10 @@ else
 	echo "-------------------------------------------------------------------------------"
 	if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ]; then
 		exit
-	elif [ -f ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 ]; then
+	elif [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		echo "ERROR: You must specify update, build, config or purge."
 	else 
-		echo "ERROR: Must provide valid path/filename to romfile."	
+		echo "ERROR: Must provide valid path/filename to Super Mario 64 romfile."	
 	fi
 	exit
 fi
@@ -1119,17 +1156,19 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		cd "$BASEPATH"/"$REPO"
 		if [ -f "$BASEPATH"/"$REPO"/enhancements/CHEATER*.patch ]; then
 			git apply -R enhancements/CHEATER*.patch
-			rm enhancements/CHEATER*
 		fi
 		cd enhancements
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/750380998373671012/CHEATER.zip
-		unzip CHEATER*
-		rm CHEATER.zip
+		if [ -f CHEATER.zip ]; then
+			rm CHEATER*.patch
+			unzip CHEATER
+			rm CHEATER.zip
+		fi
 		cd ..
 		echo Applying latest cheats...
 		git apply enhancements/CHEATER.patch
 		if [ ! -f "$BASEPATH"/"$REPO"/enhancements/menu-arrows.patch ]; then
-			cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/menu-arrows.patch enhancements
+			cp "$SMLINUX"/menu-arrows.patch enhancements
 			echo Applying Menu Arrows...
 			git apply enhancements/menu-arrows.patch
 		fi
@@ -1167,12 +1206,12 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	elif [ -d "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET".old/romfs ]; then
 		echo "[6] Restoring Savefile, ROM and ROM Filesystem (paks)"
 		cp -rpn "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET".old/romfs/. "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/romfs
-		ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64.sav "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64.sav 
-		ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/sm64.log "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64.log 
-		ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/conf.bin "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/conf.bin
-	 	ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/gamepad1.bindings.json "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
-		ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/"$REPO"/keyboard1.bindings.json "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
-		ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
+		ln -s "$SHARE"/"$REPO"/sm64.sav "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64.sav 
+		ln -s "$SHARE"/"$REPO"/sm64.log "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/sm64.log 
+		ln -s "$SHARE"/"$REPO"/conf.bin "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/conf.bin
+	 	ln -s "$SHARE"/"$REPO"/gamepad1.bindings.json "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
+		ln -s "$SHARE"/"$REPO"/keyboard1.bindings.json "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
+		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
 	elif [ "$REPO" = "sm64nx" ]; then
 		echo "[6] Preparing Savefile, ROM and ROM Filesystem (paks)"
 		prepnx
@@ -1263,7 +1302,7 @@ if [ ! -d "$BASEPATH"/"$REPO" ]; then
 	xdg-open https://discord.gg/Ub6YHRm &disown
 	exit
 fi
-ln -s ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/baserom."$VERSION".z64
+ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$REPO"/baserom."$VERSION".z64
 
 echo
 echo [4] Extracting Assets from ROM...
@@ -1288,13 +1327,13 @@ else
 fi
 if  [ "$REPO" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ] || [ "$BRANCH" = "sm64ex" ] || [ "$REPO" = "render96ex" ] || [ "$REPO" = "sm64ex-coop" ]; then 
 	cd "$BASEPATH"/"$REPO"/enhancements
-	cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/menu-arrows.patch .
-	if [ ! "$REPO" = "sm64ex-coop" ]; then
+	cp "$SMLINUX"/menu-arrows.patch .
+	if [ "$REPO" = "sm64ex-coop" ]; then
+		wget -q https://cdn.discordapp.com/attachments/710283360794181633/752941642671194205/CHEATER-coop.v.1.hotfix.patch
+	else
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/750380998373671012/CHEATER.zip
 		unzip CHEATER
 		rm CHEATER.zip
-	else
-		wget -q https://cdn.discordapp.com/attachments/710283360794181633/752941642671194205/CHEATER-coop.v.1.hotfix.patch
 	fi
 	cd "$BASEPATH"/"$REPO"
 	echo Appling Cheats...
@@ -1304,7 +1343,7 @@ if  [ "$REPO" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ] || [ "$BRANCH" = 
 fi
 if [ "$BRANCH" = "sm64ex_nightly" ] && [ ! "$TOUCH_CONTROLS" = 1 ]; then
 	cd "$BASEPATH"/"$REPO"
-	cp ${XDG_DATA_HOME:-$HOME/.local/share}/sm64pc/pro1.patch enhancements
+	cp "$SMLINUX"/pro1.patch enhancements
 	echo "Applying Pro¹ Configuration File..."
 	git apply enhancements/pro1.patch
 fi
