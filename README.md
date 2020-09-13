@@ -27,7 +27,7 @@ Examples:
 	./smlinux ~/roms/n64/sm64.n64
 
 That's Everything. That's all you have to do.  
-During installation you will be prompted you to approve (or change) smlinux settings, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
+During installation you will be prompted to approve (or change) build options, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 (**Do not run smlinux as root; you will be prompted for sudo password automatically if needed.**)
 
 You must provide your own legally backed up rom file for first install. 
