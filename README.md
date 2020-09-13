@@ -48,7 +48,7 @@ If for some reason the process freezes during compilation, perhaps on single cor
 * [<strong>How to I configure options like controllers, camera, rumble, etc?</strong>](#how-to-i-configure-options-like-controllers-camera-rumble-etc)
 * [<strong>Where are my configuration files and saved games stored?</strong>](#where-are-my-configuration-files-and-saved-games-stored)
 * [<strong>Are there any cheats?</strong>](#are-there-any-cheats)
-* [<strong>How do I apply external textures?</strong>](#how-do-i-apply-external-textures)
+* [<strong>How do I apply external textures?</strong>](#how-do-i-apply-external-resources-such-as-textures)
 * [<strong>How to apply a patch?</strong>](#how-to-apply-a-patch)
 * [<strong>How to remove a patch?</strong>](#how-to-remove-a-patch)
 * [<strong>What about distros other than Ubuntu?</strong>](#what-about-distros-other-than-ubuntu)
