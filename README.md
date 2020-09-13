@@ -48,7 +48,7 @@ If for some reason the process freezes during compilation, perhaps on single cor
 * [<strong>How to I configure options like controllers, camera, rumble, etc?</strong>](#how-to-i-configure-options-like-controllers-camera-rumble-etc)
 * [<strong>Where are my configuration files and saved games stored?</strong>](#where-are-my-configuration-files-and-saved-games-stored)
 * [<strong>Are there any cheats?</strong>](#are-there-any-cheats)
-* [<strong>How do I apply external textures?</strong>](#how-do-i-apply-external-resources-such-as-textures)
+* [<strong>How do I apply external data such as textures?</strong>](#how-do-i-apply-external-data-such-as-textures)
 * [<strong>How to apply a patch?</strong>](#how-to-apply-a-patch)
 * [<strong>How to remove a patch?</strong>](#how-to-remove-a-patch)
 * [<strong>What about distros other than Ubuntu?</strong>](#what-about-distros-other-than-ubuntu)
@@ -140,9 +140,9 @@ You can also just edit the configuration file with a text editor.
 
 Cheats are built in and enabled automatically if launched from shortcut and available in options menu.
 
-## **How do I apply external resources such as textures?**
+## **How do I apply external data such as textures?**
 
-Texture and sound packs can be applied easily after build.
+Texture and sound packs can be added to the appropriate resource folder after build.
 
 sm64pc/sm64ex:  
 Put the zipfile (or gfx or sound folder) directly into build/us_pc/res and the next time you run the game it'll use it automatically.  The zip file must contain a "gfx" and/or "sound" folder. Do not move or remove base.zip, it should remain in "res" as fallback.
