@@ -140,15 +140,15 @@ You can also just edit the configuration file with a text editor.
 
 Cheats are built in and enabled automatically if launched from shortcut and available in options menu.
 
-## **How do I apply external textures?**
+## **How do I apply external resources such as textures?**
 
-Textures can be applied after build.
+Texture and sound packs can be applied easily after build.
 
 sm64pc/sm64ex:  
-Put the zip into your "res" folder in build/us_pc and the next time you run the game it'll use those textures.  The zip file must contain a "gfx" and/or "sound" folder within it. If it's another format, you must create a folder named build/us_pc/res/gfx put the unpacked archive in there. Do not move or remove base.zip, it should remain in "res" as fallback.
+Put the zipfile (or gfx or sound folder) directly into build/us_pc/res and the next time you run the game it'll use it automatically.  The zip file must contain a "gfx" and/or "sound" folder. Do not move or remove base.zip, it should remain in "res" as fallback.
   
 sm64nx:  
-Create a subdirectory in build/us_pc/romfs for each pak and place the pak file inside, and the next time you run the game it'll use that pak automatically. If you would prefer it to start disabled, use ~ at the beginning of the folder name.  Do not move or remove !!base.pak, it should remain in "romfs" as fallback.
+Create a subdirectory in build/us_pc/romfs for each pak and place the pak file inside, and the next time you run the game it'll load that pak automatically. If you would prefer it to start disabled, use ~ at the beginning of the folder name.  Do not move or remove !!base.pak, it should remain in "romfs" as fallback.
 
 ## **How to apply a patch?**
 *change path from sm64pc to sm64-port or sm64ex for newer repos*
