@@ -24,13 +24,13 @@ Examples:
 
  	./smlinux "Super Mario 64 (U) [!].z64"
 		      or 
-	./smlinux ~/roms/n64/sm64.z64
+	./smlinux ~/roms/n64/sm64.n64
 
 That's Everything. That's all you have to do.  
 During installation you will be prompted you to approve (or change) smlinux settings, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 (**Do not run smlinux as root; you will be prompted for sudo password automatically if needed.**)
 
-You must provide your own legally backed up rom file in Z64 (Big Endian) format for first install. 
+You must provide your own legally backed up rom file for first install. 
 
 smlinux will be installed in the first directory in your path, usually something like ~/bin or ~/Applications/.bin. After initial installation, just type 'smlinux' without dot-slash from any folder when you want to build or update again.
 
