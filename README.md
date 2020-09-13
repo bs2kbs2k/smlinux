@@ -51,7 +51,7 @@ If for some reason the process freezes during compilation, perhaps on single cor
 * [<strong>How do I apply external textures?</strong>](#how-do-i-apply-external-textures)
 * [<strong>How to apply a patch?</strong>](#how-to-apply-a-patch)
 * [<strong>How to remove a patch?</strong>](#how-to-remove-a-patch)
-* [<strong>What about distros other than Ubuntu?</strong>](#what-about-distros-other-than-ubuntudebian)
+* [<strong>What about distros other than Ubuntu?</strong>](#what-about-distros-other-than-ubuntu)
 * [<strong>How do I create my rom file?</strong>](#how-do-i-create-my-rom-file)
 * [<strong>How do I remove everything smlinux created during install?</strong>](#how-do-i-remove-everything-smlinux-created-during-install)
 * [<strong>How do I tell smlinux to download sm64 repositories to a folder other than home?</strong>](#how-do-i-tell-smlinux-to-download-sm64-repositories-to-a-folder-other-than-home)
