@@ -168,18 +168,19 @@ Put the patch file into ~/sm64pc/enhancements (or specify the path differently w
 
 
 ## **What about distros other than Ubuntu?**
-*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch also confirmed, others unconfirmed.*
+*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch also confirmed.*
 
-Change your Linux=parameter during first install to one that works with your distro such as those listed below, or just install dependencies first and run smlinux with Linux="" in settings (or just ignore the error from apt).  smlinux only installs dependendencies automatically during the very first installation.  If your distro needs additional dependencies not listed here, please let me know so I can add them.
+Change your Linux=parameter during first install to one that works with your distro such as those listed below, or just install dependencies first and run smlinux with Linux="" in settings (or just ignore the error from apt).  smlinux only installs dependendencies automatically during the very first installation.  If your distro needs additional dependencies not listed here, please let me know their names so I can add them.  The Ubuntu list is confirmed complete even on WSL.
 
-Some build targets depend on an additional package not listed below.  Android builds require the android-sdk package, while sm64nx requires g++-8 or higher.  Installation when needed will only be automatically attempted if apt is present, other distros will need to install those packages manually.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8.  (Note Ubuntu 20.04 build-essential provides gcc9.3, whereas for 18.04 its gcc7.5.)  
+Some build targets depend on an additional package not listed below.  Android builds require the android-sdk package, web targets emscriptem sdk, dos targets djgpp, and sm64nx requires g++-8 or higher.  Updating gcc, when needed will only be automatically attempted if apt is present, other distros will need to install those packages manually.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8.  (Note Ubuntu 20.04 build-essential provides gcc9.3, whereas for 18.04 its gcc7.5.)  
 
 Arch: 
     
 	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd
 Debian / Ubuntu:  
 
-	sudo apt install -y build-essential git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip
+	sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer
+	
 Fedora  / Red Hat:
 
 	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd
