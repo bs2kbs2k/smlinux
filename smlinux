@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0914-1256
+# 2020-0914-1344
 
 domake(){
 #Here We go & music to build to
@@ -38,13 +38,13 @@ if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
 cd "$BASEPATH"/"$PRESET"
-time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD > "$SMLINUX"/buildlog.txt
+time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI > "$SMLINUX"/buildlog.txt
 if [ ! -z "$ANDROID" ]; then
 	if [ "ARMONLY" = 1 ]; then
 		sed -i "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
 	fi
 	if [ "$BRANCH" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ]; then
-		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD > "$SMLINUX"/buildlog.txt
+		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI > "$SMLINUX"/buildlog.txt
 		sed -i '/include $(BUILD_SHARED_LIBRARY)/i TEXTURE_FIX ?= 0\nNODRAWINGDISTANCE ?= 0\nBETTERCAMERA ?= 0\nifeq ($(TEXTURE_FIX),1)\n  LOCAL_CFLAGS += -DTEXTURE_FIX\nendif\nifeq ($(NODRAWINGDISTANCE),1)\n  LOCAL_CFLAGS += -DNODRAWINGDISTANCE\nendif\nifeq ($(BETTERCAMERA),1)\n  LOCAL_CFLAGS += -DBETTERCAMERA\nendif\n' "$BASEPATH"/"$PRESET"/Android.mk
 	fi
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
@@ -262,15 +262,17 @@ AutoUpdate=1
 UpdateHD=1
 # set DEBUG=1 if you want to make a debug build for some odd reason
 DEBUG=0
-# [ GIT/BRANCH/TARGET_WEB are ignored if PRESET is known ]
+# [ These settings are ignored if PRESET is known ]
 GIT=sm64pc/sm64ex
 BRANCH=nightly
 TARGET_WEB=0
-# Linux must be set to command appropriate to your distribution. See FAQ.
+TARGET_RPI=0
+# [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 Linux="sudo apt install -y build-essential git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer"'> "$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
+TARGET_RPI=0
 TEXTSAVES=0
 TOUCH_CONTROLS=1
 LEGACY_RES=1
@@ -278,6 +280,7 @@ BASEPATH=$HOME
 ARMONLY=1
 DEBUG=0
 IMMEDIATELOAD=1
+SGI=0
 source "$SMLINUX"/smlinuxcfg.txt
 if [ -z $PRESET ] && [ ! -z $REPO ]; then
 	PRESET="$REPO"
@@ -288,36 +291,44 @@ if [ "$PRESET" = "sm64pc" ]; then
 	GIT=sm64ex/sm64pc
 	BRANCH=master
 	TARGET_WEB=0
+	TARGET_RPI=0
 elif [ "$PRESET" = "sm64-port" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
 	TARGET_WEB=0
+	TARGET_RPI=0
 	EXTERNAL_DATA=0
-elif [ "$PRESET" = "sm64ex" ]; then
+	elif [ "$PRESET" = "sm64ex" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
+	TARGET_WEB=0
+	TARGET_RPI=0
 elif [ "$PRESET" = "sm64ex-web" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
-        TARGET_WEB=1
+    TARGET_WEB=1
+    TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
 elif [ "$PRESET" = "sm64port-web" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
-        TARGET_WEB=1
+    TARGET_WEB=1
+    TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
 elif [ "$PRESET" = "sm64nx" ]; then
 	GIT=teamsalta/sm64nx
 	BRANCH=master
 	TARGET_WEB=0
+	TARGET_RPI=0
 	EXTERNAL_DATA=0
 elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET" = "render96" ] || [ "$PRESET" = "Render96" ]; then
 	PRESET=render96ex
 	GIT=render96ex/render96ex
 	BRANCH=master
 	TARGET_WEB=0
+	TARGET_RPI=0
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
 	SGI=1
@@ -326,11 +337,13 @@ elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" =
 	GIT=s4Ys369/cheaterex
 	BRANCH=master
 	TARGET_WEB=0
+	TARGET_RPI=0
 elif  [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "coop" ]; then
 	PRESET=sm64ex-coop
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=coop
 	TARGET_WEB=0
+	TARGET_RPI=0
 	NODRAWINGDISTANCE=1
 elif [ "$PRESET" = "androidex" ] ; then
 	ANDROID="$PRESET"
@@ -338,13 +351,15 @@ elif [ "$PRESET" = "androidex" ] ; then
 	GIT=vdavid003/sm64-port-android-base
 	BRANCH=sm64ex_nightly
 	TARGET_WEB=0
+	TARGET_RPI=0
 elif  [ "$PRESET" = "sm64-port-android-base" ]; then
 	ANDROID="$PRESET"
 	PRESET="sm64-port-android-base/app/jni/src"
 	GIT=vdavid003/sm64-port-android-base
 	BRANCH=master
 	EXTERNAL_DATA=0
-	TARGET_WEB=0	
+	TARGET_WEB=0
+	TARGET_RPI=0	
 fi
 if [ ! `uname -m` = "x86_64" ] || [ ! "$VERSION" = "us" ]; then
 	DISCORDRPC=0
