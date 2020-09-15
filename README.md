@@ -40,10 +40,10 @@ If for some reason the process freezes during compilation, perhaps on single cor
 
 # Frequently Asked Questions
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
-* [<strong>What repository should I use?</strong>](#what-repository-should-i-use)
+* [<strong>What preset/repository should I use?</strong>](#what-presetrepository-should-i-use)
+* [<strong>What does the InstallHD=1 option do?</strong>](#what-does-the-installhd1-option-do)
 * [<strong>What branch should I use?</strong>](#what-branch-should-i-use)
 * [<strong>When to use RENDER_API=GL_LEGACY?</strong>](#when-to-use-render_apigl_legacy)
-* [<strong>What does the InstallHD=1 option do?</strong>](#what-does-the-installhd1-option-do)
 * [<strong>How to update, rebuild, or change build options later?</strong>](#how-to-update-rebuild-or-change-build-options-later)
 * [<strong>How to I configure options like controllers, camera, rumble, etc?</strong>](#how-to-i-configure-options-like-controllers-camera-rumble-etc)
 * [<strong>Where are my configuration files and saved games stored?</strong>](#where-are-my-configuration-files-and-saved-games-stored)
