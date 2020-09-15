@@ -63,10 +63,10 @@ If you want to build for **Android** then use sm64-port-android-base
 
 ## **What branch should I use?**
 
-All repos offer master as the main branch.  With sm6ex you can set BRANCH=nightly which is under constant development.  If nightly works for you, I'd reccommend it as it is the most updated, but if a recent change causes build failure or other problems, use the more stable master.  For sm64ex-coop, use BRANCH=coop.  For sm64-port-android-base, I reccommend BRANCH=sm64ex_nightly. 
+If you chose one of the presets, your branch is defined automatically.  For the sm6ex preset the nightly branch is used; if you want the master branch instead use PRESET=sm64pc. If sm64ex nightly works for you, I'd reccommend it as it is the most updated, but if a recent change causes build failure or other problems, use the more stable master.
 
 ## **When to use RENDER_API=GL_LEGACY?** 
-*only applies to sm64pc/sm64ex fork*
+*only applies to sm64pc/sm64ex based forks*
 
 For old video cards that support OpenGL 1.1 but not 2.1 (from year 200X).  Check your OpenGL version with the following command: 
 	
@@ -88,7 +88,7 @@ On the render96ex fork, the latest Render 96 Model Pack and Render 96 Texture Pa
 
 Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released. 
 
-If you initially built without hd and wish to add later, use the --hd option during update.
+If you initially built with InstallHD=0 and wish to add later, `smlinux update --hd`, or set both InstallHD=1 and UpdateHD=1 in smlinux configuration.
 
 
 ## **How to update, rebuild, or change build options later?**
