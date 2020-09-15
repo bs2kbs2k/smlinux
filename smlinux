@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-0946
+# 2020-0915-1024
 
 domake(){
 #Here We go & music to build to
@@ -17,7 +17,7 @@ if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_S
 	fi
 fi 
 if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
-	sed -i 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=28MB/g' "$BASEPATH"/"$PRESET"/Makefile
+	sed -i 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=37MB/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
 if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
@@ -1499,6 +1499,6 @@ fi
 echo
 echo smlinux is complete.  You may exit or close this terminal window.
 if [ "$TARGET_WEB" = 1 ]; then
-	echo Python Webserver will remain running until it is closed.
+	echo Python webserver will remain running until you kill python3.
 fi
 echo
