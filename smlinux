@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-1024
+# 2020-0915-1111
 
 domake(){
 #Here We go & music to build to
@@ -594,7 +594,7 @@ else
 			echo Extracing HD Bowser...
 			unrar x -o+ enhancements/hd_bowser
 		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ ! "$TARGET" = "dos" ] && [ "$ANDROID" = 0 ]; then
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ ! "$TARGET" = "dos" ] && [ "$ANDROID" = 0 ] && [ ! "$PRESET" = "sm64ex-coop" ]; then
 			cd "$BASEPATH"/"$PRESET"/enhancements
 			if [ "$PRESET" = "sm64pc" ]; then
 				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch
@@ -608,16 +608,16 @@ else
 				git apply enhancements/3d_coin_v2*.patch
 			fi
 		fi
-	fi
-	if [ `uname -m` = "x86_64" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && (!( [ "$TARGET_WEB" = 1 ] || [ "$SGI" = 1 ] || [ "PRESET" = "sm64ex-coop" ] )); then
-		cd "$BASEPATH"/"$PRESET"
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-			echo Applying 60fps patch...
-			git apply enhancements/60fps*.patch
-			touch enhancements/60fps
-			if [ -f "$SHARE"/"$PRESET"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-				echo Enabling Vsync...
-				sed -i 's/vsync false/vsync true/g' "$SHARE"/"$PRESET"/sm64config.txt
+		if [ `uname -m` = "x86_64" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ "$TARGET_WEB" = 0 ] && [ ! "$PRESET" = "sm64ex-coop" ]; then
+			cd "$BASEPATH"/"$PRESET"
+			if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+				echo Applying 60fps patch...
+				git apply enhancements/60fps*.patch
+				touch enhancements/60fps
+				if [ -f "$SHARE"/"$PRESET"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+					echo Enabling Vsync...
+					sed -i 's/vsync false/vsync true/g' "$SHARE"/"$PRESET"/sm64config.txt
+				fi
 			fi
 		fi
 	fi
@@ -1496,9 +1496,15 @@ elif [ "$PRESET" = "render96ex" ]; then
 else
 	sleep 10
 fi
-echo
-echo smlinux is complete.  You may exit or close this terminal window.
-if [ "$TARGET_WEB" = 1 ]; then
+if [ "$TARGET" = "web" ]; then
+	echo
 	echo Python webserver will remain running until you kill python3.
+	echo WARNING: emsdk environment is loaded.  Do not try to
+	echo use this shell to build.  Exit and open new shell. 
+elif [ "$TARGET" = "dos" ]; then
+	echo
+	echo WARNING: djgpp environment is loaded.  Do not try to 
+	echo use this shell to build.  Exit and open new shell. 
 fi
 echo
+echo smlinux is complete.  Please exit or close this terminal window.
