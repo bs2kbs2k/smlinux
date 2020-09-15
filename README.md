@@ -108,13 +108,11 @@ You can also use this option to rebuild after you apply patches or edit your sou
 
 Note` --config` is only needed if `CONFIG=0` in your config file, otherwise it will come up automatically.
 
-Note` --hd` only needs to be applied if `UpdateHD=0` in smlinux configuration, and what was initally installed with`InstallHD=1` has changed/updated since you last built, or if you wish to add HD add-ons to an existing build that doesn't have them.
+Note` --hd` only needs to be applied if `UpdateHD=0` in smlinux configuration, and what was initally installed with`InstallHD=1` has changed/updated since you last built, or if you wish to add HD add-ons to an existing build that was made with `InstallHD=0`.
 
-If you want to save your existing build, rename it (anything) before running the update, for example: 
+Note smlinux automatically saves one previous build by adding the suffix .old to its foldername (and restores it if your update fails to build). If you want prevent it from being erased during the next update, rename it (anything) before running smlinux, for example: 
  
-	mv ~/sm64pc/build/us_pc ~/sm64pc/build/firstbuild
-
-Note smlinux automatically stores one previous build by adding the suffix .old to its foldername (and restores it if your update fails to build.
+	mv ~/sm64pc/build/us_pc.old ~/sm64pc/build/firstbuild
 
 ## **How to I configure options like controllers, camera, rumble, etc?**
 *dont not apply to sm64-port repository*
