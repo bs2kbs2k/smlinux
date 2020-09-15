@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0914-2119
+# 2020-0915-0946
 
 domake(){
 #Here We go & music to build to
@@ -579,7 +579,7 @@ else
 	if  [ "$SGI" = 1 ]; then
 		dosgi
 	elif  [ ! "$SGI" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ]; then
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ] && [ ! "$TARGET" = "dos" ]; then
 			cd "$BASEPATH"/"$PRESET"/enhancements
 			if [ ! "$PRESET" = "sm64ex-coop" ]; then
 				wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip 
@@ -594,11 +594,11 @@ else
 			echo Extracing HD Bowser...
 			unrar x -o+ enhancements/hd_bowser
 		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
-			if [ "$PRESET" = "sm64pc" ] || ([ "$PRESET" = "sm64ex" ] && [ "$BRANCH" = "master" ]); then
-				cd "$BASEPATH"/"$PRESET"/enhancements
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ ! "$TARGET" = "dos" ] && [ "$ANDROID" = 0 ]; then
+			cd "$BASEPATH"/"$PRESET"/enhancements
+			if [ "$PRESET" = "sm64pc" ]; then
 				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch
-			elif [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "cheaterex" ]; then
+			else
 				cd "$BASEPATH"/"$PRESET"/enhancements
 				wget -q https://cdn.discordapp.com/attachments/721806706547490868/725041183700680807/3d_coin_v2_nightly.patch
 			fi
@@ -1426,7 +1426,7 @@ if [ "$InstallHD" = 1 ]; then
 	dohd
 elif [ "$SGI" = 1 ]; then
 	dosgi
-elif [ "$TARGET" = "pc" ]
+elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
 fi
 if  [ "$PRESET" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ] || [ "$BRANCH" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ]; then 
