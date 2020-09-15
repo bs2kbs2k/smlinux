@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-1341
+# 2020-0915-1444
 
 domake(){
 #Here We go & music to build to
@@ -302,44 +302,39 @@ if [ "$PRESET" = "sm64pc" ]; then
 	GIT=sm64ex/sm64pc
 	BRANCH=master
 	TARGET_WEB=0
-	TARGET_RPI=0
-elif [ "$PRESET" = "sm64-port" ]; then
+	elif [ "$PRESET" = "sm64-port" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
 	TARGET_WEB=0
-	TARGET_RPI=0
 	EXTERNAL_DATA=0
 	elif [ "$PRESET" = "sm64ex" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
 	TARGET_WEB=0
-	TARGET_RPI=0
-elif [ "$PRESET" = "sm64exweb" ]; then
+	elif [ "$PRESET" = "sm64exweb" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
-    TARGET_WEB=1
-    TARGET_RPI=0
+	TARGET_WEB=1
+	TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
 elif [ "$PRESET" = "sm64-portweb" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
-    TARGET_WEB=1
-    TARGET_RPI=0
+	TARGET_WEB=1
+	TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
 elif [ "$PRESET" = "sm64nx" ]; then
 	GIT=teamsalta/sm64nx
 	BRANCH=master
 	TARGET_WEB=0
-	TARGET_RPI=0
 	EXTERNAL_DATA=0
 elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET" = "render96" ] || [ "$PRESET" = "Render96" ]; then
 	PRESET=render96ex
 	GIT=render96ex/render96ex
 	BRANCH=master
 	TARGET_WEB=0
-	TARGET_RPI=0
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
 	SGI=1
@@ -348,13 +343,11 @@ elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" =
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
 	TARGET_WEB=0
-	TARGET_RPI=0
 elif  [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "coop" ]; then
 	PRESET=sm64ex-coop
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=coop
 	TARGET_WEB=0
-	TARGET_RPI=0
 	NODRAWINGDISTANCE=1
 elif [ "$PRESET" = "androidex" ] ; then
 	ANDROID="$PRESET"
