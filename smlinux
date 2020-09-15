@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-1500
+# 2020-0915-1512
 
 domake(){
 #Here We go & music to build to
@@ -806,10 +806,11 @@ else
 fi
 if [ "$PRESET" = "sm64ex-coop" ] && [ -f "$SHARE"/applications/"$PRESET".desktop ]; then
 	rm "$SHARE"/applications/"$PRESET".desktop
-	echo Removing previous coop shortcut...
+	# this is cuz i messed up the old one
 fi
 
 if [ ! -f "$SHARE"/applications/"$PRESET".desktop ]; then
+	creating Desktop Shorcut and Menu Entry
 	echo '[Desktop Entry]
 Encoding=UTF-8
 Type=Application
