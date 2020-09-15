@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-1111
+# 2020-0915-1258
 
 domake(){
 #Here We go & music to build to
@@ -344,7 +344,7 @@ elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET"
 elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" = "CHEATEREX" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
-	BRANCH=master
+	BRANCH=nightly
 	TARGET_WEB=0
 	TARGET_RPI=0
 elif  [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "coop" ]; then
@@ -1221,15 +1221,19 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		fi
 		echo Reapplying previously removed patches...
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
+			echo 3D Coins...
 			git apply enhancements/3d_coin*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+			echo 60fps...
 			git apply enhancements/60fps*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
+			echo Cheater...
 			git apply enhancements/CHEATER*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
+			echo Menu Arrows....
 			git apply enhancements/menu-arrows.patch
 		fi
 	fi
@@ -1429,15 +1433,19 @@ elif [ "$SGI" = 1 ]; then
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
 fi
-if  [ "$PRESET" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ] || [ "$BRANCH" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ]; then 
+if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then 
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	cp "$SMLINUX"/menu-arrows.patch .
 	if [ "$PRESET" = "sm64ex-coop" ]; then
 		wget -q https://cdn.discordapp.com/attachments/710283360794181633/752941642671194205/CHEATER-coop.v.1.hotfix.patch
-	else
+	elif [ "$PRESET" = "render96ex"]; then
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/750380998373671012/CHEATER.zip
 		unzip CHEATER
 		rm CHEATER.zip
+	else
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/755132231244054618/CHEATERv7.zip
+		unzip CHEATERv7
+		rm CHEATERv7.zip
 	fi
 	cd "$BASEPATH"/"$PRESET"
 	echo Appling Cheats...
