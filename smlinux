@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-1444
+# 2020-0915-1500
 
 domake(){
 #Here We go & music to build to
@@ -804,9 +804,9 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 else
 	echo Icon already exists...
 fi
-if [ -f "$SMLINUX"/cooplauncher ] && [ "$PRESET" = "sm64ex-coop" ] && [ -f "$SHARE"/applications/"$PRESET".desktop ]; then
+if [ "$PRESET" = "sm64ex-coop" ] && [ -f "$SHARE"/applications/"$PRESET".desktop ]; then
 	rm "$SHARE"/applications/"$PRESET".desktop
-	rm "$SMLINUX"/cooplauncher
+	echo Removing previous coop shortcut...
 fi
 
 if [ ! -f "$SHARE"/applications/"$PRESET".desktop ]; then
@@ -820,22 +820,19 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 	if [ "$PRESET" = "sm64pc" ] || [ "$PRESET" = "sm64ex" ] ; then
 		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
 		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats>>"$SHARE"/applications/"$PRESET".desktop
-	elif [ "$PRESET" = "render96ex" ]; then
-		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
-		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SHARE"/"$PRESET">>"$SHARE"/applications/"$PRESET".desktop
-	elif [ "$PRESET" = "cheaterex" ]; then
-		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
-		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SHARE"/"$PRESET">>"$SHARE"/applications/"$PRESET".desktop
 	elif [ "$PRESET" = "sm64ex-coop" ]; then
 		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
-		echo 'Exec=zenity --info --text="\n`curl ifconfig.me`" --title="Your IP Address" --width 150&/home/bodhi/sm64ex-coop/build/us_pc/sm64.us.f3dex2e --cheats --skip-intro' >>"$SHARE"/applications/"$PRESET".desktop
+		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --skip-intro >>"$SHARE"/applications/"$PRESET".desktop
 	elif [ "$PRESET" = "sm64-port" ]; then
 		echo Path="$SHARE"/"$PRESET" >>"$SHARE"/applications/"$PRESET".desktop
 		printf "Exec=sh -c \"" >>"$SHARE"/applications/"$PRESET".desktop
 		echo \""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e';echo'\" >>"$SHARE"/applications/"$PRESET".desktop
-	else
+	elif [ "$PRESET" = "sm64nx" ]; then
 		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
 		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e>>"$SHARE"/applications/"$PRESET".desktop
+	else
+		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
+		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SHARE"/"$PRESET" >>"$SHARE"/applications/"$PRESET".desktop
 	fi
 	if [ -d ${XDG_DESKTOP_DIR:-$HOME/Desktop} ]; then
 		cp "$SHARE"/applications/"$PRESET".desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}
