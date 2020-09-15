@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0914-1344
+# 2020-0914-2119
 
 domake(){
 #Here We go & music to build to
@@ -19,7 +19,7 @@ fi
 if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
 	sed -i 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=28MB/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
-if [ ! -z "$ANDROID" ]; then
+if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 	checkphone
 	if [ "$GOTPHONE" = 1 ]; then
@@ -38,13 +38,13 @@ if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
 cd "$BASEPATH"/"$PRESET"
-time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI > "$SMLINUX"/buildlog.txt
-if [ ! -z "$ANDROID" ]; then
+time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
+if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
 		sed -i "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
 	fi
 	if [ "$BRANCH" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ]; then
-		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI > "$SMLINUX"/buildlog.txt
+		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG  > "$SMLINUX"/buildlog.txt
 		sed -i '/include $(BUILD_SHARED_LIBRARY)/i TEXTURE_FIX ?= 0\nNODRAWINGDISTANCE ?= 0\nBETTERCAMERA ?= 0\nifeq ($(TEXTURE_FIX),1)\n  LOCAL_CFLAGS += -DTEXTURE_FIX\nendif\nifeq ($(NODRAWINGDISTANCE),1)\n  LOCAL_CFLAGS += -DNODRAWINGDISTANCE\nendif\nifeq ($(BETTERCAMERA),1)\n  LOCAL_CFLAGS += -DBETTERCAMERA\nendif\n' "$BASEPATH"/"$PRESET"/Android.mk
 	fi
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
@@ -102,8 +102,9 @@ if [ ! -z "$ANDROID" ]; then
 			adb push "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/base.zip /sdcard/Android/data/com.vdavid003.sm64port/files/
 		fi
 	fi
-fi
-if [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ); then
+elif [ "$TARGET" = "dos" ]; then
+	ln -s "$BASEPATH"/djgpp/csdpmi/CWSDPMI.EXE "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/
+elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ); then
 	cd "$BASEPATH"/"$PRESET"
 	rm Makefile
 	git checkout Makefile
@@ -227,8 +228,8 @@ makeconfig(){
 if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
-echo '# PRESET supports sm64pc sm64-port sm64ex sm64nx render96ex cheaterex
-# sm64port-web sm64ex-web sm64-port-android-base androidex sm64ex-coop 
+echo '# PRESETs: sm64pc sm64-port sm64ex sm64nx render96ex sm64ex-coop sm64dos
+# and: sm64-portweb sm64exweb sm64-port-android-base androidex cheaterex 
 PRESET=sm64ex
 InstallHD=1
 # [ sm64ex and its forks ] 
@@ -247,6 +248,11 @@ LEGACY_RES=1
 # [ Android ]
 TOUCH_CONTROLS=1
 ARMONLY=1
+# [ DOS ]
+ENABLE_OPENGL_LEGACY=1
+# DOS_GL Supports dmesa (glide) or osmesa
+DOS_GL=osmesa
+ENABLE_OPENGL_LEGACY=1
 # [ Advanced Settings ]
 # VERSION supports us jp eu (must correspond to rom version)
 VERSION=us
@@ -256,8 +262,6 @@ MAXJOBS=
 CONFIG=1
 # BASEPATH must exist and is where folders for each repo will be placed
 BASEPATH=$HOME
-# Set AutoUpdate=0 to prevent smlinux updating itself 
-AutoUpdate=1
 # Set UpdateHD=0 to prevent smlinux updating addons when rebuilding
 UpdateHD=1
 # set DEBUG=1 if you want to make a debug build for some odd reason
@@ -268,7 +272,9 @@ BRANCH=nightly
 TARGET_WEB=0
 TARGET_RPI=0
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
-Linux="sudo apt install -y build-essential git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer"'> "$SMLINUX"/smlinuxcfg.txt
+Linux="sudo apt install -y build-essential bsdmainutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer"
+# Set AutoUpdate=0 to prevent smlinux updating itself
+AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
@@ -280,7 +286,10 @@ BASEPATH=$HOME
 ARMONLY=1
 DEBUG=0
 IMMEDIATELOAD=1
+DOS_GL=osmesa
+ENABLE_OPENGL_LEGACY=1
 SGI=0
+ANDROID=0
 source "$SMLINUX"/smlinuxcfg.txt
 if [ -z $PRESET ] && [ ! -z $REPO ]; then
 	PRESET="$REPO"
@@ -303,14 +312,14 @@ elif [ "$PRESET" = "sm64-port" ]; then
 	BRANCH=nightly
 	TARGET_WEB=0
 	TARGET_RPI=0
-elif [ "$PRESET" = "sm64ex-web" ]; then
+elif [ "$PRESET" = "sm64exweb" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
     TARGET_WEB=1
     TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
-elif [ "$PRESET" = "sm64port-web" ]; then
+elif [ "$PRESET" = "sm64-portweb" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
     TARGET_WEB=1
@@ -360,13 +369,31 @@ elif  [ "$PRESET" = "sm64-port-android-base" ]; then
 	EXTERNAL_DATA=0
 	TARGET_WEB=0
 	TARGET_RPI=0	
+elif  [ "$PRESET" = "mkstdos" ]; then
+	GIT=mkst/sm64-port
+	BRANCH=dos
+	EXTERNAL_DATA=0
+	TARGET_WEB=0
+	TARGET_RPI=0
+	InstallHD=0
+	ENABLE_OPENGL_LEGACY=1
+	TARGET=dos		
+elif  [ "$PRESET" = "sm64dos" ]; then
+	GIT=fgsfdsfgs/sm64-port
+	BRANCH=dos
+	EXTERNAL_DATA=0
+	TARGET_WEB=0
+	TARGET_RPI=0
+	InstallHD=0
+	ENABLE_OPENGL_LEGACY=1 
+	TARGET=dos		
 fi
 if [ ! `uname -m` = "x86_64" ] || [ ! "$VERSION" = "us" ]; then
 	DISCORDRPC=0
 fi
 if [ "$TARGET_WEB" = 1 ]; then 
 	TARGET=web
-else
+elif [ ! "$TARGET" = "dos" ]; then
 	TARGET=pc
 fi
 if [ -z "$MAXJOBS" ]; then
@@ -428,6 +455,23 @@ if [ ! -d "$BASEPATH"/emsdk ]; then
 	./emsdk activate latest
 fi
 source "$BASEPATH"/emsdk/emsdk_env.sh
+}
+
+
+dodos(){
+cd "$BASEPATH"
+if [ ! -d "$BASEPATH"/djgpp/bin ]; then
+	wget https://github.com/andrewwutw/build-djgpp/releases/download/v3.0/djgpp-linux64-gcc930.tar.bz2
+	tar xjf djgpp-linux64-gcc930.tar.bz2
+	rm djgpp-linux64-gcc930.tar.bz2
+fi
+if [ ! -d "$BASEPATH"/djgpp/csdpmi ]; then
+	mkdir djgpp/csdpmi
+	wget https://sandmann.dotster.com/cwsdpmi/csdpmi7b.zip
+	unzip -j -d djgpp/csdpmi csdpmi7b.zip bin/CWSDPMI.EXE
+	rm csdpmi7b.zip
+fi
+export PATH="$BASEPATH"/djgpp/bin:$PATH
 }
 
 prepnx(){
@@ -673,7 +717,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		mv "$SMLINUX"/smlinux "${MAPFILE[0]}"/
 		if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
 			echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
-			touch "$BASEPATH"/.smlinuxNopath
+			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
 			export PATH=$HOME/bin:$PATH
 			mapfile -t -d: <<<"$PATH"
@@ -700,7 +744,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
 				if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
 					echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
-					touch "$BASEPATH"/.smlinuxNopath
+					touch "$HOME"/.smlinuxNopath
 					mkdir $HOME/bin
 					export PATH=$HOME/bin:$PATH
 					mapfile -t -d: <<<"$PATH"
@@ -815,7 +859,7 @@ if [ "$TARGET_WEB"  = 1 ]; then
 	else
 		xdg-open http://localhost:8100&disown
 	fi
-elif [ ! -z "$ANDROID" ] ; then
+elif [ ! "$ANDROID" = 0 ] ; then
 	if [ "$GOTPHONE" = 1 ]; then
 		adb shell am start -n com.vdavid003.sm64port/.sm64portActivity
 		if [ "$EXTERNAL_DATA" = 1 ]; then
@@ -836,6 +880,11 @@ elif [ "$PRESET"  = "sm64ex-coop" ] ; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --server 27015 --cheats --savepath "$SHARE"/sm64ex-coop --skip-intro --configfile sm64config.server-local.txt &disown
 	./sm64.us.f3dex2e --client 127.0.0.1 27015 --cheats --savepath "$SHARE"/sm64ex-coop --skip-intro &disown
+elif [ "$TARGET" = "dos" ] && [ -f /usr/bin/dosbox ]; then
+	dosbox "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
+elif [ "$TARGET" = "dos" ]; then
+	echo Cannot testDOS Version from Linux!  I reccomend FreeDOS in VirtualBox.
+	xdg-open "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 else 
 	gtk-launch "$PRESET"&disown
 fi
@@ -894,7 +943,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			sh -c 'mplayer -nolirc -really-quiet "$BASEPATH"/sm64-port/sound/samples/sfx_mario_peach/0D.aiff&'
 		fi
 	fi
-	if [ ! -d "$SHARE"/"$PRESET" ] && [ -z "$ANDROID" ] && [ WEB_TARGET = 0 ]; then
+	if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ WEB_TARGET = 0 ]; then
 		echo Creating "$SHARE"/"$PRESET" folder for game save and configuration.
 		mkdir "$SHARE"/"$PRESET"
 	fi
@@ -902,7 +951,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo SM64 configuration file already exists from previous build.
 	elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
 		echo No compatible sm64 configuration files for this version, game will create one.
-	elif [ "$TARGET_WEB" = 0 ] && [ -z "$ANDROID" ]; then
+	elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
 		if [ -f "$SHARE"/sm64ex/sm64config.txt ]; then
 			cp "$SHARE"/sm64ex/sm64config.txt "$SHARE"/"$PRESET"
 			echo Copied configuration from sm64ex.
@@ -929,7 +978,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo Save file already exists from previous build.
 	elif [ "TEXTSAVES" = 1 ]; then
 		echo No compatible save files for this version.
-	elif [ -z "$ANDROID" ] && [ "$TARGET_WEB" = 0 ]; then
+	elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 		if [ "$PRESET" = "sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
 			cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$PRESET"/sm64_save_file.bin
 			echo Copied save file from sm64nx.
@@ -1019,21 +1068,26 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 			if [ "$PRESET" = "sm64nx" ] ; then
 				pip3 install pillow zstandard tqdm xxhash
 				gcccheck
-			elif [ ! -z "$ANDROID" ]; then
+			elif [ ! "$ANDROID" = 0 ]; then
 				androidsdk
 			elif [ "$TARGET_WEB" = 1 ]; then
 				loademsdk
+			elif [ "$TARGET" = "dos" ]; then
+				dodos
 			fi
 		elif [ "$PRESET" = "sm64nx" ] && [ ! -d "$BASEPATH"/"$PRESET/build" ]; then
 			echo "[1] Installing required build tools for nx..."
 			pip3 install pillow zstandard tqdm xxhash
 			gcccheck
-		elif [ ! -z "$ANDROID" ]; then
+		elif [ ! "$ANDROID" = 0 ]; then
 			echo "[1] Loading Android SDK Environment..."
 			androidsdk
 		elif [ "$TARGET_WEB" = 1 ]; then
 			echo "[1] Loading Enscriptem for Web Target..."
 			loademsdk
+		elif [ "$TARGET" = "dos" ]; then
+			echo "[1] Loading djgpp for DOS Target..."
+			dodos
 		else
 			echo "[1] This is not first build, skipping dependencies and romcheck..."
 		fi
@@ -1133,7 +1187,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	fi
 	echo
 	echo [3] Checking "$PRESET" github repository for updates...
-	if [ ! -z "$ANDROID" ]; then
+	if [ ! "$ANDROID" = 0 ]; then
 		cd "$BASEPATH"/"$ANDROID"
 	else
 		cd "$BASEPATH"/"$PRESET"
@@ -1179,7 +1233,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			git apply enhancements/menu-arrows.patch
 		fi
 	fi
-	if [ ! -z "$ANDROID" ]; then
+	if [ ! "$ANDROID" = 0 ]; then
 		git submodule init
 		git submodule update	
 		if [ -d "$BASEPATH"/"$ANDROID"/app/build ]; then
@@ -1268,7 +1322,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	else
 		echo [6] No resources found in previous build, skipping restore...
 	fi
-	if [ ! -z "$ANDROID" ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		zip -r -0 -u hdbase gfx
 		rm -rf gfx
@@ -1276,23 +1330,33 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	echo
 	if [ "$TARGET" = "web" ]; then
 		echo [7] Update Complete.  
-	elif [ ! -z "$ANDROID" ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
+	elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
 		echo
 		echo "ERROR: Build Failure.  Android Package Kit (apk) not found."
 		echo "smlinux exiting incomplete.  Contact #help-desk for support."
 		xdg-open https://discord.gg/Ub6YHRm &disown
 		exit
-	elif [ -z "$ANDROID" ] && [ $"TARGET_WEB" = 0 ] ; then
+	elif [ "$ANDROID" = 0 ] && [ "$TARGET" = "pc" ] ; then
 		echo [7] Verifying Menu Entry....
 		makedesktop
 		echo
 		echo [8] Update Complete.  
-	elif [ ! -z "$ANDROID" ]; then
+	elif [ ! "$ANDROID" = 0 ]; then
 		mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
 		echo [7] Update Complete. 
+	elif [ "$TARGET" = "dos" ]; then
+		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
 	fi
 	rungame
-	sleep 10
+	if [ "$TARGET" = "dos" ] && [ ! -f /usr/bin/dosbox ]; then
+		true
+	elif [ "$EXTERNAL_DATA" = 0 ]; then
+		sleep 5
+	elif [ "$PRESET" = "render96ex" ]; then
+		sleep 30
+	else 
+		sleep 10
+	fi
 	echo
 	echo smlinux is complete.  You may exit or close this terminal window.
 	if [ "$TARGET_WEB" = 1 ]; then
@@ -1303,7 +1367,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	exit
 fi
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
-	if [ ! -z "$ANDROID" ]; then
+	if [ ! "$ANDROID" = 0 ]; then
 		echo WARNING: "$ANDROID" directory already exists! 
 		echo Renaming to "$BASEPATH"/"$ANDROID".old...
 		if [ -d "$BASEPATH"/"$ANDROID".old ]; then
@@ -1320,27 +1384,29 @@ if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	cd "$BASEPATH"
-	if [ ! -z "$ANDROID" ]; then
-		printf '\n[3] Downloading Android source from github... \n\n'
+	if [ ! "$ANDROID" = 0 ]; then
+		printf "\n[3] Downloading Android source from github... \n\n"
 		git clone https://github.com/"$GIT" -b "$BRANCH" "$ANDROID"
 		cd "$ANDROID"
 		git submodule init
 		git submodule update
 		./getSDL.sh
 	else
-		printf '\n[3] Downloading "$PRESET" source from github... \n\n'
+		printf "\n[3] Downloading source from github... \n\n"
 		git clone https://github.com/"$GIT" -b "$BRANCH" "$PRESET"
 	fi
 else
 	echo ERROR: Could not rename old folder so cannot clone new one.
+	echo Proceeding with existing source.
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	echo "ERROR: Could not reach github."
 	echo "Script Ending Incomplete.  Contact #help-desk for support."
 	xdg-open https://discord.gg/Ub6YHRm &disown
 	exit
+elif [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
+	ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 fi
-ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 
 echo
 echo [4] Extracting Assets from ROM...
@@ -1360,7 +1426,7 @@ if [ "$InstallHD" = 1 ]; then
 	dohd
 elif [ "$SGI" = 1 ]; then
 	dosgi
-else
+elif [ "$TARGET" = "pc" ]
 	echo "WARNING: InstallHD Disabled in Config File."
 fi
 if  [ "$PRESET" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ] || [ "$BRANCH" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ]; then 
@@ -1395,33 +1461,39 @@ if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex
 	echo "smlinux exiting incomplete.  Contact #help-desk for support."
 	xdg-open https://discord.gg/Ub6YHRm &disown
 	exit
-fi
-if [ ! -z "$ANDROID" ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
+elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
 	echo
 	echo ERROR: Build Failure.  Expected apk file not found.
 	echo "smlinux exiting incomplete.  Contact #help-desk for support."
 	xdg-open https://discord.gg/Ub6YHRm &disown
 	exit
-elif [ -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
+elif [ ! "$ANDROID" = 0 ]; then
 	mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
+elif [ "$TARGET" = "dos" ]; then
+	mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
 fi
+
 echo
-if [ "$TARGET_WEB" = 1 ] || [ ! -z "$ANDROID" ]; then
-	echo [7] Skipping menu entry for non pc version...
-else
+if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
 	echo [7] Creating Desktop Shortcut and Menu Entry...
 	makedesktop
+else
+	echo [7] Skipping menu entry for non Linux version...
 fi
 echo
 echo [8] Build Succesful!  Testing Application Launch...
 echo
 rungame
-if [ -f "$BASEPATH"/.smlinuxNopath ]; then
-	rm "$BASEPATH"/.smlinuxNopath
+if [ -f "$HOME"/.smlinuxNopath ]; then
+	rm "$HOME"/.smlinuxNopath
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 	zenity --info --text='You did not have a home folder in your path so $HOME/bin was created.\n\nReboot or type \n\n    PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.' --title="Your installation is complete." --width=450	
 	printf '\nYou did not have a home folder in your path so $HOME/bin was created.\n\nReboot or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
-else	
+elif [ "$EXTERNAL_DATA" = 0 ]; then
+	sleep 5
+elif [ "$PRESET" = "render96ex" ]; then
+	sleep 30
+else
 	sleep 10
 fi
 echo
