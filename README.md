@@ -34,7 +34,7 @@ You must provide your own legally backed up Super Mario 64 ROM file during smlin
 
 smlinux will be installed in the first directory in your path, usually something like ~/bin or ~/Applications/.bin. After initial installation, just type 'smlinux' without dot-slash from any folder when you want to build or update again.
 
-If for some reason the process freezes during compilation, perhaps on single core cpu or system with low memory, then set JOBS=-j1. Without the 1, this switch makes make run multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
+If for some reason the process freezes during compilation, perhaps on single core cpu or system with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
@@ -57,13 +57,11 @@ If for some reason the process freezes during compilation, perhaps on single cor
 * [<strong>How do I tell smlinux to download sm64 repositories to a folder other than home?</strong>](#how-do-i-tell-smlinux-to-download-sm64-repositories-to-a-folder-other-than-home)
 
 ## **What repository should I use?**
-If you want to build for PC, the official repo from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks from there offer other changes, such as render96ex with added Luigi Keys, or sm64-coop for a 2 player network mode.
-
-If you want to build for **Android** then use sm64-port-android-base
+If you want to build for PC, the official repo from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks from there offer other changes, such as render96ex with added Luigi Keys, or sm64-coop for a 2 player network mode.  Seperate repositories are used for Android and DOS builds.
 
 ## **What branch should I use?**
 
-If you chose one of the presets, your branch is defined automatically.  For the sm6ex preset the nightly branch is used; if you want the master branch instead use PRESET=sm64pc. If sm64ex nightly works for you, I'd reccommend it as it is the most updated, but if a recent change causes build failure or other problems, use the more stable master.
+If you chose one of the presets, your branch is defined automatically.  For `PRESET=sm6ex` the nightly branch is automatically used; if you would like the master branch instead use `PRESET=sm64pc`. If sm64ex nightly works for you, I'd reccommend it as it is the most updated, but if a recent change causes build failure or other problems, use the more stable master.
 
 ## **When to use RENDER_API=GL_LEGACY?** 
 *only applies to sm64pc/sm64ex based forks*
@@ -88,7 +86,7 @@ On the render96ex fork, the latest Render 96 Model Pack and Render 96 Texture Pa
 
 Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released. 
 
-If you initially built with InstallHD=0 and wish to add later, `smlinux update --hd`, or set both InstallHD=1 and UpdateHD=1 in smlinux configuration.
+If you initially built with `InstallHD=0` and wish to add later, `smlinux update --hd`, or set both `InstallHD=1` and `UpdateHD=1` in smlinux configuration.
 
 
 ## **How to update, rebuild, or change build options later?**
@@ -108,9 +106,9 @@ Updates existing install to latest from github while retaining custom textures a
 
 You can also use this option to rebuild after you apply patches or edit your source or source assets like actors manually.
 
-Note --config is only needed if CONFIG=0 in your config file, otherwise it will come up automatically.
+Note` --config` is only needed if `CONFIG=0` in your config file, otherwise it will come up automatically.
 
-Note --updatehd only needs to be applied if UpdateHD=0 in config file, and what was initally installed with the InstallHD option has changed/updated since you last built, or if you wish to add HD add-ons to an existing build that doesn't have them.
+Note` --hd` only needs to be applied if `UpdateHD=0` in smlinux configuration, and what was initally installed with`InstallHD=1` has changed/updated since you last built, or if you wish to add HD add-ons to an existing build that doesn't have them.
 
 If you want to save your existing build, rename it (anything) before running the update, for example: 
  
@@ -170,9 +168,9 @@ Put the patch file into ~/sm64pc/enhancements (or specify the path differently w
 ## **What about distros other than Ubuntu?**
 *Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch also confirmed.*
 
-Change your Linux=parameter during first install to one that works with your distro such as those listed below, or just install dependencies first and run smlinux with Linux="" in settings (or just ignore the error from apt).  smlinux only installs dependendencies automatically during the very first installation.  If your distro needs additional dependencies not listed here, please let me know their names so I can add them.  The Ubuntu list is confirmed complete even on WSL.
+Change your `Linux=` parameter during first install to one that works with your distro such as those listed below, or just install dependencies first and run smlinux with `Linux=""` (or just ignore the error from apt).  smlinux only installs dependendencies automatically during the very first installation; if you wish to force reinstallation append ` --depends` during next update or build.
 
-Some build targets depend on an additional package not listed below.  Android builds require the android-sdk package, web targets emscriptem sdk, dos targets djgpp, and sm64nx requires g++-8 or higher.  Updating gcc, when needed will only be automatically attempted if apt is present, other distros will need to install those packages manually.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8.  (Note Ubuntu 20.04 build-essential provides gcc9.3, whereas for 18.04 its gcc7.5.)  
+If your distro needs additional dependencies not listed here, please let me know their names so I can add them.  The Ubuntu list is confirmed complete even on WSL.  Some build targets depend on an additional package not listed below.  Android builds require the android-sdk package, web targets emscriptem sdk, dos targets djgpp, and sm64nx requires g++-8 or higher.  Updating gcc, when needed will only be automatically attempted if apt is present, other distros will need to install those packages manually.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8.  (Note Ubuntu 20.04 build-essential provides gcc9.3, whereas for 18.04 its gcc7.5.)  
 
 Arch: 
     
@@ -202,7 +200,7 @@ Alpine:
 
 ## **How do I create my rom file?**
 
-Backup your cartridge to z64 format with a cartridge dumper such as a Retrode2, or buy for Wii U Virtual Console and extract image using homebrew tools.  
+Backup your cartridge with a cartridge dumper such as a Retrode2 or Mr. Backup, or buy for Wii U Virtual Console and extract image using homebrew tools.  
  &nbsp; &nbsp; [Dragonbox Store](https://www.dragonbox.de/en/accessories/cartridge-dumper/retrode2-with-all-plugins) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Stoneage Gamer](https://stoneagegamer.com/retrode-2-cart-reader-rom-dumper-for-super-nintendo-genesis-more.html) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
 [Nintendo Wii U Store](https://www.nintendo.com/games/detail/super-mario-64-wii-u) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Virtual Console ROM Claim Software]( https://github.com/JanErikGunnar/vcromclaim)
 ## **How do I remove everything smlinux created during install?**
