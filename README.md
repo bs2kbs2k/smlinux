@@ -56,22 +56,8 @@ If for some reason the process freezes during compilation, perhaps on single cor
 * [<strong>How do I remove everything smlinux created during install?</strong>](#how-do-i-remove-everything-smlinux-created-during-install)
 * [<strong>How do I tell smlinux to download sm64 repositories to a folder other than home?</strong>](#how-do-i-tell-smlinux-to-download-sm64-repositories-to-a-folder-other-than-home)
 
-## **What repository should I use?**
-If you want to build for PC, the official repo from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks from there offer other changes, such as render96ex with added Luigi Keys, or sm64-coop for a 2 player network mode.  Seperate repositories are used for Android and DOS builds.
-
-## **What branch should I use?**
-
-If you chose one of the presets, your branch is defined automatically.  For `PRESET=sm6ex` the nightly branch is automatically used; if you would like the master branch instead use `PRESET=sm64pc`. If sm64ex nightly works for you, I'd reccommend it as it is the most updated, but if a recent change causes build failure or other problems, use the more stable master.
-
-## **When to use RENDER_API=GL_LEGACY?** 
-*only applies to sm64pc/sm64ex based forks*
-
-For old video cards that support OpenGL 1.1 but not 2.1 (from year 200X).  Check your OpenGL version with the following command: 
-	
-	glxinfo | grep "OpenGL version"
- 
-If 1.1-2.0, you must use the legacy renderer.  For 2.1 or greater, standard GL renderer is reccommended, although some old computers that do support 2.1 may perform better with the legacy renderer.
-  
+## **What preset/repository should I use?**
+If you want to build for PC, the official repo from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks of sm64ex offer additional enhancements, such as render96ex with added Luigi Keys, sm64ex-coop for a 2 player network mode, or cheaterex for the latest experimental features. For android or web, presets are available based on sm64-port or sm64ex; for dos a sm64-port based fork is used. 
 
 ## **What does the InstallHD=1 option do?**
 
@@ -88,6 +74,18 @@ Some of these addons require files remaining available in discord or github, so 
 
 If you initially built with `InstallHD=0` and wish to add later, `smlinux update --hd`, or set both `InstallHD=1` and `UpdateHD=1` in smlinux configuration.
 
+## **What branch should I use?**
+
+If you chose one of the presets, the appropriate branch is defined automatically.  For `PRESET=sm6ex` the nightly branch is automatically used; if you would like the master branch instead use `PRESET=sm64pc`. If sm64ex nightly works for you, I'd reccommend it as it is the most updated, but if a recent change causes build failure or other problems, use the more stable sm64pc master. 
+
+## **When to use RENDER_API=GL_LEGACY?** 
+*only applies to sm64pc/sm64ex based forks*
+
+For old video cards that support OpenGL 1.1 but not 2.1 (from year 200X).  Check your OpenGL version with the following command: 
+	
+	glxinfo | grep "OpenGL version"
+ 
+If 1.1-2.0, you must use the legacy renderer.  For 2.1 or greater, standard GL renderer is reccommended, although some old computers that do support 2.1 may perform better with the legacy renderer.
 
 ## **How to update, rebuild, or change build options later?**
     
