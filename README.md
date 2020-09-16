@@ -58,18 +58,15 @@ If for some reason the process freezes during compilation, perhaps on single cor
 * [<strong>How do I tell smlinux to download sm64 repositories to a folder other than home?</strong>](#how-do-i-tell-smlinux-to-download-sm64-repositories-to-a-folder-other-than-home)
 
 ## **What preset/repository should I use?**
-If you want to build for PC, the official repo from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks of sm64ex offer additional enhancements, such as render96ex with added Luigi Keys, sm64ex-coop for a 2 player network mode, or cheaterex for the latest experimental features. For android or web, presets are available based on sm64-port or sm64ex; for dos a sm64-port based fork is used. 
+If you want to build for PC, the repo from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks of sm64ex offer additional enhancements, such as render96ex with added Luigi Keys, sm64ex-coop for a 2 player network mode, or cheaterex for the latest experimental features. For android or web, presets are available based on sm64-port or sm64ex; for dos a sm64-port based fork is used. 
 
 ## **What does the InstallHD=1 option do?**
 
-This will modify your source with the repo-provided 60fps patch and from #modding-releases HD Mario (Old School V2) and HD Bowser, and on both sm64-port and sm64pc/sm6ex the 3D Coin Patch (V2) will also be applied.
-  
-Additionally, on the sm64pc/sm64ex fork upscaled textures will be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.
+See the table above the FAQ for details.  This will usually modify your source with the repo-provided 60fps patch, HD Mario (Old School V2) and HD Bowser character models from #modding-releases , and apply the 3D Coin Patch (V2).  Additionally, on the sm64pc/sm64ex based forks upscaled textures will be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.
+On the render96ex fork, the latest Render 96 Model Pack and Render 96 Texture Pack will be applied.  Note these are large so require more download time, game load time, and better comupter to perform well.
 *Note that precaching these textures will make the game use more memory and increase initial startup time, but may be necessary for some computers.*
 
 On the sm64nx fork only, 60fps is already default, and with InstallHD in addition to the models and textures mentioned above, a few other add-ons are obtained which can be enabled from the in-game menu if you prefer, including SGI models and HD Luigi.
-
-On the render96ex fork, the latest Render 96 Model Pack and Render 96 Texture Pack will be applied.  Note these are large so require more download time, game load time, and better comupter to perform well.
 
 Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released. 
 
