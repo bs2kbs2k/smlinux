@@ -113,9 +113,11 @@ Note smlinux automatically saves one previous build by adding the suffix .old to
 
 ## **How do I build a different version?**
 
-	smlinux build
+	smlinux build --config
 
 Change your preset to another version and it will be installed in its own folder with its own seperate menu entry.  You can build as many versions as you like.  If you wish to build a version other than a predefined preset, leave preset blank or make your own name (which will be used for its foldername), and set GIT and BRANCH.
+
+Note `--config` is only necessary if `CONFIG=0`and/or you havent edited your smlinuxcfg.txt before build.
 
 
 ## **How to I configure options like controllers, camera, rumble, etc?**
