@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-1734
+# 2020-0915-2057
 
 domake(){
 #Here We go & music to build to
@@ -1264,6 +1264,11 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			cd "$BASEPATH"/"$PRESET"
 			git apply enhancements/menu-arrows.patch
 		fi
+	elif [ "$PRESET" = "cheaterex" ] && [ ! -f "$BASEPATH"/"$PRESET"smo.cappy_assets.zip ]; then
+		echo Getting smo cappy assets as required for cheaterex
+		cd "$BASEPATH"/"$PRESET" 
+		wget -q https://cdn.discordapp.com/attachments/723992726319792140/754402820588961882/smo.cappy_assets.zip
+		unzip -q -o smo.cappy_assets
 	fi
 	if [ "TARGET_WEB" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Removing 60fps for web target...
@@ -1383,6 +1388,12 @@ if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	else
 		printf "\n[3] Downloading source from github... \n"
 		git clone https://github.com/"$GIT" -b "$BRANCH" "$PRESET"
+	fi
+	if [ "$PRESET" = "cheaterex" ]; then
+		echo Getting smo cappy assets as required for cheaterex
+		cd "$BASEPATH"/"$PRESET" 
+		wget -q https://cdn.discordapp.com/attachments/723992726319792140/754402820588961882/smo.cappy_assets.zip
+		unzip -q -o smo.cappy_assets
 	fi
 else
 	echo ERROR: Could not rename old folder so cannot clone new one.
