@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0916-1258
+# 2020-0916-1603
 
 domake(){
 #Here We go & music to build to
@@ -1239,28 +1239,33 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		printf "\nSGI Selected, Processing...\n\n"
 		dosgi
 	fi
-	if [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "androidex" ] || [ "$PRESET" = "render96ex" ] ; then
+	if ([ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "androidex" ] || [ "$PRESET" = "render96ex" ]) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER7*.zip ]; then
+		echo Updating cheats...
 		cd "$BASEPATH"/"$PRESET"/enhancements
-		echo Applying latest cheats...
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/750380998373671012/CHEATER.zip
-		if [ -f CHEATER.zip ] && [ -f CHEATER*.patch ]; then
-			cd ..
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip ]; then
+			rm "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip
+		fi
+		if  [ "$PRESET" = "render96ex" ]; then
+			wget -q https://cdn.discordapp.com/attachments/716459185230970880/755831396991500438/CHEATERv7Render96ex.zip
+		else
+			wget -q https://cdn.discordapp.com/attachments/716459185230970880/755132231244054618/CHEATERv7.zip
+		fi
+		if [ -f CHEATER*.zip ] && [ -f CHEATER*.patch ]; then
+			cd "$BASEPATH"/"$PRESET"
 			git apply -R enhancements/CHEATER*.patch
 			cd enhancements
 			rm CHEATER*.patch
-			unzip -q CHEATER
-			rm CHEATER.zip
+			unzip -q CHEATER*
 			cd ..
 			git apply enhancements/CHEATER.patch
-		elif [ -f CHEATER.zip ]; then
-			unzip -q CHEATER
-			rm CHEATER.zip
+		elif [ -f CHEATER*.zip ]; then
+			unzip -q CHEATER*
 			cd ..
 			git apply enhancements/CHEATER.patch
 		fi
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
-			cp "$SMLINUX"/menu-arrows.patch "$BASEPATH"/"$PRESET"/enhancements
 			echo Applying Menu Arrows...
+			cp "$SMLINUX"/menu-arrows.patch "$BASEPATH"/"$PRESET"/enhancements
 			cd "$BASEPATH"/"$PRESET"
 			git apply enhancements/menu-arrows.patch
 		fi
@@ -1432,22 +1437,19 @@ fi
 if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then 
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	cp "$SMLINUX"/menu-arrows.patch .
-	if [ "$PRESET" = "sm64ex-coop" ]; then
-		# wget -q https://cdn.discordapp.com/attachments/710283360794181633/752941642671194205/CHEATER-coop.v.1.hotfix.patch
-		true
-	elif [ "$PRESET" = "render96ex"]; then
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/750380998373671012/CHEATER.zip
-		unzip CHEATER
-		rm CHEATER.zip
+	if  [ "$PRESET" = "render96ex" ]; then
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/755831396991500438/CHEATERv7Render96ex.zip
 	else
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/755132231244054618/CHEATERv7.zip
-		unzip CHEATERv7
-		rm CHEATERv7.zip
 	fi
-	cd "$BASEPATH"/"$PRESET"
-	echo Appling Cheats...
-	git apply enhancements/CHEATER*.patch
+	if [ -f CHEATER*.zip ]; then
+		unzip -q CHEATER*
+		cd "$BASEPATH"/"$PRESET"
+		echo Appling Cheats...
+		git apply enhancements/CHEATER*.patch
+	fi
 	echo Applying Menu Arrows...
+	cd "$BASEPATH"/"$PRESET"
 	git apply enhancements/menu-arrows.patch
 fi
 if [ "$BRANCH" = "sm64ex_nightly" ] && [ ! "$TOUCH_CONTROLS" = 1 ]; then
