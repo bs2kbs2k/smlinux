@@ -3,17 +3,17 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-2143
+# 2020-0916-1258
 
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	if [ -f "$BASEPATH"/"$PRESET"/sound/samples/sfx_mario/0C.aiff ]; then
-		sh -c 'mplayer -nolirc -really-quiet '"$BASEPATH"/"$PRESET"'/sound/samples/sfx_mario/0C.aiff;mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SHARE"'/sm64pc/File_Select_64_slowed_down.mp3&'
+		sh -c 'mplayer -nolirc -really-quiet '"$BASEPATH"/"$PRESET"'/sound/samples/sfx_mario/0C.aiff;mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SMLINUX"'/File_Select_64_slowed_down.mp3&'
 	elif [ -f "$BASEPATH"/sm64ex/sound/samples/sfx_mario/0C.aiff ]; then
-		sh -c 'mplayer -nolirc -really-quiet '"$BASEPATH"'/sm64ex/sound/samples/sfx_mario/0C.aiff;mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SHARE"'/sm64pc/File_Select_64_slowed_down.mp3&'
+		sh -c 'mplayer -nolirc -really-quiet '"$BASEPATH"'/sm64ex/sound/samples/sfx_mario/0C.aiff;mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SMLINUX"'/File_Select_64_slowed_down.mp3&'
 	else
-		sh -c 'mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SHARE"'/sm64pc/File_Select_64_slowed_down.mp3&'
+		sh -c 'mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SMLINUX"'/File_Select_64_slowed_down.mp3&'
 	fi
 fi 
 if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
@@ -64,7 +64,7 @@ if [ ! "$ANDROID" = 0 ]; then
 		echo
 		TOUCH_CONTROLS=$TOUCH_CONTROLS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA VERSION=$VERSION TEXTSAVES=$TEXTSAVES ./gradlew installDebug -q
 	else
-		echo WARNING: Phone not deteced, building without installing.
+		echo WARNING: Phone not detected, building without installing.
 		echo
 		TOUCH_CONTROLS=$TOUCH_CONTROLS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA VERSION=$VERSION TEXTSAVES=$TEXTSAVES ./gradlew assembleDebug -q
 	fi
@@ -328,7 +328,7 @@ elif [ "$PRESET" = "sm64nx" ]; then
 	EXTERNAL_DATA=0
 elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET" = "render96" ] || [ "$PRESET" = "Render96" ]; then
 	PRESET=render96ex
-	GIT=render96ex/render96ex
+	GIT=render96/render96ex
 	BRANCH=master
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
@@ -1205,13 +1205,13 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			echo Update Succesful.
 		fi
 		echo Reapplying previously removed patches...
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
-			echo 3D Coins...
-			git apply enhancements/3d_coin*.patch
-		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 			echo 60fps...
 			git apply enhancements/60fps*.patch
+		fi
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
+			echo 3D Coins...
+			git apply enhancements/3d_coin*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
 			echo Cheater...
