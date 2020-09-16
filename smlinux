@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-2057
+# 2020-0915-2143
 
 domake(){
 #Here We go & music to build to
@@ -639,13 +639,6 @@ if [ ! -f /usr/bin/7z ]; then
 		fi
 	fi
 fi
-if [ -d "$BASEPATH"/"$PRESET"/actors.bak ]; then
-	echo Restoring default actors...
-	cd "$BASEPATH"/"$PRESET"/enhancements
-	rm -rf "$BASEPATH"/"$PRESET"/actors
-	mv "$BASEPATH"/"$PRESET"/actors.bak "$BASEPATH"/"$PRESET"/actors
-	rm hd_bowser.rar Old_School_HD_Mario_Model.zip
-fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 	echo Removing 3D coins...
 	cd "$BASEPATH"/"$PRESET"
@@ -659,6 +652,13 @@ if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 	if [ -f "$SHARE"/"$PRESET"/sm64config.txt ]; then
 		sed -i 's/vsync true/vsync false/g' "$SHARE"/"$PRESET"/sm64config.txt
 	fi
+fi
+if [ -d "$BASEPATH"/"$PRESET"/actors.bak ]; then
+	echo Restoring default actors...
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	rm -rf "$BASEPATH"/"$PRESET"/actors
+	mv "$BASEPATH"/"$PRESET"/actors.bak "$BASEPATH"/"$PRESET"/actors
+	rm hd_bowser.rar Old_School_HD_Mario_Model.zip
 fi
 if [ "$PRESET" = "render96ex" ] ; then
 	cd "$BASEPATH"/"$PRESET"/enhancements 
