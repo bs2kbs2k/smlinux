@@ -202,7 +202,7 @@ Alpine:
 
 ## **How do I create my rom file?**
 
-Backup your cartridge with a cartridge dumper such as a Retrode2 or Mr. Backup, or buy for Wii U Virtual Console and extract image using homebrew tools.  
+Backup cartridge with a dumper such as Retrode2 or Mr. Backup, or buy for Wii U Virtual Console and extract image using homebrew tools.  
  &nbsp; &nbsp; [Dragonbox Store](https://www.dragonbox.de/en/accessories/cartridge-dumper/retrode2-with-all-plugins) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Stoneage Gamer](https://stoneagegamer.com/retrode-2-cart-reader-rom-dumper-for-super-nintendo-genesis-more.html) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
 [Nintendo Wii U Store](https://www.nintendo.com/games/detail/super-mario-64-wii-u) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [Virtual Console ROM Claim Software]( https://github.com/JanErikGunnar/vcromclaim)
 ## **How do I remove everything smlinux created during install?**
