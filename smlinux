@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0915-1512
+# 2020-0915-1734
 
 domake(){
 #Here We go & music to build to
@@ -301,16 +301,13 @@ fi
 if [ "$PRESET" = "sm64pc" ]; then
 	GIT=sm64ex/sm64pc
 	BRANCH=master
-	TARGET_WEB=0
 	elif [ "$PRESET" = "sm64-port" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
-	TARGET_WEB=0
 	EXTERNAL_DATA=0
 	elif [ "$PRESET" = "sm64ex" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
-	TARGET_WEB=0
 	elif [ "$PRESET" = "sm64exweb" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
@@ -328,13 +325,11 @@ elif [ "$PRESET" = "sm64-portweb" ]; then
 elif [ "$PRESET" = "sm64nx" ]; then
 	GIT=teamsalta/sm64nx
 	BRANCH=master
-	TARGET_WEB=0
 	EXTERNAL_DATA=0
 elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET" = "render96" ] || [ "$PRESET" = "Render96" ]; then
 	PRESET=render96ex
 	GIT=render96ex/render96ex
 	BRANCH=master
-	TARGET_WEB=0
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
 	SGI=1
@@ -342,12 +337,10 @@ elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" =
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
-	TARGET_WEB=0
 elif  [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "coop" ]; then
 	PRESET=sm64ex-coop
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=coop
-	TARGET_WEB=0
 	NODRAWINGDISTANCE=1
 elif [ "$PRESET" = "androidex" ] ; then
 	ANDROID="$PRESET"
@@ -370,17 +363,14 @@ elif  [ "$PRESET" = "mkstdos" ]; then
 	EXTERNAL_DATA=0
 	TARGET_WEB=0
 	TARGET_RPI=0
-	InstallHD=0
-	ENABLE_OPENGL_LEGACY=1
 	TARGET=dos		
+	InstallHD=0
 elif  [ "$PRESET" = "sm64dos" ]; then
 	GIT=fgsfdsfgs/sm64-port
 	BRANCH=dos
 	EXTERNAL_DATA=0
 	TARGET_WEB=0
 	TARGET_RPI=0
-	InstallHD=0
-	ENABLE_OPENGL_LEGACY=1 
 	TARGET=dos		
 fi
 if [ ! `uname -m` = "x86_64" ] || [ ! "$VERSION" = "us" ]; then
@@ -407,8 +397,10 @@ elif [ "$2" = "--hd" ] || [ "$3" = "--hd" ] ||[ "$4" = "--hd" ] ||[ "$5" = "--hd
 fi
 if [ "$2" = "--sgi" ] || [ "$3" = "--sgi" ] ||[ "$4" = "--sgi" ] ||[ "$5" = "--sgi" ]; then
 	SGI=1
+	EXTERNAL_DATA=1
 elif [ "$2" = "--SGI" ] || [ "$3" = "--SGI" ] ||[ "$4" = "--SGI" ] ||[ "$5" = "--SGI" ]; then
 	SGI=1
+	EXTERNAL_DATA=1
 fi
 if [ "$2" = "--config" ] || [ "$3" = "--config" ] ||[ "$4" = "--config" ] ||[ "$5" = "--config" ]; then
 	CONFIG=1
@@ -1382,14 +1374,14 @@ fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	cd "$BASEPATH"
 	if [ ! "$ANDROID" = 0 ]; then
-		printf "\n[3] Downloading Android source from github... \n\n"
+		printf "\n[3] Downloading Android source from github... \n"
 		git clone https://github.com/"$GIT" -b "$BRANCH" "$ANDROID"
 		cd "$ANDROID"
 		git submodule init
 		git submodule update
 		./getSDL.sh
 	else
-		printf "\n[3] Downloading source from github... \n\n"
+		printf "\n[3] Downloading source from github... \n"
 		git clone https://github.com/"$GIT" -b "$BRANCH" "$PRESET"
 	fi
 else
@@ -1430,7 +1422,8 @@ if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "s
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	cp "$SMLINUX"/menu-arrows.patch .
 	if [ "$PRESET" = "sm64ex-coop" ]; then
-		wget -q https://cdn.discordapp.com/attachments/710283360794181633/752941642671194205/CHEATER-coop.v.1.hotfix.patch
+		# wget -q https://cdn.discordapp.com/attachments/710283360794181633/752941642671194205/CHEATER-coop.v.1.hotfix.patch
+		true
 	elif [ "$PRESET" = "render96ex"]; then
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/750380998373671012/CHEATER.zip
 		unzip CHEATER
