@@ -46,6 +46,7 @@ If for some reason the process freezes during compilation, perhaps on single cor
 * [<strong>What branch should I use?</strong>](#what-branch-should-i-use)
 * [<strong>When to use RENDER_API=GL_LEGACY?</strong>](#when-to-use-render_apigl_legacy)
 * [<strong>How to update, rebuild, or change build options later?</strong>](#how-to-update-rebuild-or-change-build-options-later)
+* [<strong>How do I build a different version?</strong>](#how-do-i-build-a-different-version)
 * [<strong>How to I configure options like controllers, camera, rumble, etc?</strong>](#how-to-i-configure-options-like-controllers-camera-rumble-etc)
 * [<strong>Where are my configuration files and saved games stored?</strong>](#where-are-my-configuration-files-and-saved-games-stored)
 * [<strong>Are there any cheats?</strong>](#are-there-any-cheats)
@@ -109,6 +110,13 @@ Note` --hd` only needs to be applied if `UpdateHD=0` in smlinux configuration, a
 Note smlinux automatically saves one previous build by adding the suffix .old to its foldername (and restores it if your update fails to build). If you want prevent it from being erased during the next update, rename it (anything) before running smlinux, for example: 
  
 	mv ~/sm64pc/build/us_pc.old ~/sm64pc/build/firstbuild
+
+## **How do I build a different version?**
+
+	smlinux build
+
+Change your preset to another version and it will be installed in its own folder with its own seperate menu entry.  You can build as many versions as you like.  If you wish to build a version other than a predefined preset, leave preset blank or make your own name (which will be used for its foldername), and set GIT and BRANCH.
+
 
 ## **How to I configure options like controllers, camera, rumble, etc?**
 *dont not apply to sm64-port repository*
