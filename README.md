@@ -37,6 +37,7 @@ smlinux will be installed in the first directory in your path, usually something
 If for some reason the process freezes during compilation, perhaps on single core cpu or system with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/presets.png>
 
 # Frequently Asked Questions
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
