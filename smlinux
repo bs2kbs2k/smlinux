@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0916-1603
+# 2020-0916-2356
 
 domake(){
 #Here We go & music to build to
@@ -889,6 +889,9 @@ fi
 if [ ! -d "$SHARE" ]; then 
 	mkdir "$SHARE"
 fi
+if [ ! -d "$SHARE"/"$PRESET" ]; then
+	mkdir "$SHARE"/"$PRESET"
+fi
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$1" = "config" ]; then
 		editconfig
@@ -928,7 +931,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			sh -c 'mplayer -nolirc -really-quiet "$BASEPATH"/sm64-port/sound/samples/sfx_mario_peach/0D.aiff&'
 		fi
 	fi
-	if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ WEB_TARGET = 0 ]; then
+	if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ "$WEB_TARGET" = 0 ]; then
 		echo Creating "$SHARE"/"$PRESET" folder for game save and configuration.
 		mkdir "$SHARE"/"$PRESET"
 	fi
