@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0917-1231
+# 2020-0917-1320
 
 domake(){
 #Here We go & music to build to
@@ -40,7 +40,9 @@ if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
 cd "$BASEPATH"/"$PRESET"
-echo make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt 
+echo next line
+echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt 
+echo previous line
 time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
@@ -111,7 +113,13 @@ elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]
 	cd "$BASEPATH"/"$PRESET"
 	rm Makefile
 	git checkout Makefile
-fi
+elif [ "$LEGACY_RES" = 0 ]; then
+		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+		zip -r -0 base sound gfx
+		if [ -f base.zip ]; then
+			rm -rf sound gfx
+		fi
+	fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	killall -q -y1h mplayer
 fi
@@ -342,6 +350,7 @@ elif [ "$PRESET" = "r96proto" ]; then
 	TEXTSAVES=1
 	SGI=1
 	DISCORDRPC=0
+	LEGACY_RES=0
 elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" = "CHEATEREX" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
@@ -548,27 +557,40 @@ else
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git pull
+		elif [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+			echo Linking Existing Textures from Render96ex
+			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
+			ln -s "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			ln -s "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			echo Updating textures from github...
+			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			git pull
+		elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+			echo Linking Existing Textures from Render96ex Fastbuild Prototype
+			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
+			ln -s "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			ln -s "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			echo Updating textures from github...
+			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			git pull
 		elif [  -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
-			echo Downloading Cleaner Aesthetics Textures...
-			git clone --single-branch https://github.com/CrashCrod/Cleaner-Aesthetics.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-		elif [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
-			if [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-				echo Linking Existing Textures from Render96ex
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-				ln -s "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/
-			elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-				echo Linking Existing Textures from Render96ex Fastbuild Prototype
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-				ln -s "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/
-			elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
+		fi
+		if [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
+			if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 				echo Downloading Render96 Textures... 
 				git clone --single-branch https://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			else
 				echo Downloading Cleaner Aesthetics Textures...
 				git clone --single-branch https://github.com/CrashCrod/Cleaner-Aesthetics "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
+		fi
+		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old ]; then
+			mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		fi
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes ]; then
 			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes
