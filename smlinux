@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0917-1018
+# 2020-0917-1205
 
 domake(){
 #Here We go & music to build to
@@ -40,6 +40,7 @@ if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
 cd "$BASEPATH"/"$PRESET"
+echo make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt 
 time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
@@ -230,8 +231,9 @@ makeconfig(){
 if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
-echo '# PRESETs: sm64pc sm64-port sm64ex sm64nx render96ex sm64ex-coop sm64dos
-# & sm64-portweb sm64exweb sm64-port-android-base androidex cheaterex r96proto
+echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex
+# AND: sm64-port sm64nx sm64ex-coop
+# AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
 PRESET=sm64ex
 InstallHD=1
 # [ sm64ex and its forks ] 
@@ -268,11 +270,11 @@ BASEPATH=$HOME
 UpdateHD=1
 # set DEBUG=1 if you want to make a debug build for some odd reason
 DEBUG=0
+TARGET_WEB=0
+TARGET_RPI=0
 # [ These settings are ignored if PRESET is known ]
 GIT=sm64pc/sm64ex
 BRANCH=nightly
-TARGET_WEB=0
-TARGET_RPI=0
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 Linux="sudo apt install -y build-essential bsdmainutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer"
 # Set AutoUpdate=0 to prevent smlinux updating itself
@@ -301,14 +303,14 @@ fi
 if [ "$PRESET" = "sm64pc" ]; then
 	GIT=sm64ex/sm64pc
 	BRANCH=master
-	elif [ "$PRESET" = "sm64-port" ]; then
+elif [ "$PRESET" = "sm64-port" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
 	EXTERNAL_DATA=0
-	elif [ "$PRESET" = "sm64ex" ]; then
+elif [ "$PRESET" = "sm64ex" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
-	elif [ "$PRESET" = "sm64exweb" ]; then
+elif [ "$PRESET" = "sm64exweb" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
 	TARGET_WEB=1
@@ -332,7 +334,7 @@ elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET"
 	BRANCH=master
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
-	F
+	SGI=1
 elif [ "$PRESET" = "r96proto" ]; then
 	GIT=render96/render96ex
 	BRANCH=fastbuild_prototype
@@ -552,7 +554,13 @@ else
 			git clone --single-branch https://github.com/CrashCrod/Cleaner-Aesthetics.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		elif [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
-			if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
+			if [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+				ln -s "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/
+			elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+				ln -s "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/
+			elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 				echo Downloading Render96 Textures... 
 				git clone --single-branch https://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			else
@@ -898,9 +906,6 @@ fi
 if [ ! -d "$SHARE" ]; then 
 	mkdir "$SHARE"
 fi
-if [ ! -d "$SHARE"/"$PRESET" ]; then
-	mkdir "$SHARE"/"$PRESET"
-fi
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$1" = "config" ]; then
 		editconfig
@@ -931,16 +936,16 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 	#Play a sound clip for no reason - thank you for playing my game.
 	if [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ]; then
 		if [ -f "$BASEPATH"/sm64pc/sound/samples/sfx_mario_peach/0D.aiff ]; then
-			sh -c 'mplayer -nolirc -really-quiet "$BASEPATH"/sm64pc/sound/samples/sfx_mario_peach/0D.aiff&'
+			mplayer -nolirc -really-quiet "$BASEPATH"/sm64pc/sound/samples/sfx_mario_peach/0D.aiff&
 		elif [ -f "$BASEPATH"/sm64ex/sound/samples/sfx_mario_peach/0D.aiff ]; then
-			sh -c 'mplayer -nolirc -really-quiet "$BASEPATH"/sm64ex/sound/samples/sfx_mario_peach/0D.aiff&'
+			mplayer -nolirc -really-quiet "$BASEPATH"/sm64ex/sound/samples/sfx_mario_peach/0D.aiff&
 		elif [ -f "$BASEPATH"/render96ex/sound/samples/sfx_mario_peach/0D.aiff ]; then
-			sh -c 'mplayer -nolirc -really-quiet "$BASEPATH"/render96ex/sound/samples/sfx_mario_peach/0D.aiff&'
+			mplayer -nolirc -really-quiet "$BASEPATH"/render96ex/sound/samples/sfx_mario_peach/0D.aiff&
 		elif [ -f "$BASEPATH"/sm64-port/sound/samples/sfx_mario_peach/0D.aiff ]; then
-			sh -c 'mplayer -nolirc -really-quiet "$BASEPATH"/sm64-port/sound/samples/sfx_mario_peach/0D.aiff&'
+			mplayer -nolirc -really-quiet "$BASEPATH"/sm64-port/sound/samples/sfx_mario_peach/0D.aiff&
 		fi
 	fi
-	if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ "$WEB_TARGET" = 0 ]; then
+	if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 		echo Creating "$SHARE"/"$PRESET" folder for game save and configuration.
 		mkdir "$SHARE"/"$PRESET"
 	fi
@@ -973,7 +978,13 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 	fi
 	if [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/sm64.sav ]; then
 		echo Save file already exists from previous build.
-	elif [ "TEXTSAVES" = 1 ]; then
+	elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
+		cp "$SHARE"/render96ex/render96_save_file_0.sav "$SHARE"/"$PRESET"
+		echo Copied Save file from Render96
+	elif [ "$PRESET" = "render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
+		cp "$SHARE"/r96proto/render96_save_file_0.sav "$SHARE"/"$PRESET"
+		echo Copied Save file from Render96 Fastbuild_Prototype
+	elif [ "$TEXTSAVES" = 1 ]; then
 		echo No compatible save files for this version.
 	elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 		if [ "$PRESET" = "sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
