@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0917-1320
+# 2020-0917-1551
 
 domake(){
 #Here We go & music to build to
@@ -114,12 +114,19 @@ elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]
 	rm Makefile
 	git checkout Makefile
 elif [ "$LEGACY_RES" = 0 ]; then
-		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-		zip -r -0 base sound gfx
-		if [ -f base.zip ]; then
-			rm -rf sound gfx
-		fi
+	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+	zip -r -0 base sound gfx
+	if [ -f base.zip ]; then
+		rm -rf sound gfx
 	fi
+elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.zip ]; then
+		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+		if [ -f base.zip ]; then
+			rm base.zip
+		fi
+		mv awesome-legacy.zip base.zip
+fi
+
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	killall -q -y1h mplayer
 fi
@@ -558,22 +565,22 @@ else
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git pull
 		elif [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-			echo Linking Existing Textures from Render96ex
+			echo Copying Existing Textures from Render96ex
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
-			ln -s "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			ln -s "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			cp -r "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			cp -r "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git pull
 		elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-			echo Linking Existing Textures from Render96ex Fastbuild Prototype
+			echo Copying Existing Textures from Render96ex Fastbuild Prototype
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
-			ln -s "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			ln -s "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			cp -r "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			cp -r "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git pull
@@ -603,6 +610,8 @@ else
 			echo Getting High Quality Sounds...
 			wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
 		fi
+	else
+		echo WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
 	fi
 	if [ "$PRESET" = "r96proto" ]; then
 		echo WARNING: Skipping Models for r96 proto
@@ -1409,7 +1418,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		true
 	elif [ "$EXTERNAL_DATA" = 0 ]; then
 		sleep 5
-	elif  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
+	elif  ([ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]) && [ "$InstallHD" = 1 ]; then
 		sleep 30
 	else 
 		sleep 10
@@ -1556,7 +1565,7 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 	printf '\nYou did not have a home folder in your path so $HOME/bin was created.\n\nReboot or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 5
-elif  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
+elif  ([ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]) && [ "$InstallHD" = 1 ]; then
 	sleep 30
 else
 	sleep 10
