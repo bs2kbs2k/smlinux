@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0916-2356
+# 2020-0917-0928
 
 domake(){
 #Here We go & music to build to
@@ -231,7 +231,7 @@ if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
 echo '# PRESETs: sm64pc sm64-port sm64ex sm64nx render96ex sm64ex-coop sm64dos
-# and: sm64-portweb sm64exweb sm64-port-android-base androidex cheaterex 
+# & sm64-portweb sm64exweb sm64-port-android-base androidex cheaterex r96proto
 PRESET=sm64ex
 InstallHD=1
 # [ sm64ex and its forks ] 
@@ -332,6 +332,12 @@ elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET"
 	BRANCH=master
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
+	F
+elif [ "$PRESET" = "r96proto" ]; then
+	GIT=render96/render96ex
+	BRANCH=fastbuild_prototype
+	EXTERNAL_DATA=1
+	TEXTSAVES=1
 	SGI=1
 elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" = "CHEATEREX" ]; then
 	PRESET=cheaterex
@@ -398,9 +404,11 @@ fi
 if [ "$2" = "--sgi" ] || [ "$3" = "--sgi" ] ||[ "$4" = "--sgi" ] ||[ "$5" = "--sgi" ]; then
 	SGI=1
 	EXTERNAL_DATA=1
+	DOSGI=1
 elif [ "$2" = "--SGI" ] || [ "$3" = "--SGI" ] ||[ "$4" = "--SGI" ] ||[ "$5" = "--SGI" ]; then
 	SGI=1
 	EXTERNAL_DATA=1
+	DOSGI=1
 fi
 if [ "$2" = "--config" ] || [ "$3" = "--config" ] ||[ "$4" = "--config" ] ||[ "$5" = "--config" ]; then
 	CONFIG=1
@@ -543,7 +551,7 @@ else
 			git clone --single-branch https://github.com/CrashCrod/Cleaner-Aesthetics.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		elif [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
-			if [ "$PRESET" = "render96ex" ]; then
+			if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 				echo Downloading Render96 Textures... 
 				git clone --single-branch https://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			else
@@ -660,7 +668,7 @@ if [ -d "$BASEPATH"/"$PRESET"/actors.bak ]; then
 	mv "$BASEPATH"/"$PRESET"/actors.bak "$BASEPATH"/"$PRESET"/actors
 	rm hd_bowser.rar Old_School_HD_Mario_Model.zip
 fi
-if [ "$PRESET" = "render96ex" ] ; then
+if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements 
 	wget -q https://cdn.discordapp.com/attachments/730551213376143431/745382037560492132/RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
 	SGIFILE=RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
@@ -775,7 +783,7 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 	elif [ "$PRESET" = "sm64nx" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/711253314855108629/719215654837682226/Super_Mario_64.png
 		mv Super_Mario_64.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "render96ex" ]; then 
+	elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 		mv "$SMLINUX"/r96-icon.png "$SHARE"/icons/"$PRESET".png
 	elif [ "$PRESET" = "cheaterex" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745150550382870548/bowser.png
@@ -1007,6 +1015,7 @@ if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
 	rm -rf "$BASEPATH"/sm64-port
 	rm -rf "$BASEPATH"/sm64nx
 	rm -rf "$BASEPATH"/render96ex
+	rm -rf "$BASEPATH"/r96proto
 	rm -rf "$BASEPATH"/cheaterex
 	rm -rf "$BASEPATH"/sm64ex-coop
 	rm -rf "$BASEPATH"/sm64-port-android.base
@@ -1015,6 +1024,7 @@ if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
 	rm -rf "$BASEPATH"/sm64-port.old
 	rm -rf "$BASEPATH"/sm64nx.old
 	rm -rf "$BASEPATH"/render96ex.old
+	rm -rf "$BASEPATH"/r96proto.old
 	rm -rf "$BASEPATH"/cheaterex.old
 	rm -rf "$BASEPATH"/sm64ex-coop.old
 	rm -rf "$BASEPATH"/sm64-port-android.base.old
@@ -1023,16 +1033,20 @@ if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
 	rm -rf "$SHARE"/sm64-port
 	rm -rf "$SHARE"/sm64nx
 	rm -rf "$SHARE"/render96ex
+	rm -rf "$SHARE"/r96proto
 	rm -rf "$SHARE"/cheaterex
 	rm -rf "$SHARE"/sm64ex-coop
 	rm "$SHARE"/icons/sm64*
 	rm "$SHARE"/icons/render96ex*
+	rm "$SHARE"/icons/r96proto*
 	rm "$SHARE"/icons/cheaterex*
 	rm "$SHARE"/applications/sm64*
 	rm "$SHARE"/applications/render96ex*
+	rm "$SHARE"/applications/r96proto*
 	rm "$SHARE"/applications/cheaterex*
 	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/sm64*.desktop
 	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/render96ex*.desktop
+	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/r96proto*.desktop
 	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/cheaterex*.desktop
 	rm $HOME/Downloads/smlinux.*
 	echo Note this did not remove any packages installed as build tools or dependencies.
@@ -1238,17 +1252,20 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	echo [4] Applying pre-build modifications...
 	if [ "$UpdateHD" = 1 ] && [ "$InstallHD" = 1 ]; then
 		dohd
-	elif [ "$SGI" = 1 ]; then
+	elif [ "$DOSGI" = 1 ]; then
 		printf "\nSGI Selected, Processing...\n\n"
 		dosgi
+	else
+		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
+		echo set InstallHD=1 and UpdatehD=1 if you would like these checked for udpates.
 	fi
-	if ([ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "androidex" ] || [ "$PRESET" = "render96ex" ]) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER7*.zip ]; then
+	if ([ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "androidex" ] || [ "$PRESET" = "render96ex" ] ) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER7*.zip ]; then
 		echo Updating cheats...
 		cd "$BASEPATH"/"$PRESET"/enhancements
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip ]; then
 			rm "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip
 		fi
-		if  [ "$PRESET" = "render96ex" ]; then
+		if  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/755831396991500438/CHEATERv7Render96ex.zip
 		else
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/755132231244054618/CHEATERv7.zip
@@ -1354,7 +1371,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		true
 	elif [ "$EXTERNAL_DATA" = 0 ]; then
 		sleep 5
-	elif [ "$PRESET" = "render96ex" ]; then
+	elif  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 		sleep 30
 	else 
 		sleep 10
@@ -1432,7 +1449,7 @@ echo
 
 if [ "$InstallHD" = 1 ]; then 
 	dohd
-elif [ "$SGI" = 1 ]; then
+elif [ "$DOSGI" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
@@ -1440,7 +1457,7 @@ fi
 if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then 
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	cp "$SMLINUX"/menu-arrows.patch .
-	if  [ "$PRESET" = "render96ex" ]; then
+	if  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/755831396991500438/CHEATERv7Render96ex.zip
 	else
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/755132231244054618/CHEATERv7.zip
@@ -1501,7 +1518,7 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 	printf '\nYou did not have a home folder in your path so $HOME/bin was created.\n\nReboot or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 5
-elif [ "$PRESET" = "render96ex" ]; then
+elif  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 	sleep 30
 else
 	sleep 10
