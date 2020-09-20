@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0917-1222
+# 2020-0917-1231
 
 domake(){
 #Here We go & music to build to
@@ -980,7 +980,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			mv "$SHARE"/"$PRESET"/sm64config.txt "$SHARE"/"$PRESET"/CHEATERex_config.txt
 		fi
 	fi
-	if [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/sm64.sav ] || [ -f "$SHARE"/"$PRESET"/render96_save_file_0.sav] ; then
+	if [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/sm64.sav ] || [ -f "$SHARE"/"$PRESET"/render96_save_file_0.sav ] ; then
 		echo Save file already exists from previous build.
 	elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
 		cp "$SHARE"/render96ex/render96_save_file_0.sav "$SHARE"/"$PRESET"
