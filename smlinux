@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0917-1205
+# 2020-0917-1222
 
 domake(){
 #Here We go & music to build to
@@ -555,9 +555,11 @@ else
 			mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		elif [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
 			if [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+				echo Linking Existing Textures from Render96ex
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 				ln -s "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/
 			elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+				echo Linking Existing Textures from Render96ex Fastbuild Prototype
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 				ln -s "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/
 			elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
@@ -580,7 +582,9 @@ else
 			wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
 		fi
 	fi
-	if  [ "$SGI" = 1 ]; then
+	if [ "$PRESET" = "r96proto" ]; then
+		echo WARNING: Skipping Models for r96 proto
+	elif  [ "$SGI" = 1 ]; then
 		dosgi
 	elif  [ ! "$SGI" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ] && [ ! "$TARGET" = "dos" ]; then
@@ -976,7 +980,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			mv "$SHARE"/"$PRESET"/sm64config.txt "$SHARE"/"$PRESET"/CHEATERex_config.txt
 		fi
 	fi
-	if [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/sm64.sav ]; then
+	if [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/sm64.sav ] || [ -f "$SHARE"/"$PRESET"/render96_save_file_0.sav] ; then
 		echo Save file already exists from previous build.
 	elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
 		cp "$SHARE"/render96ex/render96_save_file_0.sav "$SHARE"/"$PRESET"
