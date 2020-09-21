@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0917-2150
+# 2020-0917-2214
 
 domake(){
 #Here We go & music to build to
@@ -576,45 +576,32 @@ else
 			git checkout gfx
 			git pull
 		elif [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Updating render96 textures from github...
-			cd "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res
-			git pull
 			echo Copying render96 texutres from render96ex
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
-			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			fi
-			cp -r -u "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
+			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
 			cp -r -u "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-		elif [ "$PRESET" = "r96proto" ]; then
-			if [ ! -d "$BASEPATH"/render96ex ]; then
-				echo render96ex not installed so creating base folders for shared textures...
-				mkdir "$BASEPATH"/render96ex
-			fi
-			if [ ! -d "$BASEPATH"/render96ex/build ]; then
-				mkdir "$BASEPATH"/render96ex/build
-			fi
-			if [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET" ]; then
-				mkdir "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"
-			fi
-			if [  -d "$BASEPATH"/"$PRESET"/render96ex/"$VERSION"_"$TARGET"/res ] ; then
-				mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
-			fi
-			echo Downloading Render96 Textures... 
-			git clone --single-branch https://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res
-			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+			echo Updating render96 textures from github...
+			cd "$BASEPATH"/"$PRESET"/"$VERSION"_"$TARGET"/res
+			git checkout gfx
+			git pull
+		elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git ]; then
+			echo Copying render96 texutres from r96proto
+			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
-			cp -r -u "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res
-			mv -n "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res
+			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
+			cp -r -u "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
+			echo Updating render96 textures from github...
+			cd "$BASEPATH"/"$PRESET"/"$VERSION"_"$TARGET"/res
+			git checkout gfx
+			git pull
 		elif [  -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
 		fi
 		if [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
-			if [ "$PRESET" = "render96ex" ]; then
+			if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 				echo Downloading Render96 Textures... 
 				git clone --single-branch https://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			else
