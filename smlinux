@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0917-1752
+# 2020-0917-1755
 
 domake(){
 #Here We go & music to build to
@@ -577,7 +577,7 @@ else
 			git pull
 		elif [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Updating render96 textures from github...
-			cd "$BASEPATH"/render96/build/"$VERSION"_"$TARGET"/res
+			cd "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res
 			git pull
 			echo Copying render96 texutres from render96ex
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
