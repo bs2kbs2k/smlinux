@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0917-1551
+# 2020-0917-1752
 
 domake(){
 #Here We go & music to build to
@@ -40,9 +40,9 @@ if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
 cd "$BASEPATH"/"$PRESET"
-echo next line
-echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt 
-echo previous line
+echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
+echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG 
+echo IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL -j"$MAXJOBS"
 time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
@@ -115,9 +115,10 @@ elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]
 	git checkout Makefile
 elif [ "$LEGACY_RES" = 0 ]; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-	zip -r -0 base sound gfx
+	echo Creating Basepack...
+	zip -q -r -0 base sound levels actors textures
 	if [ -f base.zip ]; then
-		rm -rf sound gfx
+		rm -rf sound level actors textures
 	fi
 elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.zip ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -564,31 +565,51 @@ else
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git pull
-		elif [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-			echo Copying Existing Textures from Render96ex
+		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git ] ; then
+			echo Restoring old texture source...
+			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
+			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			mv "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git .
+			echo Updating textures from github...
+			git checkout gfx
+			git pull
+		elif [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
+			echo Updating render96 textures from github...
+			cd "$BASEPATH"/render96/build/"$VERSION"_"$TARGET"/res
+			git pull
+			echo Copying render96 texutres from render96ex
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
-			cp -r "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			cp -r "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			echo Updating textures from github...
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			git pull
-		elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-			echo Copying Existing Textures from Render96ex Fastbuild Prototype
+			cp -r -u "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+		elif [ "$PRESET" = "r96proto" ]; then
+			if [ ! -d "$BASEPATH"/render96ex ]; then
+				echo render96ex not installed so creating base folders for shared textures...
+				mkdir "$BASEPATH"/render96ex
+			fi
+			if [ ! -d "$BASEPATH"/render96ex/build ]; then
+				mkdir "$BASEPATH"/render96ex/build
+			fi
+			if [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET" ]; then
+				mkdir "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"
+			fi
+			if [  -d "$BASEPATH"/"$PRESET"/render96ex/"$VERSION"_"$TARGET"/res ] ; then
+				mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
+			fi
+			echo Downloading Render96 Textures... 
+			git clone --single-branch https://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
-			cp -r "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			cp -r "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			echo Updating textures from github...
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			git pull
+			cp -r -u "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res
+			mv -n "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res
 		elif [  -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
 		fi
 		if [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
-			if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
+			if [ "$PRESET" = "render96ex" ]; then
 				echo Downloading Render96 Textures... 
 				git clone --single-branch https://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			else
@@ -613,7 +634,7 @@ else
 	else
 		echo WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
 	fi
-	if [ "$PRESET" = "r96proto" ]; then
+	if [ "$PRESET" = "r96proto" ]; then 		
 		echo WARNING: Skipping Models for r96 proto
 	elif  [ "$SGI" = 1 ]; then
 		dosgi
