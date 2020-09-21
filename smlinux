@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0917-1755
+# 2020-0917-2144
 
 domake(){
 #Here We go & music to build to
@@ -116,9 +116,9 @@ elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]
 elif [ "$LEGACY_RES" = 0 ]; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	echo Creating Basepack...
-	zip -q -r -0 base sound levels actors textures
+	zip -q -r -0 base gfx sound
 	if [ -f base.zip ]; then
-		rm -rf sound level actors textures
+		rm -rf gfx sound
 	fi
 elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.zip ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -583,7 +583,12 @@ else
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
-			cp -r -u "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
+			fi
+			cp -r -u "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/gfx/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
+			cp -r -u "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
 		elif [ "$PRESET" = "r96proto" ]; then
 			if [ ! -d "$BASEPATH"/render96ex ]; then
 				echo render96ex not installed so creating base folders for shared textures...
@@ -1130,7 +1135,7 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 	else	# The real start, the rest was preperation and setup. 
 		echo 
 		if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ]; then
-			echo "[1] Installing dependancies..."
+			echo "[1] Installing dependencies..."
 			if [ -f /usr/bin/apt ]; then
 				sudo apt update
 			fi
