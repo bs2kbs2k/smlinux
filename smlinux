@@ -580,10 +580,10 @@ else
 			cd "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res
 			git pull
 			echo Copying render96 texutres from render96ex
-			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
-			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
 			fi
