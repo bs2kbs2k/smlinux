@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0921-0734
+# 2020-0921-1710
 
 domake(){
 #Here We go & music to build to
@@ -840,8 +840,10 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 	elif [ "$PRESET" = "sm64nx" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/711253314855108629/719215654837682226/Super_Mario_64.png
 		mv Super_Mario_64.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
+	elif [ "$PRESET" = "render96ex" ]; then
 		mv "$SMLINUX"/r96-icon.png "$SHARE"/icons/"$PRESET".png
+	elif [ "$PRESET" = "r96proto" ]; then
+		mv "$SMLINUX"/r96proto-icon.png "$SHARE"/icons/"$PRESET".png
 	elif [ "$PRESET" = "cheaterex" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745150550382870548/bowser.png
 		mv bowser.png "$SHARE"/icons/"$PRESET".png
