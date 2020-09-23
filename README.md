@@ -160,8 +160,12 @@ Put the patch file into ~/sm64pc/enhancements (or specify the path differently w
 	cd ~/sm64pc
 	git apply enhancements/filename.patch
 	smlinux update
+	
+If the patch errors when you try to apply it, and you want to use it anyway, you can force it to apply with:
+	
+	git apply --reject enhancements/filename.patch
 
-## **How to remove a patch?** 
+## **How to reverse (remove) a patch?** 
 *change path from sm64pc to sm64-port or sm64ex for newer repos*
    
 	cd ~/sm64pc
