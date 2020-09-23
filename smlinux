@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0921-1710
+# 2020-0923-0830
 
 domake(){
 #Here We go & music to build to
@@ -930,8 +930,9 @@ elif [ ! "$ANDROID" = 0 ] ; then
 	xdg-open "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
 elif [ "$PRESET"  = "sm64ex-coop" ] ; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
-	./sm64.us.f3dex2e --server 27015 --cheats --savepath "$SHARE"/sm64ex-coop --skip-intro --configfile sm64config.server-local.txt &disown
-	./sm64.us.f3dex2e --client 127.0.0.1 27015 --cheats --savepath "$SHARE"/sm64ex-coop --skip-intro &disown
+	./sm64.us.f3dex2e --server 27015 --cheats --skip-intro &disown
+	sleep 0.3
+	./sm64.us.f3dex2e --client 127.0.0.1 27015 --cheats --savepath ! --skip-intro &disown
 elif [ "$TARGET" = "dos" ] && [ -f /usr/bin/dosbox ]; then
 	dosbox "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
 elif [ "$TARGET" = "dos" ]; then
