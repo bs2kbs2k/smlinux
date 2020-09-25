@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0923-0830
+# 2020-0924-1707
 
 domake(){
 #Here We go & music to build to
@@ -40,9 +40,9 @@ if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
 cd "$BASEPATH"/"$PRESET"
+echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI TEXTSAVES=$TEXTSAVES DEBUG=$DEBUG -j"$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
-echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG 
-echo IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL -j"$MAXJOBS"
+echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL 
 time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
@@ -637,7 +637,8 @@ else
 				wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip 
 			fi
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar	
-			cd "$BASEPATH"/"$PRESET"	
+			cd "$BASEPATH"/"$PRESET"
+			echo Saving original actors folder as actors.bak 	
 			cp -Rn actors actors.bak
 			if [ ! "$PRESET" = "sm64ex-coop" ]; then
 				echo Extracting HD Mario...
@@ -678,14 +679,14 @@ fi
 
 dosgi(){
 if  [ "$TARGET_WEB" = 1 ] || [ "$EXTERNAL_DATA" = 0 ]; then
-	if(whiptail --title "SGI Model Warning" --yesno "SGI Model Pack V1.3 might not work on anything besides PRESET=sm64ex BRANCH=nightly and TARGET_WEB=0.\nExternal Data is also Required." 10 50 --yes-button "Continue Anyway" --no-button "Cancel" --defaultno); then
+	if(whiptail --title "SGI Model Warning" --yesno "SGI Models are unlikely to work without external data or for web Target." 10 50 --yes-button "Continue Anyway" --no-button "Cancel" --defaultno); then
 		echo WARNING: sgi 1.3 might not work on anything besides sm64ex-nightly
 		echo Proceeding anyway, but it may not be succesful.
 	else
-		exit
+		return
 	fi
 fi
-if [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ]; then 
+if [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/render96* ]; then 
 	echo Render96 models already installed...
 	return
 fi
@@ -718,17 +719,14 @@ if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		sed -i 's/vsync true/vsync false/g' "$SHARE"/"$PRESET"/sm64config.txt
 	fi
 fi
-if [ -d "$BASEPATH"/"$PRESET"/actors.bak ]; then
-	echo Restoring default actors...
-	cd "$BASEPATH"/"$PRESET"/enhancements
-	rm -rf "$BASEPATH"/"$PRESET"/actors
-	mv "$BASEPATH"/"$PRESET"/actors.bak "$BASEPATH"/"$PRESET"/actors
-	rm hd_bowser.rar Old_School_HD_Mario_Model.zip
-fi
 if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements 
 	wget -q https://cdn.discordapp.com/attachments/730551213376143431/745382037560492132/RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
 	SGIFILE=RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
+elif [ "$PRESET" = "sm64ex-coop" ]; then
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	wget -q https://sm64pc.info/downloads/model_pack/render96_coop.zip
+	SGIFILE=render96_coop.zip
 else
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
@@ -739,6 +737,23 @@ if  [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
 	cd "$BASEPATH"/"$PRESET"
 	git apply -R enhancements/CHEATER*.patch
 	rm enhancements/CHEATER*
+fi
+if [ -d "$BASEPATH"/"$PRESET"/actors.bak ] && [ ! "$SGIFILE" = "render96_coop.zip" ]; then
+	echo Restoring default actors...
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	rm -rf "$BASEPATH"/"$PRESET"/actors
+	mv "$BASEPATH"/"$PRESET"/actors.bak "$BASEPATH"/"$PRESET"/actors
+	rm hd_bowser.rar Old_School_HD_Mario_Model.zip
+elif [ -d "$BASEPATH"/"$PRESET"/actors.bak ] && [ "$SGIFILE" = "render96_coop.zip" ]; then
+	echo Restoring default actors and keeping backup...
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	rm -rf "$BASEPATH"/"$PRESET"/actors
+	cp -r "$BASEPATH"/"$PRESET"/actors.bak "$BASEPATH"/"$PRESET"/actors
+	rm hd_bowser.rar
+elif [ "$SGIFILE" = "render96_coop.zip" ]; then
+	echo Saving original actors folder as actors.bak 	
+	cd "$BASEPATH"/"$PRESET"
+	cp -Rn actors actors.bak
 fi
 cd "$BASEPATH"/"$PRESET"
 echo Applying Render96 SGI Models...
@@ -1231,7 +1246,7 @@ else
 	echo "| Options: --depends  reinstall dependencies                                  |"
 	echo "|          --config   prompt to edit configuration file before build          |"
 	echo "|          --hd       aquire & apply upscale enhancements (see FAQ)           |"
-	echo "|          --sgi      aquire and apply Render96 SGI model pack v1.3           |"
+	echo "|          --sgi      aquire and apply Render96 SGI model pack                |"
 	echo "|                                                                             |"
 	echo "-------------------------------------------------------------------------------"
 	if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ]; then
