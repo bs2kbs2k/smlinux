@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0926-1125
+# 2020-0926-1157
 
 domake(){
 #Here We go & music to build to
@@ -1205,7 +1205,11 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 				sudo apt update
 			fi
 			if [ "$OSX_BUILD" = 1 ]; then
-				brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip
+				brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip unrar
+				alias gcc='gcc-9'
+				alias cc='gcc-9'
+				alias g++='g++-9'
+				alias c++='c++-9'
 			else
 				$Linux
 			fi
