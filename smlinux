@@ -152,10 +152,12 @@ elif [ "$TARGET" = "dos" ]; then
 	echo use this shell to build.  Exit and open new shell. 
 fi
 echo
-echo smlinux is complete.  Please exit or close this terminal window.
+echo ¡smlinux is complete.  Please exit or close this terminal window.
 echo smlinux internal timestamp:"$TIMESTAMP". "$GIT" last commit:
 cd "$BASEPATH"/"$PRESET"
 git log -1 --format=%cd
+echo smlinux is complete.  Please exit or close this terminal window!
+echo
 }
 
 
