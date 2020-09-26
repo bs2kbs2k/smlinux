@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0925-1819
+# 2020-0925-1847
 
 domake(){
 #Here We go & music to build to
@@ -1341,7 +1341,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these checked for udpates.
 	fi
-	if ([ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "androidex" ] || [ "$PRESET" = "render96ex" ] ) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8.zip ]; then
+	if ([ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "render96ex" ] ) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8.zip ]; then
 		echo Updating cheats...
 		cd "$BASEPATH"/"$PRESET"/enhancements
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip ]; then
@@ -1532,18 +1532,16 @@ elif [ "$DOSGI" = 1 ]; then
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
 fi
-if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then 
+if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ] || [ "$ANDROID" = "androidex" ]; then 
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	cp "$SMLINUX"/menu-arrows.patch .
-	if  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/755831396991500438/CHEATERv7Render96ex.zip
-	else
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/755132231244054618/CHEATERv7.zip
+	if  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ]; then
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
 	fi
 	if [ -f CHEATER*.zip ]; then
 		unzip -q CHEATER*
 		cd "$BASEPATH"/"$PRESET"
-		echo Appling Cheats...
+		echo Applying Cheats...
 		git apply enhancements/CHEATER*.patch
 	fi
 	echo Applying Menu Arrows...
