@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0925-1847
+# 2020-0925-2055
 
 domake(){
 #Here We go & music to build to
@@ -987,7 +987,8 @@ fi
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/sm64pc
 LAUNCH_DIR=$(pwd)
-if [ "$OSX_BUILD" = 1 ]; then	
+if [ `uname` = "Darwin" ]; then
+	OSX_BUILD=1
 	PATHDIR=/usr/local/bin
 else
 	mapfile -t -d: <<<"$PATH"
