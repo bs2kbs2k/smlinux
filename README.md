@@ -204,7 +204,10 @@ Alpine:
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev 
 	
+MacOS:
 
+	brew install libxdg-basedir coreutils  brew install mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile
+	
 
 ## **How do I create my rom file?**
 
