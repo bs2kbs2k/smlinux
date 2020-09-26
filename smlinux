@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0925-1819
+# 2020-0926-0823
 
 domake(){
 #Here We go & music to build to
@@ -20,6 +20,8 @@ if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
 	sed -i 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=40MB/g' "$BASEPATH"/"$PRESET"/Makefile
 elif [ "$TARGET_WEB" = 1 ]; then
 	sed -i 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=30MB/g' "$BASEPATH"/"$PRESET"/Makefile
+elif [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
+	sed -i 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
 if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
@@ -42,8 +44,12 @@ fi
 cd "$BASEPATH"/"$PRESET"
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI TEXTSAVES=$TEXTSAVES DEBUG=$DEBUG -j"$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
-echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL 
-time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
+echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL OSX_BUILD=$OSX_BUILD
+if [ "$OSX_BUILD" = 1 ]; then
+	time gmake OSX_BUILD=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
+else
+	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
+fi
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
 		sed -i "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
@@ -109,7 +115,7 @@ if [ ! "$ANDROID" = 0 ]; then
 	fi
 elif [ "$TARGET" = "dos" ]; then
 	ln -s "$BASEPATH"/djgpp/csdpmi/CWSDPMI.EXE "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/
-elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ); then
+elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ) || [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"
 	rm Makefile
 	git checkout Makefile
@@ -127,11 +133,19 @@ elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.z
 		fi
 		mv awesome-legacy.zip base.zip
 fi
-
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	killall -q -y1h mplayer
 fi
 }
+
+endnow(){
+echo "Script Ending Incomplete.  Contact #help-desk for support."
+	if [ "$OSX_BUILD" = 0 ] && [ "$TARGET_RPI" = 0 ]; then
+		xdg-open https://discord.gg/Ub6YHRm &disown
+	fi
+	exit
+}
+
 
 androidsdk(){
 if [ -f /usr/bin/apt ] && [ ! -d /usr/lib/android-sdk ]; then
@@ -288,6 +302,7 @@ UpdateHD=1
 DEBUG=0
 TARGET_WEB=0
 TARGET_RPI=0
+OSX_BUILD=0
 # [ These settings are ignored if PRESET is known ]
 GIT=sm64pc/sm64ex
 BRANCH=nightly
@@ -298,6 +313,7 @@ AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
+OSX_BUILD=0
 TARGET_RPI=0
 TEXTSAVES=0
 TOUCH_CONTROLS=1
@@ -441,9 +457,11 @@ fi
 }
 
 doconfig(){
-if(whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 28 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
+if [ "$OSX_BUILD" = 1 ]; then
+	editconfig
+elif(whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 28 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
 	whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a text editor.\n\nWhen you exit your editor, smlinux will continue.\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60
-editconfig	
+	editconfig	
 fi
 }
 
@@ -454,7 +472,7 @@ IFS=":"
 for editor in $EDITORS; do
 	$editor "$SMLINUX"/smlinuxcfg.txt
 	if [ $? -eq 0 ]; then
-		echo "${MAPFILE[0]}"/smlinux: line $(($LINENO - 2)): "$editor": wow! command found!
+		echo "$PATHDIR"/smlinux: line $(($LINENO - 2)): "$editor": wow! command found!
 		echo
 		return
 	fi
@@ -506,11 +524,8 @@ python3 extract_assets.py
 python3 ../scripts/pak.py --source . --output "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak'
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak' ]; then
 	echo 
-	echo Unable to extract and pak ROM.
-	echo "smlinux exiting incomplete.  Contact #help-desk for support."
-	echo
-	xdg-open https://discord.gg/Ub6YHRm &disown
-	exit
+	echo ERROR: Unable to extract and pak ROM.
+	endnow
 fi
 }
 
@@ -732,7 +747,7 @@ else
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
 	SGIFILE=RENDER96_V1.3.7z
 fi
-if  [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
+if  [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
 	echo Removing cheater...
 	cd "$BASEPATH"/"$PRESET"
 	git apply -R enhancements/CHEATER*.patch
@@ -762,7 +777,7 @@ echo Applying Render96 SGI Models...
 	
 scriptUpdate(){
 if [ ! -f ~/.smlinuxUpdate ]; then 
-	if [ ! -f "${MAPFILE[0]}"/smlinux ] || [ ! -d "$SMLINUX"/.git ] ; then
+	if [ ! -f "$PATHDIR"/smlinux ] || [ ! -d "$SMLINUX"/.git ] ; then
 		echo Installing Script... 		
 		if [ -d "$SMLINUX" ]; then
 			if [ -d "$SMLINUX".baq ]; then
@@ -781,21 +796,26 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			exit
 		fi
 		touch ~/.smlinuxUpdate
-		mv "$SMLINUX"/smlinux "${MAPFILE[0]}"/
-		if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
+		mv "$SMLINUX"/smlinux "$PATHDIR"/
+		if [ ! -f "$PATHDIR"/smlinux ]; then
 			echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
 			export PATH=$HOME/bin:$PATH
-			mapfile -t -d: <<<"$PATH"
-			mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
-			if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
+			if [ "$OSX_BUILD" = 1 ]; then	
+				PATHDIR=$HOME/bin
+			else
+				mapfile -t -d: <<<"$PATH"
+				PATHDIR="${MAPFILE[0]}"
+			fi
+			mv -f "$SMLINUX"/smlinux "$PATHDIR"
+			if [ ! -f "$PATHDIR"/smlinux ]; then
 				echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
 				echo smlinux exiting incomplete.
 				exit
 			fi
 		fi
-		chmod +x "${MAPFILE[0]}"/smlinux
+		chmod +x "$PATHDIR"/smlinux
 		cd "$LAUNCH_DIR"
 		exec smlinux "$@"
 	else
@@ -807,26 +827,36 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				echo "ERROR: Script Update Unsuccesful."
 				echo "Try #help-desk if script udpates continue to fail"
 			else
-				echo 'mapfile -t -d: <<<"$PATH"
-				mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
-				if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
+				echo 'if [ `uname` = "Darwin" ]; then	
+					PATHDIR=/usr/local/bin
+					if [ ! -f "$PATHDIR"/smlinux ]; then
+						echo Password is needed to add smlinux link in /usr/local/bin
+						sudo ln -s "$SMLINUX"/smlinux "$PATHDIR"
+					fi
+				else
+					mapfile -t -d: <<<"$PATH"
+					PATHDIR="${MAPFILE[0]}"
+					mv -f "$SMLINUX"/smlinux "$PATHDIR"/
+				fi
+				if [ ! -f "$PATHDIR"/smlinux ]; then
 					echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
 					touch "$HOME"/.smlinuxNopath
 					mkdir $HOME/bin
 					export PATH=$HOME/bin:$PATH
 					mapfile -t -d: <<<"$PATH"
-					mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
-					if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
+					PATHDIR="${MAPFILE[0]}"
+					mv -f "$SMLINUX"/smlinux "$PATHDIR"/
+					if [ ! -f "$PATHDIR"/smlinux ]; then
 						echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
 						exit
 					fi
 				fi
-				chmod +x "${MAPFILE[0]}"/smlinux
-				if [ -f "$BASEPATH"/Downloads/smlinux ]; then mv -f "$BASEPATH"/Downloads/smlinux "$BASEPATH"/Downloads/smlinux.old.backup
+				chmod +x "$PATHDIR"/smlinux
+				if [ -f "$HOME"/Downloads/smlinux ]; then mv -f "$HOME"/Downloads/smlinux "$HOME"/Downloads/smlinux.old.backup
 				fi
-				if [ -f "$BASEPATH"/Downloads/smlinux.sh ]; then mv -f "$BASEPATH"/Downloads/smlinux.sh "$BASEPATH"/Downloads/smlinux.old.backup
+				if [ -f "$HOME"/Downloads/smlinux.sh ]; then mv -f "$HOME"/Downloads/smlinux.sh "$HOME"/Downloads/smlinux.old.backup
 				fi
-				if [ -f "$BASEPATH"/Downloads/smlinux.txt ]; then mv -f "$BASEPATH"/Downloads/smlinux.txt "$BASEPATH"/Downloads/smlinux.old.backup
+				if [ -f "$HOME"/Downloads/smlinux.txt ]; then mv -f "$HOME"/Downloads/smlinux.txt "$HOME"/Downloads/smlinux.old.backup
 				fi	
 				exec smlinux "$@"' > ~/.smlinuxUpdate
 				chmod +x ~/.smlinuxUpdate
@@ -884,7 +914,7 @@ if [ "$PRESET" = "sm64ex-coop" ] && [ -f "$SHARE"/applications/"$PRESET".desktop
 fi
 
 if [ ! -f "$SHARE"/applications/"$PRESET".desktop ]; then
-	creating Desktop Shorcut and Menu Entry
+	echo Creating desktop shorcut and menu entry...
 	echo '[Desktop Entry]
 Encoding=UTF-8
 Type=Application
@@ -953,6 +983,9 @@ elif [ "$TARGET" = "dos" ] && [ -f /usr/bin/dosbox ]; then
 elif [ "$TARGET" = "dos" ]; then
 	echo Cannot testDOS Version from Linux!  I reccomend FreeDOS in VirtualBox.
 	xdg-open "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
+elif [ "$OSX_BUILD" = 1 ]; then
+	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
+	./sm64.us.f3dex2e --cheats &disown
 else 
 	gtk-launch "$PRESET"&disown
 fi
@@ -963,7 +996,14 @@ fi
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/sm64pc
 LAUNCH_DIR=$(pwd)
-mapfile -t -d: <<<"$PATH"
+if [ `uname` = "Darwin" ]; then
+	OSX_BUILD=1
+	PATHDIR=/usr/local/bin
+else
+	mapfile -t -d: <<<"$PATH"
+	PATHDIR="${MAPFILE[0]}"
+fi
+
 
 # Make sure folders and installer config file exist, if not create them.
 if [ ! -d $HOME/.local ]; then 
@@ -1036,7 +1076,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			cp "$SHARE"/cheaterex/CHEATERex_config.txt "$SHARE"/"$PRESET"/sm64config.txt
 			echo Copied configuration from CHEATERex
 		else 
-			echo No compatible sm64configuration file found, game will create one.
+			echo No compatible sm64 configuration file found, game will create one.
 		fi
 		if [ "$PRESET" = "cheaterex" ] && [ -f "$SHARE"/"$PRESET"/sm64config.txt ]; then
 			mv "$SHARE"/"$PRESET"/sm64config.txt "$SHARE"/"$PRESET"/CHEATERex_config.txt
@@ -1129,7 +1169,7 @@ if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
 	rm $HOME/Downloads/smlinux.*
 	echo Note this did not remove any packages installed as build tools or dependencies.
 	echo Remove those with your package manager.  Devel libraries can always safely be removed.
-	echo And of course you must delete smlinux itself from "${MAPFILE[0]}"
+	echo And of course you must delete smlinux itself from "$PATHDIR"
         exit
 fi
 
@@ -1144,7 +1184,11 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 			if [ -f /usr/bin/apt ]; then
 				sudo apt update
 			fi
-			$Linux
+			if [ "$OSX_BUILD" = 1 ]; then
+				brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip
+			else
+				$Linux
+			fi
 			if [ "$PRESET" = "sm64nx" ] ; then
 				pip3 install pillow zstandard tqdm xxhash
 				gcccheck
@@ -1290,8 +1334,8 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 			git apply -R enhancements/60fps*.patch
 		fi
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
-			git apply -R enhancements/CHEATER*.patch
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
+			git apply -R enhancements/CHEATER.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 			git apply -R enhancements/menu-arrows.patch
@@ -1312,9 +1356,9 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			echo 3D Coins...
 			git apply enhancements/3d_coin*.patch
 		fi
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
 			echo Cheater...
-			git apply enhancements/CHEATER*.patch
+			git apply enhancements/CHEATER.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 			echo Menu Arrows....
@@ -1341,14 +1385,14 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these checked for udpates.
 	fi
-	if ([ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "androidex" ] || [ "$PRESET" = "render96ex" ] ) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8.zip ]; then
+	if ([ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "render96ex" ] ) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8.zip ]; then
 		echo Updating cheats...
 		cd "$BASEPATH"/"$PRESET"/enhancements
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip ]; then
 			rm "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip
 		fi
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
-		if [ -f CHEATER*.zip ] && [ -f CHEATER*.patch ]; then
+		if [ -f CHEATERv8.zip ] && [ -f CHEATER.patch ]; then
 			cd "$BASEPATH"/"$PRESET"
 			git apply -R enhancements/CHEATER*.patch
 			cd enhancements
@@ -1356,8 +1400,8 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			unzip -q CHEATER*
 			cd ..
 			git apply enhancements/CHEATER.patch
-		elif [ -f CHEATER*.zip ]; then
-			unzip -q CHEATER*
+		elif [ -f CHEATERv8.zip ]; then
+			unzip -q CHEATERv8
 			cd ..
 			git apply enhancements/CHEATER.patch
 		fi
@@ -1373,6 +1417,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		wget -q https://cdn.discordapp.com/attachments/723992726319792140/754402820588961882/smo.cappy_assets.zip
 		unzip -q -o smo.cappy_assets
 	fi
+fi
 	if [ "TARGET_WEB" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Removing 60fps for web target...
 		git apply -R enhancements/60fps*.patch
@@ -1397,9 +1442,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			fi
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 		fi
-		echo "smlinux exiting incomplete.  Contact #help-desk for support."
-		xdg-open https://discord.gg/Ub6YHRm &disown
-		exit
+		endnow
 	fi
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
 		echo [6] Restoring External Resources...
@@ -1430,9 +1473,9 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
 		echo
 		echo "ERROR: Build Failure.  Android Package Kit (apk) not found."
-		echo "smlinux exiting incomplete.  Contact #help-desk for support."
-		xdg-open https://discord.gg/Ub6YHRm &disown
-		exit
+		endnow
+	elif [ "$OSX_BUILD" = "1" ]; then
+		echo [7] Update Complete. 
 	elif [ "$ANDROID" = 0 ] && [ "$TARGET" = "pc" ] ; then
 		echo [7] Verifying Menu Entry....
 		makedesktop
@@ -1443,6 +1486,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		echo [7] Update Complete. 
 	elif [ "$TARGET" = "dos" ]; then
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
+		echo [7] Update Complete. 
 	fi
 	rungame
 	if [ "$TARGET" = "dos" ] && [ ! -f /usr/bin/dosbox ]; then
@@ -1463,7 +1507,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	echo
 	exit
 fi
-if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
+if [ -d "$BASEPATH"/"$PRESET" ]; then
 	if [ ! "$ANDROID" = 0 ]; then
 		echo WARNING: "$ANDROID" directory already exists! 
 		echo Renaming to "$BASEPATH"/"$ANDROID".old...
@@ -1504,9 +1548,7 @@ else
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	echo "ERROR: Could not reach github."
-	echo "Script Ending Incomplete.  Contact #help-desk for support."
-	xdg-open https://discord.gg/Ub6YHRm &disown
-	exit
+	endnow
 elif [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
 	ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 fi
@@ -1532,18 +1574,16 @@ elif [ "$DOSGI" = 1 ]; then
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
 fi
-if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then 
+if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ] || [ "$ANDROID" = "androidex" ]; then 
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	cp "$SMLINUX"/menu-arrows.patch .
-	if  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/755831396991500438/CHEATERv7Render96ex.zip
-	else
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/755132231244054618/CHEATERv7.zip
+	if  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ]; then
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
 	fi
-	if [ -f CHEATER*.zip ]; then
-		unzip -q CHEATER*
+	if [ -f CHEATERv8.zip ]; then
+		unzip -q CHEATERv8
 		cd "$BASEPATH"/"$PRESET"
-		echo Appling Cheats...
+		echo Applying Cheats...
 		git apply enhancements/CHEATER*.patch
 	fi
 	echo Applying Menu Arrows...
@@ -1572,15 +1612,11 @@ fi
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	echo
 	echo ERROR: Build Failure.  Expected binary file not found.
-	echo "smlinux exiting incomplete.  Contact #help-desk for support."
-	xdg-open https://discord.gg/Ub6YHRm &disown
-	exit
+	endnow
 elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
 	echo
 	echo ERROR: Build Failure.  Expected apk file not found.
-	echo "smlinux exiting incomplete.  Contact #help-desk for support."
-	xdg-open https://discord.gg/Ub6YHRm &disown
-	exit
+	endnow
 elif [ ! "$ANDROID" = 0 ]; then
 	mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
 elif [ "$TARGET" = "dos" ]; then
@@ -1588,7 +1624,7 @@ elif [ "$TARGET" = "dos" ]; then
 fi
 
 echo
-if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
+if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ] && [ "$OSX_BUILD" = 0 ]; then
 	echo [7] Creating Desktop Shortcut and Menu Entry...
 	makedesktop
 else
