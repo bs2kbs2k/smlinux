@@ -17,14 +17,13 @@
 ## **Download & Installation Instructions**      
                
 	wget http://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux
-	chmod +x smlinux
-	./smlinux <romfile>
+	bash smlinux <romfile>
 	rm smlinux
 Examples: 
 
- 	./smlinux "Super Mario 64 (U) [!].z64"
+ 	bash smlinux "Super Mario 64 (U) [!].z64"
 		      or 
-	./smlinux ~/roms/n64/sm64.n64
+	bash smlinux ~/roms/n64/sm64.n64
 
 That's Everything. That's all you have to do.  
 During installation you will be prompted to approve (or change) build options, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
@@ -32,9 +31,9 @@ During installation you will be prompted to approve (or change) build options, t
 
 You must provide your own legally backed up Super Mario 64 ROM file during smlinux installation. 
 
-smlinux will be installed in the first directory in your path, usually something like ~/bin or ~/Applications/.bin. After initial installation, just type 'smlinux' without dot-slash from any folder when you want to build or update again.
+smlinux will be installed in the first directory in your path, usually something like ~/bin or ~/Applications/.bin. After initial installation, just type `smlinux` from any folder when you want to build or update again.
 
-If for some reason the process freezes during compilation, perhaps on single core cpu or system with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
+If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/presets.png>
