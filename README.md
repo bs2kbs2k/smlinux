@@ -206,7 +206,7 @@ Alpine:
 	
 MacOS:
 
-	brew install libxdg-basedir coreutils  brew install mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile
+	brew install libxdg-basedir coreutils mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile
 	
 
 ## **How do I create my rom file?**
