@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0926-1415
+# 2020-0926-1420
 
 domake(){
 #Here We go & music to build to
@@ -860,6 +860,8 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 					mapfile -t -d: <<<"$PATH"
 					PATHDIR="${MAPFILE[0]}"
 				fi
+				SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
+				SMLINUX="$SHARE"/sm64pc
 				mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 				if [ ! -f "$PATHDIR"/smlinux ]; then
 					echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
