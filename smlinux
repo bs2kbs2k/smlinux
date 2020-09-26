@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0926-1157
+# 2020-0926-1204
 
 domake(){
 #Here We go & music to build to
@@ -23,7 +23,6 @@ elif [ "$TARGET_WEB" = 1 ]; then
 fi
 if [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
 	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
-	sed -i.bak 's/cpp-9/gcc-9/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
 if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
@@ -1210,6 +1209,7 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 				alias cc='gcc-9'
 				alias g++='g++-9'
 				alias c++='c++-9'
+				alias cpp-9='gcc-9'
 			else
 				$Linux
 			fi
