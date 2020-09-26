@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0925-2107
+# 2020-0925-2113
 
 domake(){
 #Here We go & music to build to
@@ -820,7 +820,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				echo "ERROR: Script Update Unsuccesful."
 				echo "Try #help-desk if script udpates continue to fail"
 			else
-				echo 'if [ "$OSX_BUILD" = 1 ]; then	
+				echo 'if [ `uname` = "Darwin" ]; then	
 					PATHDIR=/usr/local/bin
 					if [ ! -f "$PATHDIR"/smlinux ]; then
 						sudo ln -s "$SMLINUX"/smlinux "$PATHDIR"/smlinux
@@ -843,11 +843,11 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 					fi
 				fi
 				chmod +x "$PATHDIR"/smlinux
-				if [ -f "$BASEPATH"/Downloads/smlinux ]; then mv -f "$BASEPATH"/Downloads/smlinux "$BASEPATH"/Downloads/smlinux.old.backup
+				if [ -f "$HOME"/Downloads/smlinux ]; then mv -f "$HOME"/Downloads/smlinux "$HOME"/Downloads/smlinux.old.backup
 				fi
-				if [ -f "$BASEPATH"/Downloads/smlinux.sh ]; then mv -f "$BASEPATH"/Downloads/smlinux.sh "$BASEPATH"/Downloads/smlinux.old.backup
+				if [ -f "$HOME"/Downloads/smlinux.sh ]; then mv -f "$HOME"/Downloads/smlinux.sh "$HOME"/Downloads/smlinux.old.backup
 				fi
-				if [ -f "$BASEPATH"/Downloads/smlinux.txt ]; then mv -f "$BASEPATH"/Downloads/smlinux.txt "$BASEPATH"/Downloads/smlinux.old.backup
+				if [ -f "$HOME"/Downloads/smlinux.txt ]; then mv -f "$HOME"/Downloads/smlinux.txt "$HOME"/Downloads/smlinux.old.backup
 				fi	
 				exec smlinux "$@"' > ~/.smlinuxUpdate
 				chmod +x ~/.smlinuxUpdate
@@ -1067,7 +1067,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			cp "$SHARE"/cheaterex/CHEATERex_config.txt "$SHARE"/"$PRESET"/sm64config.txt
 			echo Copied configuration from CHEATERex
 		else 
-			echo No compatible sm64configuration file found, game will create one.
+			echo No compatible sm64 configuration file found, game will create one.
 		fi
 		if [ "$PRESET" = "cheaterex" ] && [ -f "$SHARE"/"$PRESET"/sm64config.txt ]; then
 			mv "$SHARE"/"$PRESET"/sm64config.txt "$SHARE"/"$PRESET"/CHEATERex_config.txt
