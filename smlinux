@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0925-2113
+# 2020-0925-2153
 
 domake(){
 #Here We go & music to build to
@@ -131,7 +131,13 @@ elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.z
 		fi
 		mv awesome-legacy.zip base.zip
 fi
-
+if [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/base.zip ]; then
+	echo Creating Basepack
+	cd "$BASEPATH"/"$PRESET"
+	local FILE="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/basepack.list
+	tail -n +2 "$FILE" > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
+	python3 tools/mkzip.py "$FILE" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/base.zip
+fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	killall -q -y1h mplayer
 fi
@@ -823,6 +829,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				echo 'if [ `uname` = "Darwin" ]; then	
 					PATHDIR=/usr/local/bin
 					if [ ! -f "$PATHDIR"/smlinux ]; then
+						echo Password is needed to add smlinux link in /usr/local/bin
 						sudo ln -s "$SMLINUX"/smlinux "$PATHDIR"/smlinux
 					fi
 				else
@@ -905,7 +912,7 @@ if [ "$PRESET" = "sm64ex-coop" ] && [ -f "$SHARE"/applications/"$PRESET".desktop
 fi
 
 if [ ! -f "$SHARE"/applications/"$PRESET".desktop ]; then
-	creating Desktop Shorcut and Menu Entry
+	echo Creating desktop shorcut and menu entry...
 	echo '[Desktop Entry]
 Encoding=UTF-8
 Type=Application
@@ -1175,7 +1182,11 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 			if [ -f /usr/bin/apt ]; then
 				sudo apt update
 			fi
-			$Linux
+			if [ "$OSX_BUILD" = 1 ]; then
+				brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip
+			else
+				$Linux
+			fi
 			if [ "$PRESET" = "sm64nx" ] ; then
 				pip3 install pillow zstandard tqdm xxhash
 				gcccheck
@@ -1464,6 +1475,8 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		echo "smlinux exiting incomplete.  Contact #help-desk for support."
 		xdg-open https://discord.gg/Ub6YHRm &disown
 		exit
+	elif [ "$OSX_BUILD" = "1" ]; then
+		echo [7] Update Complete. 
 	elif [ "$ANDROID" = 0 ] && [ "$TARGET" = "pc" ] ; then
 		echo [7] Verifying Menu Entry....
 		makedesktop
@@ -1474,6 +1487,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		echo [7] Update Complete. 
 	elif [ "$TARGET" = "dos" ]; then
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
+		echo [7] Update Complete. 
 	fi
 	rungame
 	if [ "$TARGET" = "dos" ] && [ ! -f /usr/bin/dosbox ]; then
@@ -1617,7 +1631,7 @@ elif [ "$TARGET" = "dos" ]; then
 fi
 
 echo
-if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
+if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ] && [ "$OSX_BUILD" = 0 ]; then
 	echo [7] Creating Desktop Shortcut and Menu Entry...
 	makedesktop
 else
