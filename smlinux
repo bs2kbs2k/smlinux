@@ -42,8 +42,12 @@ fi
 cd "$BASEPATH"/"$PRESET"
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI TEXTSAVES=$TEXTSAVES DEBUG=$DEBUG -j"$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
-echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL 
-time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
+echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL OSX_BUILD=$OSX_BUILD
+if [ "$OSX_BUILD" = 1 ]; then
+	time gmake OSX_BUILD=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
+else
+	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
+fi
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
 		sed -i "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
@@ -288,6 +292,7 @@ UpdateHD=1
 DEBUG=0
 TARGET_WEB=0
 TARGET_RPI=0
+OSX_BUILD=0
 # [ These settings are ignored if PRESET is known ]
 GIT=sm64pc/sm64ex
 BRANCH=nightly
@@ -298,6 +303,7 @@ AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
+OSX_BUILD=0
 TARGET_RPI=0
 TEXTSAVES=0
 TOUCH_CONTROLS=1
@@ -441,9 +447,11 @@ fi
 }
 
 doconfig(){
-if(whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 28 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
+if [ "$OSX_BUILD" = 1 ]; then
+	editconfig
+elif(whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 28 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
 	whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a text editor.\n\nWhen you exit your editor, smlinux will continue.\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60
-editconfig	
+	editconfig	
 fi
 }
 
@@ -454,7 +462,7 @@ IFS=":"
 for editor in $EDITORS; do
 	$editor "$SMLINUX"/smlinuxcfg.txt
 	if [ $? -eq 0 ]; then
-		echo "${MAPFILE[0]}"/smlinux: line $(($LINENO - 2)): "$editor": wow! command found!
+		echo "$PATHDIR"/smlinux: line $(($LINENO - 2)): "$editor": wow! command found!
 		echo
 		return
 	fi
@@ -762,7 +770,7 @@ echo Applying Render96 SGI Models...
 	
 scriptUpdate(){
 if [ ! -f ~/.smlinuxUpdate ]; then 
-	if [ ! -f "${MAPFILE[0]}"/smlinux ] || [ ! -d "$SMLINUX"/.git ] ; then
+	if [ ! -f "$PATHDIR"/smlinux ] || [ ! -d "$SMLINUX"/.git ] ; then
 		echo Installing Script... 		
 		if [ -d "$SMLINUX" ]; then
 			if [ -d "$SMLINUX".baq ]; then
@@ -781,21 +789,26 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			exit
 		fi
 		touch ~/.smlinuxUpdate
-		mv "$SMLINUX"/smlinux "${MAPFILE[0]}"/
-		if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
+		mv "$SMLINUX"/smlinux "$PATHDIR"/
+		if [ ! -f "$PATHDIR"/smlinux ]; then
 			echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
 			export PATH=$HOME/bin:$PATH
-			mapfile -t -d: <<<"$PATH"
-			mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
-			if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
+			if [ "$OSX_BUILD" = 1 ]; then	
+				PATHDIR=$HOME/bin
+			else
+				mapfile -t -d: <<<"$PATH"
+				PATHDIR="$PATHDIR"
+			fi
+			mv -f "$SMLINUX"/smlinux "$PATHDIR"/
+			if [ ! -f "$PATHDIR"/smlinux ]; then
 				echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
 				echo smlinux exiting incomplete.
 				exit
 			fi
 		fi
-		chmod +x "${MAPFILE[0]}"/smlinux
+		chmod +x "$PATHDIR"/smlinux
 		cd "$LAUNCH_DIR"
 		exec smlinux "$@"
 	else
@@ -807,21 +820,29 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				echo "ERROR: Script Update Unsuccesful."
 				echo "Try #help-desk if script udpates continue to fail"
 			else
-				echo 'mapfile -t -d: <<<"$PATH"
-				mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
-				if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
+				echo 'if [ "$OSX_BUILD" = 1 ]; then	
+					PATHDIR=/usr/local/bin
+					if [ ! -f "$PATHDIR"/smlinux ]; then
+						sudo ln -s "$SMLINUX"/smlinux "$PATHDIR"/smlinux
+					fi
+				else
+					mapfile -t -d: <<<"$PATH"
+					PATHDIR="$PATHDIR"
+					mv -f "$SMLINUX"/smlinux "$PATHDIR"/
+				fi
+				if [ ! -f "$PATHDIR"/smlinux ]; then
 					echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
 					touch "$HOME"/.smlinuxNopath
 					mkdir $HOME/bin
 					export PATH=$HOME/bin:$PATH
 					mapfile -t -d: <<<"$PATH"
-					mv -f "$SMLINUX"/smlinux "${MAPFILE[0]}"/
-					if [ ! -f "${MAPFILE[0]}"/smlinux ]; then
+					mv -f "$SMLINUX"/smlinux "$PATHDIR"/
+					if [ ! -f "$PATHDIR"/smlinux ]; then
 						echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
 						exit
 					fi
 				fi
-				chmod +x "${MAPFILE[0]}"/smlinux
+				chmod +x "$PATHDIR"/smlinux
 				if [ -f "$BASEPATH"/Downloads/smlinux ]; then mv -f "$BASEPATH"/Downloads/smlinux "$BASEPATH"/Downloads/smlinux.old.backup
 				fi
 				if [ -f "$BASEPATH"/Downloads/smlinux.sh ]; then mv -f "$BASEPATH"/Downloads/smlinux.sh "$BASEPATH"/Downloads/smlinux.old.backup
@@ -953,6 +974,9 @@ elif [ "$TARGET" = "dos" ] && [ -f /usr/bin/dosbox ]; then
 elif [ "$TARGET" = "dos" ]; then
 	echo Cannot testDOS Version from Linux!  I reccomend FreeDOS in VirtualBox.
 	xdg-open "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
+elif [ "$OSX_BUILD" = 1 ]; then
+	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
+	./sm64.us.f3dex2e --cheats &disown
 else 
 	gtk-launch "$PRESET"&disown
 fi
@@ -963,7 +987,13 @@ fi
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/sm64pc
 LAUNCH_DIR=$(pwd)
-mapfile -t -d: <<<"$PATH"
+if [ "$OSX_BUILD" = 1 ]; then	
+	PATHDIR=/usr/local/bin
+else
+	mapfile -t -d: <<<"$PATH"
+	PATHDIR="$PATHDIR"
+fi
+
 
 # Make sure folders and installer config file exist, if not create them.
 if [ ! -d $HOME/.local ]; then 
@@ -1129,7 +1159,7 @@ if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
 	rm $HOME/Downloads/smlinux.*
 	echo Note this did not remove any packages installed as build tools or dependencies.
 	echo Remove those with your package manager.  Devel libraries can always safely be removed.
-	echo And of course you must delete smlinux itself from "${MAPFILE[0]}"
+	echo And of course you must delete smlinux itself from "$PATHDIR"
         exit
 fi
 
