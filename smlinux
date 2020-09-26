@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0926-0823
+# 2020-0926-1020
 
 domake(){
 #Here We go & music to build to
@@ -17,11 +17,12 @@ if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_S
 	fi
 fi 
 if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
-	sed -i 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=40MB/g' "$BASEPATH"/"$PRESET"/Makefile
+	sed -i.bak 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=40MB/g' "$BASEPATH"/"$PRESET"/Makefile
 elif [ "$TARGET_WEB" = 1 ]; then
-	sed -i 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=30MB/g' "$BASEPATH"/"$PRESET"/Makefile
-elif [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
-	sed -i 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
+	sed -i.bak 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=30MB/g' "$BASEPATH"/"$PRESET"/Makefile
+fi
+if [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
+	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
 if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
@@ -36,7 +37,7 @@ if [ ! "$ANDROID" = 0 ]; then
 	fi
 fi
 if [ "$PRESET" = "sm64nx" ]; then
-	sed -i 's/-no-pie -lpthread -lzstd/-no-pie -lpthread -lzstd -lstdc++fs/g' "$BASEPATH"/"$PRESET"/Makefile
+	sed -i.bak 's/-no-pie -lpthread -lzstd/-no-pie -lpthread -lzstd -lstdc++fs/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
 if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
@@ -52,11 +53,11 @@ else
 fi
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
-		sed -i "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
+		sed -i.bak "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
 	fi
 	if [ "$BRANCH" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ]; then
 		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG  > "$SMLINUX"/buildlog.txt
-		sed -i '/include $(BUILD_SHARED_LIBRARY)/i TEXTURE_FIX ?= 0\nNODRAWINGDISTANCE ?= 0\nBETTERCAMERA ?= 0\nifeq ($(TEXTURE_FIX),1)\n  LOCAL_CFLAGS += -DTEXTURE_FIX\nendif\nifeq ($(NODRAWINGDISTANCE),1)\n  LOCAL_CFLAGS += -DNODRAWINGDISTANCE\nendif\nifeq ($(BETTERCAMERA),1)\n  LOCAL_CFLAGS += -DBETTERCAMERA\nendif\n' "$BASEPATH"/"$PRESET"/Android.mk
+		sed -i.bak '/include $(BUILD_SHARED_LIBRARY)/i TEXTURE_FIX ?= 0\nNODRAWINGDISTANCE ?= 0\nBETTERCAMERA ?= 0\nifeq ($(TEXTURE_FIX),1)\n  LOCAL_CFLAGS += -DTEXTURE_FIX\nendif\nifeq ($(NODRAWINGDISTANCE),1)\n  LOCAL_CFLAGS += -DNODRAWINGDISTANCE\nendif\nifeq ($(BETTERCAMERA),1)\n  LOCAL_CFLAGS += -DBETTERCAMERA\nendif\n' "$BASEPATH"/"$PRESET"/Android.mk
 	fi
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 		return
@@ -684,7 +685,7 @@ else
 				touch enhancements/60fps
 				if [ -f "$SHARE"/"$PRESET"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 					echo Enabling Vsync...
-					sed -i 's/vsync false/vsync true/g' "$SHARE"/"$PRESET"/sm64config.txt
+					sed -i.bak 's/vsync false/vsync true/g' "$SHARE"/"$PRESET"/sm64config.txt
 				fi
 			fi
 		fi
@@ -731,7 +732,7 @@ if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 	git apply -R enhancements/60fps*.patch
 	rm enhancements/60fps
 	if [ -f "$SHARE"/"$PRESET"/sm64config.txt ]; then
-		sed -i 's/vsync true/vsync false/g' "$SHARE"/"$PRESET"/sm64config.txt
+		sed -i.bak 's/vsync true/vsync false/g' "$SHARE"/"$PRESET"/sm64config.txt
 	fi
 fi
 if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
@@ -1213,7 +1214,7 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 			echo "[1] Loading djgpp for DOS Target..."
 			dodos
 		else
-			echo "[1] This is not first build, skipping dependencies and romcheck..."
+			echo "[1] This is not first build, skipping dependencies..."
 		fi
 		if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 			if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$PRESET" ]; then
