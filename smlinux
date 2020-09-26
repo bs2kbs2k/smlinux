@@ -1419,7 +1419,6 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		wget -q https://cdn.discordapp.com/attachments/723992726319792140/754402820588961882/smo.cappy_assets.zip
 		unzip -q -o smo.cappy_assets
 	fi
-fi
 	if [ "TARGET_WEB" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Removing 60fps for web target...
 		git apply -R enhancements/60fps*.patch
