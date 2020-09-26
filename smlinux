@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0926-1517
+TIMESTAMP=2020-0926-1617
 
 domake(){
 #Here We go & music to build to
@@ -152,11 +152,13 @@ elif [ "$TARGET" = "dos" ]; then
 	echo use this shell to build.  Exit and open new shell. 
 fi
 echo
-echo ¡smlinux is complete.  Please exit or close this terminal window.
-echo smlinux internal timestamp:"$TIMESTAMP". "$GIT" last commit:
+echo smlinux is complete. 
+echo smlinux internal timestamp:
+echo "$TIMESTAMP".
+echo "$GIT" last commit:
 cd "$BASEPATH"/"$PRESET"
 git log -1 --format=%cd
-echo smlinux is complete.  Please exit or close this terminal window!
+echo Please exit or close this terminal window!
 echo
 }
 
