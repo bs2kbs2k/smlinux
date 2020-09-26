@@ -174,7 +174,7 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 
 
 ## **What about distros other than Ubuntu?**
-*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch also confirmed.*
+*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Tested in MacOS 10.13 High Sierra Virtual Machine.  Arch also confirmed.*
 
 Change your `Linux=` parameter during first install to one that works with your distro such as those listed below, or just install dependencies first and run smlinux with `Linux=""` (or just ignore the error from apt).  smlinux only installs dependendencies automatically during the very first installation; if you wish to force reinstallation append ` --depends` during next update or build.
 
@@ -206,7 +206,7 @@ Alpine:
 	
 MacOS:
 
-	brew install libxdg-basedir coreutils mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile
+	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip
 	
 
 ## **How do I create my rom file?**
