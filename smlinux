@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0925-2055
+# 2020-0925-2107
 
 domake(){
 #Here We go & music to build to
@@ -740,7 +740,7 @@ else
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
 	SGIFILE=RENDER96_V1.3.7z
 fi
-if  [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
+if  [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
 	echo Removing cheater...
 	cd "$BASEPATH"/"$PRESET"
 	git apply -R enhancements/CHEATER*.patch
@@ -1321,8 +1321,8 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 			git apply -R enhancements/60fps*.patch
 		fi
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
-			git apply -R enhancements/CHEATER*.patch
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
+			git apply -R enhancements/CHEATER.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 			git apply -R enhancements/menu-arrows.patch
@@ -1343,9 +1343,9 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			echo 3D Coins...
 			git apply enhancements/3d_coin*.patch
 		fi
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
 			echo Cheater...
-			git apply enhancements/CHEATER*.patch
+			git apply enhancements/CHEATER.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 			echo Menu Arrows....
@@ -1375,11 +1375,11 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	if ([ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "render96ex" ] ) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8.zip ]; then
 		echo Updating cheats...
 		cd "$BASEPATH"/"$PRESET"/enhancements
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip ]; then
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.zip ]; then
 			rm "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip
 		fi
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
-		if [ -f CHEATER*.zip ] && [ -f CHEATER*.patch ]; then
+		if [ -f CHEATERv8.zip ] && [ -f CHEATER.patch ]; then
 			cd "$BASEPATH"/"$PRESET"
 			git apply -R enhancements/CHEATER*.patch
 			cd enhancements
@@ -1387,8 +1387,8 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			unzip -q CHEATER*
 			cd ..
 			git apply enhancements/CHEATER.patch
-		elif [ -f CHEATER*.zip ]; then
-			unzip -q CHEATER*
+		elif [ -f CHEATERv8.zip ]; then
+			unzip -q CHEATERv8
 			cd ..
 			git apply enhancements/CHEATER.patch
 		fi
@@ -1494,7 +1494,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	echo
 	exit
 fi
-if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
+if [ -d "$BASEPATH"/"$PRESET" ]; then
 	if [ ! "$ANDROID" = 0 ]; then
 		echo WARNING: "$ANDROID" directory already exists! 
 		echo Renaming to "$BASEPATH"/"$ANDROID".old...
@@ -1569,8 +1569,8 @@ if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "s
 	if  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ]; then
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
 	fi
-	if [ -f CHEATER*.zip ]; then
-		unzip -q CHEATER*
+	if [ -f CHEATERv8.zip ]; then
+		unzip -q CHEATERv8
 		cd "$BASEPATH"/"$PRESET"
 		echo Applying Cheats...
 		git apply enhancements/CHEATER*.patch
