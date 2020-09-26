@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0926-1211
+# 2020-0926-121
 
 domake(){
 #Here We go & music to build to
@@ -1016,6 +1016,7 @@ SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/sm64pc
 LAUNCH_DIR=$(pwd)
 if [ `uname` = "Darwin" ]; then
+	CONFIG=0    # whiptail not supported in mac and zenity is huge
 	OSX_BUILD=1
 	PATHDIR=/usr/local/bin
 else
@@ -1345,7 +1346,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	git fetch
 	git checkout "$BRANCH"
 	if [ "$(git diff HEAD origin/HEAD)" != "" ]; then
-		echo Updates found, attempting merge....
+		echo Attempting to murge updates....
 		 git merge
 	fi
 	if [ "$?" = "1" ]; then
