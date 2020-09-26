@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0925-2153
+# 2020-0925-2208
 
 domake(){
 #Here We go & music to build to
@@ -805,7 +805,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				PATHDIR=$HOME/bin
 			else
 				mapfile -t -d: <<<"$PATH"
-				PATHDIR="$PATHDIR"
+				PATHDIR="${MAPFILE[0]}"
 			fi
 			mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 			if [ ! -f "$PATHDIR"/smlinux ]; then
@@ -834,7 +834,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 					fi
 				else
 					mapfile -t -d: <<<"$PATH"
-					PATHDIR="$PATHDIR"
+					PATHDIR="${MAPFILE[0]}"
 					mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 				fi
 				if [ ! -f "$PATHDIR"/smlinux ]; then
@@ -843,6 +843,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 					mkdir $HOME/bin
 					export PATH=$HOME/bin:$PATH
 					mapfile -t -d: <<<"$PATH"
+					PATHDIR="${MAPFILE[0]}"
 					mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 					if [ ! -f "$PATHDIR"/smlinux ]; then
 						echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
@@ -999,7 +1000,7 @@ if [ `uname` = "Darwin" ]; then
 	PATHDIR=/usr/local/bin
 else
 	mapfile -t -d: <<<"$PATH"
-	PATHDIR="$PATHDIR"
+	PATHDIR="${MAPFILE[0]}"
 fi
 
 
