@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0926-1204
+# 2020-0926-1211
 
 domake(){
 #Here We go & music to build to
@@ -1209,7 +1209,6 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 				alias cc='gcc-9'
 				alias g++='g++-9'
 				alias c++='c++-9'
-				alias cpp-9='gcc-9'
 			else
 				$Linux
 			fi
