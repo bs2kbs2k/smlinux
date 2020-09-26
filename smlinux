@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0925-2208
+# 2020-0925-2227
 
 domake(){
 #Here We go & music to build to
@@ -20,6 +20,8 @@ if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
 	sed -i 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=40MB/g' "$BASEPATH"/"$PRESET"/Makefile
 elif [ "$TARGET_WEB" = 1 ]; then
 	sed -i 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=30MB/g' "$BASEPATH"/"$PRESET"/Makefile
+elif [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
+	sed -i 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
 if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
@@ -113,7 +115,7 @@ if [ ! "$ANDROID" = 0 ]; then
 	fi
 elif [ "$TARGET" = "dos" ]; then
 	ln -s "$BASEPATH"/djgpp/csdpmi/CWSDPMI.EXE "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/
-elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ); then
+elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ) || [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"
 	rm Makefile
 	git checkout Makefile
@@ -130,13 +132,6 @@ elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.z
 			rm base.zip
 		fi
 		mv awesome-legacy.zip base.zip
-fi
-if [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/base.zip ]; then
-	echo Creating Basepack
-	cd "$BASEPATH"/"$PRESET"
-	local FILE="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/basepack.list
-	tail -n +2 "$FILE" > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
-	python3 tools/mkzip.py "$FILE" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/base.zip
 fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	killall -q -y1h mplayer
@@ -1441,6 +1436,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 		fi
 		echo "smlinux exiting incomplete.  Contact #help-desk for support."
+		if [ "$OSX_BUILD" = 0 ] && [ "$TARGET_RPI" = 0 ]; then
 		xdg-open https://discord.gg/Ub6YHRm &disown
 		exit
 	fi
