@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0924-1939
+# 2020-0925-1819
 
 domake(){
 #Here We go & music to build to
@@ -775,7 +775,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			cp -Rn "$SMLINUX".baq/* "$SMLINUX"/
 			rm -rf "$SMLINUX".baq
 		fi
-		if [ ! -d "$SMLINUX"/.git] ; then
+		if [ ! -d "$SMLINUX"/.git ] ; then
 			echo ERROR: Cannot connect to github. Run without AutoUpdate enabled.  
 			echo smlinux exiting incomplete.
 			exit
@@ -1075,7 +1075,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$PRESET"/sm64_save_file.bin
 			echo Copied save file from sm64nx.
 		else 
-			No compatible save file found.
+			echo No compatible save file found.
 		fi
 		if [ "$PRESET" = "cheaterex" ] && [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ]; then
 			mv "$SHARE"/"$PRESET"/sm64_save_file.bin "$SHARE"/"$PRESET"/CHEATERex_save_file.bin
