@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-# 2020-0926-1420
+TIMESTAMP=2020-0926-1517
 
 domake(){
 #Here We go & music to build to
@@ -139,11 +139,34 @@ if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; 
 fi
 }
 
+theend(){
+if [ "$TARGET" = "web" ]; then
+	echo
+	echo Python webserver will remain running until you kill python3.
+	echo Unless you forward a port you cannot connect from outside your local network.
+	echo WARNING: emsdk environment is loaded.  Do not try to
+	echo use this shell to build.  Exit and open new shell. 
+elif [ "$TARGET" = "dos" ]; then
+	echo
+	echo WARNING: djgpp environment is loaded.  Do not try to 
+	echo use this shell to build.  Exit and open new shell. 
+fi
+echo
+echo smlinux is complete.  Please exit or close this terminal window.
+echo smlinux internal timestamp:"$TIMESTAMP". "$GIT" last commit:
+cd "$BASEPATH"/"$PRESET"
+git log -1 --format=%cd
+}
+
+
 endnow(){
 echo "Script Ending Incomplete.  Contact #help-desk for support."
 	if [ "$OSX_BUILD" = 0 ] && [ "$TARGET_RPI" = 0 ]; then
 		xdg-open https://discord.gg/Ub6YHRm &disown
 	fi
+echo Your version of smlinux was last updated "$TIMESTAMP".
+echo If that is not recent, perhaps updates are not working.
+echo check github.com/enigma9o7/smlinux for the latest version
 	exit
 }
 
@@ -1057,7 +1080,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		doconfig
 	else
 		loadconfig "$@"
-		if [ "$CONFIG" = 1 ] && (!( [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] )); then
+		if [ "$CONFIG" = 1 ] && [ ! -z "$1" ] && (!( [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ] )); then
 			doconfig
 		fi
 	fi
@@ -1298,13 +1321,13 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 		fi
 	fi
 else
-	echo "/-----------------------------------------------------------------------------\\"
+	echo '/---------------------------'"$TIMESTAMP"'------------------------------------\'
 	echo "|                                                                             |"
 	echo "|      Super Mario 64 Install * Build * Update Script for Linux               |"
 	echo "|                                                                             |"
-	echo "| Installation & First Build: ./smlinux <romfile>                             |"
+	echo "| Installation & First Build: bash smlinux <romfile>                          |"
 	echo "|  for example:                                                               |"
-	echo "|   ./smlinux ~/roms/n64/sm64.n64  or  ./smlinux \"Super Mario 64 (U) [!].z64\" |"
+	echo "| bash smlinux ~/roms/sm64.n64  or  bash smlinux \"Super Mario 64 (U) [!].z64\" |"
 	echo "|                                                                             |"
 	echo "| Normal Usage: smlinux <command> <options>                                   |"
 	echo "|                                                                             |"
@@ -1318,11 +1341,10 @@ else
 	echo "| Options: --depends  reinstall dependencies                                  |"
 	echo "|          --config   prompt to edit configuration file before build          |"
 	echo "|          --hd       aquire & apply upscale enhancements (see FAQ)           |"
-	echo "|          --sgi      aquire and apply Render96 SGI models (V 1.3 or coop)    |"
-	echo "|                                                                             |"
+	echo "|          --sgi      aquire and apply Render96 SGI models (V 1.3 or co-op)   |"
 	echo "-------------------------------------------------------------------------------"
 	if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ]; then
-		exit
+		echo
 	elif [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		echo "ERROR: You must specify update, build, config, reset or purge."
 	else 
@@ -1525,13 +1547,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	else 
 		sleep 10
 	fi
-	echo
-	echo smlinux is complete.  You may exit or close this terminal window.
-	if [ "$TARGET_WEB" = 1 ]; then
-		echo Python Webserver will remain running until it is closed.
-		echo Unless you forward a port you cannot connect from outside your local network.
-	fi
-	echo
+	theend
 	exit
 fi
 if [ -d "$BASEPATH"/"$PRESET" ]; then
@@ -1667,21 +1683,10 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 	zenity --info --text='You did not have a home folder in your path so $HOME/bin was created.\n\nReboot or type \n\n    PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.' --title="Your installation is complete." --width=450	
 	printf '\nYou did not have a home folder in your path so $HOME/bin was created.\n\nReboot or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
 elif [ "$EXTERNAL_DATA" = 0 ]; then
-	sleep 5
+	sleep 4
 elif  ([ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]) && [ "$InstallHD" = 1 ]; then
 	sleep 30
 else
-	sleep 10
+	sleep 8
 fi
-if [ "$TARGET" = "web" ]; then
-	echo
-	echo Python webserver will remain running until you kill python3.
-	echo WARNING: emsdk environment is loaded.  Do not try to
-	echo use this shell to build.  Exit and open new shell. 
-elif [ "$TARGET" = "dos" ]; then
-	echo
-	echo WARNING: djgpp environment is loaded.  Do not try to 
-	echo use this shell to build.  Exit and open new shell. 
-fi
-echo
-echo smlinux is complete.  Please exit or close this terminal window.
+theend
