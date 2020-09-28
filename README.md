@@ -40,9 +40,9 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 
 # Frequently Asked Questions
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
-* [<strong>What preset/repository should I use?</strong>](#what-presetrepository-should-i-use)
+* [<strong>What preset/repo/branch should I use?</strong>](#what-presetrepobranch-should-i-use)
 * [<strong>What does the InstallHD=1 option do?</strong>](#what-does-the-installhd1-option-do)
-* [<strong>What branch should I use?</strong>](#what-branch-should-i-use)
+* [<strong>What about other branches?</strong>](#what-about-other-branches)
 * [<strong>When to use RENDER_API=GL_LEGACY?</strong>](#when-to-use-render_apigl_legacy)
 * [<strong>How to update, rebuild, or change build options later?</strong>](#how-to-update-rebuild-or-change-build-options-later)
 * [<strong>How do I build a different version?</strong>](#how-do-i-build-a-different-version)
@@ -57,24 +57,22 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 * [<strong>How do I remove everything smlinux created during install?</strong>](#how-do-i-remove-everything-smlinux-created-during-install)
 * [<strong>How do I tell smlinux to download sm64 repositories to a folder other than home?</strong>](#how-do-i-tell-smlinux-to-download-sm64-repositories-to-a-folder-other-than-home)
 
-## **What preset/repository should I use?**
-If you want to build for PC, the repo from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks of sm64ex offer additional enhancements, such as render96ex with added Luigi Keys, sm64ex-coop for a 2 player network mode, or cheaterex for the latest experimental features. For android or web, presets are available based on sm64-port or sm64ex; for dos a sm64-port based fork is used. 
+## **What preset/repository/branch should I use?**
+If you want to build for PC, the source repository from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks of sm64ex offer additional enhancements, such as render96ex with added Luigi Keys, sm64ex-coop for a 2 player network mode, or cheaterex for the latest experimental features. For android or web, presets are available based on sm64-port or sm64ex; for dos a sm64-port based fork is used. 
 
 ## **What does the InstallHD=1 option do?**
 
-See the table above the FAQ for details.  This will usually modify your source with the repo-provided 60fps patch, HD Mario (Old School V2) and HD Bowser character models from #modding-releases , and apply the 3D Coin Patch (V2).  Additionally, on the sm64pc/sm64ex based forks upscaled textures will be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.
+See the presets table above the FAQ for details.  This will usually modify your source with the repo-provided 60fps patch, HD Mario (Old School V2) and HD Bowser character models from #modding-releases , and apply the 3D Coin Patch (V2).  Additionally, on the sm64pc/sm64ex based forks upscaled textures will be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.
 On the render96ex fork, the latest Render 96 Model Pack and Render 96 Texture Pack will be applied.  Note these are large so require more download time, game load time, and better comupter to perform well.
 *Note that precaching these textures will make the game use more memory and increase initial startup time, but may be necessary for some computers.*
 
 On the sm64nx fork only, 60fps is already default, and with InstallHD in addition to the models and textures mentioned above, a few other add-ons are obtained which can be enabled from the in-game menu if you prefer, including SGI models and HD Luigi.
 
-Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released. 
+Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released. See presets table for more details.
 
-If you initially built with `InstallHD=0` and wish to add later, `smlinux update --hd`, or set both `InstallHD=1` and `UpdateHD=1` in smlinux configuration.
+## **What about other branches?**
 
-## **What branch should I use?**
-
-If you chose one of the presets, the appropriate branch is defined automatically.  For `PRESET=sm6ex` the nightly branch is automatically used; if you would like the master branch instead use `PRESET=sm64pc`. If sm64ex nightly works for you, I'd reccommend it as it is the most updated, but if a recent change causes build failure or other problems, use the more stable sm64pc master. 
+If you chose one of the presets, an appropriate branch is used automatically.  For `PRESET=sm6ex` the nightly branch is used; if you would like the master branch instead use `PRESET=sm64pc`. If sm64ex nightly works for you, I'd reccommend it as it is the most updated, but if a recent change causes build failure or other problems, use the more stable sm64pc master. For advanced users, branches other than those defined by preset can be built by setting `PRESET` to any unknown name, in which case the user specified `GIT` and `BRANCH`settings are used and folder named after user defined `PRESET`.
 
 ## **When to use RENDER_API=GL_LEGACY?** 
 *only applies to sm64pc/sm64ex based forks*
