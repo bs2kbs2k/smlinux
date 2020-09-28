@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0926-1617
+TIMESTAMP=2020-0927-1824
 
 domake(){
 #Here We go & music to build to
@@ -516,8 +516,8 @@ if [ ! -d "$BASEPATH"/emsdk ]; then
 	cd "$BASEPATH"
 	git clone https://github.com/emscripten-core/emsdk
 	cd emsdk
-	./emsdk install latest
-	./emsdk activate latest
+	./emsdk install 1.39.5
+	./emsdk activate 1.39.5
 fi
 source "$BASEPATH"/emsdk/emsdk_env.sh
 }
