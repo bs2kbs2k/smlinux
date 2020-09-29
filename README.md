@@ -35,7 +35,8 @@ smlinux will be installed in the first directory in your path, usually something
 
 If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
-Not all features are supported in MacOS. For now no dos/android targets and only sm64ex guaranteed to work with all options.  Using 'smlinux config' to try other pc presets is currently experimental, although cheaterex seems to be working now and I expect coop will be within a day or two.
+**__MacOS Addendum__**
+Not all features are supported. For now no dos/android targets and only sm64ex guaranteed to work with all options.  Using 'smlinux config' to try other pc presets is currently experimental, although cheaterex seems to be working now and I expect coop will be within a day or two.  Feedback appreciated.
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/presets.png>
