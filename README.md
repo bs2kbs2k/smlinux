@@ -27,13 +27,15 @@ Examples:
 
 That's Everything. That's all you have to do.  
 During installation you will be prompted to approve (or change) build options, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
-(**Do not run smlinux as root; you will be prompted for sudo password automatically if needed.**)
+(**Do not run smlinux as root; you will be prompted for sudo password automatically during installation if needed for dependency installation.**)
 
 You must provide your own legally backed up Super Mario 64 ROM file during smlinux installation. 
 
 smlinux will be installed in the first directory in your path, usually something like ~/bin or ~/Applications/.bin. After initial installation, just type `smlinux` from any folder when you want to build or update again.
 
 If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
+
+Not all features are supported in MacOS. For now no dos/android targets and only sm64ex guaranteed to work with all options.  Using 'smlinux config' to try other pc presets is currently experimental, although cheaterex seems to be working now and I expect coop will be within a day or two.
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/presets.png>
