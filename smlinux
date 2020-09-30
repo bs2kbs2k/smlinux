@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0929-2136
+TIMESTAMP=2020-0930-0013
 
 domake(){
 #Here We go & music to build to
@@ -498,9 +498,7 @@ fi
 }
 
 doconfig(){
-if [ "$OSX_BUILD" = 1 ]; then
-	editconfig
-elif(whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 28 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
+if(whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 28 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
 	whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a text editor.\n\nWhen you exit your editor, smlinux will continue.\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60
 	editconfig	
 fi
@@ -1039,12 +1037,13 @@ elif [ "$OSX_BUILD" = 1 ]; then
  	if [ -f /Applications/'Super Mario 64 ('"$PRESET"')'.app ]; then
  		rm -rf /Applications/'Super Mario 64 ('"$PRESET"')'.app 
 	fi
-	echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats >"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
-	chmod +x "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	cd "$BASEPATH"/"$PRESET"
-	local GITVER=`git rev-parse --short HEAD`
+	GITVER=`git rev-parse --short HEAD`
 	cd /Applications
-	~/go/bin/appify -name 'Super Mario 64 ("$PRESET")' -icon "$SHARE"/icons/"$PRESET".png --author smlinux --version "$GITVER" --id "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	~/go/bin/appify -name 'Super Mario 64 ('"$PRESET"')' -icon "$SHARE"/icons/"$PRESET".png -author smlinux --version "$GITVER" --id "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e
+	if [ "$EXTERNAL_DATA" = 1 ] && [ ! -d "/Users/$USER/Library/Application Support"/"$PRESET"/res ]; then 
+		ln -s "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "/Users/$USER/Library/Application Support"/"$PRESET"
+	fi
 else
 	echo Menu entry desktop file already exists...
 fi
