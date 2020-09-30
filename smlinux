@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0930-1040
+TIMESTAMP=2020-0930-1232
 
 domake(){
 #Here We go & music to build to
@@ -116,7 +116,7 @@ if [ ! "$ANDROID" = 0 ]; then
 	fi
 elif [ "$TARGET" = "dos" ]; then
 	ln -s "$BASEPATH"/djgpp/csdpmi/CWSDPMI.EXE "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/
-elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ) || [ "$OSX_BUILD" = 1 ]; then
+elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ] ); then
 	cd "$BASEPATH"/"$PRESET"
 	rm Makefile
 	git checkout Makefile
