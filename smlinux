@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0929-1945
+TIMESTAMP=2020-0929-2000
 
 domake(){
 #Here We go & music to build to
@@ -1027,8 +1027,8 @@ elif [ "$OSX_BUILD" = 1 ]; then
  	if [ -f /Applications/'Super Mario 64 ("$PRESET")'.app ]; then
  		rm -rf /Applications/'Super Mario 64 ("$PRESET")'.app
 	fi
-	echo '"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats' >$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
-	chmod +x $BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	echo '"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats' >"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	chmod +x "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	cd "$BASEPATH"/"$PRESET"
 	local GITVER=`git rev-parse --short HEAD`
 	cd /Applications
