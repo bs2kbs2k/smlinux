@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0929-2000
+TIMESTAMP=2020-0929-2058
 
 domake(){
 #Here We go & music to build to
@@ -234,6 +234,14 @@ exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 if zenity --question --text="sm64nx requires gcc 8 or newer and was not detected.\nDo you wish to continue anyway incase smlinux is reading gcc -dumpversion wrong,\nor abort so you can install it then run smlinux again?" --title "GCC 8 or newer not detected" --ok-label="Abort" --cancel-label="Continue" --width 550; then
 	exit
 fi
+}
+
+domymenu(){}
+	#cd "$BASEPATH"/"$PRESET"/enhancements
+	#cp "$SMLINUX"/menu-arrows.patch .
+	#	echo Applying Menu Arrows...
+	#cd "$BASEPATH"/"$PRESET"
+	#git apply enhancements/menu-arrows.patch
 }
 
 vettrom(){
@@ -924,29 +932,32 @@ fi
 
 docheats(){
 cd "$BASEPATH"/"$PRESET"/enhancements
-if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip ]; then
-	rm "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip
-fi
-if [ "$PRESET" = "sm64ex" ]; then
-	wget https://cdn.discordapp.com/attachments/716459185230970880/760557717839806524/CHEATER.hotfix.sm64ex-nightly.zip 
-	mv CHEATER.hotfix.sm64ex-nightly.zip CHEATERv8.hotfix.sm64ex-nightly.zip 
-else
-	wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
-fi
-if [ -f CHEATERv8*.zip ] && [ -f CHEATER.patch ]; then
-	echo Updating cheats...
-	cd "$BASEPATH"/"$PRESET"
-	git apply -R enhancements/CHEATER*.patch
-	cd enhancements
-	rm CHEATER*.patch
-	unzip -q CHEATER*
-	cd ..
-	git apply enhancements/CHEATER.patch
-elif [ -f CHEATERv8*.zip ]; then
-	echo Applying cheats...
-	unzip -q CHEATER*
-	cd ..
-	git apply enhancements/CHEATER.patch
+if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8*.zip ]; then
+	echo Getting cheats...
+	if [ -f CHEATER*.zip ]; then
+		rm CHEATER*.zip
+	fi
+	if [ "$PRESET" = "sm64ex" ]; then
+		wget https://cdn.discordapp.com/attachments/716459185230970880/760557717839806524/CHEATER.hotfix.sm64ex-nightly.zip 
+		mv CHEATER.hotfix.sm64ex-nightly.zip CHEATERv8.hotfix.sm64ex-nightly.zip 
+	else
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
+	fi
+	if [ -f CHEATERv8*.zip ] && [ -f CHEATER.patch ]; then
+		echo Updating cheats...
+		cd "$BASEPATH"/"$PRESET"
+		git apply -R enhancements/CHEATER.patch
+		cd enhancements
+		rm CHEATER.patch
+		unzip -q CHEATER*
+		cd ..
+		git apply enhancements/CHEATER.patch
+	elif [ -f CHEATERv8*.zip ]; then
+		echo Applying cheats...
+		unzip -q CHEATER*
+		cd ..
+		git apply enhancements/CHEATER.patch
+	fi
 fi
 }
 
@@ -1027,12 +1038,12 @@ elif [ "$OSX_BUILD" = 1 ]; then
  	if [ -f /Applications/'Super Mario 64 ("$PRESET")'.app ]; then
  		rm -rf /Applications/'Super Mario 64 ("$PRESET")'.app
 	fi
-	echo '"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats' >"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats >"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	chmod +x "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	cd "$BASEPATH"/"$PRESET"
 	local GITVER=`git rev-parse --short HEAD`
 	cd /Applications
-	~/go/bin/appify -name 'Super Mario 64 ("$PRESET")' -icon "$SHARE"/icons/"$PRESET".png --author smlinux --version "$GITVER" --id "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64
+	~/go/bin/appify -name 'Super Mario 64 ("$PRESET")' -icon "$SHARE"/icons/"$PRESET".png --author smlinux --version "$GITVER" --id "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 else
 	echo Menu entry desktop file already exists...
 fi
@@ -1484,14 +1495,11 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
-	if ([ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "render96ex" ] ) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8*.zip ]; then
+	if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "PRESET" = "sm64exweb" ]; then 
 		docheats
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
-			echo Applying Menu Arrows...
-			cp "$SMLINUX"/menu-arrows.patch "$BASEPATH"/"$PRESET"/enhancements
-			cd "$BASEPATH"/"$PRESET"
-			git apply enhancements/menu-arrows.patch
-		fi
+		domymenu
+	elif [ "$PRESET" = "sm64ex-coop " ]; then
+		domymenu
 	elif [ "$PRESET" = "cheaterex" ] && [ ! -f "$BASEPATH"/"$PRESET"smo.cappy_assets.zip ]; then
 		echo Getting smo cappy assets as required for cheaterex
 		cd "$BASEPATH"/"$PRESET" 
@@ -1647,13 +1655,11 @@ elif [ "$DOSGI" = 1 ]; then
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
 fi
-if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ] || [ "$ANDROID" = "androidex" ]; then 
+if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "PRESET" = "sm64exweb" ]; then 
 	docheats
-	cd "$BASEPATH"/"$PRESET"/enhancements
-	cp "$SMLINUX"/menu-arrows.patch .
-		echo Applying Menu Arrows...
-	cd "$BASEPATH"/"$PRESET"
-	git apply enhancements/menu-arrows.patch
+	domymenu
+elif [ "$PRESET" = "sm64ex-coop" ]; then
+	domymenu
 fi
 if [ "$BRANCH" = "sm64ex_nightly" ] && [ ! "$TOUCH_CONTROLS" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"
