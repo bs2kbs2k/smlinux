@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0928-2142
+TIMESTAMP=2020-0929-1836
 
 domake(){
 #Here We go & music to build to
@@ -168,7 +168,7 @@ echo "Script Ending Incomplete.  Contact #help-desk for support."
 	if [ "$OSX_BUILD" = 0 ] && [ "$TARGET_RPI" = 0 ]; then
 		xdg-open https://discord.gg/Ub6YHRm &disown
 	fi
-echo Your version of smlinux was last updated "$TIMESTAMP".
+echo Your smlinux internal timestamp is "$TIMESTAMP".
 echo If that is not recent, perhaps updates are not working.
 echo check github.com/enigma9o7/smlinux for the latest version
 	exit
@@ -923,6 +923,34 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 fi
 }
 
+docheats(){
+cd "$BASEPATH"/"$PRESET"/enhancements
+if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip ]; then
+	rm "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip
+fi
+if [ "$PRESET" = "sm64ex" ]; then
+	wget https://cdn.discordapp.com/attachments/716459185230970880/760557717839806524/CHEATER.hotfix.sm64ex-nightly.zip 
+	mv CHEATER.hotfix.sm64ex-nightly.zip CHEATERv8.hotfix.sm64ex-nightly.zip 
+else
+	wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
+fi
+if [ -f CHEATERv8*.zip ] && [ -f CHEATER.patch ]; then
+	echo Updating cheats...
+	cd "$BASEPATH"/"$PRESET"
+	git apply -R enhancements/CHEATER*.patch
+	cd enhancements
+	rm CHEATER*.patch
+	unzip -q CHEATER*
+	cd ..
+	git apply enhancements/CHEATER.patch
+elif [ -f CHEATERv8*.zip ]; then
+	echo Applying cheats...
+	unzip -q CHEATER*
+	cd ..
+	git apply enhancements/CHEATER.patch
+fi
+}
+
 makedesktop(){
 if [ ! -d "$SHARE"/icons ]; then 
 	mkdir "$SHARE"/icons
@@ -963,10 +991,10 @@ else
 fi
 if [ "$PRESET" = "sm64ex-coop" ] && [ -f "$SHARE"/applications/"$PRESET".desktop ]; then
 	rm "$SHARE"/applications/"$PRESET".desktop
-	# this is cuz i messed up the old one
+	# this is cuz i messed up the old one the first week or so, will take this out later
 fi
 
-if [ ! -f "$SHARE"/applications/"$PRESET".desktop ]; then
+if [ ! -f "$SHARE"/applications/"$PRESET".desktop ] && [ "$OSX_BUILD" = 0 ]; then
 	echo Creating desktop shorcut and menu entry...
 	echo '[Desktop Entry]
 Encoding=UTF-8
@@ -995,6 +1023,15 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 	if [ -d ${XDG_DESKTOP_DIR:-$HOME/Desktop} ]; then
 		cp "$SHARE"/applications/"$PRESET".desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}
 	fi
+elif [ "$OSX_BUILD" = 1 ]; then
+	echo Creating MacOS AppImage...
+ 	if [ -f /Applications/'Super Mario 64 ("$PRESET")'.app ]; then
+ 		rm -rf /Applications/'Super Mario 64 ("$PRESET")'.app
+	fi
+	echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats > $BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64
+	chmod +x $BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64
+	cd /Applications
+	~/go/bin/appify -name 'Super Mario 64 ("$PRESET")' -icon "$SHARE"/icons/"$PRESET".png --author smlinux "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64
 else
 	echo Menu entry desktop file already exists...
 fi
@@ -1242,8 +1279,9 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 					echo Install Homebrew package manager
 					bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 				fi
-				brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip unrar
+				brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip unrar go
 				alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
+				go get github.com/machinebox/appify
 			else
 				$Linux
 			fi
@@ -1443,28 +1481,10 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		dosgi
 	else
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
-		echo set InstallHD=1 and UpdatehD=1 if you would like these checked for udpates.
+		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
-	if ([ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "render96ex" ] ) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8.zip ]; then
-		echo Updating cheats...
-		cd "$BASEPATH"/"$PRESET"/enhancements
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip ]; then
-			rm "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.zip
-		fi
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
-		if [ -f CHEATERv8.zip ] && [ -f CHEATER.patch ]; then
-			cd "$BASEPATH"/"$PRESET"
-			git apply -R enhancements/CHEATER*.patch
-			cd enhancements
-			rm CHEATER*.patch
-			unzip -q CHEATER*
-			cd ..
-			git apply enhancements/CHEATER.patch
-		elif [ -f CHEATERv8.zip ]; then
-			unzip -q CHEATERv8
-			cd ..
-			git apply enhancements/CHEATER.patch
-		fi
+	if ([ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "render96ex" ] ) && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8*.zip ]; then
+		docheats
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 			echo Applying Menu Arrows...
 			cp "$SMLINUX"/menu-arrows.patch "$BASEPATH"/"$PRESET"/enhancements
@@ -1533,8 +1553,6 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		echo
 		echo "ERROR: Build Failure.  Android Package Kit (apk) not found."
 		endnow
-	elif [ "$OSX_BUILD" = "1" ]; then
-		echo [7] Update Complete. 
 	elif [ "$ANDROID" = 0 ] && [ "$TARGET" = "pc" ] ; then
 		echo [7] Verifying Menu Entry....
 		makedesktop
@@ -1629,18 +1647,10 @@ elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
 fi
 if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex-coop" ] || [ "$ANDROID" = "androidex" ]; then 
+	docheats
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	cp "$SMLINUX"/menu-arrows.patch .
-	if  [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "sm64ex" ] || [ "$ANDROID" = "androidex" ]; then
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
-	fi
-	if [ -f CHEATERv8.zip ]; then
-		unzip -q CHEATERv8
-		cd "$BASEPATH"/"$PRESET"
-		echo Applying Cheats...
-		git apply enhancements/CHEATER*.patch
-	fi
-	echo Applying Menu Arrows...
+		echo Applying Menu Arrows...
 	cd "$BASEPATH"/"$PRESET"
 	git apply enhancements/menu-arrows.patch
 fi
@@ -1678,7 +1688,7 @@ elif [ "$TARGET" = "dos" ]; then
 fi
 
 echo
-if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ] && [ "$OSX_BUILD" = 0 ]; then
+if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
 	echo [7] Creating Desktop Shortcut and Menu Entry...
 	makedesktop
 else
