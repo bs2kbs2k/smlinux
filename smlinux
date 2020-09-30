@@ -237,6 +237,7 @@ fi
 }
 
 domymenu(){
+	echo broken
 	#cd "$BASEPATH"/"$PRESET"/enhancements
 	#cp "$SMLINUX"/menu-arrows.patch .
 	#	echo Applying Menu Arrows...
