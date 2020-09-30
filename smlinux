@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0929-2058
+TIMESTAMP=2020-0929-2100
 
 domake(){
 #Here We go & music to build to
@@ -236,7 +236,7 @@ if zenity --question --text="sm64nx requires gcc 8 or newer and was not detected
 fi
 }
 
-domymenu(){}
+domymenu(){
 	#cd "$BASEPATH"/"$PRESET"/enhancements
 	#cp "$SMLINUX"/menu-arrows.patch .
 	#	echo Applying Menu Arrows...
