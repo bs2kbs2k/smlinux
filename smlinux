@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0929-1915
+TIMESTAMP=2020-0929-1945
 
 domake(){
 #Here We go & music to build to
@@ -504,7 +504,7 @@ IFS=":"
 for editor in $EDITORS; do
 	$editor "$SMLINUX"/smlinuxcfg.txt
 	if [ $? -eq 0 ]; then
-		echo "$PATHDIR"/smlinux: line $(($LINENO - 2)): "$editor": wow! command found!
+		echo "$PATHDIR"/smlinux: line $(($LINENO - 2))":" "$editor": wow! command found!
 		echo
 		return
 	fi
