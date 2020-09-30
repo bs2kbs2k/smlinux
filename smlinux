@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0929-1836
+TIMESTAMP=2020-0929-1915
 
 domake(){
 #Here We go & music to build to
@@ -445,7 +445,6 @@ elif  [ "$PRESET" = "sm64dos" ]; then
 	TARGET=dos		
 fi
 if [ `uname` = "Darwin" ]; then
-	CONFIG=0    # whiptail not supported in mac and zenity is huge
 	OSX_BUILD=1
 fi
 if [ ! `uname -m` = "x86_64" ] || [ ! "$VERSION" = "us" ]; then
@@ -1028,10 +1027,12 @@ elif [ "$OSX_BUILD" = 1 ]; then
  	if [ -f /Applications/'Super Mario 64 ("$PRESET")'.app ]; then
  		rm -rf /Applications/'Super Mario 64 ("$PRESET")'.app
 	fi
-	echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats > $BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64
-	chmod +x $BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64
+	echo '"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats' >$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	chmod +x $BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	cd "$BASEPATH"/"$PRESET"
+	local GITVER=`git rev-parse --short HEAD`
 	cd /Applications
-	~/go/bin/appify -name 'Super Mario 64 ("$PRESET")' -icon "$SHARE"/icons/"$PRESET".png --author smlinux "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64
+	~/go/bin/appify -name 'Super Mario 64 ("$PRESET")' -icon "$SHARE"/icons/"$PRESET".png --author smlinux --version "$GITVER" --id "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64
 else
 	echo Menu entry desktop file already exists...
 fi
@@ -1279,7 +1280,7 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 					echo Install Homebrew package manager
 					bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 				fi
-				brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip unrar go
+				brew install libxdg-basedir coreutils git wget nano newt mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip unrar go
 				alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
 				go get github.com/machinebox/appify
 			else
