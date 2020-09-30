@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0930-1330
+TIMESTAMP=2020-0930-1454
 
 domake(){
 #Here We go & music to build to
@@ -337,8 +337,6 @@ BASEPATH=$HOME
 UpdateHD=1
 # set DEBUG=1 if you want to make a debug build for some odd reason
 DEBUG=0
-# Set AutoUpdate=0 to prevent smlinux updating itself
-AutoUpdate=1
 TARGET_WEB=0
 TARGET_RPI=0
 OSX_BUILD=0
@@ -347,7 +345,9 @@ GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 # Linux command is only called during first install and is not used for MacOS
-Linux="sudo apt install -y build-essential bsdmainutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer"' > "$SMLINUX"/smlinuxcfg.txt
+Linux="sudo apt install -y build-essential bsdmainutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer"
+# Set AutoUpdate=0 to prevent smlinux updating itself
+AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
@@ -1033,7 +1033,7 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 		cp "$SHARE"/applications/"$PRESET".desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}
 	fi
 elif [ "$OSX_BUILD" = 1 ]; then
-	echo Creating MacOS AppImage...
+	echo Creating MacOS AppImage and Desktop Shortcut. ..
  	if [ -f /Applications/'Super Mario 64 ('"$PRESET"')'.app ]; then
  		rm -rf /Applications/'Super Mario 64 ('"$PRESET"')'.app 
 	fi
@@ -1044,6 +1044,11 @@ elif [ "$OSX_BUILD" = 1 ]; then
 	if [ "$EXTERNAL_DATA" = 1 ] && [ ! -d "/Users/$USER/Library/Application Support"/"$PRESET"/res ]; then 
 		ln -s "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "/Users/$USER/Library/Application Support"/"$PRESET"
 	fi
+	if [ ! -d $HOME/Desktop/'Super Mario 64 ('"$PRESET"')'.app ]; then
+		cd $HOME/Desktop
+		ln -s /Applications/'Super Mario 64 ('"$PRESET"')'.app
+	fi
+
 else
 	echo Menu entry desktop file already exists.
 fi
