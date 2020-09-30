@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0930-0013
+TIMESTAMP=2020-0930-1040
 
 domake(){
 #Here We go & music to build to
@@ -154,7 +154,7 @@ fi
 echo
 echo smlinux is complete. 
 echo smlinux internal timestamp "$TIMESTAMP".
-echo "$GIT" last commit:
+echo "$GIT"-"$BRANCH" last commit:
 cd "$BASEPATH"/"$PRESET"
 git log -1 --format=%cd
 echo Please exit or close this terminal window!
@@ -763,7 +763,7 @@ if  [ "$TARGET_WEB" = 1 ] || [ "$EXTERNAL_DATA" = 0 ]; then
 	fi
 fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/render96* ]; then 
-	echo Render96 models already installed...
+	echo Render96 models already installed.
 	return
 fi
 if [ ! -f /usr/bin/7z ]; then 
@@ -839,7 +839,7 @@ echo Applying Render96 SGI Models...
 scriptUpdate(){
 if [ ! -f ~/.smlinuxUpdate ]; then 
 	if [ ! -f "$PATHDIR"/smlinux ] || [ ! -d "$SMLINUX"/.git ] ; then
-		echo Installing Script... 		
+		echo Installing smlinux... 		
 		if [ -d "$SMLINUX" ]; then
 			if [ -d "$SMLINUX".baq ]; then
 				rm -rf "$SMLINUX".baq
@@ -996,7 +996,7 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 		echo Reccommend creating "$SHARE"/icons/"$PRESET".png
 	fi	
 else
-	echo Icon already exists...
+	echo Icon already exists.
 fi
 if [ "$PRESET" = "sm64ex-coop" ] && [ -f "$SHARE"/applications/"$PRESET".desktop ]; then
 	rm "$SHARE"/applications/"$PRESET".desktop
@@ -1045,7 +1045,7 @@ elif [ "$OSX_BUILD" = 1 ]; then
 		ln -s "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "/Users/$USER/Library/Application Support"/"$PRESET"
 	fi
 else
-	echo Menu entry desktop file already exists...
+	echo Menu entry desktop file already exists.
 fi
 }
 rungame(){
@@ -1288,7 +1288,7 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 			if [ "$OSX_BUILD" = 1 ]; then
 				echo "[1] Installing dependencies for MacOS..."
 				if [ ! -f /usr/local/bin/brew ]; then
-					echo Install Homebrew package manager
+					echo Installing Homebrew package manager...
 					bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 				fi
 				brew install libxdg-basedir coreutils git wget nano newt mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip unrar go
@@ -1308,7 +1308,7 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 				dodos
 			fi
 		elif [ "$PRESET" = "sm64nx" ] && [ ! -d "$BASEPATH"/"$PRESET/build" ]; then
-			echo "[1] Installing required build tools for nx..."
+			echo "[1] Installing required build tools for sm64nx..."
 			pip3 install pillow zstandard tqdm xxhash
 			gcccheck
 		elif [ ! "$ANDROID" = 0 ]; then
@@ -1321,10 +1321,10 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 			echo "[1] Loading djgpp for DOS Target..."
 			dodos
 		elif [ "$OSX_BUILD" = 1 ]; then
-			echo "[1] This is not first build, skipping MacOS dependencies..."
+			echo "[1] This is not first build, skipping MacOS dependencies."
 			alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
 		else
-			echo "[1] This is not first build, skipping dependencies..."
+			echo "[1] This is not first build, skipping dependencies."
 		fi
 		if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 			if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$PRESET" ]; then
@@ -1430,9 +1430,8 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		rm import/.assets-local.txt
 	fi
 	git fetch
-	git checkout "$BRANCH"
 	if [ "$(git diff HEAD origin/HEAD)" != "" ]; then
-		echo Attempting to murge updates....
+		echo Attempting to merge updates....
 		 git merge
 	fi
 	if [ "$?" = "1" ]; then
@@ -1471,7 +1470,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 			git apply enhancements/CHEATER.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
-			echo Menu Arrows....
+			echo Menu Arrows...
 			git apply enhancements/menu-arrows.patch
 		fi
 	fi
@@ -1489,7 +1488,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	if [ "$UpdateHD" = 1 ] && [ "$InstallHD" = 1 ]; then
 		dohd
 	elif [ "$DOSGI" = 1 ]; then
-		printf "\nSGI Selected, Processing...\n\n"
+		printf "SGI Selected, Processing...\n"
 		dosgi
 	else
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
@@ -1548,7 +1547,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 		echo "[6] Preparing Savefile, ROM and ROM Filesystem (paks)"
 		prepnx	
 	else
-		echo [6] No resources found in previous build, skipping restore...
+		echo [6] No resources found in previous build, skipping restore.
 	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -1612,7 +1611,7 @@ if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		git submodule update
 		./getSDL.sh
 	else
-		printf "\n[3] Downloading source from github... \n"
+		printf "\n[3] Downloading sm64 source from github... \n"
 		git clone https://github.com/"$GIT" -b "$BRANCH" "$PRESET"
 	fi
 	if [ "$PRESET" = "cheaterex" ]; then
@@ -1699,11 +1698,10 @@ if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
 	echo [7] Creating Desktop Shortcut and Menu Entry...
 	makedesktop
 else
-	echo [7] Skipping menu entry for non Linux version...
+	echo [7] Skipping menu entry for non PC version.
 fi
 echo
-echo [8] Build Succesful!  Testing Application Launch...
-echo
+echo [8] Build Succesful!  Testing Application Launch.
 rungame
 if [ -f "$HOME"/.smlinuxNopath ]; then
 	rm "$HOME"/.smlinuxNopath
@@ -1713,7 +1711,7 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 4
 elif  ([ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]) && [ "$InstallHD" = 1 ]; then
-	sleep 30
+	sleep 28
 else
 	sleep 8
 fi
