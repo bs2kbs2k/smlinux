@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-0930-1232
+TIMESTAMP=2020-0930-1330
 
 domake(){
 #Here We go & music to build to
@@ -931,7 +931,7 @@ fi
 
 docheats(){
 cd "$BASEPATH"/"$PRESET"/enhancements
-if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8*.zip ]; then
+if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8*.zip ] || ([ "$PRESET" = "sm64ex" ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8.hotfix*.zip ] ); then
 	echo Getting cheats...
 	if [ -f CHEATER*.zip ]; then
 		rm CHEATER*.zip
