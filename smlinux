@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1001-1113
+TIMESTAMP=2020-1001-1322
 
 domake(){
 #Here We go & music to build to
@@ -1293,30 +1293,35 @@ if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSI
 	else	# The real start, the rest was preperation and setup. 
 		echo 
 		if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ]; then
-			echo "[1] Installing dependencies..."
-			if [ -f /usr/bin/apt ]; then
-				sudo apt update
-			fi
 			if [ "$OSX_BUILD" = 1 ]; then
 				echo "[1] Installing dependencies for MacOS..."
 				if [ ! -f /usr/local/bin/brew ]; then
 					echo Installing Homebrew package manager...
 					bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 				fi
-				brew install libxdg-basedir coreutils git wget nano newt mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip 7zip unrar go
+				brew install libxdg-basedir coreutils git wget nano newt mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip p7zip unrar go
 				alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
 				go get github.com/machinebox/appify
+			elif [ -f /usr/bin/apt ]; then
+				echo "[1] Updating Package list and Installing dependencies..."
+				sudo apt update
+				$Linux
 			else
+				echo "[1] Installing dependencies user specified in smlinux configuration..."
 				$Linux
 			fi
 			if [ "$PRESET" = "sm64nx" ] ; then
+				echo Installing required build tools for sm64nx...
 				pip3 install pillow zstandard tqdm xxhash
 				gcccheck
 			elif [ ! "$ANDROID" = 0 ]; then
+				echo "Loading Android SDK Environment..."
 				androidsdk
 			elif [ "$TARGET_WEB" = 1 ]; then
+				echo "Loading Enscriptem for Web Target..."
 				loademsdk
 			elif [ "$TARGET" = "dos" ]; then
+				echo Loading djgpp for DOS Target...
 				dodos
 			fi
 		elif [ "$PRESET" = "sm64nx" ] && [ ! -d "$BASEPATH"/"$PRESET/build" ]; then
