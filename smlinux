@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1457
+TIMESTAMP=2020-1002-1502
 
 domake(){
 #Here We go & music to build to
@@ -941,8 +941,11 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				cd "$LAUNCH_DIR"
 				exec ~/.smlinuxUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 			fi
+		elif [ "$COMMAND" = "upgrade" ]; then    
+			echo smlinux is already up to date.
+			exit
 		else    
-			echo Already up to date.
+			echo smlinux is already up to date.
 		fi
 	fi
 fi
