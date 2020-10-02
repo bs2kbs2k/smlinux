@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1309
+TIMESTAMP=2020-1002-1356
 
 domake(){
 #Here We go & music to build to
@@ -752,7 +752,7 @@ else
 				git apply enhancements/3d_coin_v2*.patch
 			fi
 		fi
-		if [ `uname -m` = "x86_64" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ "$TARGET_WEB" = 0 ] && [ ! "$PRESET" = "sm64ex-coop" ]; then
+		if [ `uname -m` = "x86_64" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ "$TARGET_WEB" = 0 ] && [ ! "$PRESET" = "sm64ex-coop" ] && [ ! "$PRESET" = "cheaterex" ]; then
 			cd "$BASEPATH"/"$PRESET"
 			if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 				echo Applying 60fps patch...
@@ -895,7 +895,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		fi
 		chmod +x "$PATHDIR"/smlinux
 		cd "$LAUNCH_DIR"
-		exec smlinux "$@"
+		exec smlinux "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	else
 		cd "$SMLINUX"
 		git fetch
@@ -934,10 +934,10 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				fi
 				if [ -f "$HOME"/Downloads/smlinux.txt ]; then mv -f "$HOME"/Downloads/smlinux.txt "$HOME"/Downloads/smlinux.old.backup
 				fi	
-				exec smlinux "$@"' > ~/.smlinuxUpdate
+				exec smlinux "$COMMAND" "$2" "$3" "$4" "$5" "$6"' > ~/.smlinuxUpdate
 				chmod +x ~/.smlinuxUpdate
 				cd "$LAUNCH_DIR"
-				exec ~/.smlinuxUpdate "$@"
+				exec ~/.smlinuxUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 			fi
 		else    
 			echo Already up to date.
@@ -1126,7 +1126,23 @@ else
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
 fi
-
+if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then
+	COMMAND=build
+elif [ ! -z "$1" ]; then
+	COMMAND="$1"
+elif command -v whiptail &> /dev/null; then
+	COMMAND=update
+	COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
+	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and MacOS" \
+	"update" "update sm64 source & rebuild it" ON \
+	"build" "get new sm64 source and build it" OFF \
+	"clone" "get new sm64 source and extract rom" OFF \
+	"reset" "reset smlinux config file to default" OFF \
+	"config" "edit smlinux config file only" OFF \
+	"depends" "install dependencies only" OFF \
+	"upgrade" "upgrade smlinux only" OFF \
+	3>&1 1>&2 2>&3)
+fi
 
 # Make sure folders and installer config file exist, if not create them.
 if [ ! -d $HOME/.local ]; then 
@@ -1136,35 +1152,35 @@ if [ ! -d "$SHARE" ]; then
 	mkdir "$SHARE"
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
-	if [ "$1" = "config" ]; then
+	if [ "$COMMAND" = "config" ]; then
 		editconfig
 		echo "Thank you for editing your smlinux config file." 
 		echo "Do you know how to write a GUI to edit it?"
 		echo "If so I would love to use it as a front end."
 		echo
 		exit
-	elif [ "$1" = "reset" ]; then
+	elif [ "$COMMAND" = "reset" ]; then
 		rm "$SMLINUX"/smlinuxcfg.txt
 		makeconfig
 		echo
 		echo smlinux configuration file has been reset to default.
 		echo
 		exit
-	elif [ "$1" = "upgrade" ]; then
+	elif [ "$COMMAND" = "upgrade" ]; then
 		echo Script upgrade only proceeding...
 	elif [ ! -f "$SMLINUX"/smlinuxcfg.txt ]; then
 		echo smlinux configuration file not found, so making a new one...
 		makeconfig
 		doconfig
 	else
-		loadconfig "$@"
-		if [ "$CONFIG" = 1 ] && [ ! -z "$1" ] && (!( [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ] )); then
+		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
+		if [ "$CONFIG" = 1 ] && [ ! -z "$COMMAND" ] && (!( [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ] )); then
 			doconfig
 		fi
 	fi
 	if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
 		echo Loading "$SMLINUX"/smlinuxcfg.txt...
-		loadconfig "$@"
+		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	fi
 	#Play a sound clip for no reason - thank you for playing my game.
 	if [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ]; then
@@ -1179,10 +1195,10 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		fi
 	fi
 else
-	loadconfig "$@"
+	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 fi
 
-if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
+if [ "$COMMAND" = "--purge" ] || [ "$1" = "purge" ]; then
 	
 	echo Wiping...
 	rm -rf "$BASEPATH"/sm64pc
@@ -1258,7 +1274,7 @@ else	     # The real start, the rest was script preperation and setup.
 	echo "|    help: Display this message and supported options and URL for github faq  |"
 	echo "|                                                                             |"
 	echo "-------------------------------------------------------------------------------"
-	if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ]; then
+	if [ "$COMMAND" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ]; then
 		echo More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions
 		echo " Options --sgi --hd --config --depends will document better later"
 		echo but all they do is override what is in your config file already
@@ -1310,7 +1326,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "This is not first build, skipping dependencies."
 		echo "If you wish smlinux to install them again run: smlinux depends"
 	fi
-	if [ "$1" = "depends" ]; then
+	if [ "$COMMAND" = "depends" ]; then
 		theend
 	fi
 	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
@@ -1459,13 +1475,13 @@ else	     # The real start, the rest was script preperation and setup.
 	echo
 	echo [2] Checking Github for smlinux updates....
 	if [ "$AutoUpdate" = 1 ] || [ "$1" = "upgrade" ]; then
-		scriptUpdate "$@"
+		scriptUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	else
 		echo "WARNING: AutoUpdate Disabled. You might be using an old version of smlinux!"
 		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 	fi
 fi
-if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "up" ]; then
+if [ "$COMMAND" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "up" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
 		echo ERROR: No "$BASEPATH"/"$PRESET" folder to update!
@@ -1693,7 +1709,7 @@ else
 	cd "$BASEPATH"/"$PRESET"
 	./extract_assets.py "$VERSION"
 fi
-if [ "$1" = "clone" ]; then
+if [ "$COMMAND" = "clone" ]; then
 	theend
 fi
 echo
