@@ -182,31 +182,31 @@ If your distro needs additional dependencies not listed here, please let me know
 
 Arch: 
     
-	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd
+	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity
 Debian / Ubuntu:  
 
-	sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer
+	sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full zenity mplayer
 	
 Fedora  / Red Hat:
 
-	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd
+	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity
 openSuSE:
 
-	sudo zypper in gcc make python3 libaudiofile1 glew-devel libSDL2-devel
+	sudo zypper in gcc make python3 libaudiofile1 glew-devel libSDL2-devel zenity
 Solus:
 	
-	sudo eopkg install make gcc python3 audiofile-devel glew-devel sdl2-devel
+	sudo eopkg install make gcc python3 audiofile-devel glew-devel sdl2-devel zenity
 
 Void: 
 
-	sudo xbps-install -S base-devel python3 audiofile-devel SDL2-devel glew-devel zstd 
+	sudo xbps-install -S base-devel python3 audiofile-devel SDL2-devel glew-devel zstd zenity
 Alpine:
 
-	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev 
+	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 	
 MacOS:
 
-	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip p7zip unrar newt go
+	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip p7zip unrar newt go python3
 	
 
 ## **How do I create my rom file?**
