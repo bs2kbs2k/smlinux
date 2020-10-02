@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1153
+TIMESTAMP=2020-1002-1309
 
 domake(){
 #Here We go & music to build to
@@ -1230,7 +1230,7 @@ if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
         exit
 fi
 
-if [ -f ~/.smlinuxUpdate ] && [ "$1" = "upgrade" ]; then 
+if [ -f ~/.smlinuxUpdate ] || [ "$1" = "upgrade" ]; then 
 	rm ~/.smlinuxUpdate
 	echo Script Update Complete.
 	exit
