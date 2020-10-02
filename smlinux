@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1139
+TIMESTAMP=2020-1002-1146
 
 domake(){
 #Here We go & music to build to
@@ -1150,6 +1150,8 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo smlinux configuration file has been reset to default.
 		echo
 		exit
+	elif [ "$1" = "upgrade" ]; then
+		echo smlinux configuration file not found.  run smlinux reset to create one.
 	elif [ ! -f "$SMLINUX"/smlinuxcfg.txt ]; then
 		echo smlinux configuration file not found, so making a new one...
 		makeconfig
@@ -1454,7 +1456,7 @@ else	     # The real start, the rest was script preperation and setup.
 	fi
 	echo
 	echo [2] Checking Github for smlinux updates....
-	if [ "$AutoUpdate" = 1 ]; then
+	if [ "$AutoUpdate" = 1 ] || [ "$1" = "upgrade" ]; then
 		scriptUpdate "$@"
 	else
 		echo "WARNING: AutoUpdate Disabled. You might be using an old version of smlinux!"
