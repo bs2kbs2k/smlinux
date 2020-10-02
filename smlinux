@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1429
+TIMESTAMP=2020-1002-1457
 
 domake(){
 #Here We go & music to build to
@@ -1128,9 +1128,9 @@ else
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
 fi
-if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then
+if [ -z "$@" ] && [ ! -d "$SMLINUX"/.git ]; then
 	COMMAND=build
-elif [ ! -z "$1" ]; then
+elif [ ! -z "$@" ]; then
 	COMMAND="$1"
 elif command -v whiptail &> /dev/null; then
 	COMMAND=update
@@ -1200,7 +1200,7 @@ else
 	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 fi
 
-if [ "$COMMAND" = "--purge" ] || [ "$1" = "purge" ]; then
+if [ "$COMMAND" = "purge" ] || [ "$1" = "--purge" ]; then
 	
 	echo Wiping...
 	rm -rf "$BASEPATH"/sm64pc
@@ -1248,7 +1248,7 @@ if [ "$COMMAND" = "--purge" ] || [ "$1" = "purge" ]; then
         exit
 fi
 
-if [ -f ~/.smlinuxUpdate ] && [ "$1" = "upgrade" ]; then 
+if [ -f ~/.smlinuxUpdate ] && [ "$COMMAND" = "upgrade" ]; then 
 	rm ~/.smlinuxUpdate
 	echo Script Update Complete.
 	exit
@@ -1276,14 +1276,14 @@ else	     # The real start, the rest was script preperation and setup.
 	echo "|    help: Display this message and supported options and URL for github faq  |"
 	echo "|                                                                             |"
 	echo "-------------------------------------------------------------------------------"
-	if [ "$COMMAND" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ]; then
+	if [ "$COMMAND" = "help" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
 		echo More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions
 		echo " Options --sgi --hd --config --depends will document better later"
 		echo but all they do is override what is in your config file already
 		exit
 	fi
 	echo [1] Preparing Build environment...
-	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$1" = "depends" ]; then
+	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
 		if [ "$OSX_BUILD" = 1 ]; then
 			echo "Installing dependencies for MacOS..."
 			if ! command -v brew &> /dev/null; then
@@ -1307,7 +1307,7 @@ else	     # The real start, the rest was script preperation and setup.
 			$Linux
 		fi
 	fi
-	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$1" = "depends" ]); then
+	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		echo "Installing required build tools for sm64nx..."
 		pip3 install pillow zstandard tqdm xxhash
 		gcccheck
@@ -1324,7 +1324,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "This is not first build, skipping MacOS dependencies."
 		echo "If you wish smlinux to install them again run: smlinux depends"
 		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
-	else
+	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ]; then
 		echo "This is not first build, skipping dependencies."
 		echo "If you wish smlinux to install them again run: smlinux depends"
 	fi
@@ -1335,7 +1335,7 @@ else	     # The real start, the rest was script preperation and setup.
 		if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$PRESET" ]; then
 			ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 		fi
-	elif [ ! "$1" = "upgrade" ]; then
+	elif [ ! "$COMMAND" = "upgrade" ]; then
 		echo "Verifying ROM..."
 		cd "$LAUNCH_DIR"
 		if [ -f "$1" ]; then 
@@ -1366,7 +1366,7 @@ else	     # The real start, the rest was script preperation and setup.
 			echo "ERROR: Specified file is not original Super Mario 64 ROM image or VERSION set wrong."
 			echo
 		fi
-		if [ ! "$1" = "upgrade" ]; then
+		if [ ! "$COMMAND" = "upgrade" ]; then
 			echo "Please select Super Mario 64 romfile to begin."	
 			if [ "$OSX_BUILD" = 1 ]; then
 				cd $HOME
@@ -1476,14 +1476,14 @@ else	     # The real start, the rest was script preperation and setup.
 	fi
 	echo
 	echo [2] Checking Github for smlinux updates....
-	if [ "$AutoUpdate" = 1 ] || [ "$1" = "upgrade" ]; then
+	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
 		scriptUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	else
 		echo "WARNING: AutoUpdate Disabled. You might be using an old version of smlinux!"
 		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 	fi
 fi
-if [ "$COMMAND" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "up" ]; then
+if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
 		echo ERROR: No "$BASEPATH"/"$PRESET" folder to update!
