@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1356
+TIMESTAMP=2020-1002-1420
 
 domake(){
 #Here We go & music to build to
@@ -238,7 +238,7 @@ fi
 }
 
 domymenu(){
-	echo broken
+	true
 	#cd "$BASEPATH"/"$PRESET"/enhancements
 	#cp "$SMLINUX"/menu-arrows.patch .
 	#	echo Applying Menu Arrows...
@@ -710,7 +710,7 @@ else
 		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res	
 			echo Getting High Quality Sounds...
-			wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
+			wget https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
 		fi
 	elif [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$PRESET" = "cheaterex" ] ||[ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
 		echo WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
@@ -1246,7 +1246,7 @@ if [ "$COMMAND" = "--purge" ] || [ "$1" = "purge" ]; then
         exit
 fi
 
-if [ -f ~/.smlinuxUpdate ] || [ "$1" = "upgrade" ]; then 
+if [ -f ~/.smlinuxUpdate ] && [ "$1" = "upgrade" ]; then 
 	rm ~/.smlinuxUpdate
 	echo Script Update Complete.
 	exit
