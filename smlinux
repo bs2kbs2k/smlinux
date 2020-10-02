@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1502
+TIMESTAMP=2020-1002-1522
 
 domake(){
 #Here We go & music to build to
@@ -1298,8 +1298,11 @@ else	     # The real start, the rest was script preperation and setup.
 				endnow
 			fi
 			brew install libxdg-basedir coreutils go wget newt nano unzip unrar p7zip python3 
-			brew install git gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
+			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
 			alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
+			if [ ! -f ~/.bashrc ]; then
+				echo "alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'" > ~/.bashrc
+			fi
 			go get github.com/machinebox/appify
 		elif [ -f /usr/bin/apt ]; then
 			echo "Updating Package list and Installing dependencies..."
