@@ -22,7 +22,7 @@ Paste the following into a terminal:
 	
 That's Everything. That's all you have to do.  
 During installation you will be prompted to approve (or change) build options, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
-(**Do not run smlinux as root; you will be prompted for sudo password automatically during installation if needed for dependency installation.**)
+(**Do not run smlinux as root; you will be prompted for sudo password automatically during installation for dependency installation.**)
 
 You must provide your own legally backed up Super Mario 64 ROM file during smlinux installation. 
 
