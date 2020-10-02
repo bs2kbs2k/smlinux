@@ -14,17 +14,12 @@
 
 ...and! you can use it again later to quickly rebuild and sync to the latest updates from github.
  
-## **Download & Installation Instructions**      
+## **Download & Installation Instructions**    
+
+Paste the following into a terminal:
                
-	wget http://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux
-	bash smlinux <romfile>
-	rm smlinux
-Examples: 
-
- 	bash smlinux "Super Mario 64 (U) [!].z64"
-		      or 
-	bash smlinux ~/roms/n64/sm64.n64
-
+	bash -c "$(curl -fsSL https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux)";rm smlinux
+	
 That's Everything. That's all you have to do.  
 During installation you will be prompted to approve (or change) build options, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 (**Do not run smlinux as root; you will be prompted for sudo password automatically during installation if needed for dependency installation.**)
