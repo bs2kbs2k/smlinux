@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1118
+TIMESTAMP=2020-1002-1139
 
 domake(){
 #Here We go & music to build to
@@ -312,6 +312,7 @@ echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex
 # AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
 PRESET=sm64ex
 InstallHD=1
+InstallSGI=0
 # set MAXJOBS=n to limit cpu threads used, i.e. MAXJOBS=1 or MAXJOBS=7
 MAXJOBS=
 # [ options for sm64ex and its forks ] 
@@ -371,8 +372,8 @@ DEBUG=0
 IMMEDIATELOAD=1
 DOS_GL=osmesa
 ENABLE_OPENGL_LEGACY=1
-SGI=0
 ANDROID=0
+InstallSGI=0
 source "$SMLINUX"/smlinuxcfg.txt
 if [ -z $PRESET ] && [ ! -z $REPO ]; then
 	PRESET="$REPO"
@@ -413,13 +414,13 @@ elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET"
 	BRANCH=master
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
-	SGI=1
+	InstallSGI=1
 elif [ "$PRESET" = "r96proto" ]; then
 	GIT=render96/render96ex
 	BRANCH=fastbuild_prototype
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
-	SGI=1
+	InstallSGI=1
 	DISCORDRPC=0
 	LEGACY_RES=0
 elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" = "CHEATEREX" ]; then
@@ -485,13 +486,11 @@ if [ "$2" = "--hd" ] || [ "$3" = "--hd" ] ||[ "$4" = "--hd" ] ||[ "$5" = "--hd" 
 	InstallHD=1
 fi
 if [ "$2" = "--sgi" ] || [ "$3" = "--sgi" ] ||[ "$4" = "--sgi" ] ||[ "$5" = "--sgi" ]; then
-	SGI=1
 	EXTERNAL_DATA=1
-	DOSGI=1
+	InstallSGI=1
 elif [ "$2" = "--SGI" ] || [ "$3" = "--SGI" ] ||[ "$4" = "--SGI" ] ||[ "$5" = "--SGI" ]; then
-	SGI=1
 	EXTERNAL_DATA=1
-	DOSGI=1
+	InstallSGI=1
 fi
 if [ "$2" = "--config" ] || [ "$3" = "--config" ] ||[ "$4" = "--config" ] ||[ "$5" = "--config" ]; then
 	CONFIG=1
@@ -720,9 +719,9 @@ else
 	fi
 	if [ "$PRESET" = "r96proto" ]; then 		
 		echo WARNING: Skipping Models for r96 proto
-	elif  [ "$SGI" = 1 ]; then
+	elif  [ "$InstallSGI" = 1 ]; then
 		dosgi
-	elif  [ ! "$SGI" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
+	elif  [ ! "$InstallSGI" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ] && [ ! "$TARGET" = "dos" ]; then
 			cd "$BASEPATH"/"$PRESET"/enhancements
 			if [ ! "$PRESET" = "sm64ex-coop" ]; then
@@ -1236,11 +1235,12 @@ elif [ -f ~/.smlinuxUpdate ]; then
 	echo Script Update Complete.
 else	     # The real start, the rest was script preperation and setup. 
 	echo '/---------------------------'"$TIMESTAMP"'------------------------------------\'
+	echo "|                                                                             |"
 	echo "|     Super Mario 64 Install * Build * Update Script for Linux and MacOS      |"
 	echo "|                                                                             |"
 	echo "|        Command Line Usage: smlinux <command> <options>                      |"
 	echo "|               for example: smlinux update                                   |"
-	echo "|                        or: smlinux build --sgi                              |"
+	echo "|                        or: smlinux build                                    |"
 	echo "| Commands                                                                    |"
 	echo "| ~~~~~~~~                                                                    |"
 	echo "|  update: Update existing sm64 source & rebuild, preserving modifications    |"
@@ -1251,15 +1251,15 @@ else	     # The real start, the rest was script preperation and setup.
 	echo "| depends: Install Dependencies (automatic before first build)                |"
 	echo "| upgrade: Upgrade smlinux to latest version from github (without building)   |"
 	echo "|   purge: Deletes all files obtained or created by smlinux including sm64    |"
-	echo "|    help: Display this message and the URL for github faq                    |"
+	echo "|    help: Display this message and supported options and URL for github faq  |"
 	echo "|                                                                             |"
-	echo "| Options:  --sgi  aquire and apply Render96 SGI models (V1.3 or co-op)       |"
 	echo "-------------------------------------------------------------------------------"
 	if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ]; then
 		echo More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions
+		echo " Options --sgi --hd --config --depends will document better later"
+		echo but all they do is override what is in your config file already
 		exit
 	fi
-	echo 
 	echo [1] Preparing Build environment...
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$1" = "depends" ]; then
 		if [ "$OSX_BUILD" = 1 ]; then
@@ -1536,7 +1536,7 @@ if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "
 	echo [4] Applying pre-build modifications...
 	if [ "$UpdateHD" = 1 ] && [ "$InstallHD" = 1 ]; then
 		dohd
-	elif [ "$DOSGI" = 1 ]; then
+	elif [ "$InstallSGI" = 1 ]; then
 		printf "SGI Selected, Processing...\n"
 		dosgi
 	else
@@ -1698,7 +1698,7 @@ echo
 
 if [ "$InstallHD" = 1 ]; then 
 	dohd
-elif [ "$DOSGI" = 1 ]; then
+elif [ "$InstallSGI" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
