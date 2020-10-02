@@ -3,7 +3,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1001-1411
+TIMESTAMP=2020-1001-1937
 
 domake(){
 #Here We go & music to build to
@@ -170,8 +170,9 @@ echo "Script Ending Incomplete.  Contact #help-desk for support."
 	fi
 echo Your smlinux internal timestamp is "$TIMESTAMP".
 echo If that is not recent, perhaps updates are not working.
-echo check github.com/enigma9o7/smlinux for the latest version
-	exit
+echo check https://github.com/enigma9o7/smlinux for the latest version.
+echo
+exit
 }
 
 
@@ -275,20 +276,28 @@ if [ "$HASH" = "" ]; then
 	# Try V64
 	mv "$romfile".z64 "$romfile".v64
 	python3 n64swap.py "$romfile".v64 "$romfile".z64
-	hashcheck
-	if [ ! "$HASH" = "" ]; then
-		echo Conversion from V64 succesful.
-	else
-		rm "$romfile".z64
-		# Try N64
-		mv "$romfile".v64 "$romfile".n64
-		python3 n64swap.py "$romfile".v64 "$romfile".z64
+	if [ -f "$romfile".z64 ]; then
 		hashcheck
 		if [ ! "$HASH" = "" ]; then
-			echo Conversion from N64 succesful.
+			echo Conversion from V64 succesful.
 		else
-			rm "$romfile".*
-			echo Conversion still did not produce correct sha1sum.
+			if [ -f "$romfile".z64 ]; then
+				rm "$romfile".z64
+			fi
+			# Try N64
+			mv "$romfile".v64 "$romfile".n64
+			python3 n64swap.py "$romfile".v64 "$romfile".z64
+			if [ -f "$romfile".z64 ]; then
+				hashcheck
+				if [ ! "$HASH" = "" ]; then
+					echo Conversion from N64 succesful.
+				elif [ -f "$romfile".* ]; then
+					rm "$romfile".*
+					echo Conversion still did not produce correct sha1sum.
+				else
+					echo Conversion still did not produce correct sha1sum.
+				fi
+			fi
 		fi
 	fi
 fi
@@ -464,7 +473,7 @@ if [ "$TARGET_WEB" = 1 ]; then
 elif [ ! "$TARGET" = "dos" ]; then
 	TARGET=pc
 fi
-if [ -z "$MAXJOBS" ] && [ "$OSX_BUILD" = 1 ]; then
+if [ -z "$MAXJOBS" ] && [ "$OSX_BUILD" = 0 ]; then
 	if [ "$PRESET" = "sm64nx" ]; then 
 		MAXJOBS=$((`nproc` - 1))		
 	else 
@@ -1161,6 +1170,211 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			mplayer -nolirc -really-quiet "$BASEPATH"/sm64-port/sound/samples/sfx_mario_peach/0D.aiff&
 		fi
 	fi
+else
+	loadconfig "$@"
+fi
+
+if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
+	
+	echo Wiping...
+	rm -rf "$BASEPATH"/sm64pc
+	rm -rf "$BASEPATH"/sm64ex
+	rm -rf "$BASEPATH"/sm64-port
+	rm -rf "$BASEPATH"/sm64nx
+	rm -rf "$BASEPATH"/render96ex
+	rm -rf "$BASEPATH"/r96proto
+	rm -rf "$BASEPATH"/cheaterex
+	rm -rf "$BASEPATH"/sm64ex-coop
+	rm -rf "$BASEPATH"/sm64-port-android.base
+	rm -rf "$BASEPATH"/sm64pc.old
+	rm -rf "$BASEPATH"/sm64ex.old
+	rm -rf "$BASEPATH"/sm64-port.old
+	rm -rf "$BASEPATH"/sm64nx.old
+	rm -rf "$BASEPATH"/render96ex.old
+	rm -rf "$BASEPATH"/r96proto.old
+	rm -rf "$BASEPATH"/cheaterex.old
+	rm -rf "$BASEPATH"/sm64ex-coop.old
+	rm -rf "$BASEPATH"/sm64-port-android.base.old
+	rm -rf "$SMLINUX"
+	rm -rf "$SHARE"/sm64ex	
+	rm -rf "$SHARE"/sm64-port
+	rm -rf "$SHARE"/sm64nx
+	rm -rf "$SHARE"/render96ex
+	rm -rf "$SHARE"/r96proto
+	rm -rf "$SHARE"/cheaterex
+	rm -rf "$SHARE"/sm64ex-coop
+	rm "$SHARE"/icons/sm64*
+	rm "$SHARE"/icons/render96ex*
+	rm "$SHARE"/icons/r96proto*
+	rm "$SHARE"/icons/cheaterex*
+	rm "$SHARE"/applications/sm64*
+	rm "$SHARE"/applications/render96ex*
+	rm "$SHARE"/applications/r96proto*
+	rm "$SHARE"/applications/cheaterex*
+	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/sm64*.desktop
+	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/render96ex*.desktop
+	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/r96proto*.desktop
+	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/cheaterex*.desktop
+	rm $HOME/Downloads/smlinux.*
+	echo Note this did not remove any packages installed as build tools or dependencies.
+	echo Remove those with your package manager.  Devel libraries can always safely be removed.
+	echo And of course you must delete smlinux itself from "$PATHDIR"
+        exit
+fi
+
+if [ -f ~/.smlinuxUpdate ] && [ "$1" = "upgrade" ]; then 
+	rm ~/.smlinuxUpdate
+	echo Script Update Complete.
+	exit
+elif [ -f ~/.smlinuxUpdate ]; then 
+	rm ~/.smlinuxUpdate
+	echo Script Update Complete.
+else	     # The real start, the rest was script preperation and setup. 
+	echo '/---------------------------'"$TIMESTAMP"'------------------------------------\'
+	echo "|                                                                             |"
+	echo "|     Super Mario 64 Install * Build * Update Script for Linux and MacOS      |"
+	echo "|                                                                             |"
+	echo "|        Command Line Usage: smlinux <command> <options>                      |"
+	echo "|               for example: smlinux update                                   |"
+	echo "|                        or: smlinux build --sgi                              |"
+	echo "| Commands                                                                    |"
+	echo "| ~~~~~~~~                                                                    |"
+	echo "|  update: Update existing sm64 source & rebuild, preserving modifications    |"
+	echo "|   build: Get sm64 source from github & build (renames existing folder)      |"
+	echo "|   clone: Get sm64 source from github & extract rom (without addons or build)|"
+	echo "|  config: Opens smlinuxcfg.txt in a text editor (without building)           |"
+	echo "|   reset: Resets smlinux configuration file to default settings              |"
+	echo "| depends: Install Dependencies (automatic before first build)                |"
+	echo "| upgrade: Upgrade smlinux to latest version from github (without building)   |"
+	echo "|   purge: Deletes all files obtained or created by smlinux including sm64    |"
+	echo "|    help: Display this message and the URL for github faq                    |"
+	echo "|                                                                             |"
+	echo "| Options   --config   prompt to edit configuration file before build/update  |"
+	echo "|           --sgi      aquire and apply Render96 SGI models (V 1.3 or co-op)  |"
+	echo "-------------------------------------------------------------------------------"
+	if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ]; then
+		echo More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions
+		exit
+	fi
+	echo 
+	echo [1] Preparing Build environment...
+	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$1" = "depends" ]; then
+		if [ "$OSX_BUILD" = 1 ]; then
+			echo "Installing dependencies for MacOS..."
+			if [ ! -f /usr/local/bin/brew ]; then
+				echo Installing Homebrew package manager...
+				bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+			fi
+			brew install libxdg-basedir coreutils go wget newt nano unzip unrar p7zip python3 
+			brew install git gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
+			alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
+			go get github.com/machinebox/appify
+		elif [ -f /usr/bin/apt ]; then
+			echo "Updating Package list and Installing dependencies..."
+			sudo apt update
+			$Linux
+		else
+			echo "Installing Linux dependencies specified in smlinux configuration file..."
+			$Linux
+		fi
+	fi
+	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$1" = "depends" ]); then
+		echo "Installing required build tools for sm64nx..."
+		pip3 install pillow zstandard tqdm xxhash
+		gcccheck
+	elif [ ! "$ANDROID" = 0 ]; then
+		echo "Loading Android SDK Environment..."
+		androidsdk
+	elif [ "$TARGET_WEB" = 1 ]; then
+		echo "Loading Enscriptem for Web Target..."
+		loademsdk
+	elif [ "$TARGET" = "dos" ]; then
+		echo "Loading djgpp for DOS Target..."
+		dodos
+	elif [ "$OSX_BUILD" = 1 ]; then
+		echo "This is not first build, skipping MacOS dependencies."
+		echo "If you wish smlinux to install them again run: smlinux depends"
+		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
+	else
+		echo "This is not first build, skipping dependencies."
+		echo "If you wish smlinux to install them again run: smlinux depends"
+	fi
+	if [ "$1" = "depends" ]; then
+		theend
+	fi
+	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+		if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$PRESET" ]; then
+			ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
+		fi
+	elif [ ! "$1" = "upgrade" ]; then
+		echo "Verifying ROM..."
+		cd "$LAUNCH_DIR"
+		if [ -f "$1" ]; then 
+			cp "$1" "$SMLINUX"/baserom."$VERSION".z64
+			vettrom
+		fi
+		if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+			if [ -f "$BASEPATH"/sm64pc/baserom."$VERSION".z64 ]; then
+				cp "$BASEPATH"/sm64pc/baserom."$VERSION".z64 "$SMLINUX"
+				vettrom
+			fi
+			if [ -f "$BASEPATH"/sm64ex/baserom."$VERSION".z64 ] && [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+				cp "$BASEPATH"/sm64ex/baserom."$VERSION".z64 "$SMLINUX"
+				vettrom
+			fi
+			if [ -f "$BASEPATH"/sm64-port/baserom."$VERSION".z64 ] && [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+				cp "$BASEPATH"/sm64-port/baserom."$VERSION".z64 "$SMLINUX"
+			vettrom
+			fi
+		fi
+		echo
+		if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+			echo Located and Verified.
+		elif [ -f "$1" ]; then
+			exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+			zenity --error --text="ERROR: Specified file is not original Super Mario 64 ROM image\nMake sure VERSION= is set to the correct region if not US romfile\n" --title="Your installation is incomplete." --width=640 &disown	
+			sleep 1			
+			echo "ERROR: Specified file is not original Super Mario 64 ROM image or VERSION set wrong."
+			echo
+		fi
+		if [ ! "$1" = "upgrade" ]; then
+			echo "Please select Super Mario 64 romfile to begin."	
+			if [ "$OSX_BUILD" = 1 ]; then
+				cd $HOME
+				USERFILE=$(osascript -e 'set macpath to choose file' -e 'set unixpath to posix path of macpath')
+			else
+				exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+				USERFILE=`zenity --file-selection --title="Select your Super Mario 64 romfile" --filename $HOME/ --file-filter='romfiles | *.z64 *.v64 *.n64' --file-filter='allfiles | *'`
+			fi
+			if [ -f "$USERFILE" ]; then
+				cp "$USERFILE" "$SMLINUX"/baserom."$VERSION".z64
+				vettrom
+			fi
+			if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+				echo
+				echo "ERROR: Something didnt work like it was supposed to!"
+				echo "Try dragging and dropping romfile into this terminal window from file manager."
+				echo "Some terminals (including macOS) will paste the filename when you do that."
+				echo "If that does not work, some filenmanagers (like pcmanfm) you can right click the"
+				echo "file to select \"copy path\" then paste it here followed by enter. "
+				echo "Lastly, you can try typing the full path and filename then press enter."
+				echo "If that still does not work, romfile must be corrupt or its a smlinux problem."
+				echo
+				printf "Filename? "
+				read USERFILE
+				if [ -f "$USERFILE" ]; then
+					cp "$USERFILE" "$SMLINUX"/baserom."$VERSION".z64
+					vettrom
+				fi
+			fi
+			if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+				echo smlinux exiting incomplete. Need valid Super mario 64 N64 romfile to proceed.
+				endnow
+			fi
+		else	
+			echo WARNING: No ROM file found.  Please specify a romfile when you are ready to build.
+		fi
+	fi
 	if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 		echo Creating "$SHARE"/"$PRESET" folder for game save and configuration.
 		mkdir "$SHARE"/"$PRESET"
@@ -1231,200 +1445,14 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			mv "$SHARE"/"$PRESET"/sm64_save_file.bin "$SHARE"/"$PRESET"/CHEATERex_save_file.bin
 		fi
 	fi
-else
-	loadconfig "$@"
-fi
-
-if [ "$1" = "--purge" ] || [ "$1" = "purge" ]; then
-	
-	echo Wiping...
-	rm -rf "$BASEPATH"/sm64pc
-	rm -rf "$BASEPATH"/sm64ex
-	rm -rf "$BASEPATH"/sm64-port
-	rm -rf "$BASEPATH"/sm64nx
-	rm -rf "$BASEPATH"/render96ex
-	rm -rf "$BASEPATH"/r96proto
-	rm -rf "$BASEPATH"/cheaterex
-	rm -rf "$BASEPATH"/sm64ex-coop
-	rm -rf "$BASEPATH"/sm64-port-android.base
-	rm -rf "$BASEPATH"/sm64pc.old
-	rm -rf "$BASEPATH"/sm64ex.old
-	rm -rf "$BASEPATH"/sm64-port.old
-	rm -rf "$BASEPATH"/sm64nx.old
-	rm -rf "$BASEPATH"/render96ex.old
-	rm -rf "$BASEPATH"/r96proto.old
-	rm -rf "$BASEPATH"/cheaterex.old
-	rm -rf "$BASEPATH"/sm64ex-coop.old
-	rm -rf "$BASEPATH"/sm64-port-android.base.old
-	rm -rf "$SMLINUX"
-	rm -rf "$SHARE"/sm64ex	
-	rm -rf "$SHARE"/sm64-port
-	rm -rf "$SHARE"/sm64nx
-	rm -rf "$SHARE"/render96ex
-	rm -rf "$SHARE"/r96proto
-	rm -rf "$SHARE"/cheaterex
-	rm -rf "$SHARE"/sm64ex-coop
-	rm "$SHARE"/icons/sm64*
-	rm "$SHARE"/icons/render96ex*
-	rm "$SHARE"/icons/r96proto*
-	rm "$SHARE"/icons/cheaterex*
-	rm "$SHARE"/applications/sm64*
-	rm "$SHARE"/applications/render96ex*
-	rm "$SHARE"/applications/r96proto*
-	rm "$SHARE"/applications/cheaterex*
-	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/sm64*.desktop
-	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/render96ex*.desktop
-	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/r96proto*.desktop
-	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/cheaterex*.desktop
-	rm $HOME/Downloads/smlinux.*
-	echo Note this did not remove any packages installed as build tools or dependencies.
-	echo Remove those with your package manager.  Devel libraries can always safely be removed.
-	echo And of course you must delete smlinux itself from "$PATHDIR"
-        exit
-fi
-
-if [ -f "$1" ] || [ -f "$LAUNCH_DIR"/"$1" ] || ( [ -f "$SMLINUX"/baserom."$VERSION".z64 ] && ( [ "$1" = "build" ] || [ "$1" = "update" ] || [ "$1" = "clone" ] )); then
-	if [ -f ~/.smlinuxUpdate ]; then 
-		rm ~/.smlinuxUpdate
-		echo Script Update Complete.
-	else	# The real start, the rest was preperation and setup. 
-		echo 
-		if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ]; then
-			if [ "$OSX_BUILD" = 1 ]; then
-				echo "[1] Installing dependencies for MacOS..."
-				if [ ! -f /usr/local/bin/brew ]; then
-					echo Installing Homebrew package manager...
-					bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-				fi
-				brew install libxdg-basedir coreutils git wget nano newt mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip p7zip unrar go
-				alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
-				go get github.com/machinebox/appify
-			elif [ -f /usr/bin/apt ]; then
-				echo "[1] Updating Package list and Installing dependencies..."
-				sudo apt update
-				$Linux
-			else
-				echo "[1] Installing dependencies user specified in smlinux configuration..."
-				$Linux
-			fi
-			if [ "$PRESET" = "sm64nx" ] ; then
-				echo Installing required build tools for sm64nx...
-				pip3 install pillow zstandard tqdm xxhash
-				gcccheck
-			elif [ ! "$ANDROID" = 0 ]; then
-				echo "Loading Android SDK Environment..."
-				androidsdk
-			elif [ "$TARGET_WEB" = 1 ]; then
-				echo "Loading Enscriptem for Web Target..."
-				loademsdk
-			elif [ "$TARGET" = "dos" ]; then
-				echo Loading djgpp for DOS Target...
-				dodos
-			fi
-		elif [ "$PRESET" = "sm64nx" ] && [ ! -d "$BASEPATH"/"$PRESET/build" ]; then
-			echo "[1] Installing required build tools for sm64nx..."
-			pip3 install pillow zstandard tqdm xxhash
-			gcccheck
-		elif [ ! "$ANDROID" = 0 ]; then
-			echo "[1] Loading Android SDK Environment..."
-			androidsdk
-		elif [ "$TARGET_WEB" = 1 ]; then
-			echo "[1] Loading Enscriptem for Web Target..."
-			loademsdk
-		elif [ "$TARGET" = "dos" ]; then
-			echo "[1] Loading djgpp for DOS Target..."
-			dodos
-		elif [ "$OSX_BUILD" = 1 ]; then
-			echo "[1] This is not first build, skipping MacOS dependencies."
-			alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
-		else
-			echo "[1] This is not first build, skipping dependencies."
-		fi
-		if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-			if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$PRESET" ]; then
-				ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
-			fi
-		else
-			echo "Verifying ROM..."
-			cd "$LAUNCH_DIR"
-			if [ -f "$1" ]; then 
-				cp "$1" "$SMLINUX"/baserom."$VERSION".z64
-				vettrom
-			fi
-			if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-				if [ -f "$BASEPATH"/sm64pc/baserom."$VERSION".z64 ]; then
-					cp "$BASEPATH"/sm64pc/baserom."$VERSION".z64 "$SMLINUX"
-					vettrom
-				fi
-				if [ -f "$BASEPATH"/sm64ex/baserom."$VERSION".z64 ] && [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-					cp "$BASEPATH"/sm64ex/baserom."$VERSION".z64 "$SMLINUX"
-					vettrom
-				fi
-				if [ -f "$BASEPATH"/sm64-port/baserom."$VERSION".z64 ] && [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-					cp "$BASEPATH"/sm64-port/baserom."$VERSION".z64 "$SMLINUX"
-				vettrom
-				fi
-			fi
-			echo
-			if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-				echo Located and Verified.
-			elif [ -f "$1" ]; then
-				exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-				zenity --error --text="ERROR: Specified file is not original Super Mario 64 ROM image\nMake sure VERSION= is set to the correct region if not US romfile\n" --title="Your installation is incomplete." --width=640 &disown	
-				sleep 1			
-				echo "ERROR: Specified file is not original Super Mario 64 ROM image or VERSION= set wrong."
-				echo
-				exit
-			elif [ "$1" = "update" ] || [ "$1" = "build" ] || [ "$1" = "clone" ]; then
-				echo "ERROR: Must provide valid path/filename to Super Mario 64 romfile."	
-				echo
-				echo smlinux exiting incomplete.  Please specify romfile.
-				echo
-				exit
-			else	
-				echo WARNING: No ROM file found.  Please specify a romfile when you are ready to build.
-			fi
-		fi
-		echo
-		echo [2] Checking Github for smlinux updates....
-		if [ "$AutoUpdate" = 1 ]; then
-			scriptUpdate "$@"
-		else
-			echo "WARNING: AutoUpdate Disabled. You might be using an old version of smlinux!"
-			echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
-		fi
+	echo
+	echo [2] Checking Github for smlinux updates....
+	if [ "$AutoUpdate" = 1 ]; then
+		scriptUpdate "$@"
+	else
+		echo "WARNING: AutoUpdate Disabled. You might be using an old version of smlinux!"
+		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 	fi
-else
-	echo '/---------------------------'"$TIMESTAMP"'------------------------------------\'
-	echo "|     Super Mario 64 Install * Build * Update Script for Linux and MacOS      |"
-	echo "|                                                                             |"
-	echo "| Installation & First Build: bash smlinux <romfile>                          |"
-	echo "|                for example: bash smlinux ~/roms/sm64.n64                    |"
-	echo "|                         or: bash smlinux \"Super Mario 64 (U) [!].z64\"       |"
-	echo "|                                                                             |"
-	echo "| Normal Usage: smlinux <command> <options>                                   |"
-	echo "|  for example: smlinux update                                                |"
-	echo "|                                                                             |"
-	echo "| Commands:                                                                   |"
-	echo "|   build:  Gets new source from github and builds (renames existing folder)  |"
-	echo "|   update: Updates source & rebuilds, preserving mods and external resources |"
-	echo "|   config: Opens smlinuxcfg.txt in a text editor (without building)          |"
-	echo "|   reset:  Resets smlinux configuration file to default settings             |"
-	echo "|   clone:  Clones sm64 repository and extracts rom (without addons or build) |"
-	echo "|   purge:  Deletes all files obtained or created by smlinux including sm64   |"
-	echo "|                                                                             |"
-	echo "| Options:  --depends  install dependencies                                   |"
-	echo "|           --config   prompt to edit configuration file before build/update  |"
-	echo "|           --sgi      aquire and apply Render96 SGI models (V 1.3 or co-op)  |"
-	echo "-------------------------------------------------------------------------------"
-	if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "help" ] || [ "$1" = "-h" ]; then
-		echo More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions
-	elif [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-		echo "ERROR: You must specify one of the listed commands."
-	else 
-		echo "ERROR: You must specify valid path/filename to Super Mario 64 romfile."	
-	fi
-	exit
 fi
 if [ "$1" = "-u" ] || [ "$1" = "--update" ] || [ "$1" = "update" ] || [ "$1" = "up" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
