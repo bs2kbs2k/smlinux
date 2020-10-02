@@ -18,7 +18,7 @@
 
 Paste the following into a terminal:
                
-	bash -c "$(curl -fsSL https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux)";rm smlinux
+	bash -c "$(curl -fsSL https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux)"
 	
 That's Everything. That's all you have to do.  
 During installation you will be prompted to approve (or change) build options, then asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
