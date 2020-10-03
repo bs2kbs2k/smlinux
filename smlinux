@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1213
+TIMESTAMP=2020-1003-1216
 
 domake(){
 #Here We go & music to build to
@@ -1144,7 +1144,7 @@ elif [ ! $# -eq 0 ]; then
 	OP2="$3"
 	OP3="$4"
 	OP4="$5"
-	COMMANDOPS="$COMMAND" "$OP1" "$OP2" "$OP3" "$OP4"
+	COMMANDOPS='"$COMMAND" "$OP1" "$OP2" "$OP3" "$OP4"'
 elif command -v whiptail &> /dev/null; then
 	export NEWT_COLORS='
 	roottext=magenta,black     # title on top
