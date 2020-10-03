@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1216
+TIMESTAMP=2020-1003-1233
 
 domake(){
 #Here We go & music to build to
@@ -899,7 +899,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		fi
 		chmod +x "$PATHDIR"/smlinux
 		cd "$LAUNCH_DIR"
-		exec smlinux "$COMMANDOPS"
+		exec smlinux "$COMMAND" "$OP1" "$OP2" "$OP3" "$OP4"
 	else
 		cd "$SMLINUX"
 		git fetch
@@ -938,10 +938,10 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				fi
 				if [ -f "$HOME"/Downloads/smlinux.txt ]; then mv -f "$HOME"/Downloads/smlinux.txt "$HOME"/Downloads/smlinux.old.backup
 				fi	
-				exec smlinux "$@" "$2" "$3" "$4" "$5" "$6"' > ~/.smlinuxUpdate
+				exec smlinux "$@"' > ~/.smlinuxUpdate
 				chmod +x ~/.smlinuxUpdate
 				cd "$LAUNCH_DIR"
-				exec ~/.smlinuxUpdate "$COMMANDOPS" 
+				exec ~/.smlinuxUpdate "$COMMAND" "$OP1" "$OP2" "$OP3" "$OP4"
 			fi
 		elif [ "$COMMAND" = "upgrade" ]; then    
 			echo smlinux is already up to date.
@@ -1144,7 +1144,6 @@ elif [ ! $# -eq 0 ]; then
 	OP2="$3"
 	OP3="$4"
 	OP4="$5"
-	COMMANDOPS='"$COMMAND" "$OP1" "$OP2" "$OP3" "$OP4"'
 elif command -v whiptail &> /dev/null; then
 	export NEWT_COLORS='
 	roottext=magenta,black     # title on top
@@ -1155,7 +1154,6 @@ elif command -v whiptail &> /dev/null; then
 	title=blue,black           # make choice with arrows
 	checkbox=brightcyan,black  # important list
 	compactbutton=blue,black   # ok button'
-	COMMAND=update
 	if ! COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
 	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and macOS" \
 	"update" "update sm64 source and rebuild it" ON \
@@ -1453,76 +1451,6 @@ else	     # The real start, the rest was script preperation and setup.
 			echo WARNING: No ROM file found.  Please specify a romfile when you are ready to build.
 		fi
 	fi
-	if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
-		echo Creating "$SHARE"/"$PRESET" folder for game save and configuration.
-		mkdir "$SHARE"/"$PRESET"
-	fi
-	if [ -f "$SHARE"/"$PRESET"/sm64config.txt ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_config.txt ]; then
-		echo SM64 configuration file already exists from previous build.
-	elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
-		echo No compatible sm64 configuration files for this version, game will create one.
-	elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
-		if [ -f "$SHARE"/sm64ex/sm64config.txt ]; then
-			cp "$SHARE"/sm64ex/sm64config.txt "$SHARE"/"$PRESET"
-			echo Copied configuration from sm64ex.
-		elif [ -f "$SMLINUX"/sm64config.txt ]; then
-			cp "$SMLINUX"/sm64config.txt "$SHARE"/"$PRESET"
-			echo Copied configuration from sm64pc.
-		elif [ -f "$SHARE"/render96ex/sm64config.txt ]; then
-			cp "$SHARE"/render96ex/sm64config.txt "$SHARE"/"$PRESET"
-			echo Copied configuration from render96ex
-		elif [ -f "$SHARE"/sm64ex-coop/sm64config.txt ]; then
-			cp "$SHARE"/sm64ex-coop/sm64config.txt "$SHARE"/"$PRESET"
-			echo Copied configuration from sm64ex-coop
-		elif [ -f "$SHARE"/cheaterex/CHEATERex_config.txt ]; then
-			cp "$SHARE"/cheaterex/CHEATERex_config.txt "$SHARE"/"$PRESET"/sm64config.txt
-			echo Copied configuration from CHEATERex
-		else 
-			echo No compatible sm64 configuration file found, game will create one.
-		fi
-		if [ "$PRESET" = "cheaterex" ] && [ -f "$SHARE"/"$PRESET"/sm64config.txt ]; then
-			mv "$SHARE"/"$PRESET"/sm64config.txt "$SHARE"/"$PRESET"/CHEATERex_config.txt
-		fi
-	fi
-	if [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/sm64.sav ] || [ -f "$SHARE"/"$PRESET"/render96_save_file_0.sav ] ; then
-		echo Save file already exists from previous build.
-	elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
-		cp "$SHARE"/render96ex/render96_save_file_0.sav "$SHARE"/"$PRESET"
-		echo Copied Save file from Render96
-	elif [ "$PRESET" = "render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
-		cp "$SHARE"/r96proto/render96_save_file_0.sav "$SHARE"/"$PRESET"
-		echo Copied Save file from Render96 Fastbuild_Prototype
-	elif [ "$TEXTSAVES" = 1 ]; then
-		echo No compatible save files for this version.
-	elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
-		if [ "$PRESET" = "sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
-			cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$PRESET"/sm64_save_file.bin
-			echo Copied save file from sm64nx.
-		elif [ "$PRESET" = "sm64nx" ] && [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
-			cp "$SHARE"/sm64-port/sm64_save_file.bin "$SHARE"/"$PRESET"/sm64.sav
-			echo Copied save file from sm64-port.
-		elif [ -f "$SHARE"/sm64ex/sm64_save_file.bin ]; then
-			cp "$SHARE"/sm64ex/sm64_save_file.bin "$SHARE"/"$PRESET"
-			echo Copied save file from sm64ex.
-		elif [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
-			cp "$SHARE"/sm64-port/sm64_save_file.bin "$SHARE"/"$PRESET"
-			echo Copied save file from sm64-port.
-		elif [ -f "$SMLINUX"/sm64_save_file.bin ]; then
-			cp "$SMLINUX"/sm64_save_file.bin "$SHARE"/"$PRESET"
-			echo Copied save file from sm64pc.
-		elif [ -f "$SHARE"/cheaterex/CHEATERex_save_file.bin ]; then
-			cp "$SHARE"/cheaterex/CHEATERex_save_file.bin "$SHARE"/"$PRESET"/sm64_save_file.bin
-			echo Copied save file from cheaterex
-		elif [ -f "$SHARE"/sm64nx/sm64.sav ]; then
-			cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$PRESET"/sm64_save_file.bin
-			echo Copied save file from sm64nx.
-		else 
-			echo No compatible save file found.
-		fi
-		if [ "$PRESET" = "cheaterex" ] && [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ]; then
-			mv "$SHARE"/"$PRESET"/sm64_save_file.bin "$SHARE"/"$PRESET"/CHEATERex_save_file.bin
-		fi
-	fi
 	echo
 	echo [2] Checking Github for smlinux updates....
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
@@ -1530,6 +1458,76 @@ else	     # The real start, the rest was script preperation and setup.
 	else
 		echo "WARNING: AutoUpdate Disabled. You might be using an old version of smlinux!"
 		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
+	fi
+fi
+if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
+	echo Creating "$SHARE"/"$PRESET" folder for game save and configuration.
+	mkdir "$SHARE"/"$PRESET"
+fi
+if [ -f "$SHARE"/"$PRESET"/sm64config.txt ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_config.txt ]; then
+	echo SM64 configuration file already exists from previous build.
+elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
+	echo No compatible sm64 configuration files for this version, game will create one.
+elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
+	if [ -f "$SHARE"/sm64ex/sm64config.txt ]; then
+		cp "$SHARE"/sm64ex/sm64config.txt "$SHARE"/"$PRESET"
+		echo Copied configuration from sm64ex.
+	elif [ -f "$SMLINUX"/sm64config.txt ]; then
+		cp "$SMLINUX"/sm64config.txt "$SHARE"/"$PRESET"
+		echo Copied configuration from sm64pc.
+	elif [ -f "$SHARE"/render96ex/sm64config.txt ]; then
+		cp "$SHARE"/render96ex/sm64config.txt "$SHARE"/"$PRESET"
+		echo Copied configuration from render96ex
+	elif [ -f "$SHARE"/sm64ex-coop/sm64config.txt ]; then
+		cp "$SHARE"/sm64ex-coop/sm64config.txt "$SHARE"/"$PRESET"
+		echo Copied configuration from sm64ex-coop
+	elif [ -f "$SHARE"/cheaterex/CHEATERex_config.txt ]; then
+		cp "$SHARE"/cheaterex/CHEATERex_config.txt "$SHARE"/"$PRESET"/sm64config.txt
+		echo Copied configuration from CHEATERex
+	else 
+		echo No compatible sm64 configuration file found, game will create one.
+	fi
+	if [ "$PRESET" = "cheaterex" ] && [ -f "$SHARE"/"$PRESET"/sm64config.txt ]; then
+		mv "$SHARE"/"$PRESET"/sm64config.txt "$SHARE"/"$PRESET"/CHEATERex_config.txt
+	fi
+fi
+if [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/sm64.sav ] || [ -f "$SHARE"/"$PRESET"/render96_save_file_0.sav ] ; then
+	echo Save file already exists from previous build.
+elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
+	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SHARE"/"$PRESET"
+	echo Copied Save file from Render96
+elif [ "$PRESET" = "render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
+	cp "$SHARE"/r96proto/render96_save_file_0.sav "$SHARE"/"$PRESET"
+	echo Copied Save file from Render96 Fastbuild_Prototype
+elif [ "$TEXTSAVES" = 1 ]; then
+	echo No compatible save files for this version.
+elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
+	if [ "$PRESET" = "sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
+		cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$PRESET"/sm64_save_file.bin
+		echo Copied save file from sm64nx.
+	elif [ "$PRESET" = "sm64nx" ] && [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
+		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SHARE"/"$PRESET"/sm64.sav
+		echo Copied save file from sm64-port.
+	elif [ -f "$SHARE"/sm64ex/sm64_save_file.bin ]; then
+		cp "$SHARE"/sm64ex/sm64_save_file.bin "$SHARE"/"$PRESET"
+		echo Copied save file from sm64ex.
+	elif [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
+		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SHARE"/"$PRESET"
+		echo Copied save file from sm64-port.
+	elif [ -f "$SMLINUX"/sm64_save_file.bin ]; then
+		cp "$SMLINUX"/sm64_save_file.bin "$SHARE"/"$PRESET"
+		echo Copied save file from sm64pc.
+	elif [ -f "$SHARE"/cheaterex/CHEATERex_save_file.bin ]; then
+		cp "$SHARE"/cheaterex/CHEATERex_save_file.bin "$SHARE"/"$PRESET"/sm64_save_file.bin
+		echo Copied save file from cheaterex
+	elif [ -f "$SHARE"/sm64nx/sm64.sav ]; then
+		cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$PRESET"/sm64_save_file.bin
+		echo Copied save file from sm64nx.
+	else 
+		echo No compatible save file found.
+	fi
+	if [ "$PRESET" = "cheaterex" ] && [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ]; then
+		mv "$SHARE"/"$PRESET"/sm64_save_file.bin "$SHARE"/"$PRESET"/CHEATERex_save_file.bin
 	fi
 fi
 if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
