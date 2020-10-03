@@ -1,6 +1,6 @@
 #  smlinux -Super Mario Linux- Install Build Update Script
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot.jpg>
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
 # 
 1. Installs Required Packages (build tools & dependencies)
@@ -33,7 +33,7 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 Not all features are supported. For now no dos/android targets and only sm64ex and cheaterex guaranteed to work with all options, although should have coop working shortly and will change this note then, and android could be added upon request.  R96ex will work when they pull malloc fix from sm64ex.  Feedback appreciated.
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/presets.png>
 
 # Frequently Asked Questions
