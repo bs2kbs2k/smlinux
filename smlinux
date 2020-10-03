@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-0843
+TIMESTAMP=2020-1003-0859
 
 domake(){
 #Here We go & music to build to
@@ -1143,7 +1143,7 @@ else
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
 fi
-if [ -z "$@" ] && [ ! -d "$SMLINUX"/.git ]; then
+if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then
 	COMMAND=build
 elif [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "/?" ]; then
 	COMMAND=help
