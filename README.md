@@ -134,7 +134,7 @@ You can also just edit the configuration file with a text editor.
 ## **Are there any cheats?**
 *only applies to sm64pc/sm64ex and sm64nx based builds*
 
-Cheats are built in and enabled automatically if launched from shortcut and available in options menu.
+Some cheats are built in and enabled automatically if launched from shortcut and available in options menu.  On compatible sm64ex basd versions additional cheats are applied with $4Y$'s CHEATER patch.
 
 ## **How do I apply external data such as textures?**
 
