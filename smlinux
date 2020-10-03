@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1356
+TIMESTAMP=2020-1003-1359
 
 domake(){
 #Here We go & music to build to
@@ -1167,7 +1167,6 @@ elif command -v whiptail &> /dev/null; then
 		# echo User escape.
 		COMMAND=help
 		OP1="--noweb"
-		exit
 	fi
 
 fi
