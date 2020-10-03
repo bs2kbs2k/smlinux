@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1148
+TIMESTAMP=2020-1003-1213
 
 domake(){
 #Here We go & music to build to
@@ -899,7 +899,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		fi
 		chmod +x "$PATHDIR"/smlinux
 		cd "$LAUNCH_DIR"
-		exec smlinux "$COMMAND" "$2" "$3" "$4" "$5" "$6"
+		exec smlinux "$COMMANDOPS"
 	else
 		cd "$SMLINUX"
 		git fetch
@@ -938,10 +938,10 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				fi
 				if [ -f "$HOME"/Downloads/smlinux.txt ]; then mv -f "$HOME"/Downloads/smlinux.txt "$HOME"/Downloads/smlinux.old.backup
 				fi	
-				exec smlinux "$COMMAND" "$2" "$3" "$4" "$5" "$6"' > ~/.smlinuxUpdate
+				exec smlinux "$@" "$2" "$3" "$4" "$5" "$6"' > ~/.smlinuxUpdate
 				chmod +x ~/.smlinuxUpdate
 				cd "$LAUNCH_DIR"
-				exec ~/.smlinuxUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
+				exec ~/.smlinuxUpdate "$COMMANDOPS" 
 			fi
 		elif [ "$COMMAND" = "upgrade" ]; then    
 			echo smlinux is already up to date.
@@ -1138,8 +1138,13 @@ if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then
 	COMMAND=build
 elif [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "/?" ]; then
 	COMMAND=help
-elif [ ! -z "$1" ]; then
+elif [ ! $# -eq 0 ]; then
 	COMMAND="$1"
+	OP1="$2"
+	OP2="$3"
+	OP3="$4"
+	OP4="$5"
+	COMMANDOPS="$COMMAND" "$OP1" "$OP2" "$OP3" "$OP4"
 elif command -v whiptail &> /dev/null; then
 	export NEWT_COLORS='
 	roottext=magenta,black     # title on top
@@ -1151,7 +1156,7 @@ elif command -v whiptail &> /dev/null; then
 	checkbox=brightcyan,black  # important list
 	compactbutton=blue,black   # ok button'
 	COMMAND=update
-	COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
+	if ! COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
 	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and macOS" \
 	"update" "update sm64 source and rebuild it" ON \
 	"build" "get new sm64 source and build it" OFF \
@@ -1160,7 +1165,13 @@ elif command -v whiptail &> /dev/null; then
 	"config" "edit smlinux config file only" OFF \
 	"depends" "install dependencies only" OFF \
 	"upgrade" "upgrade smlinux only" OFF \
-	3>&1 1>&2 2>&3)
+	3>&1 1>&2 2>&3); then
+		# echo User escape.
+		COMMAND=help
+		OP1=nourl
+		exit
+	fi
+
 fi
 export NEWT_COLORS='
 roottext=magenta,black     # title on top
@@ -1304,7 +1315,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "|       --depends Install Dependencies before update or build                  |"
 		echo "|                                                                              |"
 		echo "--------------------------------------------------------------------------------"
-		if [ "$2" = "--noweb" ]; then
+		if [ "OP1" = "--noorul" ]; then
 			echo
 			exit
 		else
