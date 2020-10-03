@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-0859
+TIMESTAMP=2020-1003-1058
 
 domake(){
 #Here We go & music to build to
@@ -49,7 +49,7 @@ echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL OSX_BUILD=$OSX_BUILD
 if [ "$OSX_BUILD" = 1 ]; then
-	time gmake CC=/usr/local/bin/gcc-9 OSX_BUILD=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
+	time gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 OSX_BUILD=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 else
 	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 fi
@@ -1127,15 +1127,6 @@ fi
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/sm64pc
 LAUNCH_DIR=$(pwd)
-export NEWT_COLORS='
-roottext=magenta,black     # title on top
-root=,black                # background
-window=,black              # window background
-border=brightblue,black
-textbox=magenta,black      # after spacebar
-title=blue,black           # make choice with arrows
-checkbox=brightcyan,black  # important list
-compactbutton=blue,black   # ok button'
 
 if [ `uname` = "Darwin" ]; then
 	PATHDIR=/usr/local/bin
@@ -1149,7 +1140,18 @@ elif [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "/
 	COMMAND=help
 elif [ ! -z "$1" ]; then
 	COMMAND="$1"
+elif [ ! -z "$COMMAND" ]; then
+	true
 elif command -v whiptail &> /dev/null; then
+	export NEWT_COLORS='
+	roottext=magenta,black     # title on top
+	root=,black                # background
+	window=,black              # window background
+	border=brightblue,black
+	textbox=magenta,black      # after spacebar
+	title=blue,black           # make choice with arrows
+	checkbox=brightcyan,black  # important list
+	compactbutton=blue,black   # ok button'
 	COMMAND=update
 	COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
 	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and macOS" \
@@ -1162,6 +1164,15 @@ elif command -v whiptail &> /dev/null; then
 	"upgrade" "upgrade smlinux only" OFF \
 	3>&1 1>&2 2>&3)
 fi
+export NEWT_COLORS='
+roottext=magenta,black     # title on top
+root=,black                # background
+window=,black              # window background
+border=magenta,black        
+textbox=brightcyan,black   # editor text
+title=blue,black           # make choice with arrows
+checkbox=brightcyan,black  # important list
+compactbutton=blue,black   # ok button'
 # Make sure folders and installer config file exist, if not create them.
 if [ ! -d $HOME/.local ]; then 
 	mkdir $HOME/.local
@@ -1351,13 +1362,11 @@ else	     # The real start, the rest was script preperation and setup.
 	elif [ "$TARGET" = "dos" ]; then
 		echo "Loading djgpp for DOS Target..."
 		dodos
-	elif [ "$OSX_BUILD" = 1 ] && [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
-		echo "This is not first build, skipping macOS dependencies."
-		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
-	elif [ "$OSX_BUILD" = 1 ]; then
-		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
 	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "This is not first build, skipping dependencies."
+	fi
+	if [ "$OSX_BUILD" = 1 ]; then
+		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
 	fi
 	if [ "$COMMAND" = "depends" ]; then
 		theend
