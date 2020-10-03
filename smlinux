@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1058
+TIMESTAMP=2020-1003-1148
 
 domake(){
 #Here We go & music to build to
@@ -1140,8 +1140,6 @@ elif [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "/
 	COMMAND=help
 elif [ ! -z "$1" ]; then
 	COMMAND="$1"
-elif [ ! -z "$COMMAND" ]; then
-	true
 elif command -v whiptail &> /dev/null; then
 	export NEWT_COLORS='
 	roottext=magenta,black     # title on top
