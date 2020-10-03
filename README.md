@@ -32,6 +32,8 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 **_MacOS Addendum_**
 Not all features are supported. For now no dos/android targets and only sm64ex and cheaterex guaranteed to work with all options, although should have coop working shortly and will change this note then, and android could be added upon request.  R96ex will work when they pull malloc fix from sm64ex.  Feedback appreciated.
 
+* [<strong>Jump to FAQ</strong>](#frequently-asked-questions)
+
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/presets.png>
