@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1359
+TIMESTAMP=2020-1003-1654
 
 domake(){
 #Here We go & music to build to
@@ -641,7 +641,7 @@ else
 			cp "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip .
 			echo Updating textures from github...
 			git checkout gfx
-			git pull
+			git pull --no-rebase
 		elif [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Copying texutres from render96ex
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
@@ -653,7 +653,7 @@ else
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
-			git pull
+			git pull --no-rebase
 		elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Copying texutres from r96proto
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
@@ -665,7 +665,7 @@ else
 			echo Updating render96 textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
-			git pull
+			git pull --no-rebase
 		elif [ ! "PRESET" = "render96ex" ] && [ ! "PRESET" = "r96proto" ] && [ -d "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Copying texutres from sm64ex
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
@@ -677,7 +677,7 @@ else
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
-			git pull
+			git pull --no-rebase
 		elif [ ! "PRESET" = "render96ex" ] && [ ! "PRESET" = "r96proto" ] && [ -d "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Copying texutres from sm64ex-coop
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
@@ -689,7 +689,7 @@ else
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
-			git pull
+			git pull --no-rebase
 		elif [  -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
 		fi
