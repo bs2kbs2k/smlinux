@@ -29,10 +29,12 @@ smlinux will be installed in the first directory in your path, usually something
 
 If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
+https://github.com/enigma9o7/smlinux/blob/master/README.md#what-about-distros-other-than-ubuntu
+
 **_MacOS Addendum_**
 You may have to enter your password more than once during installation if you dont have homebrew and command line tools already installed.  Not all presets are supported - no dos/android targets and only sm64ex and cheaterex guaranteed to work with all options, although should have coop working shortly and will change this note then, and android could be added upon request.  R96ex will work when they pull malloc fix from sm64ex.  Feedback appreciated.
 
-* [<strong>Jump to FAQ</strong>](#frequently-asked-questions)
+* [<strong>Jump to FAQ</strong>](#frequently-asked-questions)   * [<strong>non Ubuntu-based Linux</strong>](#what-about-distros-other-than-ubuntu)   
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
