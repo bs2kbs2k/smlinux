@@ -4,7 +4,7 @@
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1729
+TIMESTAMP=2020-1002-1909
 
 domake(){
 #Here We go & music to build to
@@ -1133,7 +1133,9 @@ else
 fi
 if [ -z "$@" ] && [ ! -d "$SMLINUX"/.git ]; then
 	COMMAND=build
-elif [ ! -z "$@" ]; then
+elif [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "/?" ]; then
+	COMMAND=help
+elif [ ! -z "$1" ]; then
 	COMMAND="$1"
 elif command -v whiptail &> /dev/null; then
 	COMMAND=update
@@ -1148,7 +1150,6 @@ elif command -v whiptail &> /dev/null; then
 	"upgrade" "upgrade smlinux only" OFF \
 	3>&1 1>&2 2>&3)
 fi
-
 # Make sure folders and installer config file exist, if not create them.
 if [ ! -d $HOME/.local ]; then 
 	mkdir $HOME/.local
@@ -1259,31 +1260,43 @@ elif [ -f ~/.smlinuxUpdate ]; then
 	rm ~/.smlinuxUpdate
 	echo Script Update Complete.
 else	     # The real start, the rest was script preperation and setup. 
-	echo '/---------------------------'"$TIMESTAMP"'------------------------------------\'
-	echo "|                                                                             |"
-	echo "|     Super Mario 64 Install * Build * Update Script for Linux and MacOS      |"
-	echo "|                                                                             |"
-	echo "|        Command Line Usage: smlinux <command> <options>                      |"
-	echo "|               for example: smlinux update                                   |"
-	echo "|                        or: smlinux build                                    |"
-	echo "| Commands                                                                    |"
-	echo "| ~~~~~~~~                                                                    |"
-	echo "|  update: Update existing sm64 source & rebuild, preserving modifications    |"
-	echo "|   build: Get sm64 source from github & build (renames existing folder)      |"
-	echo "|   clone: Get sm64 source from github & extract rom (without addons or build)|"
-	echo "|  config: Opens smlinuxcfg.txt in a text editor (without building)           |"
-	echo "|   reset: Resets smlinux configuration file to default settings              |"
-	echo "| depends: Install dependencies (automatic before first build)                |"
-	echo "| upgrade: Upgrade smlinux to latest version from github (without building)   |"
-	echo "|   purge: Delete all files obtained or created by smlinux including sm64     |"
-	echo "|    help: Display this message and supported options and URL for github faq  |"
-	echo "|                                                                             |"
-	echo "-------------------------------------------------------------------------------"
-	if [ "$COMMAND" = "help" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
-		echo More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions
-		echo " Options --sgi --hd --config --depends will document better later"
-		echo but all they do is override what is in your config file already
+	echo '/---------------------------'"$TIMESTAMP"'-------------------------------------\'
+	echo "|                                                                              |"
+	echo "|     Super Mario 64 Install * Build * Update Script for Linux and MacOS       |"
+	echo "|                                                                              |"
+	echo "|               Command Line Usage: smlinux <command> <options>                |"
+	echo "| Commands                                                                     |"
+	echo "|  update: Update existing sm64 source & rebuild, preserving modifications     |"
+	echo "|   build: Get sm64 source from github & build (renames existing folder)       |"
+	echo "|   clone: Get sm64 source from github & extract rom (without addons or build) |"
+	echo "|  config: Opens smlinuxcfg.txt in a text editor (without building)            |"
+	echo "|   reset: Resets smlinux configuration file to default settings               |"
+	echo "| depends: Install dependencies (automatic before first build)                 |"
+	echo "| upgrade: Upgrade smlinux to latest version from github (without building)    |"
+	echo "|   purge: Delete all files obtained or created by smlinux including sm64      |"
+	echo "|    help: Display this information and open frequently asked questions url    |"
+	echo "|                                                                              |"
+	if [ "$COMMAND" = "help" ]; then
+		echo "| Options:   --hd Install HD Add-Ons (Override EnableHD=0 and UpgradeHD=0)     |"
+		echo "|           --sgi Install SGI 1.3/coop Models (Override InstallSGI=0)          |"
+		echo "|        --config Prompt to edit config file (Override CONFIG=0)               |"
+		echo "|       --depends Install Dependencies before update or build                  |"
+		echo "|                                                                              |"
+		echo "--------------------------------------------------------------------------------"
+		if [ "$2" = "--noopen" ]; then
+			echo
+			exit
+		else
+			echo "More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions"
+		fi
+		if [ "OSX_BUILD" = 1 ]; then
+			open https://github.com/enigma9o7/smlinux#frequently-asked-questions
+		else
+			xdg-open https://github.com/enigma9o7/smlinux#frequently-asked-questions &disown
+		fi
 		exit
+	else
+		echo "--------------------------------------------------------------------------------"
 	fi
 	echo [1] Preparing Build environment...
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
