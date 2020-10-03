@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1002-2115
+TIMESTAMP=2020-1003-0752
 
 domake(){
 #Here We go & music to build to
@@ -274,7 +274,8 @@ if [ "$HASH" = "" ]; then
 	echo ROM failed initial hash check - attempting format conversion...
 	cd "$SMLINUX"
 	if [ ! -f "$SMLINUX"/n64swap.py ]; then
-		wget http://github.com/Brawl345/N64Swap/blob/master/n64swap.py
+		echo Getting conversion tools...
+		wget https://github.com/Brawl345/N64Swap/raw/master/n64swap.py
 		pip3 install numpy
 	fi
 	# Try V64
@@ -1152,7 +1153,7 @@ elif command -v whiptail &> /dev/null; then
 	COMMAND=update
 	COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
 	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and MacOS" \
-	"update" "update sm64 source & rebuild it" ON \
+	"update" "update sm64 source and rebuild it" ON \
 	"build" "get new sm64 source and build it" OFF \
 	"clone" "get new sm64 source and extract rom" OFF \
 	"reset" "reset smlinux config file to default" OFF \
