@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1233
+TIMESTAMP=2020-1003-1236
 
 domake(){
 #Here We go & music to build to
@@ -1751,7 +1751,6 @@ fi
 
 echo
 echo [4] Extracting Assets from ROM...
-echo
 if [ "$PRESET" = "sm64nx" ]; then
 	prepnx
 else 	
@@ -1763,8 +1762,6 @@ if [ "$COMMAND" = "clone" ]; then
 fi
 echo
 echo [5] Applying Community Enhancements...
-echo
-
 if [ "$InstallHD" = 1 ]; then 
 	dohd
 elif [ "$InstallSGI" = 1 ]; then
