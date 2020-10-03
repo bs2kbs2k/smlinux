@@ -34,7 +34,9 @@ https://github.com/enigma9o7/smlinux/blob/master/README.md#what-about-distros-ot
 **_MacOS Addendum_**
 You may have to enter your password more than once during installation if you dont have homebrew and command line tools already installed.  Not all presets are supported - no dos/android targets and only sm64ex and cheaterex guaranteed to work with all options, although should have coop working shortly and will change this note then, and android could be added upon request.  R96ex will work when they pull malloc fix from sm64ex.  Feedback appreciated.
 
-* [<strong>Jump to FAQ</strong>](#frequently-asked-questions)   * [<strong>non Ubuntu-based Linux</strong>](#what-about-distros-other-than-ubuntu)   
+[<strong>What about Linux distros that are not Ubuntu-based?</strong>](#what-about-distros-other-than-ubuntu)   
+
+[<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
