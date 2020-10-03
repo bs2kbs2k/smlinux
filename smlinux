@@ -1,10 +1,11 @@
 #!/bin/bash
-# Super Mario 64 Install * Build * Update Script for Linux and MacOS
-# This should do everything required to build & install under Ubuntu or macOS and update itself.
-# Other distros edit config file when prompted to change Linux= to command to get your dependencies.
-# Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
-# or if you have another distro to add.
-TIMESTAMP=2020-1002-1909
+# Super Mario 64 Install * Build * Update Script for Linux and macOS
+# This scrupt will do everything required to build & install Super Mario 64 under Ubuntu or macOS.
+# Other distros will need to edit config file when prompted to change Linux= command.
+# Dependencies for many distros are listed on the github FAQ.  
+# Please let me know if incorrect or if you have another distro to add.
+# Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
+TIMESTAMP=2020-1002-2115
 
 domake(){
 #Here We go & music to build to
@@ -1125,6 +1126,16 @@ fi
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/sm64pc
 LAUNCH_DIR=$(pwd)
+export NEWT_COLORS='
+roottext=magenta,black     # title on top
+root=,black                # background
+window=,black              # window background
+border=brightblue,black
+textbox=magenta,black      # after spacebar
+title=blue,black           # make choice with arrows
+checkbox=brightcyan,black  # important list
+compactbutton=blue,black   # ok button'
+
 if [ `uname` = "Darwin" ]; then
 	PATHDIR=/usr/local/bin
 else
