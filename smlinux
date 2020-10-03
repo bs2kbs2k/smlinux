@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-0752
+TIMESTAMP=2020-1003-0843
 
 domake(){
 #Here We go & music to build to
@@ -49,7 +49,7 @@ echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL OSX_BUILD=$OSX_BUILD
 if [ "$OSX_BUILD" = 1 ]; then
-	time gmake OSX_BUILD=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
+	time gmake CC=/usr/local/bin/gcc-9 OSX_BUILD=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 else
 	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 fi
@@ -359,7 +359,7 @@ OSX_BUILD=0
 GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
-# Linux command is only called during first install and is not used for MacOS
+# Linux command is only called during first install and is not used for macOS
 Linux="sudo apt install -y build-essential bsdmainutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer"
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
@@ -1057,7 +1057,7 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 		cp "$SHARE"/applications/"$PRESET".desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}
 	fi
 elif [ "$OSX_BUILD" = 1 ]; then
-	echo Creating MacOS AppImage and Desktop Shortcut. ..
+	echo Creating macOS AppImage and Desktop Shortcut. ..
  	if [ -f /Applications/'Super Mario 64 ('"$PRESET"')'.app ]; then
  		rm -rf /Applications/'Super Mario 64 ('"$PRESET"')'.app 
 	fi
@@ -1152,7 +1152,7 @@ elif [ ! -z "$1" ]; then
 elif command -v whiptail &> /dev/null; then
 	COMMAND=update
 	COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
-	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and MacOS" \
+	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and macOS" \
 	"update" "update sm64 source and rebuild it" ON \
 	"build" "get new sm64 source and build it" OFF \
 	"clone" "get new sm64 source and extract rom" OFF \
@@ -1274,7 +1274,7 @@ elif [ -f ~/.smlinuxUpdate ]; then
 else	     # The real start, the rest was script preperation and setup. 
 	echo '/---------------------------'"$TIMESTAMP"'-------------------------------------\'
 	echo "|                                                                              |"
-	echo "|     Super Mario 64 Install * Build * Update Script for Linux and MacOS       |"
+	echo "|     Super Mario 64 Install * Build * Update Script for Linux and macOS       |"
 	echo "|                                                                              |"
 	echo "|               Command Line Usage: smlinux <command> <options>                |"
 	echo "| Commands                                                                     |"
@@ -1286,7 +1286,7 @@ else	     # The real start, the rest was script preperation and setup.
 	echo "| depends: Install dependencies (automatic before first build)                 |"
 	echo "| upgrade: Upgrade smlinux to latest version from github (without building)    |"
 	echo "|   purge: Delete all files obtained or created by smlinux including sm64      |"
-	echo "|    help: Display this information and open frequently asked questions url    |"
+	echo "|    help: Display all smlinux commands and options plus open faq url          |"
 	echo "|                                                                              |"
 	if [ "$COMMAND" = "help" ]; then
 		echo "| Options:   --hd Install HD Add-Ons (Override EnableHD=0 and UpgradeHD=0)     |"
@@ -1295,7 +1295,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "|       --depends Install Dependencies before update or build                  |"
 		echo "|                                                                              |"
 		echo "--------------------------------------------------------------------------------"
-		if [ "$2" = "--noopen" ]; then
+		if [ "$2" = "--noweb" ]; then
 			echo
 			exit
 		else
@@ -1313,7 +1313,7 @@ else	     # The real start, the rest was script preperation and setup.
 	echo [1] Preparing Build environment...
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
 		if [ "$OSX_BUILD" = 1 ]; then
-			echo "Installing dependencies for MacOS..."
+			echo "Installing dependencies for macOS..."
 			if ! command -v brew &> /dev/null; then
     			echo Installing Homebrew package manager...
 				bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -1351,13 +1351,13 @@ else	     # The real start, the rest was script preperation and setup.
 	elif [ "$TARGET" = "dos" ]; then
 		echo "Loading djgpp for DOS Target..."
 		dodos
-	elif [ "$OSX_BUILD" = 1 ]; then
-		echo "This is not first build, skipping MacOS dependencies."
-		echo "If you wish smlinux to install them again run: smlinux depends"
+	elif [ "$OSX_BUILD" = 1 ] && [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
+		echo "This is not first build, skipping macOS dependencies."
 		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
-	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ]; then
+	elif [ "$OSX_BUILD" = 1 ]; then
+		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
+	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "This is not first build, skipping dependencies."
-		echo "If you wish smlinux to install them again run: smlinux depends"
 	fi
 	if [ "$COMMAND" = "depends" ]; then
 		theend
