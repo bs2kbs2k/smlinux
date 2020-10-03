@@ -1,9 +1,10 @@
 #!/bin/bash
-# This should do everything required to build & install under Ubuntu and update itself.
+# Super Mario 64 Install * Build * Update Script for Linux and MacOS
+# This should do everything required to build & install under Ubuntu or macOS and update itself.
 # Other distros edit config file when prompted to change Linux= to command to get your dependencies.
 # Dependencies for many distros are listed on the github FAQ.  Please let me know if incorrect
 # or if you have another distro to add.
-TIMESTAMP=2020-1002-1522
+TIMESTAMP=2020-1002-1729
 
 domake(){
 #Here We go & music to build to
@@ -505,9 +506,8 @@ fi
 }
 
 doconfig(){
-if ! command -v whiptail &> /dev/null
-then
-    echo "COMMAND could not be found"
+if ! command -v whiptail &> /dev/null; then
+    return
 elif (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 28 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
 	whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a text editor.\n\nWhen you exit your editor, smlinux will continue.\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1
 	editconfig	
@@ -1273,9 +1273,9 @@ else	     # The real start, the rest was script preperation and setup.
 	echo "|   clone: Get sm64 source from github & extract rom (without addons or build)|"
 	echo "|  config: Opens smlinuxcfg.txt in a text editor (without building)           |"
 	echo "|   reset: Resets smlinux configuration file to default settings              |"
-	echo "| depends: Install Dependencies (automatic before first build)                |"
+	echo "| depends: Install dependencies (automatic before first build)                |"
 	echo "| upgrade: Upgrade smlinux to latest version from github (without building)   |"
-	echo "|   purge: Deletes all files obtained or created by smlinux including sm64    |"
+	echo "|   purge: Delete all files obtained or created by smlinux including sm64     |"
 	echo "|    help: Display this message and supported options and URL for github faq  |"
 	echo "|                                                                             |"
 	echo "-------------------------------------------------------------------------------"
