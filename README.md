@@ -32,7 +32,7 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 [<strong>What about Linux distros that are not Ubuntu-based?</strong>](#what-about-distros-other-than-ubuntu) 
 
 **_macOS notes_**
-You may have to enter your password more than once during installation if you dont already have homebrew and command line tools installed.  Not all presets are supported - only sm64ex and cheaterex are fully supported, although should have coop working shortly and will change this note then, web could likely be fixed upon request if not working already, and likely android easily added.  R96ex will work when they pull malloc fix from sm64ex. DOS builds wont work. Feedback appreciated, so far only tested in Sierra and High Sierra virtual machines.
+You may have to enter your password more than once during installation if you dont already have homebrew and command line tools installed. Oonly sm64ex and cheaterex are fully supported, although should have coop working shortly and will change this note then, web could likely be fixed upon request if not working already, and likely android easily added.  R96ex will work when they pull malloc fix from sm64ex. DOS builds wont work. Feedback appreciated, so far only tested in Sierra and High Sierra virtual machines.
 
 [<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
 
