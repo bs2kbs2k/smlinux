@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1819
+TIMESTAMP=2020-1003-1911
 
 domake(){
 #Here We go & music to build to
@@ -1314,7 +1314,7 @@ else	     # The real start, the rest was script preperation and setup.
 		else
 			echo "More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions"
 		fi
-		if [ "OSX_BUILD" = 1 ]; then
+		if [ "$OSX_BUILD" = 1 ]; then
 			open https://github.com/enigma9o7/smlinux#frequently-asked-questions
 		else
 			xdg-open https://github.com/enigma9o7/smlinux#frequently-asked-questions &disown
