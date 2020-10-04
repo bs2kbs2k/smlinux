@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1815
+TIMESTAMP=2020-1003-1819
 
 domake(){
 #Here We go & music to build to
@@ -974,6 +974,7 @@ if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv9*.zip ]; then
 		git apply enhancements/v9_*.patch
 	elif [ -f CHEATERv9.zip ]; then
 		echo Applying cheats...
+		cd "$BASEPATH"/"$PRESET"
 		git apply enhancements/v9_*.patch
 	fi
 fi
