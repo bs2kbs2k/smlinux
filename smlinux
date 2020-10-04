@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1654
+TIMESTAMP=2020-1003-1815
 
 domake(){
 #Here We go & music to build to
@@ -955,31 +955,26 @@ fi
 
 docheats(){
 cd "$BASEPATH"/"$PRESET"/enhancements
-if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8*.zip ] || ([ "$PRESET" = "sm64ex" ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv8.hotfix*.zip ] ); then
+if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv9*.zip ]; then
 	echo Getting cheats...
 	if [ -f CHEATER*.zip ]; then
 		rm CHEATER*.zip
 	fi
-	if [ "$PRESET" = "sm64ex" ]; then
-		wget https://cdn.discordapp.com/attachments/716459185230970880/760557717839806524/CHEATER.hotfix.sm64ex-nightly.zip 
-		mv CHEATER.hotfix.sm64ex-nightly.zip CHEATERv8.hotfix.sm64ex-nightly.zip 
-	else
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/758875393658060820/CHEATERv8.zip
+	wget https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
+	if [ -f CHEATERv9.zip ] && [ "$PRESET" = "render96ex" ]; then
+		unzip CHEATERv9 v9_r96ex.patch
+	elif [ -f CHEATERv9.zip ]; then
+		unzip CHEATERv9 v9_sm64ex.patch
 	fi
-	if [ -f CHEATERv8*.zip ] && [ -f CHEATER.patch ]; then
+	if [ -f CHEATERv9.zip ] && [ -f CHEATER.patch ]; then
 		echo Updating cheats...
 		cd "$BASEPATH"/"$PRESET"
 		git apply -R enhancements/CHEATER.patch
-		cd enhancements
-		rm CHEATER.patch
-		unzip -q CHEATER*
-		cd ..
-		git apply enhancements/CHEATER.patch
-	elif [ -f CHEATERv8*.zip ]; then
+		rm enhancements/CHEATER.patch
+		git apply enhancements/v9_*.patch
+	elif [ -f CHEATERv9.zip ]; then
 		echo Applying cheats...
-		unzip -q CHEATER*
-		cd ..
-		git apply enhancements/CHEATER.patch
+		git apply enhancements/v9_*.patch
 	fi
 fi
 }
