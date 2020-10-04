@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1003-1911
+TIMESTAMP=2020-1004-0905
 
 domake(){
 #Here We go & music to build to
@@ -170,7 +170,7 @@ exit
 endnow(){
 echo "Script Ending Incomplete.  Contact #help-desk for support."
 	if [ "$OSX_BUILD" = 0 ] && [ "$TARGET_RPI" = 0 ]; then
-		xdg-open https://discord.gg/Ub6YHRm &disown
+		xdg-open https://discord.gg/Ub6YHRm &
 	fi
 echo Your smlinux internal timestamp is "$TIMESTAMP".
 echo If that is not recent, perhaps updates are not working.
@@ -241,13 +241,12 @@ if zenity --question --text="sm64nx requires gcc 8 or newer and was not detected
 fi
 }
 
-domymenu(){
-	true
-	#cd "$BASEPATH"/"$PRESET"/enhancements
-	#cp "$SMLINUX"/menu-arrows.patch .
-	#	echo Applying Menu Arrows...
-	#cd "$BASEPATH"/"$PRESET"
-	#git apply enhancements/menu-arrows.patch
+domymenu(){	
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	cp "$SMLINUX"/menu-arrows.patch .
+		echo Applying Menu Arrows...
+	cd "$BASEPATH"/"$PRESET"
+	git apply enhancements/menu-arrows.patch
 }
 
 vettrom(){
@@ -1114,7 +1113,7 @@ elif [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --cheats &disown
 else 
-	gtk-launch "$PRESET"&disown
+	gtk-launch "$PRESET" &disown
 fi
 }
 
@@ -1314,11 +1313,7 @@ else	     # The real start, the rest was script preperation and setup.
 		else
 			echo "More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions"
 		fi
-		if [ "$OSX_BUILD" = 1 ]; then
-			open https://github.com/enigma9o7/smlinux#frequently-asked-questions
-		else
-			xdg-open https://github.com/enigma9o7/smlinux#frequently-asked-questions &disown
-		fi
+		xdg-open https://github.com/enigma9o7/smlinux#frequently-asked-questions 
 		exit
 	else
 		echo "--------------------------------------------------------------------------------"
@@ -1368,7 +1363,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "This is not first build, skipping dependencies."
 	fi
 	if [ "$OSX_BUILD" = 1 ]; then
-		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
+		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9';alias xdg-open=open
 	fi
 	if [ "$COMMAND" = "depends" ]; then
 		theend
@@ -1456,7 +1451,7 @@ else	     # The real start, the rest was script preperation and setup.
 	fi
 fi
 if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
-	echo Creating "$SHARE"/"$PRESET" folder for game save and configuration.
+	echo Creating "$SHARE"/"$PRESET" for save files.
 	mkdir "$SHARE"/"$PRESET"
 fi
 if [ -f "$SHARE"/"$PRESET"/sm64config.txt ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_config.txt ]; then
@@ -1612,13 +1607,7 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 		domymenu
 	elif [ "$PRESET" = "sm64ex-coop " ]; then
 		domymenu
-	elif [ "$PRESET" = "cheaterex" ] && [ ! -f "$BASEPATH"/"$PRESET"smo.cappy_assets.zip ]; then
-		echo Getting smo cappy assets as required for cheaterex
-		cd "$BASEPATH"/"$PRESET" 
-		wget -q https://cdn.discordapp.com/attachments/723992726319792140/754402820588961882/smo.cappy_assets.zip
-		unzip -q -o smo.cappy_assets
-	fi
-	if [ "TARGET_WEB" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+	if [ "$TARGET_WEB" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Removing 60fps for web target...
 		git apply -R enhancements/60fps*.patch
 		rm enhanements/60fps			
@@ -1726,12 +1715,6 @@ if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	else
 		printf "\n[3] Downloading sm64 source from github... \n"
 		git clone https://github.com/"$GIT" -b "$BRANCH" "$PRESET"
-	fi
-	if [ "$PRESET" = "cheaterex" ]; then
-		echo Getting smo cappy assets as required for cheaterex
-		cd "$BASEPATH"/"$PRESET" 
-		wget -q https://cdn.discordapp.com/attachments/723992726319792140/754402820588961882/smo.cappy_assets.zip
-		unzip -q -o smo.cappy_assets
 	fi
 else
 	echo ERROR: Could not rename old folder so cannot clone new one.
