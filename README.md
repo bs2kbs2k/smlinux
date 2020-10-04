@@ -188,7 +188,7 @@ Debian / Ubuntu:
 	
 Fedora  / Red Hat:
 
-	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity
+	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++
 openSuSE:
 
 	sudo zypper in gcc make python3 libaudiofile1 glew-devel libSDL2-devel zenity
