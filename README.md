@@ -173,11 +173,11 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 
 
 ## **What about distros other than Ubuntu?**
-*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Tested in MacOS 10.13 High Sierra Virtual Machine.  Arch also confirmed.*
+*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch and Fedora also confirmed working by users.*
 
 Change your `Linux=` parameter during first install to one that works with your distro such as those listed below, or just install dependencies first and run smlinux with `Linux=""` (or just ignore the error from apt).  smlinux only installs dependendencies automatically during the very first installation; if you wish to force reinstallation append ` --depends` during next update or build.
 
-If your distro needs additional dependencies not listed here, please let me know their names so I can add them.  The Ubuntu list is confirmed complete even on WSL.  Some build targets depend on an additional package not listed below.  Android builds require the android-sdk package, web targets emscriptem sdk, dos targets djgpp, and sm64nx requires g++-8 or higher.  Updating gcc, when needed will only be automatically attempted if apt is present, other distros will need to install those packages manually.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8.  (Note Ubuntu 20.04 build-essential provides gcc9.3, whereas for 18.04 its gcc7.5.)  
+If your distro needs additional dependencies not listed here, please let me know their names so I can add them.  The Ubuntu list is confirmed complete even on WSL.  Some build targets depend on an additional package not listed below.  Android builds require the android-sdk package, web targets emscriptem sdk, dos targets djgpp, and sm64nx requires g++-8 or higher.  smlinux will attempt to install these as needed, but updating gcc will only be attempted if apt is present, other distros will need to install manually.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8.  (Note Ubuntu 20.04 build-essential provides gcc9.3, whereas for 18.04 its gcc7.5.)  
 
 Arch: 
     
@@ -206,7 +206,14 @@ Alpine:
 MacOS:
 
 	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip p7zip unrar newt go python3
+
+MinGW64: 
 	
+	pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 python3 git make mingw-w64-x86_64-gcc unzip unrar
+	
+MinGW32:
+
+	pacman -S mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 git make mingw-w64-x86_i686-gcc unzip unrar
 
 ## **How do I create my rom file?**
 
