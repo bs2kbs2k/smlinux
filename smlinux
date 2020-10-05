@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1004-1812
+TIMESTAMP=2020-1005-1025
 
 domake(){
 #Here We go & music to build to
@@ -317,6 +317,8 @@ echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex
 PRESET=sm64ex
 InstallHD=1
 InstallSGI=0
+# VERSION supports us jp eu (must correspond to rom version)
+VERSION=us
 # set MAXJOBS=n to limit cpu threads used, i.e. MAXJOBS=1 or MAXJOBS=7
 MAXJOBS=
 # [ options for sm64ex and its forks ] 
@@ -341,8 +343,6 @@ ENABLE_OPENGL_LEGACY=1
 DOS_GL=osmesa
 ENABLE_OPENGL_LEGACY=1
 # [ Advanced Settings ]
-# VERSION supports us jp eu (must correspond to rom version)
-VERSION=us
 # Set CONFIG=0 If you do not want to be automatically prompted before building.
 CONFIG=1
 # BASEPATH must exist and is where folders for each repo will be placed
@@ -509,7 +509,7 @@ fi
 doconfig(){
 if ! command -v whiptail &> /dev/null; then
     return
-elif (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 27 77 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
+elif (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 24 80 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
 	whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a text editor.\n\nWhen you exit your editor, smlinux will continue.\n(To exit pico/nano/micro editors use Control-X)\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1
 	editconfig	
 fi
@@ -1455,7 +1455,7 @@ if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; t
 	mkdir "$SHARE"/"$PRESET"
 fi
 if [ -f "$SHARE"/"$PRESET"/sm64config.txt ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_config.txt ]; then
-	echo SM64 configuration file already exists from previous build.
+	echo SM64 configuration file found.
 elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
 	echo No compatible sm64 configuration files for this version, game will create one.
 elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
@@ -1482,7 +1482,7 @@ elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
 	fi
 fi
 if [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/sm64.sav ] || [ -f "$SHARE"/"$PRESET"/render96_save_file_0.sav ] ; then
-	echo Save file already exists from previous build.
+	echo SM64 save file found.
 elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
 	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SHARE"/"$PRESET"
 	echo Copied Save file from Render96
@@ -1540,7 +1540,7 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 	git fetch
 	if [ "$(git diff HEAD origin/HEAD)" != "" ]; then
 		echo Attempting to merge updates....
-		 git merge
+		git merge
 	fi
 	if [ "$?" = "1" ]; then
 		cd "$BASEPATH"/"$PRESET"
@@ -1607,6 +1607,7 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 		domymenu
 	elif [ "$PRESET" = "sm64ex-coop " ]; then
 		domymenu
+	fi
 	if [ "$TARGET_WEB" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Removing 60fps for web target...
 		git apply -R enhancements/60fps*.patch
