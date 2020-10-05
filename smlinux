@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1005-1412
+TIMESTAMP=2020-1005-1511
 
 domake(){
 #Here We go & music to build to
@@ -727,12 +727,11 @@ else
 		dosgi
 	elif  [ ! "$InstallSGI" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ] && [ ! "$TARGET" = "dos" ]; then
-			cd "$BASEPATH"/"$PRESET"/enhancements
-			if [ ! "$PRESET" = "sm64ex-coop" ]; then
-				wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip 
-			fi
-			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar	
 			cd "$BASEPATH"/"$PRESET"
+			if [ ! "$PRESET" = "sm64ex-coop" ] || [[ ! $(git diff actors) ]];  then
+				wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip -P enhancements
+			fi
+			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar -P enhancements
 			echo Saving original actors folder as actors.bak 	
 			cp -Rn actors actors.bak
 			if [ ! "$PRESET" = "sm64ex-coop" ]; then
