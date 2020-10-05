@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1005-1112
+TIMESTAMP=2020-1005-1412
 
 domake(){
 #Here We go & music to build to
@@ -562,11 +562,11 @@ prepnx(){
 mkdir "$BASEPATH"/"$PRESET"/build
 mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
-ln -s "$SHARE"/"$PRESET"/sm64.sav "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sav 
-ln -s "$SHARE"/"$PRESET"/sm64.log "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.log 
-ln -s "$SHARE"/"$PRESET"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin
-ln -s "$SHARE"/"$PRESET"/gamepad1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
-ln -s "$SHARE"/"$PRESET"/keyboard1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
+ln -s "$SAVEDIR"/sm64.sav "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sav 
+ln -s "$SAVEDIR"/sm64.log "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.log 
+ln -s "$SAVEDIR"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin
+ln -s "$SAVEDIR"/gamepad1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
+ln -s "$SAVEDIR"/keyboard1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
 ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
 cd "$BASEPATH"/"$PRESET"/tools
 make -j"$MAXJOBS"
@@ -762,9 +762,9 @@ else
 				echo Applying 60fps patch...
 				git apply enhancements/60fps*.patch
 				touch enhancements/60fps
-				if [ -f "$SHARE"/"$PRESET"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+				if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 					echo Enabling Vsync...
-					sed -i.bak 's/vsync false/vsync true/g' "$SHARE"/"$PRESET"/sm64config.txt
+					sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
 				fi
 			fi
 		fi
@@ -810,8 +810,8 @@ if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 	cd "$BASEPATH"/"$PRESET"
 	git apply -R enhancements/60fps*.patch
 	rm enhancements/60fps
-	if [ -f "$SHARE"/"$PRESET"/sm64config.txt ]; then
-		sed -i.bak 's/vsync true/vsync false/g' "$SHARE"/"$PRESET"/sm64config.txt
+	if [ -f "$SAVEDIR"/sm64config.txt ]; then
+		sed -i.bak 's/vsync true/vsync false/g' "$SAVEDIR"/sm64config.txt
 	fi
 fi
 if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
@@ -1039,7 +1039,7 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
 		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --skip-intro >>"$SHARE"/applications/"$PRESET".desktop
 	elif [ "$PRESET" = "sm64-port" ]; then
-		echo Path="$SHARE"/"$PRESET" >>"$SHARE"/applications/"$PRESET".desktop
+		echo Path="$SAVEDIR" >>"$SHARE"/applications/"$PRESET".desktop
 		printf "Exec=sh -c \"" >>"$SHARE"/applications/"$PRESET".desktop
 		echo \""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e';echo'\" >>"$SHARE"/applications/"$PRESET".desktop
 	elif [ "$PRESET" = "sm64nx" ]; then
@@ -1047,7 +1047,7 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e>>"$SHARE"/applications/"$PRESET".desktop
 	else
 		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
-		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SHARE"/"$PRESET" >>"$SHARE"/applications/"$PRESET".desktop
+		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SAVEDIR" >>"$SHARE"/applications/"$PRESET".desktop
 	fi
 	if [ -d ${XDG_DESKTOP_DIR:-$HOME/Desktop} ]; then
 		cp "$SHARE"/applications/"$PRESET".desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}
@@ -1451,74 +1451,80 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 	fi
 fi
-if [ ! -d "$SHARE"/"$PRESET" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
-	echo Creating "$SHARE"/"$PRESET" for save files.
-	mkdir "$SHARE"/"$PRESET"
+if [ "$OSX_BUILD" = 1 ]; then
+	SAVEDIR="$HOME"/Library/"Application Support"/"$PRESET"
+else
+	SAVEDIR="$SHARE"/"$PRESET"
 fi
-if [ -f "$SHARE"/"$PRESET"/sm64config.txt ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_config.txt ]; then
+
+if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
+	echo Creating "$SAVEDIR" for save files.
+	mkdir "$SAVEDIR"
+fi
+if [ -f "$SAVEDIR"/sm64config.txt ] || [ -f "$SAVEDIR"/CHEATERex_config.txt ]; then
 	echo SM64 configuration file found.
 elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
 	echo No compatible sm64 configuration files for this version, game will create one.
 elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
 	if [ -f "$SHARE"/sm64ex/sm64config.txt ]; then
-		cp "$SHARE"/sm64ex/sm64config.txt "$SHARE"/"$PRESET"
+		cp "$SHARE"/sm64ex/sm64config.txt "$SAVEDIR"
 		echo Copied configuration from sm64ex.
 	elif [ -f "$SMLINUX"/sm64config.txt ]; then
-		cp "$SMLINUX"/sm64config.txt "$SHARE"/"$PRESET"
+		cp "$SMLINUX"/sm64config.txt "$SAVEDIR"
 		echo Copied configuration from sm64pc.
 	elif [ -f "$SHARE"/render96ex/sm64config.txt ]; then
-		cp "$SHARE"/render96ex/sm64config.txt "$SHARE"/"$PRESET"
+		cp "$SHARE"/render96ex/sm64config.txt "$SAVEDIR"
 		echo Copied configuration from render96ex
 	elif [ -f "$SHARE"/sm64ex-coop/sm64config.txt ]; then
-		cp "$SHARE"/sm64ex-coop/sm64config.txt "$SHARE"/"$PRESET"
+		cp "$SHARE"/sm64ex-coop/sm64config.txt "$SAVEDIR"
 		echo Copied configuration from sm64ex-coop
 	elif [ -f "$SHARE"/cheaterex/CHEATERex_config.txt ]; then
-		cp "$SHARE"/cheaterex/CHEATERex_config.txt "$SHARE"/"$PRESET"/sm64config.txt
+		cp "$SHARE"/cheaterex/CHEATERex_config.txt "$SAVEDIR"/sm64config.txt
 		echo Copied configuration from CHEATERex
 	else 
 		echo No compatible sm64 configuration file found, game will create one.
 	fi
-	if [ "$PRESET" = "cheaterex" ] && [ -f "$SHARE"/"$PRESET"/sm64config.txt ]; then
-		mv "$SHARE"/"$PRESET"/sm64config.txt "$SHARE"/"$PRESET"/CHEATERex_config.txt
+	if [ "$PRESET" = "cheaterex" ] && [ -f "$SAVEDIR"/sm64config.txt ]; then
+		mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"/CHEATERex_config.txt
 	fi
 fi
-if [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/CHEATERex_save_file.bin ] || [ -f "$SHARE"/"$PRESET"/sm64.sav ] || [ -f "$SHARE"/"$PRESET"/render96_save_file_0.sav ] ; then
+if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATERex_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
 	echo SM64 save file found.
 elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
-	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SHARE"/"$PRESET"
+	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
 	echo Copied Save file from Render96
 elif [ "$PRESET" = "render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
-	cp "$SHARE"/r96proto/render96_save_file_0.sav "$SHARE"/"$PRESET"
+	cp "$SHARE"/r96proto/render96_save_file_0.sav "$SAVEDIR"
 	echo Copied Save file from Render96 Fastbuild_Prototype
 elif [ "$TEXTSAVES" = 1 ]; then
 	echo No compatible save files for this version.
 elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 	if [ "$PRESET" = "sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
-		cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$PRESET"/sm64_save_file.bin
+		cp "$SHARE"/sm64nx/sm64.sav "$SAVEDIR"/sm64_save_file.bin
 		echo Copied save file from sm64nx.
 	elif [ "$PRESET" = "sm64nx" ] && [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
-		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SHARE"/"$PRESET"/sm64.sav
+		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SAVEDIR"/sm64.sav
 		echo Copied save file from sm64-port.
 	elif [ -f "$SHARE"/sm64ex/sm64_save_file.bin ]; then
-		cp "$SHARE"/sm64ex/sm64_save_file.bin "$SHARE"/"$PRESET"
+		cp "$SHARE"/sm64ex/sm64_save_file.bin "$SAVEDIR"
 		echo Copied save file from sm64ex.
 	elif [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
-		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SHARE"/"$PRESET"
+		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SAVEDIR"
 		echo Copied save file from sm64-port.
 	elif [ -f "$SMLINUX"/sm64_save_file.bin ]; then
-		cp "$SMLINUX"/sm64_save_file.bin "$SHARE"/"$PRESET"
+		cp "$SMLINUX"/sm64_save_file.bin "$SAVEDIR"
 		echo Copied save file from sm64pc.
 	elif [ -f "$SHARE"/cheaterex/CHEATERex_save_file.bin ]; then
-		cp "$SHARE"/cheaterex/CHEATERex_save_file.bin "$SHARE"/"$PRESET"/sm64_save_file.bin
+		cp "$SHARE"/cheaterex/CHEATERex_save_file.bin "$SAVEDIR"/sm64_save_file.bin
 		echo Copied save file from cheaterex
 	elif [ -f "$SHARE"/sm64nx/sm64.sav ]; then
-		cp "$SHARE"/sm64nx/sm64.sav "$SHARE"/"$PRESET"/sm64_save_file.bin
+		cp "$SHARE"/sm64nx/sm64.sav "$SAVEDIR"/sm64_save_file.bin
 		echo Copied save file from sm64nx.
 	else 
 		echo No compatible save file found.
 	fi
-	if [ "$PRESET" = "cheaterex" ] && [ -f "$SHARE"/"$PRESET"/sm64_save_file.bin ]; then
-		mv "$SHARE"/"$PRESET"/sm64_save_file.bin "$SHARE"/"$PRESET"/CHEATERex_save_file.bin
+	if [ "$PRESET" = "cheaterex" ] && [ -f "$SAVEDIR"/sm64_save_file.bin ]; then
+		mv "$SAVEDIR"/sm64_save_file.bin "$SAVEDIR"/CHEATERex_save_file.bin
 	fi
 fi
 if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
@@ -1641,11 +1647,11 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 	elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
 		echo "[6] Restoring Savefile, ROM and ROM Filesystem (paks)"
 		cp -rpn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
-		ln -s "$SHARE"/"$PRESET"/sm64.sav "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sav 
-		ln -s "$SHARE"/"$PRESET"/sm64.log "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.log 
-		ln -s "$SHARE"/"$PRESET"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin
-	 	ln -s "$SHARE"/"$PRESET"/gamepad1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
-		ln -s "$SHARE"/"$PRESET"/keyboard1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
+		ln -s "$SAVEDIR"/sm64.sav "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sav 
+		ln -s "$SAVEDIR"/sm64.log "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.log 
+		ln -s "$SAVEDIR"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin
+	 	ln -s "$SAVEDIR"/gamepad1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
+		ln -s "$SAVEDIR"/keyboard1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
 		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
 	elif [ "$PRESET" = "sm64nx" ]; then
 		echo "[6] Preparing Savefile, ROM and ROM Filesystem (paks)"
