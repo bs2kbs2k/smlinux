@@ -38,7 +38,6 @@ You may have to enter your password more than once during installation if you do
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/presets.png>
 
 # Frequently Asked Questions
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
@@ -58,7 +57,7 @@ You may have to enter your password more than once during installation if you do
 * [<strong>How do I create my rom file?</strong>](#how-do-i-create-my-rom-file)
 * [<strong>How do I remove everything smlinux created during install?</strong>](#how-do-i-remove-everything-smlinux-created-during-install)
 * [<strong>How do I tell smlinux to download sm64 repositories to a folder other than home?</strong>](#how-do-i-tell-smlinux-to-download-sm64-repositories-to-a-folder-other-than-home)
-
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/presets.png>
 ## **What preset/repository/branch should I use?**
 If you want to build for PC, the source repository from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks of sm64ex offer additional enhancements, such as render96ex with added Luigi Keys, sm64ex-coop for a 2 player network mode, or cheaterex for the latest experimental features. For android or web, presets are available based on sm64-port or sm64ex; for dos a sm64-port based fork is used. 
 
