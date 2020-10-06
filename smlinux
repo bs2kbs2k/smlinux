@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1005-1853
+TIMESTAMP=2020-1005-2042
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -29,7 +29,7 @@ if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 	checkphone
 	if [ "$GOTPHONE" = 1 ]; then
-		zenity --info --text='\nPhone Detected.  Be sure to grant it debugging permission.\n\nExisting copies must also be uninstalled before this window closes itself.' --title="Preparing for Android Installation...." --width=460 &disown
+		zenity --info --text='\nPhone Detected.  Be sure to grant it debugging permission.\n\nExisting copies must also be uninstalled before this window closes itself.' --title="Preparing for Android Installation...." --width=500 &disown
 	else
 		echo "If you want the app installed to your Android device,"
 		echo "plug it in now via USB and grant it debugging permission."
@@ -54,6 +54,7 @@ else
 fi
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
+		echo Reming x86 x64
 		sed -i.bak "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
 	fi
 	if [ "$BRANCH" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ]; then
@@ -93,9 +94,9 @@ if [ ! "$ANDROID" = 0 ]; then
 		echo Preparing external data for transfer...
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip ]; then
-			cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-		else
-			unzip -q hq_sounds_v5.1
+			cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip .
+		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
+			cp -rn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* .
 		fi
 		unzip -n -q base
 		zip -r -0 -u -q hdbase gfx sound
@@ -645,7 +646,7 @@ else
 			git checkout gfx
 			git pull --no-rebase
 		elif [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Copying texutres from render96ex
+			echo Copying textures from render96ex
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
@@ -657,7 +658,7 @@ else
 			git checkout gfx
 			git pull --no-rebase
 		elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Copying texutres from r96proto
+			echo Copying textures from r96proto
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
@@ -669,7 +670,7 @@ else
 			git checkout gfx
 			git pull --no-rebase
 		elif [ ! "PRESET" = "render96ex" ] && [ ! "PRESET" = "r96proto" ] && [ -d "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Copying texutres from sm64ex
+			echo Copying textures from sm64ex
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
@@ -681,7 +682,7 @@ else
 			git checkout gfx
 			git pull --no-rebase
 		elif [ ! "PRESET" = "render96ex" ] && [ ! "PRESET" = "r96proto" ] && [ -d "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Copying texutres from sm64ex-coop
+			echo Copying textures from sm64ex-coop
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
@@ -849,7 +850,7 @@ elif [ -d "$BASEPATH"/"$PRESET"/actors.bak ] && [ "$SGIFILE" = "render96_coop.zi
 elif [ "$SGIFILE" = "render96_coop.zip" ]; then
 	echo Saving original actors folder as actors.bak 	
 	cd "$BASEPATH"/"$PRESET"
-	cp -Rn actors actors.bak
+	cp -rn actors actors.bak
 fi
 cd "$BASEPATH"/"$PRESET"
 echo Applying Render96 SGI Models...
@@ -960,13 +961,13 @@ fi
 
 docheats(){
 cd "$BASEPATH"/"$PRESET"/enhancements
-if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv9*.zip ]; then
+if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv9.zip ]; then
 	echo Getting cheats...
 	if [ -f CHEATER*.zip ]; then
 		rm CHEATER*.zip
 	fi
-	wget https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
-	if [ -f CHEATERv9.zip ] && [ "$PRESET" = "render96ex" ]; then
+	wget -q https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
+	if [ -f CHEATERv9.zip ] && ([ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ]); then
 		unzip CHEATERv9 v9_r96ex.patch
 	elif [ -f CHEATERv9.zip ]; then
 		unzip CHEATERv9 v9_sm64ex.patch
@@ -1614,6 +1615,11 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
+	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+		zip -r -0 -u hdbase gfx
+		rm -rf gfx
+	fi
 	if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "PRESET" = "sm64exweb" ]; then 
 		docheats
 		domymenu
@@ -1663,11 +1669,6 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 		prepnx	
 	elif [ "$ANDROID" = 0 ]; then
 		echo [6] No resources found in previous build, skipping restore.
-	fi
-	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-		zip -r -0 -u hdbase gfx
-		rm -rf gfx
 	fi
 	echo
 	if [ "$TARGET" = "web" ]; then
