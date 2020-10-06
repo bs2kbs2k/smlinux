@@ -17,7 +17,7 @@
 ## **Download & Installation Instructions**    
 
 Paste either of the following into a terminal:  
-(*Both commands do the exact same thing using a different tool, whichever works for you us fine.*)
+(*Both commands do the exact same thing using different tools; use whichever works for you.*)
                
 	bash -c "$(curl -fsSL https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux)"
 OR
