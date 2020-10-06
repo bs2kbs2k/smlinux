@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1005-2042
+TIMESTAMP=2020-1006-1050
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -1813,8 +1813,10 @@ rungame
 if [ -f "$HOME"/.smlinuxNopath ]; then
 	rm "$HOME"/.smlinuxNopath
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-	zenity --info --text='You did not have a home folder in your path so $HOME/bin was created.\n\nReboot or type \n\n    PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.' --title="Your installation is complete." --width=450	
-	printf '\nYou did not have a home folder in your path so $HOME/bin was created.\n\nReboot or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
+	zenity --info --text="You did not have a home folder in your path so "$HOME"/bin was created.\n\nReboot or type \n\n    PATH=\$HOME/bin:\$PATH\n\nbefore running smlinux again." --title="Your installation is complete." --width=500	
+	echo
+	echo You did not have a home folder in your path so "$HOME"/bin was created.
+	printf 'nReboot or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 4
 elif  ([ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]) && [ "$InstallHD" = 1 ]; then
