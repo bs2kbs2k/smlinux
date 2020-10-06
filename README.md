@@ -25,7 +25,7 @@ OR
 	wget https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux;bash smlinux;rm smlinux
 	
 	
-That's Everything. That's all you have to do. You will be prompted to approve (or change) build options, specify your romfile,  and asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
+That's Everything. That's all you have to do for mac and ubuntu based linux. You will be prompted to approve (or change) build options, specify your romfile,  and asked sudo password to install build tools.  smlinux will then run as user unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 (**Do not run smlinux as root; you will be prompted for password automatically if needed during installation.**)
 
 You must provide your own legally backed up Super Mario 64 ROM file during smlinux installation. 
@@ -37,7 +37,7 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 [<strong>What about Linux distros that are not Ubuntu-based?</strong>](#what-about-distros-other-than-ubuntu) 
 
 **_macOS notes_**
-You may have to enter your password more than once during installation if you dont already have homebrew and command line tools installed. Oonly sm64ex and cheaterex are fully supported, although should have coop working shortly and will change this note then, web could likely be fixed upon request if not working already, and likely android easily added.  R96ex will work when they pull malloc fix from sm64ex. DOS builds wont work. Feedback appreciated, so far only tested in Sierra and High Sierra virtual machines.
+You may have to enter your password more than once during installation if you dont already have homebrew and command line tools installed. Only sm64ex and cheaterex are fully supported, although should have coop working shortly and will change this note then, web could likely be fixed upon request if not working already, and likely android easily added.  R96ex will work when they pull malloc fix from sm64ex. DOS builds wont work. Feedback appreciated, so far only tested in Sierra and High Sierra virtual machines.
 
 [<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
 
