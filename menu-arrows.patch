@@ -32,7 +32,7 @@ index 0bcb32b4..acb6b74e 100644
                  currentMenu->scroll = currentMenu->select - 3;
          }
 -    } else if (ABS(gPlayer1Controller->stickX) > 60) {
-+    } else if ((ABS(gPlayer1Controller->stickX) > 60) || (gPlayer1Controller->buttonPressed & (L_CBUTTONS|R_CBUTTONS))) { 
++    } else if ((ABS(gPlayer1Controller->stickX) > 60) || (gPlayer1Controller->buttonPressed & (L_CBUTTONS|R_CBUTTONS))) {
          if (allowInput) {
              #ifndef nosound
              play_sound(SOUND_MENU_CHANGE_SELECT, gDefaultSoundArgs);
