@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1006-1207
+TIMESTAMP=2020-1006-1207 
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -1784,17 +1784,7 @@ if [ "$BRANCH" = "sm64ex_nightly" ] && [ ! "$TOUCH_CONTROLS" = 1 ]; then
 fi
 echo
 echo [6] Compiling...
-echo
-if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
-	mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
-fi
 domake
-if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
-	cp -rpn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
-	echo "[6] Restoring Savefile, ROM and ROM Filesystem (paks)"
-	cp -rpn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
-fi
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	echo
 	echo ERROR: Build Failure.  Expected binary file not found.
