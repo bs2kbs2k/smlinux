@@ -5,8 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1005-1511
-
+TIMESTAMP=2020-1005-1853
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -30,11 +29,11 @@ if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 	checkphone
 	if [ "$GOTPHONE" = 1 ]; then
-		zenity --info --text='\nPhone Detected.  Be sure to grant it debugging permission.\n\nExisting copies must also be removed from device.' --title="Preparing for Android Installation...." --width=440 &disown
+		zenity --info --text='\nPhone Detected.  Be sure to grant it debugging permission.\n\nExisting copies must also be uninstalled before this window closes itself.' --title="Preparing for Android Installation...." --width=460 &disown
 	else
 		echo "If you want the app installed to your Android device,"
 		echo "plug it in now via USB and grant it debugging permission."
-		zenity --info --text='\nIf you want the app installed to your Android device, attach it via USB.\n\nGrant it debugging permission before this window disappears.\n\nExisting copies must also be removed from device.' --title="Preparing for Android Installation...." --width=480 &disown
+		zenity --info --text='\nIf you want the app installed to your Android device, attach it via USB.\n\nUnlock and grant your pc debugging permission before this window closes itself.\n\nExisting copies must also be uninstalled from device.' --title="Preparing for Android Installation...." --width=480 &disown
 		echo
 	fi
 fi
@@ -62,6 +61,9 @@ if [ ! "$ANDROID" = 0 ]; then
 		sed -i.bak '/include $(BUILD_SHARED_LIBRARY)/i TEXTURE_FIX ?= 0\nNODRAWINGDISTANCE ?= 0\nBETTERCAMERA ?= 0\nifeq ($(TEXTURE_FIX),1)\n  LOCAL_CFLAGS += -DTEXTURE_FIX\nendif\nifeq ($(NODRAWINGDISTANCE),1)\n  LOCAL_CFLAGS += -DNODRAWINGDISTANCE\nendif\nifeq ($(BETTERCAMERA),1)\n  LOCAL_CFLAGS += -DBETTERCAMERA\nendif\n' "$BASEPATH"/"$PRESET"/Android.mk
 	fi
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
+		if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
+			killall -q -y1h mplayer
+		fi
 		return
 	else
 		echo
@@ -93,10 +95,10 @@ if [ ! "$ANDROID" = 0 ]; then
 		if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip ]; then
 			cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		else
-			unzip hq_sounds_v5.1
+			unzip -q hq_sounds_v5.1
 		fi
-		unzip -n base
-		zip -r -0 -u hdbase gfx sound
+		unzip -n -q base
+		zip -r -0 -u -q hdbase gfx sound
 		ln -s "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hdbase.zip "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/hdbase.zip
 		rm -rf sound gfx
 	elif [ "$EXTERNAL_DATA" = 1 ]; then
@@ -852,6 +854,10 @@ fi
 cd "$BASEPATH"/"$PRESET"
 echo Applying Render96 SGI Models...
 7z x enhancements/"$SGIFILE" -aoa 
+if [ ! "$ANDROID" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/render96_android.patch ]; then
+	echo Applying Android patch for Render96 models
+	git apply enhancements/render96_android.patch
+fi
 }
 	
 scriptUpdate(){
@@ -1351,7 +1357,7 @@ else	     # The real start, the rest was script preperation and setup.
 		pip3 install pillow zstandard tqdm xxhash
 		gcccheck
 	elif [ ! "$ANDROID" = 0 ]; then
-		echo "Loading Android SDK Environment..."
+		echo "Loading Android SDK..."
 		androidsdk
 	elif [ "$TARGET_WEB" = 1 ]; then
 		echo "Loading Enscriptem for Web Target..."
@@ -1640,7 +1646,7 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 		fi
 		endnow
 	fi
-	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
+	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ] && [ "$ANDROID" = 0 ]; then
 		echo [6] Restoring External Resources...
 		cp -rpn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
@@ -1655,7 +1661,7 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 	elif [ "$PRESET" = "sm64nx" ]; then
 		echo "[6] Preparing Savefile, ROM and ROM Filesystem (paks)"
 		prepnx	
-	else
+	elif [ "$ANDROID" = 0 ]; then
 		echo [6] No resources found in previous build, skipping restore.
 	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
