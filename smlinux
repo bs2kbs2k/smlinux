@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1006-1207 
+TIMESTAMP=2020-1006-1500 
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -246,7 +246,7 @@ fi
 
 domymenu(){	
 if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
-	echo Applying Menu Arrows...
+	echo Applying menu arrows...
 	cd "$BASEPATH"/"$PRESET"
 	cp "$SMLINUX"/menu-arrows.patch enhancements
 	git apply enhancements/menu-arrows.patch
@@ -482,8 +482,8 @@ if [ "$TARGET_WEB" = 1 ]; then
 elif [ ! "$TARGET" = "dos" ]; then
 	TARGET=pc
 fi
-if [ -z "$MAXJOBS" ] && [ "$OSX_BUILD" = 0 ]; then
-	if [ "$PRESET" = "sm64nx" ]; then 
+if [ -z "$MAXJOBS" ]; then
+	if [ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]; then 
 		MAXJOBS=$((`nproc` - 1))		
 	else 
 		MAXJOBS=`nproc`
