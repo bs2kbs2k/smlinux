@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1006-1050
+TIMESTAMP=2020-1006-1207
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -580,12 +580,15 @@ if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak' ];
 	echo 
 	echo ERROR: Unable to extract and pak ROM.
 	endnow
+else
+	echo could now get hash for ...ummmm.... forgot... got hash so dont care anymore... 
+	echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak' created.
 fi
 }
 
 dohd(){ 
 if [ "$PRESET" = "sm64nx" ]; then 
-	echo Getting Add-on Paks
+	echo Getting Add-on Paks - Select with in-game mods menu
 	if [ ! -d "$BASEPATH"/"$PRESET"/build ] ; then mkdir "$BASEPATH"/"$PRESET"/build
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] ; then mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
@@ -593,31 +596,37 @@ if [ "$PRESET" = "sm64nx" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs ] ; then mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Cleaner Aesthetics" ]; then
+		echo Getting Cleaner Aesthetics Textures...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Cleaner Aesthetics"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Cleaner Aesthetics"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730430152957362191/cleaner.pak
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"HD Mario . Bowser" ]; then
+		echo "Getting HD Mario & Bowser..."
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"HD Mario . Bowser"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"HD Mario . Bowser"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730425308989227158/arredondo.pak
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~SGI Models" ]; then
+		echo Getting Render96 SGI Models...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~SGI Models"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~SGI Models"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730645970693652591/sgi1.2.pak
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~OWO Mod" ]; then
+		echo Getting oWo...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~OWO Mod"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~OWO Mod"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730420038024036362/owo.pak
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~HD Luigi" ]; then
+		echo Getting HD Luigi...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~HD Luigi"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~HD Luigi"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730425786452017222/luigi.pak
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro" ]; then
+		echo Getting NES Retro Theme...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730431589749620736/nes.pak
@@ -1308,10 +1317,10 @@ else	     # The real start, the rest was script preperation and setup.
 	echo "|    help: Display all smlinux commands and options plus open faq url          |"
 	echo "|                                                                              |"
 	if [ "$COMMAND" = "help" ]; then
-		echo "| Options:   --hd Install HD Add-Ons (Override EnableHD=0 and UpgradeHD=0)     |"
-		echo "|           --sgi Install SGI 1.3/coop Models (Override InstallSGI=0)          |"
-		echo "|        --config Prompt to edit config file (Override CONFIG=0)               |"
-		echo "|       --depends Install Dependencies before update or build                  |"
+		echo "| Options:   --hd  install HD add-ons (ignore EnableHD=0/UpgradeHD=0)          |"
+		echo "|           --sgi  install Render96 models & textures (ignore InstallSGI=0)    |"
+		echo "|        --config  prompt to edit config file before build (ignore CONFIG=0)   |"
+		echo "|       --depends  install dependencies before build                           |"
 		echo "|                                                                              |"
 		echo "--------------------------------------------------------------------------------"
 		if [ "$OP1" = "--noweb" ]; then
