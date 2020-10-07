@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1006-1500 
+TIMESTAMP=2020-1006-1802
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -642,7 +642,7 @@ else
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git ] ; then
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			git pull
+			git pull --no-rebase
 		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git ] ; then
 			echo Restoring old texture source...
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
@@ -1306,17 +1306,18 @@ else	     # The real start, the rest was script preperation and setup.
 	echo "|                                                                              |"
 	echo "|               Command Line Usage: smlinux <command> <options>                |"
 	echo "| Commands                                                                     |"
-	echo "|  update: Update existing sm64 source & rebuild, preserving modifications     |"
+	echo "|  update: Update existing sm64 source & build (preserves modifications)       |"
 	echo "|   build: Get sm64 source from github & build (renames existing folder)       |"
 	echo "|   clone: Get sm64 source from github & extract rom (without addons or build) |"
 	echo "|  config: Opens smlinuxcfg.txt in a text editor (without building)            |"
 	echo "|   reset: Resets smlinux configuration file to default settings               |"
-	echo "| depends: Install dependencies (automatic before first build)                 |"
+	echo "| depends: Install dependencies (automatic during first smlinux installation)  |"
 	echo "| upgrade: Upgrade smlinux to latest version from github (without building)    |"
 	echo "|   purge: Delete all files obtained or created by smlinux including sm64      |"
 	echo "|    help: Display all smlinux commands and options plus open faq url          |"
-	echo "|                                                                              |"
 	if [ "$COMMAND" = "help" ]; then
+		echo "| rebuild: rebuild an existing or previously failed build with no changes      |"
+		echo "|                                                                              |"
 		echo "| Options:   --hd  install HD add-ons (ignore EnableHD=0/UpgradeHD=0)          |"
 		echo "|           --sgi  install Render96 models & textures (ignore InstallSGI=0)    |"
 		echo "|        --config  prompt to edit config file before build (ignore CONFIG=0)   |"
@@ -1324,7 +1325,6 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "|                                                                              |"
 		echo "--------------------------------------------------------------------------------"
 		if [ "$OP1" = "--noweb" ]; then
-			echo
 			exit
 		else
 			echo "More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions"
@@ -1332,6 +1332,7 @@ else	     # The real start, the rest was script preperation and setup.
 		xdg-open https://github.com/enigma9o7/smlinux#frequently-asked-questions 
 		exit
 	else
+		echo "|                                                                              |"
 		echo "--------------------------------------------------------------------------------"
 	fi
 	echo [1] Preparing Build environment...
@@ -1542,7 +1543,27 @@ elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 		mv "$SAVEDIR"/sm64_save_file.bin "$SAVEDIR"/CHEATERex_save_file.bin
 	fi
 fi
-if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
+if [ "$COMMAND" = "rebuild" ]; then
+	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
+		echo
+		echo ERROR: No "$BASEPATH"/"$PRESET" folder to rebuild!
+		echo Specify smlinux build for a fresh build.
+		exit
+	fi
+	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed ]; then
+		echo [3] Restoring failed build...
+		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
+			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
+				rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
+			fi
+			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
+		fi
+		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
+	else
+		echo [3] Skipping backups.
+	fi
+	echo [4] Skipping updates.
+elif [ "$COMMAND" = "update" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
 		echo ERROR: No "$BASEPATH"/"$PRESET" folder to update!
@@ -1640,14 +1661,16 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 		git apply -R enhancements/60fps*.patch
 		rm enhanements/60fps			
 	fi
-	echo		
-	echo [5] Compiling...
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
 		fi
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
 	fi
+	echo
+fi
+if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
+	echo [5] Compiling...
 	domake
 	echo
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
@@ -1655,7 +1678,7 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 			echo "Restoring previous build..."
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then 
-				rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" 
+				mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed
 			fi
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 		fi
@@ -1681,8 +1704,8 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 	fi
 	echo
 	if [ "$TARGET" = "web" ]; then
-		echo [7] Update Complete.  
-	elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
+		echo [7] "$COMMAND" complete.  
+	elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/*.apk ]; then
 		echo
 		echo "ERROR: Build Failure.  Android Package Kit (apk) not found."
 		endnow
@@ -1690,13 +1713,13 @@ if [ "$COMMAND" = "update" ] || [ "$1" = "--update" ]; then
 		echo [7] Verifying Menu Entry....
 		makedesktop
 		echo
-		echo [8] Update Complete.  
+		echo [8] "$COMMAND" complete.  
 	elif [ ! "$ANDROID" = 0 ]; then
 		mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
-		echo [7] Update Complete. 
+		echo [7] "$COMMAND" complete.   
 	elif [ "$TARGET" = "dos" ]; then
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
-		echo [7] Update Complete. 
+		echo [7] "$COMMAND" complete.  
 	fi
 	rungame
 	if [ "$TARGET" = "dos" ] && [ ! -f /usr/bin/dosbox ]; then
