@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1007-1617
+TIMESTAMP=2020-1007-1626
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -145,6 +145,7 @@ fi
 }
 
 mactools(){
+	echo Preparing tools for mac.  One error is not unexpected.
 	cd "$PRESET"/tools
 	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 
 	if [ -f skyconv ]; then
@@ -1783,7 +1784,7 @@ fi
 
 echo
 echo [4] Extracting Assets from ROM...
-if [ "OSX_BUILD" = 1 ]; then
+if [ "$OSX_BUILD" = 1 ]; then
 	mactools
 fi
 if [ "$PRESET" = "sm64nx" ]; then
