@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1007-1910
+TIMESTAMP=2020-1007-1913
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -51,7 +51,7 @@ if [ "$OSX_BUILD" = 1 ]; then
 	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 -j"$MAXJOBS"
 	if [ -f skyconv ]; then
 		echo That error was not unexpected, dealing with it...
-		gmake CC=/usr/local/bin/gcc CXX=/usr/local/bin/g++ -j"$MAXJOBS"
+		gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ -j"$MAXJOBS"
 	fi
 	if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
 		ln -s /usr/local/opt/sdl2/include/SDL2 "$SDL2PATH" "$BASEPATH"/"$PRESET"/include
