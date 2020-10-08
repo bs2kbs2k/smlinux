@@ -5,7 +5,8 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1007-1913
+TIMESTAMP=2020-1007-2107
+
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -49,7 +50,7 @@ echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD ENABLE_OPENGL_LEGACY=$E
 if [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"/tools
 	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 -j"$MAXJOBS"
-	if [ -f skyconv ]; then
+	if [ ! -f skyconv ]; then
 		echo That error was not unexpected, dealing with it...
 		gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ -j"$MAXJOBS"
 	fi
