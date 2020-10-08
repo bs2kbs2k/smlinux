@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1008-1101
+TIMESTAMP=2020-1008-1154
 
 domake(){
 #Here We go & music to build to
@@ -381,7 +381,7 @@ GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 # Linux command is only called during first install and is not used for macOS
-Linux="sudo apt install -y build-essential bsdmainutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full mplayer zenity"
+Linux="sudo apt install -y build-essential bsdmainutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip mplayer zenity"
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
@@ -756,7 +756,7 @@ else
 		echo WARNING: Skipping Models for r96 proto
 	elif  [ "$InstallSGI" = 1 ]; then
 		dosgi
-	elif  [ ! "$InstallSGI" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
+	elif  [ ! "$InstallSGI" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ] && [ ! "$TARGET" = "dos" ]; then
 			cd "$BASEPATH"/"$PRESET"
 			if [ ! "$PRESET" = "sm64ex-coop" ] || [[ ! $(git diff actors) ]];  then
@@ -811,24 +811,9 @@ if  [ "$TARGET_WEB" = 1 ] || [ "$EXTERNAL_DATA" = 0 ]; then
 		return
 	fi
 fi
-if [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11.7z ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/render96* ]; then 
+if [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/render96* ]; then 
 	echo Render96 models already installed.
 	return
-fi
-if [ ! -f /usr/bin/7z ]; then 
-	if [ ! -f /bin/7z ]; then
-		echo "SGI Models comes as a 7z file but you don't have 7z to extract it."
-		if [ -f /usr/bin/apt ]; then
-			echo Please provide your password to install...
-			sudo apt install p7zip-full
-		else
-			echo This script checks for /usr/bin/7z.  The ubuntu package is called p7zip.
-			echo Please install whatever package gets you 7z and run smlinux again.
-			echo Also please let author know what package and distro so I can add it
-			echo to depdencency list so others avoid this message.  
-			exit
-		fi
-	fi
 fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 	echo Removing 3D coins...
@@ -855,7 +840,8 @@ elif [ "$PRESET" = "sm64ex-coop" ]; then
 else
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
-	SGIFILE=RENDER96_V1.3.7z
+	mv RENDER96_V1.3.7z RENDER96_V1.3.zip
+	SGIFILE=RENDER96_V1.3.zip
 fi
 if  [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
 	echo Removing cheater...
@@ -882,7 +868,7 @@ elif [ "$SGIFILE" = "render96_coop.zip" ]; then
 fi
 cd "$BASEPATH"/"$PRESET"
 echo Applying Render96 SGI Models...
-7z x enhancements/"$SGIFILE" -aoa 
+unzip -o enhancements/"$SGIFILE" 
 if [ ! "$ANDROID" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/render96_android.patch ]; then
 	echo Applying Android patch for Render96 models
 	git apply enhancements/render96_android.patch
@@ -1366,7 +1352,7 @@ else	     # The real start, the rest was script preperation and setup.
 				echo FATAL ERROR Could not install homebrew, thus cannot install other stuff.  
 				endnow
 			fi
-			brew install libxdg-basedir coreutils go wget newt nano unzip unrar p7zip python3 
+			brew install libxdg-basedir coreutils go wget newt nano unzip unrar python3 
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
 			alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
 			if [ ! -f ~/.bashrc ]; then
