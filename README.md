@@ -190,7 +190,7 @@ Arch:
 	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity
 Debian / Ubuntu:  
 
-	sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip p7zip-full zenity mplayer zenity
+	sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer
 	
 Fedora  / Red Hat:
 
@@ -211,7 +211,7 @@ Alpine:
 	
 MacOS:
 
-	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip p7zip unrar newt go python3
+	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
 
 MinGW64: 
 	
