@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1008-1154
+TIMESTAMP=2020-1008-1450
 
 domake(){
 #Here We go & music to build to
@@ -23,7 +23,11 @@ if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
 elif [ "$TARGET_WEB" = 1 ]; then
 	sed -i.bak 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=30MB/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
-if [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
+if [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ] && [ "$PRESET"= "sm64ex-coop" ]; then
+	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
+	sed -i.bak 's/"sdk/discord_game_sdk.dylib"/"sdk/libdiscord_game_sdk.dylib"/g' "$BASEPATH"/"$PRESET"/Makefile
+	cp "$BASEPATH"/"$PRESET"/lib/diskcordsdk/discord_game_sdk.dylib "$BASEPATH"/"$PRESET"/lib/diskcordsdk/libdiscord_game_sdk.dylib
+elif [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
 	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
 if [ ! "$ANDROID" = 0 ]; then
@@ -51,7 +55,7 @@ if [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"/tools
 	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 -j"$MAXJOBS"
 	if [ ! -f skyconv ]; then
-		echo That error was not unexpected, dealing with it...
+		echo Dealing with that error...
 		gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ -j"$MAXJOBS"
 	fi
 	if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
@@ -59,6 +63,9 @@ if [ "$OSX_BUILD" = 1 ]; then
 	fi
 	cd "$BASEPATH"/"$PRESET"
 	time gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 OSX_BUILD=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK> "$SMLINUX"/buildlog.txt
+	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
+		cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib
+	fi
 else
 	cd "$BASEPATH"/"$PRESET"
 	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK > "$SMLINUX"/buildlog.txt
