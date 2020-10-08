@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1007-1626
+TIMESTAMP=2020-1007-1903
 domake(){
 #Here We go & music to build to
 if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
@@ -43,13 +43,23 @@ fi
 if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
-cd "$BASEPATH"/"$PRESET"
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI TEXTSAVES=$TEXTSAVES DEBUG=$DEBUG -j"$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL OSX_BUILD=$OSX_BUILD
 if [ "$OSX_BUILD" = 1 ]; then
+	cd "$PRESET"/tools
+	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 -j"$MAXJOBS"
+	if [ -f skyconv ]; then
+		echo That error was not unexpected, dealing with it...
+		gmake CC=/usr/local/bin/gcc CXX=/usr/local/bin/g++ -j"$MAXJOBS"
+	fi
+	if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
+		ln -s /usr/local/opt/sdl2/include/SDL2 "$SDL2PATH" "$BASEPATH"/"$PRESET"/include
+	fi
+	cd "$BASEPATH"/"$PRESET"
 	time gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 OSX_BUILD=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 else
+	cd "$BASEPATH"/"$PRESET"
 	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL > "$SMLINUX"/buildlog.txt
 fi
 if [ ! "$ANDROID" = 0 ]; then
@@ -142,15 +152,6 @@ fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	killall -q -y1h mplayer
 fi
-}
-
-mactools(){
-	echo Preparing tools for mac.  One error is not unexpected.
-	cd "$PRESET"/tools
-	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 
-	if [ -f skyconv ]; then
-		gmake CC=/usr/local/bin/gcc CXX=/usr/local/bin/g++ 
-	fi
 }
 
 theend(){
@@ -1784,9 +1785,6 @@ fi
 
 echo
 echo [4] Extracting Assets from ROM...
-if [ "$OSX_BUILD" = 1 ]; then
-	mactools
-fi
 if [ "$PRESET" = "sm64nx" ]; then
 	prepnx
 else 	
