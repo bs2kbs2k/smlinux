@@ -35,7 +35,7 @@ smlinux will be installed in the first directory in your path, usually ~/bin. Af
 If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 [<strong>What about Linux distros that are not Ubuntu-based?</strong>](#what-about-distros-other-than-ubuntu)  
-Click the question to jump to complete answer; you can install them first or add them to smlinux config file.
+Install dependencies first or add reccommended list to smlinux config file - click for details.
 
 **_macOS notes_**
 Only sm64ex and cheaterex are fully supported, although should have coop working shortly and will change this note then; web could likely be fixed upon request if not working already; and likely android easily added upon request.  R96ex will work when they pull malloc fix from sm64ex. DOS builds wont work. If you dont already have homebrew and/or apple command line tools installed, smlinux will install them but you may have to enter your password more than once and it can take quite a while to install that stuff first before the actual build tools smlinux depends on can even be installed.  Feedback appreciated, so far only confirmed in Sierra, High Sierra, Mojove and Big Sur virtual machines.  
