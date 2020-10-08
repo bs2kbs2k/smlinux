@@ -215,11 +215,11 @@ MacOS:
 
 MinGW64: 
 	
-	pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 python3 git make mingw-w64-x86_64-gcc unzip unrar
+	pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 python3 git make mingw-w64-x86_64-gcc
 	
 MinGW32:
 
-	pacman -S mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 git make mingw-w64-x86_i686-gcc unzip unrar
+	pacman -S mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 git make mingw-w64-x86_i686-gcc
 
 ## **How do I create my rom file?**
 
