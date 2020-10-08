@@ -37,7 +37,7 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 [<strong>What about Linux distros that are not Ubuntu-based?</strong>](#what-about-distros-other-than-ubuntu) 
 
 **_macOS notes_**
-Only sm64ex and cheaterex are fully supported, although should have coop working shortly and will change this note then; web could likely be fixed upon request if not working already; and likely android easily added upon request.  R96ex will work when they pull malloc fix from sm64ex. DOS builds wont work. If you dont already have homebrew and/or apple command line tools installed, smlinux will install them but you may have to enter your password more than once and it can take quite a while to install that stuff first before the actual build tools smlinux depends on can even be installed.  Feedback appreciated, so far only confirmed in Sierra and High Sierra virtual machines.  big sur fails for now, if anyone figures out workaround lmk.
+Only sm64ex and cheaterex are fully supported, although should have coop working shortly and will change this note then; web could likely be fixed upon request if not working already; and likely android easily added upon request.  R96ex will work when they pull malloc fix from sm64ex. DOS builds wont work. If you dont already have homebrew and/or apple command line tools installed, smlinux will install them but you may have to enter your password more than once and it can take quite a while to install that stuff first before the actual build tools smlinux depends on can even be installed.  Feedback appreciated, so far only confirmed in Sierra, High Sierra, Mojove and Big Sur virtual machines.  
 
 [<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
 
