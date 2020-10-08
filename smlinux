@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1008-1450
+TIMESTAMP=2020-1008-1528
 
 domake(){
 #Here We go & music to build to
@@ -26,7 +26,7 @@ fi
 if [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ] && [ "$PRESET"= "sm64ex-coop" ]; then
 	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
 	sed -i.bak 's/"sdk/discord_game_sdk.dylib"/"sdk/libdiscord_game_sdk.dylib"/g' "$BASEPATH"/"$PRESET"/Makefile
-	cp "$BASEPATH"/"$PRESET"/lib/diskcordsdk/discord_game_sdk.dylib "$BASEPATH"/"$PRESET"/lib/diskcordsdk/libdiscord_game_sdk.dylib
+	cp "$BASEPATH"/"$PRESET"/lib/discordsdk/discord_game_sdk.dylib "$BASEPATH"/"$PRESET"/lib/discordsdk/libdiscord_game_sdk.dylib
 elif [ "$OSX_BUILD" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
 	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
