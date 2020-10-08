@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1007-2107
+TIMESTAMP=2020-1007-2135
 
 domake(){
 #Here We go & music to build to
@@ -223,6 +223,12 @@ gcccheck(){
 if [ -f /usr/bin/gcc ] || [ -f /bin/gcc ]; then
 	if [ `gcc -dumpfullversion -dumpversion` \> 7.99 ]; then
 		echo gcc 8 or higher confirmed
+		return
+	elif [ `gcc-9 -dumpfullversion -dumpversion` \> 7.99 ]; then
+		if [ "$OSX_BUILD" = 0 ]; then
+			echo WARNING: Shouldnt be here should be mac only.
+		fi
+		echo gcc-9 confirmed
 		return
 	fi
 fi 
