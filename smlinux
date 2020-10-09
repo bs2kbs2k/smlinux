@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1009-1341
+TIMESTAMP=2020-1009-1341 
 
 domake(){
 #Here We go & music to build to
@@ -349,7 +349,7 @@ echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex
 PRESET=sm64ex
 InstallHD=1
 InstallR96=0
-60FPS=0
+FPS60=0
 # VERSION supports us jp eu (must correspond to rom version)
 VERSION=us
 # Set MAXJOBS=n to limit cpu threads used during compile, i.e. MAXJOBS=1
@@ -413,7 +413,7 @@ ENABLE_OPENGL_LEGACY=1
 ANDROID=0
 InstallR96=0
 DISCORD_SDK=1
-60FPS=0
+FPS60=0
 source "$SMLINUX"/smlinuxcfg.txt
 if [ -z $PRESET ] && [ ! -z $REPO ]; then
 	PRESET="$REPO"
@@ -437,7 +437,7 @@ elif [ "$PRESET" = "sm64exweb" ]; then
 	TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
-	60FPS=0
+	FPS60=0
 elif [ "$PRESET" = "sm64-portweb" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
@@ -445,12 +445,12 @@ elif [ "$PRESET" = "sm64-portweb" ]; then
 	TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
-	60FPS=0
+	FPS60=0
 elif [ "$PRESET" = "sm64nx" ]; then
 	GIT=teamsalta/sm64nx
 	BRANCH=master
 	EXTERNAL_DATA=0
-	60FPS=0
+	FPS60=0
 elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET" = "render96" ] || [ "$PRESET" = "Render96" ]; then
 	PRESET=render96ex
 	GIT=render96/render96ex
@@ -470,13 +470,13 @@ elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" =
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
-	60FPS=0
+	FPS60=0
 elif  [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "coop" ]; then
 	PRESET=sm64ex-coop
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=coop
 	NODRAWINGDISTANCE=1
-	60FPS=0
+	FPS60=0
 elif [ "$PRESET" = "androidex" ] ; then
 	ANDROID="$PRESET"
 	PRESET="androidex/app/jni/src"
@@ -810,19 +810,19 @@ fi
 
 dofps(){
 cd "$BASEPATH"/"$PRESET"
-if [ "$60FPS" = 1 ] && [ ! -f enhancements/60fps ]; then
-	echo Applying 60fps patch...
-	git apply enhancements/60fps*.patch
-	touch enhancements/60fps
-	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+if [ "$FPS60" = 1 ] && [ ! -f enhancements/FPS60 ]; then
+	echo Applying FPS60 patch...
+	git apply enhancements/FPS60*.patch
+	touch enhancements/FPS60
+	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60 ]; then
 		echo Enabling Vsync...
 		sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
 	fi
-elif [ "$60FPS" = 0 ] && [ -f enhancements/60fps ]; then
-	echo Removing 60fps patch...
-	git apply -R enhancements/60fps*.patch
-	rm enhancements/60fps
-	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+elif [ "$FPS60" = 0 ] && [ -f enhancements/FPS60 ]; then
+	echo Removing FPS60 patch...
+	git apply -R enhancements/FPS60*.patch
+	rm enhancements/FPS60
+	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60 ]; then
 		echo Enabling Vsync...
 		sed -i.bak 's/vsync true/vsync valse/g' "$SAVEDIR"/sm64config.txt
 	fi
@@ -1622,8 +1622,8 @@ elif [ "$COMMAND" = "update" ]; then
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 			git apply -R enhancements/3d_coin*.patch
 		fi
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-			git apply -R enhancements/60fps*.patch
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60 ]; then
+			git apply -R enhancements/FPS60*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
 			git apply -R enhancements/CHEATER.patch
@@ -1639,9 +1639,9 @@ elif [ "$COMMAND" = "update" ]; then
 			echo Update Succesful.
 		fi
 		echo Reapplying previously removed patches...
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-			echo 60fps...
-			git apply enhancements/60fps*.patch
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60 ]; then
+			echo FPS60...
+			git apply enhancements/FPS60*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 			echo 3D Coins...
@@ -1676,7 +1676,7 @@ elif [ "$COMMAND" = "update" ]; then
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
-	if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
+	if [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60*.patch ]; then
 		dofps
 	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
@@ -1822,7 +1822,7 @@ elif [ "$InstallR96" = 1 ]; then
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
 fi
-if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
+if [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60*.patch ]; then
 	dofps
 fi
 if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "PRESET" = "sm64exweb" ]; then 
