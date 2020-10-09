@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1008-1802
+TIMESTAMP=2020-1008-1831
 
 domake(){
 #Here We go & music to build to
@@ -348,7 +348,7 @@ echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex
 # AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
 PRESET=sm64ex
 InstallHD=1
-InstallSGI=0
+InstallR96=0
 # VERSION supports us jp eu (must correspond to rom version)
 VERSION=us
 # set MAXJOBS=n to limit cpu threads used, i.e. MAXJOBS=1 or MAXJOBS=7
@@ -410,7 +410,7 @@ IMMEDIATELOAD=1
 DOS_GL=osmesa
 ENABLE_OPENGL_LEGACY=1
 ANDROID=0
-InstallSGI=0
+InstallR96=0
 DISCORD_SDK=1
 source "$SMLINUX"/smlinuxcfg.txt
 if [ -z $PRESET ] && [ ! -z $REPO ]; then
@@ -452,13 +452,13 @@ elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET"
 	BRANCH=master
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
-	InstallSGI=1
+	InstallR96=1
 elif [ "$PRESET" = "r96proto" ]; then
 	GIT=render96/render96ex
 	BRANCH=fastbuild_prototype
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
-	InstallSGI=1
+	InstallR96=1
 	DISCORDRPC=0
 	LEGACY_RES=0
 elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" = "CHEATEREX" ]; then
@@ -525,10 +525,10 @@ if [ "$2" = "--hd" ] || [ "$3" = "--hd" ] ||[ "$4" = "--hd" ] ||[ "$5" = "--hd" 
 fi
 if [ "$2" = "--sgi" ] || [ "$3" = "--sgi" ] ||[ "$4" = "--sgi" ] ||[ "$5" = "--sgi" ]; then
 	EXTERNAL_DATA=1
-	InstallSGI=1
+	InstallR96=1
 elif [ "$2" = "--SGI" ] || [ "$3" = "--SGI" ] ||[ "$4" = "--SGI" ] ||[ "$5" = "--SGI" ]; then
 	EXTERNAL_DATA=1
-	InstallSGI=1
+	InstallR96=1
 fi
 if [ "$2" = "--config" ] || [ "$3" = "--config" ] ||[ "$4" = "--config" ] ||[ "$5" = "--config" ]; then
 	CONFIG=1
@@ -765,9 +765,9 @@ else
 	fi
 	if [ "$PRESET" = "r96proto" ]; then 		
 		echo WARNING: Skipping Models for r96 proto
-	elif  [ "$InstallSGI" = 1 ]; then
+	elif  [ "$InstallR96" = 1 ]; then
 		dosgi
-	elif  [ ! "$InstallSGI" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
+	elif  [ ! "$InstallR96" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ] && [ ! "$TARGET" = "dos" ]; then
 			cd "$BASEPATH"/"$PRESET"
 			if [ ! "$PRESET" = "sm64ex-coop" ] || [[ ! $(git diff actors) ]];  then
@@ -1335,7 +1335,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "| rebuild: rebuild an existing or previously failed build with no changes      |"
 		echo "|                                                                              |"
 		echo "| Options:   --hd  install HD add-ons (ignore EnableHD=0/UpgradeHD=0)          |"
-		echo "|           --sgi  install Render96 models & textures (ignore InstallSGI=0)    |"
+		echo "|           --sgi  install Render96 models & textures (ignore InstallR96=0)    |"
 		echo "|        --config  prompt to edit config file before build (ignore CONFIG=0)   |"
 		echo "|       --depends  install dependencies before build                           |"
 		echo "|                                                                              |"
@@ -1654,7 +1654,7 @@ elif [ "$COMMAND" = "update" ]; then
 	echo [4] Applying pre-build modifications...
 	if [ "$UpdateHD" = 1 ] && [ "$InstallHD" = 1 ]; then
 		dohd
-	elif [ "$InstallSGI" = 1 ]; then
+	elif [ "$InstallR96" = 1 ]; then
 		printf "SGI Selected, Processing...\n"
 		dosgi
 	else
@@ -1804,7 +1804,7 @@ echo
 echo [5] Applying Community Enhancements...
 if [ "$InstallHD" = 1 ]; then 
 	dohd
-elif [ "$InstallSGI" = 1 ]; then
+elif [ "$InstallR96" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
