@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1009-1341 
+TIMESTAMP=2020-1009-1348 
 
 domake(){
 #Here We go & music to build to
@@ -1359,7 +1359,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "|                                                                              |"
 		echo "--------------------------------------------------------------------------------"
 	fi
-	echo [1] Preparing Build environment...
+	echo [1] Preparing for "$COMMAND"...
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
 		if [ "$OSX_BUILD" = 1 ]; then
 			echo "Installing dependencies for macOS..."
