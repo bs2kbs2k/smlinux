@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1009-1034
+TIMESTAMP=2020-1009-1058
 
 domake(){
 #Here We go & music to build to
@@ -808,19 +808,26 @@ else
 fi
 }
 
-do60fps(){
-if [ "$60FPS" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-			echo Applying 60fps patch...
-			cd "$BASEPATH"/"$PRESET"
-			git apply enhancements/60fps*.patch
-			touch enhancements/60fps
-			if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-				echo Enabling Vsync...
-				sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
-			fi
-		fi
-	}
-
+dofps(){
+cd "$BASEPATH"/"$PRESET"
+if [ "$60FPS" = 1 ] && [ ! -f enhancements/60fps ]; then
+	echo Applying 60fps patch...
+	git apply enhancements/60fps*.patch
+	touch enhancements/60fps
+	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+		echo Enabling Vsync...
+		sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
+	fi
+elif [ "$60FPS" = 0 ] && [ -f enhancements/60fps ]; then
+	echo Removing 60fps patch...
+	git apply -R enhancements/60fps*.patch
+	rm enhancements/60fps
+	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+		echo Enabling Vsync...
+		sed -i.bak 's/vsync true/vsync valse/g' "$SAVEDIR"/sm64config.txt
+	fi
+fi
+}
 
 dosgi(){
 if  [ "$TARGET_WEB" = 1 ] || [ "$EXTERNAL_DATA" = 0 ]; then
@@ -1662,8 +1669,8 @@ elif [ "$COMMAND" = "update" ]; then
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
-	if [ "$60FPS" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-		do60fps
+	if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
+		dofps
 	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -1675,11 +1682,6 @@ elif [ "$COMMAND" = "update" ]; then
 		domymenu
 	elif [ "$PRESET" = "sm64ex-coop " ]; then
 		domymenu
-	fi
-	if [ "$TARGET_WEB" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-		echo Removing 60fps for web target...
-		git apply -R enhancements/60fps*.patch
-		rm enhanements/60fps			
 	fi
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
@@ -1813,8 +1815,8 @@ elif [ "$InstallR96" = 1 ]; then
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
 fi
-if [ "$60FPS" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-	do60fps
+if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
+	dofps
 fi
 if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "PRESET" = "sm64exweb" ]; then 
 	docheats
