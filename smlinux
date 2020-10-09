@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1009-1058
+TIMESTAMP=2020-1009-1113
 
 domake(){
 #Here We go & music to build to
@@ -352,7 +352,7 @@ InstallR96=0
 60FPS=0
 # VERSION supports us jp eu (must correspond to rom version)
 VERSION=us
-# set MAXJOBS=n to limit cpu threads used, i.e. MAXJOBS=1 or MAXJOBS=7
+# Set MAXJOBS=n to limit cpu threads used during compile, i.e. MAXJOBS=1
 MAXJOBS=
 # [ options for sm64ex and its forks ] 
 BETTERCAMERA=1
