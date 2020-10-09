@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1009-1547
+TIMESTAMP=2020-1009-1553
 
 domake(){
 #Here We go & music to build to
@@ -1506,7 +1506,7 @@ if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 fi
 if [ -f "$SAVEDIR"/sm64config.txt ] || [ -f "$SAVEDIR"/CHEATERex_config.txt ]; then
 	echo SM64 configuration file found.
-elif [ "$OSX_BUILD" = 1 ] && [ "$PRESET" = "cheaterex"] && [ -f "$HOME"/Library/"Application Support"/sm64ex/CHEATERex_config.txt ]; then
+elif [ "$OSX_BUILD" = 1 ] && [ "$PRESET" = "cheaterex" ] && [ -f "$HOME"/Library/"Application Support"/sm64ex/CHEATERex_config.txt ]; then
 	echo SM64 configuration file found.
 elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
 	echo No compatible sm64 configuration files for this version, game will create one.
