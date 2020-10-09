@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1008-1831
+TIMESTAMP=2020-1009-1034
 
 domake(){
 #Here We go & music to build to
@@ -349,6 +349,7 @@ echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex
 PRESET=sm64ex
 InstallHD=1
 InstallR96=0
+60FPS=0
 # VERSION supports us jp eu (must correspond to rom version)
 VERSION=us
 # set MAXJOBS=n to limit cpu threads used, i.e. MAXJOBS=1 or MAXJOBS=7
@@ -412,6 +413,7 @@ ENABLE_OPENGL_LEGACY=1
 ANDROID=0
 InstallR96=0
 DISCORD_SDK=1
+60FPS=0
 source "$SMLINUX"/smlinuxcfg.txt
 if [ -z $PRESET ] && [ ! -z $REPO ]; then
 	PRESET="$REPO"
@@ -435,6 +437,7 @@ elif [ "$PRESET" = "sm64exweb" ]; then
 	TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
+	60FPS=0
 elif [ "$PRESET" = "sm64-portweb" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
@@ -442,10 +445,12 @@ elif [ "$PRESET" = "sm64-portweb" ]; then
 	TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
+	60FPS=0
 elif [ "$PRESET" = "sm64nx" ]; then
 	GIT=teamsalta/sm64nx
 	BRANCH=master
 	EXTERNAL_DATA=0
+	60FPS=0
 elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET" = "render96" ] || [ "$PRESET" = "Render96" ]; then
 	PRESET=render96ex
 	GIT=render96/render96ex
@@ -465,11 +470,13 @@ elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" =
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
+	60FPS=0
 elif  [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "coop" ]; then
 	PRESET=sm64ex-coop
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=coop
 	NODRAWINGDISTANCE=1
+	60FPS=0
 elif [ "$PRESET" = "androidex" ] ; then
 	ANDROID="$PRESET"
 	PRESET="androidex/app/jni/src"
@@ -797,21 +804,23 @@ else
 				git apply enhancements/3d_coin_v2*.patch
 			fi
 		fi
-		if [ `uname -m` = "x86_64" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ "$TARGET_WEB" = 0 ] && [ ! "$PRESET" = "sm64ex-coop" ] && [ ! "$PRESET" = "cheaterex" ]; then
-			cd "$BASEPATH"/"$PRESET"
-			if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-				echo Applying 60fps patch...
-				git apply enhancements/60fps*.patch
-				touch enhancements/60fps
-				if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-					echo Enabling Vsync...
-					sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
-				fi
-			fi
-		fi
 	fi
 fi
 }
+
+do60fps(){
+if [ "$60FPS" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+			echo Applying 60fps patch...
+			cd "$BASEPATH"/"$PRESET"
+			git apply enhancements/60fps*.patch
+			touch enhancements/60fps
+			if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+				echo Enabling Vsync...
+				sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
+			fi
+		fi
+	}
+
 
 dosgi(){
 if  [ "$TARGET_WEB" = 1 ] || [ "$EXTERNAL_DATA" = 0 ]; then
@@ -832,24 +841,14 @@ if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 	git apply -R enhancements/3d_coin*.patch
 	rm enhancements/3d_coin*.patch
 fi
-if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-	cd "$BASEPATH"/"$PRESET"
-	git apply -R enhancements/60fps*.patch
-	rm enhancements/60fps
-	if [ -f "$SAVEDIR"/sm64config.txt ]; then
-		sed -i.bak 's/vsync true/vsync false/g' "$SAVEDIR"/sm64config.txt
-	fi
-fi
+cd "$BASEPATH"/"$PRESET"/enhancements
 if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
-	cd "$BASEPATH"/"$PRESET"/enhancements 
 	wget -q https://cdn.discordapp.com/attachments/730551213376143431/745382037560492132/RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
 	SGIFILE=RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
 elif [ "$PRESET" = "sm64ex-coop" ]; then
-	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://sm64pc.info/downloads/model_pack/render96_coop.zip
 	SGIFILE=render96_coop.zip
 else
-	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
 	mv RENDER96_V1.3.7z RENDER96_V1.3.zip
 	SGIFILE=RENDER96_V1.3.zip
@@ -1092,6 +1091,9 @@ elif [ "$OSX_BUILD" = 1 ]; then
 	GITVER=`git rev-parse --short HEAD`
 	cd /Applications
 	~/go/bin/appify -name 'Super Mario 64 ('"$PRESET"')' -icon "$SHARE"/icons/"$PRESET".png -author smlinux --version "$GITVER" --id "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e
+	if [ ! -f /usr/local/lib/discord_game_sdk.dylib ]; then
+		ln -s "$BASEPATH"/"$PRESET"/lib/discordsdk/discord_game_sdk.dylib /usr/local/lib
+	fi
 	if [ "$EXTERNAL_DATA" = 1 ] && [ ! -d "/Users/$USER/Library/Application Support"/"$PRESET"/res ]; then 
 		ln -s "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "/Users/$USER/Library/Application Support"/"$PRESET"
 	fi
@@ -1099,7 +1101,6 @@ elif [ "$OSX_BUILD" = 1 ]; then
 		cd $HOME/Desktop
 		ln -s /Applications/'Super Mario 64 ('"$PRESET"')'.app
 	fi
-
 else
 	echo Menu entry desktop file already exists.
 fi
@@ -1661,6 +1662,9 @@ elif [ "$COMMAND" = "update" ]; then
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
+	if [ "$60FPS" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+		do60fps
+	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		zip -r -0 -u hdbase gfx
@@ -1808,6 +1812,9 @@ elif [ "$InstallR96" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
 	echo "WARNING: InstallHD Disabled in Config File."
+fi
+if [ "$60FPS" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+	do60fps
 fi
 if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "PRESET" = "sm64exweb" ]; then 
 	docheats
