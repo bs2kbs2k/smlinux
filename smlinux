@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1010-1417
+TIMESTAMP=2020-1010-1436
 
 domake(){
 #Here We go & music to build to
@@ -1493,7 +1493,7 @@ if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 	echo Creating "$SAVEDIR" for save files.
 	mkdir "$SAVEDIR"
 fi
-if [ -f "$SAVEDIR"/sm64config.txt ] || [ -f "$SAVEDIR"/CHEATERex_config.txt ]; then
+if [ -f "$SAVEDIR"/sm64config.txt ] || [ -f "$SAVEDIR"/CHEATER64config.txt ]; then
 	echo SM64 configuration file found.
 elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
 	echo No compatible sm64 configuration files for this version, game will create one.
@@ -1510,17 +1510,14 @@ elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
 	elif [ -f "$SHARE"/sm64ex-coop/sm64config.txt ]; then
 		cp "$SHARE"/sm64ex-coop/sm64config.txt "$SAVEDIR"
 		echo Copied configuration from sm64ex-coop
-	elif [ -f "$SHARE"/cheaterex/CHEATERex_config.txt ]; then
-		cp "$SHARE"/cheaterex/CHEATERex_config.txt "$SAVEDIR"/sm64config.txt
-		echo Copied configuration from CHEATERex
 	else 
 		echo No compatible sm64 configuration file found, game will create one.
 	fi
 	if [ "$PRESET" = "cheaterex" ] && [ -f "$SAVEDIR"/sm64config.txt ]; then
-		mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"/CHEATERex_config.txt
+		mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"/CHEATER64config.txt
 	fi
 fi
-if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATERex_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
+if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATER64_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
 	echo SM64 save file found.
 elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
 	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
@@ -1547,7 +1544,7 @@ elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 		cp "$SMLINUX"/sm64_save_file.bin "$SAVEDIR"
 		echo Copied save file from sm64pc.
 	elif [ -f "$SHARE"/cheaterex/CHEATERex_save_file.bin ]; then
-		cp "$SHARE"/cheaterex/CHEATERex_save_file.bin "$SAVEDIR"/sm64_save_file.bin
+		cp "$SHARE"/cheaterex/CHEATER64_save_file.bin "$SAVEDIR"/sm64_save_file.bin
 		echo Copied save file from cheaterex
 	elif [ -f "$SHARE"/sm64nx/sm64.sav ]; then
 		cp "$SHARE"/sm64nx/sm64.sav "$SAVEDIR"/sm64_save_file.bin
@@ -1556,7 +1553,7 @@ elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 		echo No compatible save file found.
 	fi
 	if [ "$PRESET" = "cheaterex" ] && [ -f "$SAVEDIR"/sm64_save_file.bin ]; then
-		mv "$SAVEDIR"/sm64_save_file.bin "$SAVEDIR"/CHEATERex_save_file.bin
+		mv "$SAVEDIR"/sm64_save_file.bin "$SAVEDIR"/CHEATER64_save_file.bin
 	fi
 fi
 if [ "$COMMAND" = "rebuild" ]; then
