@@ -209,7 +209,7 @@ Alpine:
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 	
-MacOS:
+macOS:
 
 	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
 
