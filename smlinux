@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1009-1553
+TIMESTAMP=2020-1010-1308
 
 domake(){
 #Here We go & music to build to
@@ -1099,14 +1099,12 @@ elif [ "$OSX_BUILD" = 1 ]; then
 	fi
 	cd "$BASEPATH"/"$PRESET"
 	GITVER=`git rev-parse --short HEAD`
+	echo '#/bin/bash
+	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".sh
+	"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SAVEDIR" '>"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	chmod +x "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	cd /Applications
-	~/go/bin/appify -name 'Super Mario 64 ('"$PRESET"')' -icon "$SHARE"/icons/"$PRESET".png -author smlinux --version "$GITVER" --id "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e
-	if [ ! -f /usr/local/lib/discord_game_sdk.dylib ]; then
-		ln -s "$BASEPATH"/"$PRESET"/lib/discordsdk/discord_game_sdk.dylib /usr/local/lib
-	fi
-	if [ "$EXTERNAL_DATA" = 1 ] && [ ! -d "/Users/$USER/Library/Application Support"/"$PRESET"/res ]; then 
-		ln -s "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "/Users/$USER/Library/Application Support"/"$PRESET"
-	fi
+	~/go/bin/appify -name 'Super Mario 64 ('"$PRESET"')' -icon "$SHARE"/icons/"$PRESET".png -author smlinux --version "$GITVER" --id "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	if [ ! -d $HOME/Desktop/'Super Mario 64 ('"$PRESET"')'.app ]; then
 		cd $HOME/Desktop
 		ln -s /Applications/'Super Mario 64 ('"$PRESET"')'.app
@@ -1374,12 +1372,8 @@ else	     # The real start, the rest was script preperation and setup.
 				echo FATAL ERROR Could not install homebrew, thus cannot install other stuff.  
 				endnow
 			fi
-			brew install libxdg-basedir coreutils go wget newt nano unzip unrar python3 
+			brew install libxdg-basedir coreutils wget newt nano go unzip unrar python3 
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
-			alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'
-			if [ ! -f ~/.bashrc ]; then
-				echo "alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9'" > ~/.bashrc
-			fi
 			go get github.com/machinebox/appify
 		elif [ -f /usr/bin/apt ]; then
 			echo "Updating Package list and Installing dependencies..."
@@ -1494,19 +1488,12 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 	fi
 fi
-if [ "$OSX_BUILD" = 1 ]; then
-	SAVEDIR="$HOME"/Library/"Application Support"/"$PRESET"
-else
-	SAVEDIR="$SHARE"/"$PRESET"
-fi
-
+SAVEDIR="$SHARE"/"$PRESET"
 if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 	echo Creating "$SAVEDIR" for save files.
 	mkdir "$SAVEDIR"
 fi
 if [ -f "$SAVEDIR"/sm64config.txt ] || [ -f "$SAVEDIR"/CHEATERex_config.txt ]; then
-	echo SM64 configuration file found.
-elif [ "$OSX_BUILD" = 1 ] && [ "$PRESET" = "cheaterex" ] && [ -f "$HOME"/Library/"Application Support"/sm64ex/CHEATERex_config.txt ]; then
 	echo SM64 configuration file found.
 elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
 	echo No compatible sm64 configuration files for this version, game will create one.
@@ -1530,12 +1517,7 @@ elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
 		echo No compatible sm64 configuration file found, game will create one.
 	fi
 	if [ "$PRESET" = "cheaterex" ] && [ -f "$SAVEDIR"/sm64config.txt ]; then
-		if [ "$OSX_BUILD" = 1 ]; then
-			mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"../sm64ex/CHEATERex_config.txt
-			rm -rf "$SHARE"/"$PRESET"
-		else
-			mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"/CHEATERex_config.txt
-		fi
+		mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"/CHEATERex_config.txt
 	fi
 fi
 if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATERex_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
