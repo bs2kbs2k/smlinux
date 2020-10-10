@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1010-1515
+TIMESTAMP=2020-1010-1554
 
 domake(){
 #Here We go & music to build to
@@ -347,7 +347,7 @@ if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
 echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex
-# AND: sm64-port sm64nx sm64ex-coop
+# AND: sm64-port sm64nx sm64ex-coop emm-ody
 # AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
 PRESET=sm64ex
 InstallHD=1
@@ -473,6 +473,11 @@ elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" =
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
+	FPS60=0
+elif [ "$PRESET" = "emm-ody" ]; then
+	PRESET=cheaterex
+	GIT=s4Ys369/cheaterex
+	BRANCH=emm-ody
 	FPS60=0
 elif  [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "coop" ]; then
 	PRESET=sm64ex-coop
@@ -768,7 +773,7 @@ else
 			echo Getting High Quality Sounds...
 			wget https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
 		fi
-	elif [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$PRESET" = "cheaterex" ] ||[ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
+	elif [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
 		echo WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
 	elif [ "$PRESET" = "sm64-port" ]; then
 		echo External Data not supported for sm64-port repository, skipping...
@@ -1039,7 +1044,7 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 		mv "$SMLINUX"/r96-icon.png "$SHARE"/icons/"$PRESET".png
 	elif [ "$PRESET" = "r96proto" ]; then
 		mv "$SMLINUX"/r96proto-icon.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "cheaterex" ]; then 
+	elif [ "$GIT" = "s4Ys369/cheaterex" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745150550382870548/bowser.png
 		mv bowser.png "$SHARE"/icons/"$PRESET".png
 	elif [ "$PRESET" = "sm64-port" ]; then 
@@ -1151,7 +1156,7 @@ elif [ "$TARGET" = "dos" ]; then
 	echo Cannot testDOS Version from Linux!  I reccomend FreeDOS in VirtualBox.
 	xdg-open "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 elif [ "$OSX_BUILD" = 1 ]; then
-	/Applications/'Super Mario 64 ('"$PRESET"')'.app/Content/MacOS/'Super Mario 64 ('"$PRESET"')'.app &
+	/Applications/'Super Mario 64 ('"$PRESET"')'.app/Contents/MacOS/'Super Mario 64 ('"$PRESET"')'.app &
 else 
 	gtk-launch "$PRESET" &disown
 fi
@@ -1512,7 +1517,7 @@ elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
 	else 
 		echo No compatible sm64 configuration file found, game will create one.
 	fi
-	if [ "$PRESET" = "cheaterex" ] && [ -f "$SAVEDIR"/sm64config.txt ]; then
+	if [ "$GIT" = "s4Ys369/cheaterex" ] && [ -f "$SAVEDIR"/sm64config.txt ]; then
 		mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"/CHEATER64config.txt
 	fi
 fi
@@ -1551,7 +1556,7 @@ elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 	else 
 		echo No compatible save file found.
 	fi
-	if [ "$PRESET" = "cheaterex" ] && [ -f "$SAVEDIR"/sm64_save_file.bin ]; then
+	if [ "$GIT" = "s4Ys369/cheaterex" ] && [ -f "$SAVEDIR"/sm64_save_file.bin ]; then
 		mv "$SAVEDIR"/sm64_save_file.bin "$SAVEDIR"/CHEATER64_save_file.bin
 	fi
 fi
@@ -1665,7 +1670,7 @@ elif [ "$COMMAND" = "update" ]; then
 		zip -r -0 -u hdbase gfx
 		rm -rf gfx
 	fi
-	if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "PRESET" = "sm64exweb" ]; then 
+	if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "sm64exweb" ]; then 
 		docheats
 		domymenu
 	elif [ "$PRESET" = "sm64ex-coop " ]; then
@@ -1806,7 +1811,7 @@ fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60*.patch ]; then
 	dofps
 fi
-if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "PRESET" = "sm64exweb" ]; then 
+if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "sm64exweb" ]; then 
 	docheats
 	domymenu
 elif [ "$PRESET" = "sm64ex-coop" ]; then
