@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1010-1854
+TIMESTAMP=2020-1010-2000
 
 domake(){
 #Here We go & music to build to
@@ -66,7 +66,7 @@ if [ "$OSX_BUILD" = 1 ]; then
 		gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	fi
 	if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
-		ln -s /usr/local/opt/sdl2/include/SDL2 "$SDL2PATH" "$BASEPATH"/"$PRESET"/include
+		ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 	fi
 	cd "$BASEPATH"/"$PRESET"
 	time gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK> "$SMLINUX"/buildlog.txt
@@ -346,8 +346,8 @@ makeconfig(){
 if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
-echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex
-# AND: sm64-port sm64nx sm64ex-coop emm-ody
+echo '# PRESET supports: sm64pc sm64ex render96ex cheaterex 
+# AND: sm64-port sm64nx sm64ex-coop 
 # AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
 PRESET=sm64ex
 InstallHD=1
@@ -988,10 +988,10 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				exec ~/.smlinuxUpdate "$COMMAND" "$OP1" "$OP2" "$OP3" "$OP4"
 			fi
 		elif [ "$COMMAND" = "upgrade" ]; then    
-			echo smlinux is already up to date.
+			echo smlinux is up to date.
 			exit
 		else    
-			echo smlinux is already up to date.
+			echo smlinux is up to date.
 		fi
 	fi
 fi
