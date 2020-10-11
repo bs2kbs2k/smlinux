@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1010-1554
+TIMESTAMP=2020-1010-1706
 
 domake(){
 #Here We go & music to build to
@@ -475,7 +475,6 @@ elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" =
 	BRANCH=nightly
 	FPS60=0
 elif [ "$PRESET" = "emm-ody" ]; then
-	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=emm-ody
 	FPS60=0
@@ -1044,9 +1043,11 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 		mv "$SMLINUX"/r96-icon.png "$SHARE"/icons/"$PRESET".png
 	elif [ "$PRESET" = "r96proto" ]; then
 		mv "$SMLINUX"/r96proto-icon.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$GIT" = "s4Ys369/cheaterex" ]; then 
+	elif [ "$PRESET" = "cheaterex" ]; then
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745150550382870548/bowser.png
 		mv bowser.png "$SHARE"/icons/"$PRESET".png
+	elif [ "$PRESET" = "emm-ody" ]; then
+		mv "$SMLINUX"/sm64hat-icon.png "$SHARE"/icons/"$PRESET".png
 	elif [ "$PRESET" = "sm64-port" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745156574334550096/staricon.png
 		mv staricon.png "$SHARE"/icons/"$PRESET".png
@@ -1170,6 +1171,7 @@ LAUNCH_DIR=$(pwd)
 
 if [ `uname` = "Darwin" ]; then
 	PATHDIR=/usr/local/bin
+	alias xdg-open=open
 else
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
@@ -1403,9 +1405,6 @@ else	     # The real start, the rest was script preperation and setup.
 		dodos
 	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "This is not first build, skipping dependencies."
-	fi
-	if [ "$OSX_BUILD" = 1 ]; then
-		alias gcc='gcc-9';alias cc='gcc-9';alias g++='g++-9';alias c++='c++-9';alias xdg-open=open
 	fi
 	if [ "$COMMAND" = "depends" ]; then
 		theend
