@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1010-1706
+TIMESTAMP=2020-1010-1854
 
 domake(){
 #Here We go & music to build to
@@ -454,7 +454,7 @@ elif [ "$PRESET" = "sm64nx" ]; then
 	BRANCH=master
 	EXTERNAL_DATA=0
 	FPS60=0
-elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "Render96ex" ] || [ "$PRESET" = "render96" ] || [ "$PRESET" = "Render96" ]; then
+elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96" ] || [ "$PRESET" = "r96ex" ]; then
 	PRESET=render96ex
 	GIT=render96/render96ex
 	BRANCH=master
@@ -469,7 +469,7 @@ elif [ "$PRESET" = "r96proto" ]; then
 	InstallR96=1
 	DISCORDRPC=0
 	LEGACY_RES=0
-elif [ "$PRESET" = "cheaterex" ] || [ "$PRESET" = "CHEATERex" ] || [ "$PRESET" = "CHEATEREX" ]; then
+elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ] || [ "$PRESET" = "cheater64" ] || [ "$PRESET" = "c64ex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
@@ -1815,11 +1815,16 @@ if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "
 	domymenu
 elif [ "$PRESET" = "sm64ex-coop" ]; then
 	domymenu
+elif [ "$PRESET" = "emm-ody" ] && [ ! -f "$BASEPATH"/"$PRESET"smo.cappy_assets.zip ]; then
+    echo Getting smo cappy assets...
+    cd "$BASEPATH"/"$PRESET" 
+    wget -q https://cdn.discordapp.com/attachments/723992726319792140/754402820588961882/smo.cappy_assets.zip
+    unzip -q -o smo.cappy_assets
 fi
 if [ "$BRANCH" = "sm64ex_nightly" ] && [ ! "$TOUCH_CONTROLS" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"
 	cp "$SMLINUX"/pro1.patch enhancements
-	echo "Applying Pro¹ Configuration File..."
+	echo "Applying Pro¹ Customizations..."
 	git apply enhancements/pro1.patch
 fi
 echo
