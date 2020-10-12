@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1011-1637
+TIMESTAMP=2020-1012-1533
 
 domake(){
 #Here We go & music to build to
@@ -346,7 +346,7 @@ makeconfig(){
 if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
-echo '# PRESET supports: sm64pc sm64ex render96ex cheaterex 
+echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex 
 # AND: sm64-port sm64nx sm64ex-coop 
 # AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
 PRESET=sm64ex
@@ -857,6 +857,7 @@ if [ "$PRESET" = "sm64nx" ]; then
 	mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures"
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures"
 	wget https://sm64pc.info/downloads/texture_pack/render96_hd.pak
+	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/
 	if [ -d "Cleaner Aesthetics" ]; then
 		mv "Cleaner Aesthetics" "~Cleaner Aesthetics"
 	fi
@@ -866,10 +867,10 @@ if [ "$PRESET" = "sm64nx" ]; then
 	if [ -d "~SGI Models" ]; then
 		mv "~SGI Models" "SGI Models"
 	fi
-	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"SGI Models" ]; then
+	if [ ! -d "SGI Models" ]; then
 		echo Getting Render96 SGI Models...
-		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"SGI Models"
-		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"SGI Models"
+		mkdir "SGI Models"
+		cd "SGI Models"
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak
 	fi
 elif [ "$GIT" = "render96/render96ex" ]; then
