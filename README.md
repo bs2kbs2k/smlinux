@@ -48,7 +48,9 @@ sm64nx not working, web could likely be fixed upon request if not working alread
 # Frequently Asked Questions
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
 * [<strong>What preset/repo/branch should I use?</strong>](#what-presetrepobranch-should-i-use)
-* [<strong>What does the InstallHD=1 option do?</strong>](#what-does-the-installhd1-option-do)
+* [<strong>What does the InstallHD option do?</strong>](#what-does-the-install-option-do)
+* [<strong>What does the InstallR96 option do?</strong>](#what-does-the-installr96-option-do)
+* [<strong>What does the FPS60 option do?</strong>](#what-does-the-fps60-option-do)
 * [<strong>What about other branches?</strong>](#what-about-other-branches)
 * [<strong>When to use RENDER_API=GL_LEGACY?</strong>](#when-to-use-render_apigl_legacy)
 * [<strong>How to update, rebuild, or change build options later?</strong>](#how-to-update-rebuild-or-change-build-options-later)
@@ -82,10 +84,13 @@ Some of these addons require files remaining available in discord or github, so 
 
 ## **What does the InstallR96 option do?**
 
-On render96ex, this will apply Render 96's latest SGI model pack, currently version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, otherwise version 1.3 is used.  
+On render96ex, this will apply Render 96's latest SGI model pack, currently version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, otherwise version 1.3 is used.   
 
 For sm64nx, this will add paks for both SGI Models (version 1.3) and Render 96's HD Texture pak.
 
+## **What does the FPS60 option do?**
+
+On repositories that provide a 60fps patch (currently sm64-port and sm64ex-nightly) it will be applied when this option set to 1, and reverse applied when set to 0.  Note that some forks (such as sm64ex-coop, cheaterex, and sm64nx) are already 60fps without a patch.  The currently available patch for sm64ex uses interpolation and may require adjustments to in-game vsync setting for smooth performance, and may not work correctly on displays that aren't 60Hz and may not perform well on older computers.
 
 ## **What about other branches?**
 
