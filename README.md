@@ -68,15 +68,24 @@ sm64nx not working, web could likely be fixed upon request if not working alread
 ## **What preset/repository/branch should I use?**
 If you want to build for PC, the source repository from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks of sm64ex offer additional enhancements, such as render96ex with added Luigi Keys, sm64ex-coop for a 2 player network mode, or cheaterex for all the latest experimental add-ons. For android or web, presets are available based on sm64-port or sm64ex, while for for dos sm64-port based forks are used. 
 
-## **What does the InstallHD=1 option do?**
+## **What does the InstallHD option do?**
 
-See the presets table above the FAQ for details.  This will usually modify your source with the repo-provided 60fps patch, HD Mario (Old School V2) and HD Bowser character models from #modding-releases , and apply the 3D Coin Patch (V2).  Additionally, on the sm64pc/sm64ex based forks upscaled textures will be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.
-On the render96ex fork, the latest Render 96 Model Pack and Render 96 Texture Pack will be applied.  Note these are large so require more download time, game load time, and better comupter to perform well.
-*Note that precaching these textures will make the game use more memory and increase initial startup time, but may be necessary for some computers.*
+This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch. 
 
-On the sm64nx fork only, 60fps is already default, and with InstallHD in addition to the models and textures mentioned above, a few other add-ons are obtained which can be enabled from the in-game menu if you prefer, including SGI models and HD Luigi.
+On sm64pc/sm64ex based forks upscaled textures will be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.
+
+On the render96ex fork, Render 96 Texture Pack will be used instead.  Note this is large so requires more download time, game load time, and better comupter to perform well.
+
+On the sm64nx fork, in addition to the models and textures mentioned above, a few other add-on paks are obtained which can be enabled from the in-game menu including HD Luigi, however no 3d coins are available.
 
 Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released. See presets table for more details.
+
+## **What does the InstallR96 option do?**
+
+On render96ex, this will apply Render 96's latest SGI model pack, currently version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, otherwise version 1.3 is used.  
+
+For sm64nx, this will add paks for both SGI Models (version 1.3) and Render 96's HD Texture pak.
+
 
 ## **What about other branches?**
 
