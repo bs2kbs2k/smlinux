@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1012-1533
+TIMESTAMP=2020-1012-1648
 
 domake(){
 #Here We go & music to build to
@@ -150,7 +150,7 @@ elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]
 	cd "$BASEPATH"/"$PRESET"
 	rm Makefile
 	git checkout Makefile
-elif [ "$LEGACY_RES" = 0 ]; then
+elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	echo Creating Basepack...
 	zip -q -r -0 base gfx sound
@@ -466,7 +466,6 @@ elif [ "$PRESET" = "r96proto" ]; then
 	BRANCH=fastbuild_prototype
 	EXTERNAL_DATA=1
 	TEXTSAVES=1
-	InstallR96=1
 	DISCORDRPC=0
 	LEGACY_RES=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ] || [ "$PRESET" = "cheater64" ] || [ "$PRESET" = "c64ex" ]; then
@@ -769,32 +768,36 @@ else
 			echo Getting High Quality Sounds...
 			wget https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
 		fi
-	elif [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
+	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
 		echo WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
-	elif [ "$PRESET" = "sm64-port" ]; then
-		echo External Data not supported for sm64-port repository, skipping...
+	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
+		echo External Data not supported for sm64-port repository, skipping.
 	fi
-	if [ "$PRESET" = "r96proto" ]; then 		
-		echo WARNING: Skipping Models for r96 proto
-	elif  [ "$InstallR96" = 1 ]; then
+	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
+		echo "Render96 model pack found, skipping model application."
+	elif  [ "$InstallR96" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
 		dosgi
-	elif  [ ! "$InstallR96" = 1 ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] && [ ! -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ] && [ ! "$TARGET" = "dos" ]; then
-			cd "$BASEPATH"/"$PRESET"
-			if [ ! "$PRESET" = "sm64ex-coop" ] || [[ ! $(git diff actors) ]];  then
-				wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip -P enhancements
-			fi
+	elif [ ! "$TARGET" = "dos" ] &&  [ ! "$GIT" = "render96/render96ex" ] ; then
+		cd "$BASEPATH"/"$PRESET" 
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_Mario_Model.zip ] && [ ! "$PRESET" = "sm64ex-coop" ];  then
+			wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip -P enhancements
+		fi
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ];  then
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar -P enhancements
+		fi
+		if [ ! -d actors.bak ] && ([ -f enhacements/hd_bowser.rar ] || [ -f enhanements/Old_School_HD_Mario_Model.zip ]); then
 			echo Saving original actors folder as actors.bak 	
 			cp -Rn actors actors.bak
-			if [ ! "$PRESET" = "sm64ex-coop" ]; then
-				echo Extracting HD Mario...
-				unzip -o enhancements/Old_School_HD_Mario_Model 
-			fi
-			echo Extracing HD Bowser...
+		fi
+		if [ -f enhancements/Old_School_HD_Mario_Model.zip ]; then
+			echo Applying HD Mario...
+			unzip -o -q enhancements/Old_School_HD_Mario_Model 
+		fi
+		if [ -f enhancements/hd_bowser.rar ]; then
+			echo Applying HD Bowser...
 			unrar x -o+ enhancements/hd_bowser
 		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ ! "$TARGET" = "dos" ] && [ "$ANDROID" = 0 ] && [ ! "$PRESET" = "sm64ex-coop" ]; then
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ "$ANDROID" = 0 ] && [ ! "$PRESET" = "sm64ex-coop" ]; then
 			cd "$BASEPATH"/"$PRESET"/enhancements
 			if [ "$PRESET" = "sm64pc" ]; then
 				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch
