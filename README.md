@@ -34,13 +34,13 @@ smlinux will be installed in the first directory in your path, usually ~/bin. Af
 
 If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
+[<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
+
 [<strong>What about Linux distros that are not Ubuntu-based?</strong>](#what-about-distros-other-than-ubuntu)  
 Install dependencies first or add reccommended list to smlinux config file - click for details.
 
 **_macOS notes_**
 sm64nx not working, web could likely be fixed upon request if not working already; and likely android easily ported upon request.  DOS builds wont work. If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the tools, but you may have to enter your password more than once and it can take quite a while.  Feedback appreciated, so far confirmed working with all macOS 10.12 Sierra and newer.
-
-[<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
