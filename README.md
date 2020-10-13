@@ -36,11 +36,11 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 
 [<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
 
-[<strong>What about Linux distros that are not Ubuntu-based?</strong>](#what-about-distros-other-than-ubuntu)  
-Install dependencies first or add reccommended list to smlinux config file - click for details.
+[<strong>Click here for Linux distros that are not Ubuntu-based.</strong>](#what-about-distros-other-than-ubuntu)  
+
 
 **_macOS notes_**
-sm64nx not working, web could likely be fixed upon request if not working already; and likely android easily ported upon request.  DOS builds wont work. If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the tools, but you may have to enter your password more than once and it can take quite a while.  Feedback appreciated, so far confirmed working with all macOS 10.12 Sierra and newer.
+sm64nx not working yet.  DOS builds wont work. If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  Feedback appreciated, so far confirmed working with all macOS 10.12 Sierra and newer.
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
@@ -84,7 +84,7 @@ On the sm64nx fork, Arrendono's HD Mario & Bowser pak and Cleaner Aesthtics Text
 
 For the render96ex fork, this will apply Render96's latest SGI model pack, currently version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, otherwise for sm64ex based versions 1.3 is used.   
 
-For sm64nx, this will add paks for Render96's SGI Models (version 1.3) and HD textures and set them as defaults.
+For sm64nx, this will add paks for Render96's SGI Models (version 1.3) and Render96's HD textures and set them as defaults.
 
 ## **What does the FPS60 option do?**
 
