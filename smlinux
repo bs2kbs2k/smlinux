@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1012-1648
+TIMESTAMP=2020-1012-1853
 
 domake(){
 #Here We go & music to build to
@@ -1375,7 +1375,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "| rebuild: rebuild an existing or previously failed build with no changes      |"
 		echo "|                                                                              |"
 		echo "| Options:   --hd  install HD add-ons (ignore EnableHD=0/UpgradeHD=0)          |"
-		echo "|           --sgi  install Render96 models & textures (ignore InstallR96=0)    |"
+		echo "|           --sgi  install Render96 SGI model pack (ignore InstallR96=0)       |"
 		echo "|        --config  prompt to edit config file before build (ignore CONFIG=0)   |"
 		echo "|       --depends  install dependencies before build                           |"
 		echo "|                                                                              |"
