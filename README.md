@@ -38,7 +38,7 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 Install dependencies first or add reccommended list to smlinux config file - click for details.
 
 **_macOS notes_**
-sm64nx not working, web could likely be fixed upon request if not working already; and likely android easily ported upon request.  DOS builds wont work. If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the tools, but you may have to enter your password more than once and it can take quite a while.  Feedback appreciated, so far confirmed with macOS 10.12/10.13/10.14/11.0
+sm64nx not working, web could likely be fixed upon request if not working already; and likely android easily ported upon request.  DOS builds wont work. If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the tools, but you may have to enter your password more than once and it can take quite a while.  Feedback appreciated, so far confirmed working with all macOS 10.12 Sierra and newer.
 
 [<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
 
