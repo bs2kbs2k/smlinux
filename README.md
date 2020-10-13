@@ -155,9 +155,8 @@ You can also just edit the configuration file with a text editor.
 ~/.local/share/sm64nx sm64nx *smlinux creates links in game dir*  
 
 ## **Are there any cheats?**
-*only applies to sm64pc/sm64ex and sm64nx based builds*
 
-Some cheats are built in and enabled automatically if launched from shortcut and available in options menu.  On compatible sm64ex basd versions additional cheats are applied with $4Y$'s CHEATER patch.
+On all forks besides sm64-port, some cheats are built in and enabled automatically if launched from shortcut and available in options menu.  On compatible sm64ex based forks additional cheats are applied with $4Y$'s CHEATER patch.
 
 ## **How do I apply external data such as textures?**
 
