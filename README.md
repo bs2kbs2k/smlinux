@@ -84,9 +84,9 @@ Some of these addons require files remaining available in discord or github, so 
 
 ## **What does the InstallR96 option do?**
 
-On render96ex, this will apply Render 96's latest SGI model pack, currently version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, otherwise version 1.3 is used.   
+For the render96ex fork, this will apply Render96's latest SGI model pack, currently version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, otherwise for sm64ex based versions 1.3 is used.   
 
-For sm64nx, this will add paks for both SGI Models (version 1.3) and Render 96's HD Texture pak.
+For sm64nx, this will add paks for Render96's SGI Models (version 1.3) and HD textures.
 
 ## **What does the FPS60 option do?**
 
