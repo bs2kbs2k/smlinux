@@ -149,7 +149,7 @@ You can also just edit the configuration file with a text editor.
 ~/.local/share/sm64pc smlinux and sm64pc/ex master  
 ~/.local/share/sm64ex sm64ex nightly  
 ~/.local/share/render96ex render96ex *only if launched with shortcut*  
-~/.local/share/sm64ex-coop sm64ex-coop 
+~/.local/share/sm64ex-coop sm64ex-coop   
 ~/.local/share/cheaterex cheaterex *only if launched with shortcut*    
 ~/.local/share/sm64-port sm64-port *only if launched with shortcut*    
 ~/.local/share/sm64nx sm64nx *smlinux creates links in game dir*  
