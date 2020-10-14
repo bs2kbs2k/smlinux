@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1012-1853
+TIMESTAMP=2020-1013-1809
 
 domake(){
 #Here We go & music to build to
@@ -358,6 +358,7 @@ VERSION=us
 # Set MAXJOBS=n to limit cpu threads used during compile, i.e. MAXJOBS=1
 MAXJOBS=
 # [ options for sm64ex and its forks ] 
+CHEATER=1
 BETTERCAMERA=1
 NODRAWINGDISTANCE=1
 TEXTURE_FIX=1
@@ -417,6 +418,7 @@ ANDROID=0
 InstallR96=0
 DISCORD_SDK=1
 FPS60=0
+CHEATER=1
 source "$SMLINUX"/smlinuxcfg.txt
 if [ -z $PRESET ] && [ ! -z $REPO ]; then
 	PRESET="$REPO"
@@ -426,10 +428,12 @@ fi
 if [ "$PRESET" = "sm64pc" ]; then
 	GIT=sm64ex/sm64pc
 	BRANCH=master
+	CHEATER=0
 elif [ "$PRESET" = "sm64-port" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
 	EXTERNAL_DATA=0
+	CHEATER=0
 elif [ "$PRESET" = "sm64ex" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
@@ -449,11 +453,13 @@ elif [ "$PRESET" = "sm64-portweb" ]; then
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
 	FPS60=0
+	CHEATER=0
 elif [ "$PRESET" = "sm64nx" ]; then
 	GIT=teamsalta/sm64nx
 	BRANCH=master
 	EXTERNAL_DATA=0
 	FPS60=0
+	CHEATER=0
 elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96" ] || [ "$PRESET" = "r96ex" ]; then
 	PRESET=render96ex
 	GIT=render96/render96ex
@@ -468,15 +474,18 @@ elif [ "$PRESET" = "r96proto" ]; then
 	TEXTSAVES=1
 	DISCORDRPC=0
 	LEGACY_RES=0
+	CHEATER=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ] || [ "$PRESET" = "cheater64" ] || [ "$PRESET" = "c64ex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
 	FPS60=0
+	CHEATER=0
 elif [ "$PRESET" = "emm-ody" ]; then
 	GIT=s4Ys369/cheaterex
 	BRANCH=emm-ody
 	FPS60=0
+	CHEATER=0
 elif  [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "coop" ]; then
 	PRESET=sm64ex-coop
 	GIT=djoslin0/sm64ex-coop
@@ -497,7 +506,8 @@ elif  [ "$PRESET" = "sm64-port-android-base" ]; then
 	BRANCH=master
 	EXTERNAL_DATA=0
 	TARGET_WEB=0
-	TARGET_RPI=0	
+	TARGET_RPI=0
+	CHEATER=0	
 elif  [ "$PRESET" = "mkstdos" ]; then
 	GIT=mkst/sm64-port
 	BRANCH=dos
@@ -506,13 +516,15 @@ elif  [ "$PRESET" = "mkstdos" ]; then
 	TARGET_RPI=0
 	TARGET=dos		
 	InstallHD=0
+	CHEATER=0
 elif  [ "$PRESET" = "sm64dos" ]; then
 	GIT=fgsfdsfgs/sm64-port
 	BRANCH=dos
 	EXTERNAL_DATA=0
 	TARGET_WEB=0
 	TARGET_RPI=0
-	TARGET=dos		
+	TARGET=dos	
+	CHEATER=0	
 fi
 if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
@@ -684,13 +696,16 @@ else
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git pull --no-rebase
 		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git ] ; then
-			echo Restoring old texture source...
+			echo Getting texture repository from old build...
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			mv "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git .
-			cp "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip .
+			if [ -f "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
+				echo Copying High Quality Sounds...
+				cp "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip .
+			fi
 			echo Updating textures from github...
 			git checkout gfx
 			git pull --no-rebase
@@ -701,7 +716,10 @@ else
 			fi
 			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
 			cp -r "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			cp -r "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			if [ -f "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
+				echo Copying High Quality Sounds...
+				cp -r "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
@@ -713,7 +731,10 @@ else
 			fi
 			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
 			cp -r "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			cp -r "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			if [ -f "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
+				echo Copying High Quality Sounds...
+				cp -r "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
 			echo Updating render96 textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
@@ -725,7 +746,10 @@ else
 			fi
 			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
 			cp -r "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			cp -r "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			if [ -f "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
+				echo Copying High Quality Sounds...
+				cp -r "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
@@ -737,7 +761,10 @@ else
 			fi
 			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
 			cp -r "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			cp -r "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			if [ -f "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
+				echo Copying High Quality Sounds...
+				cp -r "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
 			echo Updating textures from github...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
@@ -766,7 +793,7 @@ else
 		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res	
 			echo Getting High Quality Sounds...
-			wget https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
+			wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
 		fi
 	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
 		echo WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
@@ -817,19 +844,19 @@ fi
 
 dofps(){
 cd "$BASEPATH"/"$PRESET"
-if [ "$FPS60" = 1 ] && [ ! -f enhancements/FPS60 ]; then
+if [ "$FPS60" = 1 ] && [ ! -f enhancements/60fps ]; then
 	echo Applying FPS60 patch...
-	git apply enhancements/FPS60*.patch
-	touch enhancements/FPS60
-	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60 ]; then
+	git apply enhancements/60fps*.patch
+	touch enhancements/60fps
+	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Enabling Vsync...
 		sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
 	fi
-elif [ "$FPS60" = 0 ] && [ -f enhancements/FPS60 ]; then
+elif [ "$FPS60" = 0 ] && [ -f enhancements/60fps ]; then
 	echo Removing FPS60 patch...
-	git apply -R enhancements/FPS60*.patch
-	rm enhancements/FPS60
-	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60 ]; then
+	git apply -R enhancements/60fps*.patch
+	rm enhancements/60fps
+	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Enabling Vsync...
 		sed -i.bak 's/vsync true/vsync valse/g' "$SAVEDIR"/sm64config.txt
 	fi
@@ -1024,30 +1051,51 @@ fi
 
 docheats(){
 cd "$BASEPATH"/"$PRESET"/enhancements
-if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/CHEATERv9.zip ]; then
-	echo Getting cheats...
-	if [ -f CHEATER*.zip ]; then
-		rm CHEATER*.zip
+if [ "$CHEATER" = 0 ]; then
+	removecheater
+elif ! ([ -f CHEATERv9*.zip ] || [ -f CHEATER.coop.v2*.zip ]); then
+	removecheater
+	echo Getting CHEATER...
+	if [ "$ANDROID" = "androidex" ]; then
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
+		unzip CHEATERv9.zip v9_r96ex.patch
+		CHEATERFILE=v9_r96ex.patch 
+	elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
+		wget -q https://cdn.discordapp.com/attachments/755507981524795623/762583302074794024/CHEATER.coop.v2.patch.zip	
+		unzip CHEATER.coop.v2.patch.zip
+		CHEATERFILE=CHEATER.coop.v2.patch
+	elif [ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]; then
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/764327857823678464/CHEATERv9.5.zip
+		unzip CHEATERv9.5.zip
+		CHEATERFILE=CHEATER.patch
 	fi
-	wget -q https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
-	if [ -f CHEATERv9.zip ] && ([ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ]); then
-		unzip CHEATERv9 v9_r96ex.patch
-	elif [ -f CHEATERv9.zip ]; then
-		unzip CHEATERv9 v9_sm64ex.patch
-	fi
-	if [ -f CHEATERv9.zip ] && [ -f CHEATER.patch ]; then
-		echo Updating cheats...
-		cd "$BASEPATH"/"$PRESET"
-		git apply -R enhancements/CHEATER.patch
-		rm enhancements/CHEATER.patch
-		git apply enhancements/v9_*.patch
-	elif [ -f CHEATERv9.zip ]; then
+	if [ -f "$CHEATERFILE" ]; then
 		echo Applying cheats...
 		cd "$BASEPATH"/"$PRESET"
-		git apply enhancements/v9_*.patch
+		git apply -R enhancements/"$CHEATERFILE" --reject
 	fi
 fi
 }
+
+removecheater(){
+cd "$BASEPATH"/"$PRESET"
+if [ -f enhancements/CHEATER*.patch ]; then
+	echo Removing CHEATER...
+	git apply -R enhancements/CHEATER*.patch
+elif [ -f enhancements/cheater*.patch ]; then
+	echo Removing CHEATER...
+	git apply -R enhancements/cheater*.patch
+	rm enhancements/cheater*.patch
+elif [ -f enhancements/v9_*.patch ]; then
+	echo Removing CHEATER...
+	git apply -R enhancements/v9_*.patch
+	rm enhancements/v9_*.patch
+fi
+if [ -f enhancements/CHEATER* ]; then
+	rm enhancements/CHEATER*
+fi
+}
+
 
 makedesktop(){
 if [ ! -d "$SHARE"/icons ]; then 
@@ -1088,10 +1136,6 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 	fi	
 else
 	echo Icon already exists.
-fi
-if [ "$PRESET" = "sm64ex-coop" ] && [ -f "$SHARE"/applications/"$PRESET".desktop ]; then
-	rm "$SHARE"/applications/"$PRESET".desktop
-	# this is cuz i messed up the old one the first week or so, will take this out later
 fi
 
 if [ ! -f "$SHARE"/applications/"$PRESET".desktop ] && [ "$OSX_BUILD" = 0 ]; then
@@ -1632,8 +1676,8 @@ elif [ "$COMMAND" = "update" ]; then
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 			git apply -R enhancements/3d_coin*.patch
 		fi
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60 ]; then
-			git apply -R enhancements/FPS60*.patch
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
+			git apply -R enhancements/60fps*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
 			git apply -R enhancements/CHEATER.patch
@@ -1649,9 +1693,9 @@ elif [ "$COMMAND" = "update" ]; then
 			echo Update Succesful.
 		fi
 		echo Reapplying previously removed patches...
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60 ]; then
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 			echo FPS60...
-			git apply enhancements/FPS60*.patch
+			git apply enhancements/60fps*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 			echo 3D Coins...
@@ -1686,7 +1730,7 @@ elif [ "$COMMAND" = "update" ]; then
 		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
-	if [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60*.patch ]; then
+	if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
 		dofps
 	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
@@ -1694,12 +1738,8 @@ elif [ "$COMMAND" = "update" ]; then
 		zip -r -0 -u hdbase gfx
 		rm -rf gfx
 	fi
-	if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "sm64exweb" ]; then 
-		docheats
-		domymenu
-	elif [ "$PRESET" = "sm64ex-coop " ]; then
-		domymenu
-	fi
+	docheats
+	domymenu
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
@@ -1830,17 +1870,14 @@ if [ "$InstallHD" = 1 ]; then
 elif [ "$InstallR96" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
-	echo "WARNING: InstallHD Disabled in Config File."
+	echo "WARNING: InstallHD Disabled in Config File so HD addons not being added."
 fi
-if [ -f "$BASEPATH"/"$PRESET"/enhancements/FPS60*.patch ]; then
+if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
 	dofps
 fi
-if  [ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$ANDROID" = "androidex" ] || [ "$PRESET" = "sm64exweb" ]; then 
-	docheats
-	domymenu
-elif [ "$PRESET" = "sm64ex-coop" ]; then
-	domymenu
-elif [ "$PRESET" = "emm-ody" ] && [ ! -f "$BASEPATH"/"$PRESET"smo.cappy_assets.zip ]; then
+docheats
+domymenu
+if [ "$PRESET" = "emm-ody" ] && [ ! -f "$BASEPATH"/"$PRESET"smo.cappy_assets.zip ]; then
     echo Getting smo cappy assets...
     cd "$BASEPATH"/"$PRESET" 
     wget -q https://cdn.discordapp.com/attachments/723992726319792140/754402820588961882/smo.cappy_assets.zip
