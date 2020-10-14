@@ -76,15 +76,15 @@ This will apply HD Mario (Old School V2) and HD Bowser character models and the 
 
 On sm64pc/sm64ex based forks upscaled textures will aslo be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.  On the render96ex fork, Render96's HD rextures will be used instead, which are over 700MB so require additional download time, as well as more than 2GB of free memory and additional time to precache before game launches.  
 
-On the sm64nx fork, Arrendono's HD Mario & Bowser pak and Cleaner Aesthtics Texture are set as defaults, along with a few other add-on paks which can be enabled from the in-game mod selection menu, including an HD Luigi model replacement.
+On the sm64nx fork, Arredondo's HD Mario & Bowser and Cleaner Aesthetics textures are set as defaults, along with a few other small add-on paks which can be enabled from the in-game mod selection menu, including an HD Luigi model replacement.
 
 *Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released.*
 
 ## **What does the InstallR96 option do?**
 
-For the render96ex fork, this will apply Render96's latest SGI model pack, currently version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, otherwise for sm64ex based versions 1.3 is used.   
+For the render96ex fork, this will apply Render96's latest SGI model pack, currently version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, while for sm64ex based forks, version 1.3 is used.   
 
-For sm64nx, this will add paks for Render96's SGI Models (version 1.3) and Render96's HD textures and set them as defaults.
+For sm64nx, this option will add paks for Render96's SGI Models (version 1.3) and Render96's HD textures and set them as defaults.  Be aware this model pak for sm64nx has minor visual problems and is no longer mainained.
 
 ## **What does the FPS60 option do?**
 
