@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1014-0921
+TIMESTAMP=2020-1014-1024
 
 domake(){
 #Here We go & music to build to
@@ -1038,7 +1038,9 @@ fi
 
 docheats(){
 cd "$BASEPATH"/"$PRESET"
-if [ "$CHEATER" = 0 ]; then
+if [ "$GIT" = "s4Ys369/cheaterex" ]; then
+	return
+elif [ "$CHEATER" = 0 ]; then
 	removecheater
 elif ! ([ -f enhancements/CHEATERv9*.zip ] || [ -f enhancements/CHEATER.coop.v2*.zip ]); then
 	removecheater
@@ -1816,6 +1818,14 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			rm -rf "$BASEPATH"/"$PRESET".old
 		fi
 		mv "$BASEPATH"/"$PRESET" "$BASEPATH"/"$PRESET".old
+		if [ -d "$BASEPATH"/"$PRESET".old/.git  ]; then
+			printf "\n[3] Preparing sm64 source from github... \n"
+			mkdir "$BASEPATH"/"$PRESET"
+			cd "$BASEPATH"/"$PRESET"
+			mv "$BASEPATH"/"$PRESET".old/.git .
+			git checkout "$BRANCH" -- .
+			git pull --no-rebase
+		fi
 	fi
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
@@ -1831,9 +1841,6 @@ if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		printf "\n[3] Downloading sm64 source from github... \n"
 		git clone https://github.com/"$GIT" -b "$BRANCH" "$PRESET"
 	fi
-else
-	echo ERROR: Could not rename old folder so cannot clone new one.
-	echo Proceeding with existing source.
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	echo "ERROR: Could not reach github."
