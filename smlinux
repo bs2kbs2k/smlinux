@@ -1072,7 +1072,7 @@ elif ! ([ -f CHEATERv9*.zip ] || [ -f CHEATER.coop.v2*.zip ]); then
 	if [ -f "$CHEATERFILE" ]; then
 		echo Applying cheats...
 		cd "$BASEPATH"/"$PRESET"
-		git apply -R enhancements/"$CHEATERFILE" --reject
+		git apply enhancements/"$CHEATERFILE" --reject
 	fi
 fi
 }
