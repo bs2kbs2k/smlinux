@@ -92,7 +92,7 @@ On repositories that provide a 60fps patch (currently sm64-port, render96ex, and
 
 ## **What about other branches?**
 
-If you chose one of the presets, an appropriate branch is used automatically.  For `PRESET=sm6ex` the nightly branch is used; if you would like the master branch instead use `PRESET=sm64pc`. If sm64ex nightly works for you, I'd reccommend it as it is the most updated, but if a recent change causes build failure or other problems, use the more stable sm64pc master. For advanced users, branches other than those defined by preset can be built by setting `PRESET` to any unknown name, in which case the user specified `GIT` and `BRANCH`settings are used and folder named after user defined `PRESET`.
+If you chose one of the presets from the smlinux preset table above, the appropriate branch is used automatically.  For example with `PRESET=sm6ex` the nightly branch is used; if you would like the master branch instead use `PRESET=sm64pc`. If sm64ex nightly works for you, it is reccommend it as it has the latest features and fixes, but if a recent change causes build failure or other problems, use the more stable sm64pc master. For advanced users, branches other than those defined by preset can be built by setting `PRESET` to any undefined name, in which case smlinux will use the the user specified `GIT` and `BRANCH`settings.
 
 ## **When to use RENDER_API=GL_LEGACY?** 
 *only applies to sm64pc/sm64ex based forks*
