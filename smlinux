@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1015-1943
+TIMESTAMP=2020-1016-1018
 
 domake(){
 #Here We go & music to build to
@@ -28,7 +28,7 @@ if [ "$OSX_BUILD" = 1 ]; then
     if [ "$EXTERNAL_DATA" = 1 ]; then 	
     	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
     fi
-    if [ "$PRESET" = "sm64ex-coop" ]; then
+    if [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 		sed -i.bak 's/sdk\/discord_game_sdk.dylib/sdk\/libdiscord_game_sdk.dylib/g' "$BASEPATH"/"$PRESET"/Makefile
 		cp "$BASEPATH"/"$PRESET"/lib/discordsdk/discord_game_sdk.dylib "$BASEPATH"/"$PRESET"/lib/discordsdk/libdiscord_game_sdk.dylib
 	elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
@@ -57,7 +57,7 @@ fi
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI OSX_BUILD=$OSX_BUILD TEXTSAVES=$TEXTSAVES  -j"$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SDK ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL 
-echo DEBUG=$DEBUG
+echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API
 if [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"/tools
 	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
@@ -70,13 +70,13 @@ if [ "$OSX_BUILD" = 1 ]; then
 		ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 	fi
 	cd "$BASEPATH"/"$PRESET"
-	time gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK> "$SMLINUX"/buildlog.txt
+	time gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API> "$SMLINUX"/buildlog.txt
 	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
 		cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib
 	fi
 else
 	cd "$BASEPATH"/"$PRESET"
-	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK > "$SMLINUX"/buildlog.txt
+	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API > "$SMLINUX"/buildlog.txt
 fi
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
@@ -84,7 +84,7 @@ if [ ! "$ANDROID" = 0 ]; then
 		sed -i.bak "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
 	fi
 	if [ "$BRANCH" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ]; then
-		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG  > "$SMLINUX"/buildlog.txt
+		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG  WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API> "$SMLINUX"/buildlog.txt
 		sed -i.bak '/include $(BUILD_SHARED_LIBRARY)/i TEXTURE_FIX ?= 0\nNODRAWINGDISTANCE ?= 0\nBETTERCAMERA ?= 0\nifeq ($(TEXTURE_FIX),1)\n  LOCAL_CFLAGS += -DTEXTURE_FIX\nendif\nifeq ($(NODRAWINGDISTANCE),1)\n  LOCAL_CFLAGS += -DNODRAWINGDISTANCE\nendif\nifeq ($(BETTERCAMERA),1)\n  LOCAL_CFLAGS += -DBETTERCAMERA\nendif\n' "$BASEPATH"/"$PRESET"/Android.mk
 	fi
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
@@ -347,9 +347,9 @@ makeconfig(){
 if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
-echo '# PRESET supports: sm64pc sm64ex render96ex r96proto cheaterex 
-# AND: sm64-port sm64nx sm64ex-coop 
+echo '# PRESET supports: sm64ex sm64nx sm64ex-coop render96ex cheaterex 
 # AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
+# AND: sm64pc sm64-port r96proto coop-unstable
 PRESET=sm64ex
 InstallHD=1
 InstallR96=0
@@ -367,6 +367,8 @@ EXTERNAL_DATA=1
 DISCORDRPC=1
 # RENDER_API supports GL (2.1+) or GL_LEGACY (1.1+)
 RENDER_API=GL
+# WINDOW_API supports SDL2 or SDL1 (1.2)
+WINDOW_API=SDL2
 TEXTSAVES=0
 # [ options for sm64ex-coop only ]
 DISCORD_SDK=1
@@ -404,6 +406,7 @@ AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
+WINDOW_API=SDL2
 OSX_BUILD=0
 TARGET_RPI=0
 TEXTSAVES=0
@@ -476,7 +479,7 @@ elif [ "$PRESET" = "r96proto" ]; then
 	DISCORDRPC=0
 	LEGACY_RES=0
 	CHEATER=0
-elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ] || [ "$PRESET" = "cheater64" ] || [ "$PRESET" = "c64ex" ]; then
+elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
@@ -487,8 +490,12 @@ elif [ "$PRESET" = "emm-ody" ]; then
 	BRANCH=emm-ody
 	FPS60=0
 	CHEATER=0
-elif  [ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "coop" ]; then
-	PRESET=sm64ex-coop
+elif  [ "$PRESET" = "coop-unstable" ]; then
+	GIT=djoslin0/sm64ex-coop
+	BRANCH=unstable
+	NODRAWINGDISTANCE=1
+	FPS60=0
+elif  [ "$PRESET" = "sm64ex-coop" ]; then
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=coop
 	NODRAWINGDISTANCE=1
@@ -776,7 +783,7 @@ else
 		if [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
 			if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 				echo Downloading Render96 Textures... 
-				git clone --single-branch git clone git://://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+				git clone --single-branch git://://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			else
 				echo Downloading Cleaner Aesthetics Textures...
 				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -796,7 +803,7 @@ else
 			echo Getting High Quality Sounds...
 			wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
 		fi
-	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$PRESET" = "sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
+	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$GIT" = "djoslin0/sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
 		echo WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
 	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
 		echo External Data not supported for sm64-port repository, skipping.
@@ -810,7 +817,7 @@ else
 		if [ ! -d actors.bak ]; then
 			cp -r actors actors.bak
 		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_Mario_Model.zip ] && [ ! "$PRESET" = "sm64ex-coop" ];  then
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_Mario_Model.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ];  then
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip -P enhancements
 			echo Applying HD Mario...
 			unzip -o -q enhancements/Old_School_HD_Mario_Model
@@ -820,7 +827,7 @@ else
 			echo Applying HD Bowser...
 			unrar x -o+ -idq enhancements/hd_bowser
 		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ "$ANDROID" = 0 ] && [ ! "$PRESET" = "sm64ex-coop" ]; then
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ "$ANDROID" = 0 ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ]; then
 			if [ "$PRESET" = "sm64pc" ]; then
 				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch -P enhancements
 			else
@@ -900,7 +907,7 @@ elif [ "$GIT" = "render96/render96ex" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/730551213376143431/745382037560492132/RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
 	SGIFILE=RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
-elif [ "$PRESET" = "sm64ex-coop" ]; then
+elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://sm64pc.info/downloads/model_pack/render96_coop.zip
 	SGIFILE=render96_coop.zip
@@ -1120,6 +1127,9 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 	elif [ "$PRESET" = "sm64ex-coop" ]; then 
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/741732375074963556/luigihudicon.png
 		mv luigihudicon.png "$SHARE"/icons/"$PRESET".png
+	elif [ "$PRESET" = "coop-unstable" ]; then 
+		wget -q https://cdn.discordapp.com/attachments/710334795674288139/741732375074963556/luigihudicon.png
+		mv luigihudicon.png "$SHARE"/icons/"$PRESET".png
 	elif [ -f "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png ]; then
 		cp "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png "$SHARE"/icons/"$PRESET".png
 		echo 16x16 image from ROM used.  Reccommend replacing "$SHARE"/icons/"$PRESET".png
@@ -1140,10 +1150,7 @@ StartupNotify=false
 Categories=Game;'>"$SHARE"/applications/"$PRESET".desktop
 echo Icon="$SHARE"/icons/"$PRESET".png >>"$SHARE"/applications/"$PRESET".desktop
 echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
-	if [ "$PRESET" = "sm64pc" ] || [ "$PRESET" = "sm64ex" ] ; then
-		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
-		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats>>"$SHARE"/applications/"$PRESET".desktop
-	elif [ "$PRESET" = "sm64ex-coop" ]; then
+	if [ "$PRESET" = "sm64ex-coop" ]; then
 		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
 		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --skip-intro >>"$SHARE"/applications/"$PRESET".desktop
 	elif [ "$PRESET" = "sm64-port" ]; then
@@ -1153,7 +1160,7 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 	elif [ "$PRESET" = "sm64nx" ]; then
 		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
 		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e>>"$SHARE"/applications/"$PRESET".desktop
-	else
+	else # assume ex 
 		echo Path="$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".desktop
 		echo Exec=\""$BASEPATH"\"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SAVEDIR" >>"$SHARE"/applications/"$PRESET".desktop
 	fi
@@ -1446,13 +1453,15 @@ else	     # The real start, the rest was script preperation and setup.
 		elif [ -f /usr/bin/apt ]; then
 			echo "Updating Package list and Installing dependencies..."
 			sudo apt update
+			if [ "$WINDOW_API" = "SDL1" ]; then
+				sudo apt install libsdl1.2-dev
+			fi
 			$Linux
 		else
 			echo "Installing Linux dependencies specified in smlinux configuration file..."
 			$Linux
 		fi
 	fi
-	
 	if [ "$COMMAND" = "upgrade" ]; then
 		echo Skipping target check for script upgrade.
 	elif [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
