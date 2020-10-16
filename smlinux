@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1015-1931
+TIMESTAMP=2020-1015-1940
 
 domake(){
 #Here We go & music to build to
@@ -1452,7 +1452,10 @@ else	     # The real start, the rest was script preperation and setup.
 			$Linux
 		fi
 	fi
-	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
+	
+	if [ "$COMMAND" = "upgrade" ]; then
+		echo Skipping target check for script upgrade.
+	elif [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		echo "Installing required build tools for sm64nx..."
 		pip3 install pillow zstandard tqdm xxhash
 		gcccheck
