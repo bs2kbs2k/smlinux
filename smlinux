@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1015-1919
+TIMESTAMP=2020-1015-1931
 
 domake(){
 #Here We go & music to build to
@@ -592,7 +592,7 @@ done
 loademsdk(){
 if [ ! -d "$BASEPATH"/emsdk ]; then
 	cd "$BASEPATH"
-	git clone https://github.com/emscripten-core/emsdk
+	git clone git://github.com/emscripten-core/emsdk
 	cd emsdk
 	./emsdk install 1.39.5
 	./emsdk activate 1.39.5
@@ -1833,14 +1833,14 @@ if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	cd "$BASEPATH"
 	if [ ! "$ANDROID" = 0 ]; then
 		printf "\n[3] Downloading Android source from github... \n"
-		git clone https://github.com/"$GIT" -b "$BRANCH" "$ANDROID"
+		git clone git://github.com/"$GIT" -b "$BRANCH" "$ANDROID"
 		cd "$ANDROID"
 		git submodule init
 		git submodule update
 		./getSDL.sh
 	else
 		printf "\n[3] Downloading sm64 source from github... \n"
-		git clone https://github.com/"$GIT" -b "$BRANCH" "$PRESET"
+		git clone git://github.com/"$GIT" -b "$BRANCH" "$PRESET"
 	fi
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
