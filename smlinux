@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1016-1018
+TIMESTAMP=2020-1016-1115
 
 domake(){
 #Here We go & music to build to
@@ -199,7 +199,7 @@ exit
 endnow(){
 echo "Script Ending Incomplete.  Contact #help-desk for support."
 	if [ "$OSX_BUILD" = 0 ] && [ "$TARGET_RPI" = 0 ]; then
-		xdg-open https://discord.gg/Ub6YHRm &
+		$OPEN https://discord.gg/Ub6YHRm &
 	fi
 echo Your smlinux internal timestamp is "$TIMESTAMP".
 echo If that is not recent, perhaps updates are not working.
@@ -1196,7 +1196,7 @@ if [ "$TARGET_WEB"  = 1 ]; then
 	if [ -f /usr/bin/firefox ]; then
 		firefox --new-window http://localhost:8100&disown
 	else
-		xdg-open http://localhost:8100&disown
+		$OPEN http://localhost:8100&disown
 	fi
 elif [ ! "$ANDROID" = 0 ] ; then
 	if [ "$GOTPHONE" = 1 ]; then
@@ -1214,8 +1214,8 @@ elif [ ! "$ANDROID" = 0 ] ; then
 		echo "Internal Storage/Android/data/com.vdavid003.sm64port/files"
 		echo 
 	fi
-	xdg-open "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
-elif [ "$PRESET"  = "sm64ex-coop" ] ; then
+	$OPEN "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
+elif [ "$GIT"  = "djoslin0/sm64ex-coop" ] ; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --server 27015 --cheats --savepath "$SAVEDIR" --skip-intro &disown
 	sleep 0.3
@@ -1223,8 +1223,8 @@ elif [ "$PRESET"  = "sm64ex-coop" ] ; then
 elif [ "$TARGET" = "dos" ] && [ -f /usr/bin/dosbox ]; then
 	dosbox "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
 elif [ "$TARGET" = "dos" ]; then
-	echo Cannot testDOS Version from Linux!  I reccomend FreeDOS in VirtualBox.
-	xdg-open "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
+	echo Cannot test DOS Version from Linux!  I reccomend FreeDOS in VirtualBox.
+	$OPEN "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 elif [ "$OSX_BUILD" = 1 ]; then
 	/Applications/'Super Mario 64 ('"$PRESET"')'.app/Contents/MacOS/'Super Mario 64 ('"$PRESET"')'.app &
 else 
@@ -1240,10 +1240,11 @@ LAUNCH_DIR=$(pwd)
 
 if [ `uname` = "Darwin" ]; then
 	PATHDIR=/usr/local/bin
-	alias xdg-open=open
+	OPEN=open
 else
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
+	OPEN=xdg-open
 fi
 if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then
 	COMMAND=build
@@ -1429,7 +1430,7 @@ else	     # The real start, the rest was script preperation and setup.
 		else
 			echo "More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions"
 		fi
-		xdg-open https://github.com/enigma9o7/smlinux#frequently-asked-questions 
+		$OPEN https://github.com/enigma9o7/smlinux#frequently-asked-questions 
 		exit
 	else
 		echo "|                                                                              |"
