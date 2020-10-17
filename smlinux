@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1016-1926
+TIMESTAMP=2020-1016-2000
 
 domake(){
 #Here We go & music to build to
@@ -1228,8 +1228,11 @@ elif [ "$TARGET" = "dos" ]; then
 	"$OPEN" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 elif [ "$OSX_BUILD" = 1 ]; then
 	/Applications/'Super Mario 64 ('"$PRESET"')'.app/Contents/MacOS/'Super Mario 64 ('"$PRESET"')'.app &
-else 
+elif command -v gtk-launch &> /dev/null; then
 	gtk-launch "$PRESET" &disown
+else
+	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
+	./sm64.us.f3dex2e --cheats --savepath "$SAVEDIR" --skip-intro &disown
 fi
 }
 
@@ -1462,7 +1465,7 @@ else	     # The real start, the rest was script preperation and setup.
 			go get github.com/machinebox/appify
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 			echo "Updating Package list and Installing dependencies..."
-			# sudo apt update
+			sudo apt update
 			if [ "$WINDOW_API" = "SDL1" ]; then
 				sudo apt install libsdl1.2-dev
 			fi
