@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1016-1800
+TIMESTAMP=2020-1016-1804
 
 domake(){
 #Here We go & music to build to
@@ -1253,7 +1253,7 @@ elif command -v firefox &> /dev/null; then
 else 
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
-	OPEN='printf "\nURL: "'
+	OPEN="echo;echo URL: "
 fi
 if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then
 	COMMAND=build
