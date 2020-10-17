@@ -1462,14 +1462,14 @@ else	     # The real start, the rest was script preperation and setup.
 			go get github.com/machinebox/appify
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 			echo "Updating Package list and Installing dependencies..."
-			sudo apt update
+			# sudo apt update
 			if [ "$WINDOW_API" = "SDL1" ]; then
 				sudo apt install libsdl1.2-dev
 			fi
-			"$Linux"
+			$Linux
 		else
 			echo "Installing Linux dependencies specified in smlinux configuration file..."
-			"$Linux"
+			$Linux
 		fi
 	fi
 	if [ "$COMMAND" = "upgrade" ]; then
