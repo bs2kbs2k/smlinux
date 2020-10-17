@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1016-2011
+TIMESTAMP=2020-1017-0956
 
 domake(){
 #Here We go & music to build to
@@ -540,8 +540,9 @@ fi
 if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
 fi
-if [ ! `uname -m` = "x86_64" ] || [ ! "$VERSION" = "us" ]; then
+if [ ! `uname -m` = "x86_64" ] || [ "$VERSION" = "jp" ]; then
 	DISCORDRPC=0
+	DISCORD_SDK=0
 fi
 if [ "$TARGET_WEB" = 1 ]; then 
 	TARGET=web
@@ -1099,7 +1100,6 @@ if [ -f enhancements/CHEATER* ]; then
 fi
 }
 
-
 makedesktop(){
 if [ ! -d "$SHARE"/icons ]; then 
 	mkdir "$SHARE"/icons
@@ -1169,6 +1169,9 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 	fi
 	if [ -d ${XDG_DESKTOP_DIR:-$HOME/Desktop} ]; then
 		cp "$SHARE"/applications/"$PRESET".desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}
+	fi
+	if [ "$USER" = "root" ] && [ -d /usr/share/applications ]; then
+		mv -f "$SHARE"/applications/"$PRESET".desktop /usr/share/applications
 	fi
 elif [ "$OSX_BUILD" = 1 ]; then
 	echo Creating macOS AppImage and Desktop Shortcut. ..
@@ -1466,10 +1469,18 @@ else	     # The real start, the rest was script preperation and setup.
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
 			go get github.com/machinebox/appify
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
-			echo "Updating Package list and Installing dependencies..."
+			echo "Updating package list and installing dependencies..."
 			sudo apt update
 			if [ "$WINDOW_API" = "SDL1" ]; then
 				sudo apt install libsdl1.2-dev
+			fi
+			$Linux
+		elif ! command -v sudo &> /dev/null && command -v apt &> /dev/null && [ "$USER" = "root" ]; then
+			echo "Updating package list and installing dependencies..."
+			apt update
+			apt install -y sudo
+			if [ "$WINDOW_API" = "SDL1" ]; then
+				apt install libsdl1.2-dev
 			fi
 			$Linux
 		else
@@ -1478,7 +1489,7 @@ else	     # The real start, the rest was script preperation and setup.
 		fi
 	fi
 	if [ "$COMMAND" = "upgrade" ]; then
-		echo Skipping target check for script upgrade.
+		echo Already prepared.
 	elif [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		echo "Installing required build tools for sm64nx..."
 		pip3 install pillow zstandard tqdm xxhash
@@ -1494,6 +1505,8 @@ else	     # The real start, the rest was script preperation and setup.
 		dodos
 	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "This is not first build, skipping dependencies."
+	else
+		echo "Done."
 	fi
 	if [ "$COMMAND" = "depends" ]; then
 		theend
@@ -1951,7 +1964,7 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 	printf 'nReboot or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 4
-elif  ([ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]) && [ "$InstallHD" = 1 ]; then
+elif  [ "$GIT" = "render96/render96ex" ] && [ "$InstallHD" = 1 ]; then
 	sleep 28
 else
 	sleep 8
