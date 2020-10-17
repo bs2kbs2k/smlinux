@@ -220,6 +220,10 @@ Alpine:
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 	
+Slax:
+	apt install sudo 
+	**must be done from command line** then smlinux will be able to install default debian dependencies
+	
 macOS:
 
 	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
