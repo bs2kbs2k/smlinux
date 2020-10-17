@@ -201,7 +201,7 @@ Arch:
 	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity
 Debian / Ubuntu:  
 
-	sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer
+	sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer unzip unrar
 	
 Fedora  / Red Hat:
 
