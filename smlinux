@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1016-2000
+TIMESTAMP=2020-1016-2011
 
 domake(){
 #Here We go & music to build to
@@ -278,10 +278,12 @@ fi
 
 domymenu(){	
 if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
-	echo Applying menu arrows...
-	cd "$BASEPATH"/"$PRESET"
-	cp "$SMLINUX"/menu-arrows.patch enhancements
-	git apply enhancements/menu-arrows.patch
+	if [ "$PRESET" = "androidex" ] || [ "$GIT" = "sm64pc/sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
+		echo Applying menu arrows...
+		cd "$BASEPATH"/"$PRESET"
+		cp "$SMLINUX"/menu-arrows.patch enhancements
+		git apply enhancements/menu-arrows.patch
+	fi
 fi
 }
 
