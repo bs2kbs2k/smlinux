@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1016-1818
+TIMESTAMP=2020-1016-1904
 
 domake(){
 #Here We go & music to build to
@@ -210,7 +210,7 @@ exit
 
 
 androidsdk(){
-if [ -f /usr/bin/apt ] && [ ! -d /usr/lib/android-sdk ]; then
+if command -v sudo &> /dev/null && command -v apt &> /dev/null && [ ! -d /usr/lib/android-sdk ]; then
 	sudo apt install android-sdk -y
 fi
 if [ ! -f "$BASEPATH"/android-sdk/tools/bin/sdkmanager ]; then
@@ -247,7 +247,7 @@ if [ -f /usr/bin/gcc ] || [ -f /bin/gcc ]; then
 		return
 	fi
 fi 
-if [ -f /usr/bin/apt ] || [ -f /bin/apt ]; then		
+if command -v sudo &> /dev/null && command -v apt &> /dev/null; then		
 	echo Attempting to install gcc 9.
 	echo | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 	sudo apt install -y g++-9
@@ -1460,7 +1460,7 @@ else	     # The real start, the rest was script preperation and setup.
 			brew install libxdg-basedir coreutils wget newt nano go unzip unrar python3 
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
 			go get github.com/machinebox/appify
-		elif [ -f /usr/bin/apt ]; then
+		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 			echo "Updating Package list and Installing dependencies..."
 			sudo apt update
 			if [ "$WINDOW_API" = "SDL1" ]; then
@@ -1575,74 +1575,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 	fi
 fi
-SAVEDIR="$SHARE"/"$PRESET"
-if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
-	echo Creating "$SAVEDIR" for save files.
-	mkdir "$SAVEDIR"
-fi
-if [ -f "$SAVEDIR"/sm64config.txt ] || [ -f "$SAVEDIR"/CHEATER64config.txt ]; then
-	echo SM64 configuration file found.
-elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
-	echo No compatible sm64 configuration files for this version, game will create one.
-elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
-	if [ -f "$SHARE"/sm64ex/sm64config.txt ]; then
-		cp "$SHARE"/sm64ex/sm64config.txt "$SAVEDIR"
-		echo Copied configuration from sm64ex.
-	elif [ -f "$SMLINUX"/sm64config.txt ]; then
-		cp "$SMLINUX"/sm64config.txt "$SAVEDIR"
-		echo Copied configuration from sm64pc.
-	elif [ -f "$SHARE"/render96ex/sm64config.txt ]; then
-		cp "$SHARE"/render96ex/sm64config.txt "$SAVEDIR"
-		echo Copied configuration from render96ex
-	elif [ -f "$SHARE"/sm64ex-coop/sm64config.txt ]; then
-		cp "$SHARE"/sm64ex-coop/sm64config.txt "$SAVEDIR"
-		echo Copied configuration from sm64ex-coop
-	else 
-		echo No compatible sm64 configuration file found, game will create one.
-	fi
-	if [ "$GIT" = "s4Ys369/cheaterex" ] && [ -f "$SAVEDIR"/sm64config.txt ]; then
-		mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"/CHEATER64config.txt
-	fi
-fi
-if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATER64_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
-	echo SM64 save file found.
-elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
-	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
-	echo Copied Save file from Render96
-elif [ "$PRESET" = "render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
-	cp "$SHARE"/r96proto/render96_save_file_0.sav "$SAVEDIR"
-	echo Copied Save file from Render96 Fastbuild_Prototype
-elif [ "$TEXTSAVES" = 1 ]; then
-	echo No compatible save files for this version.
-elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
-	if [ "$PRESET" = "sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
-		cp "$SHARE"/sm64nx/sm64.sav "$SAVEDIR"/sm64_save_file.bin
-		echo Copied save file from sm64nx.
-	elif [ "$PRESET" = "sm64nx" ] && [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
-		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SAVEDIR"/sm64.sav
-		echo Copied save file from sm64-port.
-	elif [ -f "$SHARE"/sm64ex/sm64_save_file.bin ]; then
-		cp "$SHARE"/sm64ex/sm64_save_file.bin "$SAVEDIR"
-		echo Copied save file from sm64ex.
-	elif [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
-		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SAVEDIR"
-		echo Copied save file from sm64-port.
-	elif [ -f "$SMLINUX"/sm64_save_file.bin ]; then
-		cp "$SMLINUX"/sm64_save_file.bin "$SAVEDIR"
-		echo Copied save file from sm64pc.
-	elif [ -f "$SHARE"/cheaterex/CHEATERex_save_file.bin ]; then
-		cp "$SHARE"/cheaterex/CHEATER64_save_file.bin "$SAVEDIR"/sm64_save_file.bin
-		echo Copied save file from cheaterex
-	elif [ -f "$SHARE"/sm64nx/sm64.sav ]; then
-		cp "$SHARE"/sm64nx/sm64.sav "$SAVEDIR"/sm64_save_file.bin
-		echo Copied save file from sm64nx.
-	else 
-		echo No compatible save file found.
-	fi
-	if [ "$GIT" = "s4Ys369/cheaterex" ] && [ -f "$SAVEDIR"/sm64_save_file.bin ]; then
-		mv "$SAVEDIR"/sm64_save_file.bin "$SAVEDIR"/CHEATER64_save_file.bin
-	fi
-fi
+
 if [ "$COMMAND" = "rebuild" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
@@ -1885,6 +1818,74 @@ if [ "$COMMAND" = "clone" ]; then
 fi
 echo
 echo [5] Applying Community Enhancements...
+SAVEDIR="$SHARE"/"$PRESET"
+if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
+	echo Creating "$SAVEDIR" for save files.
+	mkdir "$SAVEDIR"
+fi
+if [ -f "$SAVEDIR"/sm64config.txt ] || [ -f "$SAVEDIR"/CHEATER64config.txt ]; then
+	echo SM64 configuration file found.
+elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
+	echo No compatible sm64 configuration files for this version, game will create one.
+elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
+	if [ -f "$SHARE"/sm64ex/sm64config.txt ]; then
+		cp "$SHARE"/sm64ex/sm64config.txt "$SAVEDIR"
+		echo Copied configuration from sm64ex.
+	elif [ -f "$SMLINUX"/sm64config.txt ]; then
+		cp "$SMLINUX"/sm64config.txt "$SAVEDIR"
+		echo Copied configuration from sm64pc.
+	elif [ -f "$SHARE"/render96ex/sm64config.txt ]; then
+		cp "$SHARE"/render96ex/sm64config.txt "$SAVEDIR"
+		echo Copied configuration from render96ex
+	elif [ -f "$SHARE"/sm64ex-coop/sm64config.txt ]; then
+		cp "$SHARE"/sm64ex-coop/sm64config.txt "$SAVEDIR"
+		echo Copied configuration from sm64ex-coop
+	else 
+		echo No compatible sm64 configuration file found, game will create one.
+	fi
+	if [ "$GIT" = "s4Ys369/cheaterex" ] && [ -f "$SAVEDIR"/sm64config.txt ]; then
+		mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"/CHEATER64config.txt
+	fi
+fi
+if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATER64_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
+	echo SM64 save file found.
+elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
+	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
+	echo Copied Save file from Render96
+elif [ "$PRESET" = "render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
+	cp "$SHARE"/r96proto/render96_save_file_0.sav "$SAVEDIR"
+	echo Copied Save file from Render96 Fastbuild_Prototype
+elif [ "$TEXTSAVES" = 1 ]; then
+	echo No compatible save files for this version.
+elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
+	if [ "$PRESET" = "sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
+		cp "$SHARE"/sm64nx/sm64.sav "$SAVEDIR"/sm64_save_file.bin
+		echo Copied save file from sm64nx.
+	elif [ "$PRESET" = "sm64nx" ] && [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
+		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SAVEDIR"/sm64.sav
+		echo Copied save file from sm64-port.
+	elif [ -f "$SHARE"/sm64ex/sm64_save_file.bin ]; then
+		cp "$SHARE"/sm64ex/sm64_save_file.bin "$SAVEDIR"
+		echo Copied save file from sm64ex.
+	elif [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
+		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SAVEDIR"
+		echo Copied save file from sm64-port.
+	elif [ -f "$SMLINUX"/sm64_save_file.bin ]; then
+		cp "$SMLINUX"/sm64_save_file.bin "$SAVEDIR"
+		echo Copied save file from sm64pc.
+	elif [ -f "$SHARE"/cheaterex/CHEATERex_save_file.bin ]; then
+		cp "$SHARE"/cheaterex/CHEATER64_save_file.bin "$SAVEDIR"/sm64_save_file.bin
+		echo Copied save file from cheaterex
+	elif [ -f "$SHARE"/sm64nx/sm64.sav ]; then
+		cp "$SHARE"/sm64nx/sm64.sav "$SAVEDIR"/sm64_save_file.bin
+		echo Copied save file from sm64nx.
+	else 
+		echo No compatible save file found.
+	fi
+	if [ "$GIT" = "s4Ys369/cheaterex" ] && [ -f "$SAVEDIR"/sm64_save_file.bin ]; then
+		mv "$SAVEDIR"/sm64_save_file.bin "$SAVEDIR"/CHEATER64_save_file.bin
+	fi
+fi
 if [ "$InstallHD" = 1 ]; then 
 	dohd
 elif [ "$InstallR96" = 1 ]; then
