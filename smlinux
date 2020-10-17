@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1016-1904
+TIMESTAMP=2020-1016-1926
 
 domake(){
 #Here We go & music to build to
@@ -199,7 +199,7 @@ exit
 endnow(){
 echo "Script Ending Incomplete.  Contact #help-desk for support."
 	if [ "$OSX_BUILD" = 0 ] && [ "$TARGET_RPI" = 0 ]; then
-		$OPEN https://discord.gg/Ub6YHRm &
+		"$OPEN" https://discord.gg/Ub6YHRm &
 	fi
 echo Your smlinux internal timestamp is "$TIMESTAMP".
 echo If that is not recent, perhaps updates are not working.
@@ -400,7 +400,7 @@ GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 # Linux command is only called during first install and is not used for macOS
-Linux="sudo apt install -y build-essential bsdmainutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev binutils libusb-1.0-0-dev libzstd-dev python3-pip mplayer zenity"
+Linux="sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer unzip unrar"
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
@@ -1197,7 +1197,7 @@ if [ "$TARGET_WEB"  = 1 ]; then
 	if [ -f /usr/bin/firefox ]; then
 		firefox --new-window http://localhost:8100&disown
 	else
-		$OPEN http://localhost:8100&disown
+		"$OPEN" http://localhost:8100&disown
 	fi
 elif [ ! "$ANDROID" = 0 ] ; then
 	if [ "$GOTPHONE" = 1 ]; then
@@ -1215,7 +1215,7 @@ elif [ ! "$ANDROID" = 0 ] ; then
 		echo "Internal Storage/Android/data/com.vdavid003.sm64port/files"
 		echo 
 	fi
-	$OPEN "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
+	"$OPEN" "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
 elif [ "$GIT"  = "djoslin0/sm64ex-coop" ] ; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --server 27015 --cheats --savepath "$SAVEDIR" --skip-intro &disown
@@ -1225,7 +1225,7 @@ elif [ "$TARGET" = "dos" ] && [ -f /usr/bin/dosbox ]; then
 	dosbox "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
 elif [ "$TARGET" = "dos" ]; then
 	echo Cannot test DOS Version from Linux!  I reccomend FreeDOS in VirtualBox.
-	$OPEN "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
+	"$OPEN" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 elif [ "$OSX_BUILD" = 1 ]; then
 	/Applications/'Super Mario 64 ('"$PRESET"')'.app/Contents/MacOS/'Super Mario 64 ('"$PRESET"')'.app &
 else 
@@ -1439,7 +1439,7 @@ else	     # The real start, the rest was script preperation and setup.
 		else
 			echo "More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions"
 		fi
-		$OPEN https://github.com/enigma9o7/smlinux#frequently-asked-questions 
+		"$OPEN" https://github.com/enigma9o7/smlinux#frequently-asked-questions 
 		exit
 	else
 		echo "|                                                                              |"
@@ -1466,10 +1466,10 @@ else	     # The real start, the rest was script preperation and setup.
 			if [ "$WINDOW_API" = "SDL1" ]; then
 				sudo apt install libsdl1.2-dev
 			fi
-			$Linux
+			"$Linux"
 		else
 			echo "Installing Linux dependencies specified in smlinux configuration file..."
-			$Linux
+			"$Linux"
 		fi
 	fi
 	if [ "$COMMAND" = "upgrade" ]; then
