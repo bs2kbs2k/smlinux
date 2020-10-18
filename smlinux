@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1018-0758
+TIMESTAMP=2020-1018-0834
 
 domake(){
 #Here We go & music to build to
@@ -105,7 +105,7 @@ if [ ! "$ANDROID" = 0 ]; then
 		echo
 		TOUCH_CONTROLS=$TOUCH_CONTROLS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA VERSION=$VERSION TEXTSAVES=$TEXTSAVES ./gradlew installDebug -q
 	else
-		echo WARNING: Phone not detected, building without installing.
+		pinkecho WARNING: Phone not detected, building without installing.
 		echo
 		TOUCH_CONTROLS=$TOUCH_CONTROLS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA VERSION=$VERSION TEXTSAVES=$TEXTSAVES ./gradlew assembleDebug -q
 	fi
@@ -175,14 +175,16 @@ if [ "$TARGET" = "web" ]; then
 	echo
 	echo Python webserver will remain running until you kill python3.
 	echo Unless you forward a port you cannot connect from outside your local network.
-	echo WARNING: emsdk environment is loaded.  Do not try to
+	pinkecho WARNING: emsdk environment is loaded.  Do not try to
 	echo use this shell to build.  Exit and open new shell. 
 elif [ "$TARGET" = "dos" ]; then
 	echo
-	echo WARNING: djgpp environment is loaded.  Do not try to 
+	pinkecho WARNING: djgpp environment is loaded.  Do not try to 
 	echo use this shell to build.  Exit and open new shell. 
 fi
 echo
+tput setab 0  # black background
+tput setaf 6  # cyan text
 echo smlinux is complete. 
 echo smlinux internal timestamp "$TIMESTAMP".
 if [ -d "$BASEPATH"/"$PRESET"/.git ]; then
@@ -191,6 +193,7 @@ if [ -d "$BASEPATH"/"$PRESET"/.git ]; then
 	git log -1 --format=%cd
 fi
 echo Please exit or close this terminal window!
+tput setaf 7 # back to white
 echo
 exit
 }
@@ -219,6 +222,26 @@ greenecho(){
 # 7    white     COLOR_WHITE     1,1,1
 tput setab 0  # black background
 tput setaf 2  # greeen text
+tput bold
+echo "$@"
+tput sgr0 # reset
+tput setab 0  # black background
+tput setaf 7 # white text
+}
+
+pinkecho(){
+tput setab 0  # black background
+tput setaf 5  # magenta text
+tput bold
+echo "$@"
+tput sgr0 # reset
+tput setab 0  # black background
+tput setaf 7 # white text
+}
+
+redecho(){
+tput setab 0  # black background
+tput setaf 1  # red text
 tput bold
 echo "$@"
 tput sgr0 # reset
@@ -258,7 +281,7 @@ if [ -f /usr/bin/gcc ] || [ -f /bin/gcc ]; then
 		return
 	elif [ `gcc-9 -dumpfullversion -dumpversion` \> 7.99 ]; then
 		if [ "$OSX_BUILD" = 0 ]; then
-			echo WARNING: Shouldnt be here should be mac only.
+			pinkecho WARNING: Shouldnt be here should be mac only.
 		fi
 		echo gcc-9 confirmed
 		return
@@ -282,7 +305,7 @@ if command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 		fi
 	fi			
 fi
-echo "ERROR: smlinux doesn't think your C compiler is not new enough for sm64nx."
+redecho "ERROR: smlinux doesn't think your C compiler is not new enough for sm64nx."
 echo "gcc -dumpfullversion must report 8 or higher."
 echo "Please install it then rerun smlinux, or use another repo."
 echo "Sometimes its wrong - if you have gcc 8/9/10 and wish to continue, do so."
@@ -662,7 +685,7 @@ python3 extract_assets.py
 python3 ../scripts/pak.py --source . --output "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak'
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak' ]; then
 	echo 
-	echo ERROR: Unable to extract and pak ROM.
+	redecho ERROR: Unable to extract and pak ROM.
 	endnow
 else
 	echo could now get hash for ...ummmm.... forgot... got hash so dont care anymore... 
@@ -825,7 +848,7 @@ else
 			wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
 		fi
 	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$GIT" = "djoslin0/sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
-		echo WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
+		pinkecho WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
 	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
 		echo External Data not supported for sm64-port repository, skipping.
 	fi
@@ -887,7 +910,7 @@ fi
 dosgi(){
 if  [ "$TARGET_WEB" = 1 ] || ([ "$EXTERNAL_DATA" = 0 ] && [ ! "$PRESET" = "sm64nx" ]); then
 	if(whiptail --title "SGI Model Warning" --yesno "SGI Models are unlikely to work without external data or for web Target." 10 50 --yes-button "Continue Anyway" --no-button "Cancel" --defaultno); then
-		echo WARNING: SGI Models may not build correctly on anything besides sm64ex-nightly
+		pinkecho WARNING: SGI Models may not build correctly on anything besides sm64ex-nightly
 		echo Proceeding anyway, but it may not be succesful.
 	else
 		return
@@ -983,14 +1006,14 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			rm -rf "$SMLINUX".baq
 		fi
 		if [ ! -d "$SMLINUX"/.git ] ; then
-			echo ERROR: Cannot connect to github. Run without AutoUpdate enabled.  
+			redecho ERROR: Cannot connect to github. Run without AutoUpdate enabled.  
 			echo smlinux exiting incomplete.
 			exit
 		fi
 		touch ~/.smlinuxUpdate
 		mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 		if [ ! -f "$PATHDIR"/smlinux ]; then
-			echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
+			pinkecho WARNING: Could not write to first path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
 			echo export PATH="$HOME"/bin:$PATH >>~/.bashrc
@@ -1003,7 +1026,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			fi
 			mv -f "$SMLINUX"/smlinux "$PATHDIR"
 			if [ ! -f "$PATHDIR"/smlinux ]; then
-				echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
+				redecho ERROR - Could not add to path.  Run without AutoUpdate enabled.
 				echo smlinux exiting incomplete.
 				exit
 			fi
@@ -1019,7 +1042,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		if [ "$(git diff HEAD origin/HEAD -- smlinux)" != "" ]; then
 			git merge
 			if [ ! -f "$SMLINUX"/smlinux ]; then
-				echo "ERROR: Script Update Unsuccesful."
+				redecho "ERROR: Script Update Unsuccesful."
 				echo "Try #help-desk if script udpates continue to fail"
 			else
 				echo 'if [ `uname` = "Darwin" ]; then	
@@ -1156,7 +1179,7 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 		cp "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png "$SHARE"/icons/"$PRESET".png
 		echo 16x16 image from ROM used.  Reccommend replacing "$SHARE"/icons/"$PRESET".png
 	else 
-		echo WARNING: No icon found. 
+		pinkecho WARNING: No icon found. 
 		echo Reccommend creating "$SHARE"/icons/"$PRESET".png
 	fi	
 else
@@ -1242,9 +1265,9 @@ elif [ ! "$ANDROID" = 0 ] ; then
 	"$OPEN" "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
 elif [ "$GIT"  = "djoslin0/sm64ex-coop" ] ; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
-	./sm64.us.f3dex2e --server 27015 --cheats --savepath "$SAVEDIR" --skip-intro &disown
+	./sm64.us.f3dex2e --server 7777 --cheats --savepath "$SAVEDIR" --skip-intro &
 	sleep 0.3
-	./sm64.us.f3dex2e --client 127.0.0.1 27015 --cheats --savepath ! --skip-intro &disown
+	./sm64.us.f3dex2e --client 127.0.0.1 7777 --cheats --savepath ! --skip-intro &
 elif [ "$TARGET" = "dos" ] && [ -f /usr/bin/dosbox ]; then
 	dosbox "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
 elif [ "$TARGET" = "dos" ]; then
@@ -1565,7 +1588,7 @@ else	     # The real start, the rest was script preperation and setup.
 			exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 			zenity --error --text="ERROR: Specified file is not original Super Mario 64 ROM image\nMake sure VERSION= is set to the correct region if not US romfile\n" --title="Your installation is incomplete." --width=640 &disown	
 			sleep 1			
-			echo "ERROR: Specified file is not original Super Mario 64 ROM image or VERSION set wrong."
+			redecho "ERROR: Specified file is not original Super Mario 64 ROM image or VERSION set wrong."
 			echo
 		fi
 		if [ ! "$COMMAND" = "upgrade" ]; then
@@ -1603,7 +1626,7 @@ else	     # The real start, the rest was script preperation and setup.
 				endnow
 			fi
 		else	
-			echo WARNING: No ROM file found.  Please specify a romfile when you are ready to build.
+			pinkecho WARNING: No ROM file found.  Please specify a romfile when you are ready to build.
 		fi
 	fi
 	echo
@@ -1611,7 +1634,7 @@ else	     # The real start, the rest was script preperation and setup.
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
 		scriptUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	else
-		echo "WARNING: AutoUpdate Disabled. You might be using an old version of smlinux!"
+		pinkecho WARNING: AutoUpdate Disabled. You might be using an old version of smlinux.
 		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 	fi
 fi
@@ -1619,7 +1642,7 @@ fi
 if [ "$COMMAND" = "rebuild" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
-		echo ERROR: No "$BASEPATH"/"$PRESET" folder to rebuild!
+		redecho ERROR: No "$BASEPATH"/"$PRESET" folder to rebuild!
 		echo Specify smlinux build for a fresh build.
 		exit
 	fi
@@ -1639,7 +1662,7 @@ if [ "$COMMAND" = "rebuild" ]; then
 elif [ "$COMMAND" = "update" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
-		echo ERROR: No "$BASEPATH"/"$PRESET" folder to update!
+		redecho ERROR: No "$BASEPATH"/"$PRESET" folder to update!
 		echo Specify smlinux build for a fresh build.
 		exit
 	fi
@@ -1675,7 +1698,7 @@ elif [ "$COMMAND" = "update" ]; then
 		fi
 		git merge
 		if [ "$?" = "1" ]; then
-			echo ERROR: Unable to merge source updates from github.
+			redecho ERROR: Unable to merge source updates from github.
 			echo Rebuild will continue with existing source.
 		else
 			echo Update Succesful.
@@ -1715,7 +1738,7 @@ elif [ "$COMMAND" = "update" ]; then
 		printf "SGI Selected, Processing...\n"
 		dosgi
 	else
-		echo WARNING: HD add-ons and updates are disabled in smlinux configuration.
+		pinkecho WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
 	if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
@@ -1741,7 +1764,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 	domake
 	echo
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
-		echo "ERROR: Build Failure - output file not found."  
+		redecho "ERROR: Build Failure - output file not found."  
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 			echo "Restoring previous build..."
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then 
@@ -1774,7 +1797,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 		greenecho [7] "$COMMAND" complete.  
 	elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/*.apk ]; then
 		echo
-		echo "ERROR: Build Failure.  Android Package Kit (apk) not found."
+		redecho "ERROR: Build Failure.  Android Package Kit (apk) not found."
 		endnow
 	elif [ "$ANDROID" = 0 ] && [ "$TARGET" = "pc" ] ; then
 		greenecho [7] Verifying Menu Entry....
@@ -1802,14 +1825,14 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 fi
 if [ -d "$BASEPATH"/"$PRESET" ]; then
 	if [ ! "$ANDROID" = 0 ]; then
-		echo WARNING: "$ANDROID" directory already exists! 
+		pinkecho WARNING: "$ANDROID" directory already exists! 
 		echo Renaming to "$BASEPATH"/"$ANDROID".old...
 		if [ -d "$BASEPATH"/"$ANDROID".old ]; then
 			rm -rf "$BASEPATH"/"$ANDROID".old
 		fi
 		mv "$BASEPATH"/"$ANDROID" "$BASEPATH"/"$ANDROID".old
 	else
-		echo WARNING: "$PRESET" directory already exists!  Renaming to "$PRESET".old...
+		pinkecho WARNING: "$PRESET" directory already exists!  Renaming to "$PRESET".old...
 		if [ -d "$BASEPATH"/"$PRESET".old ]; then
 			rm -rf "$BASEPATH"/"$PRESET".old
 		fi
@@ -1839,7 +1862,7 @@ if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	fi
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
-	echo "ERROR: Could not reach github."
+	redecho "ERROR: Could not reach github."
 	endnow
 elif [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
 	ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
@@ -1931,7 +1954,7 @@ if [ "$InstallHD" = 1 ]; then
 elif [ "$InstallR96" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
-	echo "WARNING: InstallHD Disabled in Config File so HD addons not being added."
+	pinkecho WARNING: InstallHD Disabled in Config File so HD addons not being added.
 fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
 	dofps
@@ -1955,7 +1978,7 @@ greenecho [6] Compiling...
 domake
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	echo
-	echo ERROR: Build Failure.  Expected binary file not found.
+	redecho ERROR: Build Failure.  Expected binary file not found.
 	endnow
 elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
 	echo
