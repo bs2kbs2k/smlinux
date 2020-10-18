@@ -604,17 +604,15 @@ fi
 }
 
 editconfig(){
-echo Looking for a text editor...
-EDITORS=kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:nano:pico:micro:jed:emacs:vim:vi
-IFS=":"
-for editor in $EDITORS; do
-	$editor "$SMLINUX"/smlinuxcfg.txt
-	if [ $? -eq 0 ]; then
-		echo "$PATHDIR"/smlinux: line $(($LINENO - 2))":" "$editor": wow! command found!
-		echo
-		return
-	fi
-done
+if [ ! -f "$SMLINUX"/ui.py ]; then
+	echo Getting conversion tools...
+	wget -O- https://github.com/enigma9o7/smlinux/raw/master/sml.ui > "$SMLINUX"/sml.ui
+        wget -O- https://github.com/enigma9o7/smlinux/raw/master/ui.py > "$SMLINUX"/ui.py
+	pip3 install pyqt5
+fi
+printf "$SMLINUX\n$SMLINUX/smlinuxcfg.txt\n"|python3 "$SMLINUX"/ui.py > "$SMLINUX"/smlinuxcfg.txt.swp
+cat "$SMLINUX"/smlinuxcfg.txt.swp > "$SMLINUX"/smlinuxcfg.txt
+rm "$SMLINUX"/smlinuxcfg.txt.swp
 }
 
 loademsdk(){
