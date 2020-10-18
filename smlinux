@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1017-0956
+TIMESTAMP=2020-1017-2303
 
 domake(){
 #Here We go & music to build to
@@ -1436,7 +1436,7 @@ elif [ -f ~/.smlinuxUpdate ]; then
 	echo Script Update Complete.
 else	     # The real start, the rest was script preperation and setup. 
 	tput setab 0  # black background
-	tput setaf 7  # white text
+	tput setaf 6  # cyan text
 	echo '/---------------------------'"$TIMESTAMP"'-------------------------------------\'
 	echo "|                                                                              |"
 	echo "|     Super Mario 64 Install * Build * Update Script for Linux and macOS       |"
@@ -1461,6 +1461,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "|       --depends  install dependencies before build                           |"
 		echo "|                                                                              |"
 		echo "--------------------------------------------------------------------------------"
+		tput setaf 7 # white text
 		if [ "$OP1" = "--noweb" ]; then
 			exit
 		else
@@ -1604,7 +1605,7 @@ else	     # The real start, the rest was script preperation and setup.
 		fi
 	fi
 	echo
-	echo [2] Checking Github for smlinux updates....
+	greenecho [2] Checking Github for smlinux updates....
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
 		scriptUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	else
@@ -1621,7 +1622,7 @@ if [ "$COMMAND" = "rebuild" ]; then
 		exit
 	fi
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed ]; then
-		echo [3] Restoring failed build...
+		greenecho [3] Restoring failed build...
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 				rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
@@ -1630,9 +1631,9 @@ if [ "$COMMAND" = "rebuild" ]; then
 		fi
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	else
-		echo [3] Skipping backups.
+		greenecho [3] Skipping backups.
 	fi
-	echo [4] Skipping updates.
+	greenecho [4] Skipping updates.
 elif [ "$COMMAND" = "update" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
@@ -1641,7 +1642,7 @@ elif [ "$COMMAND" = "update" ]; then
 		exit
 	fi
 	echo
-	echo [3] Checking "$PRESET" github repository for updates...
+	greenecho [3] Checking "$PRESET" github repository for updates...
 	if [ ! "$ANDROID" = 0 ]; then
 		cd "$BASEPATH"/"$ANDROID"
 	else
@@ -1705,7 +1706,7 @@ elif [ "$COMMAND" = "update" ]; then
 		fi
 	fi
 	echo
-	echo [4] Applying pre-build modifications...
+	greenecho [4] Applying pre-build modifications...
 	if [ "$UpdateHD" = 1 ] && [ "$InstallHD" = 1 ]; then
 		dohd
 	elif [ "$InstallR96" = 1 ]; then
@@ -1734,7 +1735,7 @@ elif [ "$COMMAND" = "update" ]; then
 	echo
 fi
 if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
-	echo [5] Compiling...
+	greenecho [5] Compiling...
 	domake
 	echo
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
@@ -1749,7 +1750,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 		endnow
 	fi
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ] && [ "$ANDROID" = 0 ]; then
-		echo [6] Restoring External Resources...
+		greenecho [6] Restoring External Resources...
 		cp -rpn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
 		echo "[6] Restoring Savefile, ROM and ROM Filesystem (paks)"
@@ -1764,26 +1765,26 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 		echo "[6] Preparing Savefile, ROM and ROM Filesystem (paks)"
 		prepnx	
 	elif [ "$ANDROID" = 0 ]; then
-		echo [6] No resources found in previous build, skipping restore.
+		greenecho [6] No resources found in previous build, skipping restore.
 	fi
 	echo
 	if [ "$TARGET" = "web" ]; then
-		echo [7] "$COMMAND" complete.  
+		greenecho [7] "$COMMAND" complete.  
 	elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/*.apk ]; then
 		echo
 		echo "ERROR: Build Failure.  Android Package Kit (apk) not found."
 		endnow
 	elif [ "$ANDROID" = 0 ] && [ "$TARGET" = "pc" ] ; then
-		echo [7] Verifying Menu Entry....
+		greenecho [7] Verifying Menu Entry....
 		makedesktop
 		echo
-		echo [8] "$COMMAND" complete.  
+		greenecho [8] "$COMMAND" complete.  
 	elif [ ! "$ANDROID" = 0 ]; then
 		mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
-		echo [7] "$COMMAND" complete.   
+		greenecho [7] "$COMMAND" complete.   
 	elif [ "$TARGET" = "dos" ]; then
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
-		echo [7] "$COMMAND" complete.  
+		greenecho [7] "$COMMAND" complete.  
 	fi
 	rungame
 	if [ "$TARGET" = "dos" ] && [ ! -f /usr/bin/dosbox ]; then
@@ -1843,7 +1844,7 @@ elif [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
 fi
 
 echo
-echo [4] Extracting Assets from ROM...
+greenecho [4] Extracting Assets from ROM...
 if [ "$PRESET" = "sm64nx" ]; then
 	prepnx
 else 	
@@ -1854,7 +1855,7 @@ if [ "$COMMAND" = "clone" ]; then
 	theend
 fi
 echo
-echo [5] Applying Community Enhancements...
+greenecho [5] Applying Community Enhancements...
 SAVEDIR="$SHARE"/"$PRESET"
 if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 	echo Creating "$SAVEDIR" for save files.
@@ -1948,7 +1949,7 @@ if [ "$BRANCH" = "sm64ex_nightly" ] && [ ! "$TOUCH_CONTROLS" = 1 ]; then
 	git apply enhancements/pro1.patch
 fi
 echo
-echo [6] Compiling...
+greenecho [6] Compiling...
 domake
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	echo
@@ -1966,13 +1967,13 @@ fi
 
 echo
 if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
-	echo [7] Creating Desktop Shortcut and Menu Entry...
+	greenecho [7] Creating Desktop Shortcut and Menu Entry...
 	makedesktop
 else
-	echo [7] Skipping menu entry for non PC version.
+	greenecho [7] Skipping menu entry for non PC version.
 fi
 echo
-echo [8] Build Succesful!  Testing Application Launch.
+greenecho [8] Build Succesful!  Testing Application Launch.
 rungame
 if [ -f "$HOME"/.smlinuxNopath ]; then
 	rm "$HOME"/.smlinuxNopath
