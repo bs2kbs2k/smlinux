@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1017-2303
+TIMESTAMP=2020-1018-0758
 
 domake(){
 #Here We go & music to build to
@@ -993,6 +993,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
+			echo export PATH="$HOME"/bin:$PATH >>~/.bashrc
 			export PATH=$HOME/bin:$PATH
 			if [ "$OSX_BUILD" = 1 ]; then	
 				PATHDIR=$HOME/bin
@@ -1103,6 +1104,7 @@ cd "$BASEPATH"/"$PRESET"
 if [ -f enhancements/CHEATER*.patch ]; then
 	echo Removing CHEATER...
 	git apply -R enhancements/CHEATER*.patch
+	rm enhancements/CHEATER*.patch
 elif [ -f enhancements/cheater*.patch ]; then
 	echo Removing CHEATER...
 	git apply -R enhancements/cheater*.patch
@@ -1978,10 +1980,10 @@ rungame
 if [ -f "$HOME"/.smlinuxNopath ]; then
 	rm "$HOME"/.smlinuxNopath
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-	zenity --info --text="You did not have a home folder in your path so "$HOME"/bin was created.\n\nReboot or type \n\n    PATH=\$HOME/bin:\$PATH\n\nbefore running smlinux again." --title="Your installation is complete." --width=500	
+	zenity --info --text="You did not have a home folder in your path so "$HOME"/bin was created.\n\nRestart terminal or type \n\n    PATH=\$HOME/bin:\$PATH\n\nbefore running smlinux again." --title="Your installation is complete." --width=500	
 	echo
 	echo You did not have a home folder in your path so "$HOME"/bin was created.
-	printf 'nReboot or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
+	printf 'nRestart terminal or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 4
 elif  [ "$GIT" = "render96/render96ex" ] && [ "$InstallHD" = 1 ]; then
