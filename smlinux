@@ -208,6 +208,23 @@ echo
 exit
 }
 
+greenecho(){
+# 0    black     COLOR_BLACK     0,0,0
+# 1    red       COLOR_RED       1,0,0
+# 2    green     COLOR_GREEN     0,1,0
+# 3    yellow    COLOR_YELLOW    1,1,0
+# 4    blue      COLOR_BLUE      0,0,1
+# 5    magenta   COLOR_MAGENTA   1,0,1
+# 6    cyan      COLOR_CYAN      0,1,1
+# 7    white     COLOR_WHITE     1,1,1
+tput setab 0  # black background
+tput setaf 2  # greeen text
+tput bold
+echo "$@"
+tput sgr0 # reset
+tput setab 0  # black background
+tput setaf 7 # white text
+}
 
 androidsdk(){
 if command -v sudo &> /dev/null && command -v apt &> /dev/null && [ ! -d /usr/lib/android-sdk ]; then
@@ -1286,8 +1303,8 @@ elif command -v whiptail &> /dev/null; then
 	if ! COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
 	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and macOS" \
 	"update" "update sm64 source and rebuild it" ON \
-	"build" "get new sm64 source and build it" OFF \
-	"clone" "get new sm64 source and extract rom" OFF \
+	"build" "get clean sm64 source and build it" OFF \
+	"clone" "get clean sm64 source and extract rom" OFF \
 	"reset" "reset smlinux config file to default" OFF \
 	"config" "edit smlinux config file only" OFF \
 	"depends" "install dependencies only" OFF \
@@ -1418,6 +1435,8 @@ elif [ -f ~/.smlinuxUpdate ]; then
 	rm ~/.smlinuxUpdate
 	echo Script Update Complete.
 else	     # The real start, the rest was script preperation and setup. 
+	tput setab 0  # black background
+	tput setaf 7  # white text
 	echo '/---------------------------'"$TIMESTAMP"'-------------------------------------\'
 	echo "|                                                                              |"
 	echo "|     Super Mario 64 Install * Build * Update Script for Linux and macOS       |"
@@ -1453,7 +1472,7 @@ else	     # The real start, the rest was script preperation and setup.
 		echo "|                                                                              |"
 		echo "--------------------------------------------------------------------------------"
 	fi
-	echo [1] Preparing for "$COMMAND"...
+	greenecho [1] Preparing for "$COMMAND"...
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
 		if [ "$OSX_BUILD" = 1 ]; then
 			echo "Installing dependencies for macOS..."
