@@ -1016,7 +1016,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			pinkecho WARNING: Could not write to first path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
-			echo export PATH="$HOME"/bin:$PATH >>~/.bashrc
+			# echo export PATH="$HOME"/bin:$PATH >>~/.bashrc
 			export PATH=$HOME/bin:$PATH
 			if [ "$OSX_BUILD" = 1 ]; then	
 				PATHDIR=$HOME/bin
