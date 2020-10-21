@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1020-1845
+TIMESTAMP=2020-1020-2009
 
 domake(){
 #Here We go & music to build to
@@ -527,6 +527,13 @@ elif [ "$PRESET" = "r96proto" ]; then
 	DISCORDRPC=0
 	LEGACY_RES=0
 	CHEATER=0
+elif [ "$PRESET" = "r96alpha" ]; then
+	GIT=render96/render96ex
+	BRANCH=alpha
+	EXTERNAL_DATA=1
+	TEXTSAVES=1
+	DISCORDRPC=0
+	CHEATER=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
@@ -771,37 +778,31 @@ else
 			echo Updating textures from github...
 			git checkout gfx
 			git pull --no-rebase
-		elif [ "$PRESET" = "r96proto" ] && [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Copying textures from render96ex
-			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+		elif [ "$GIT" = "render96/render96ex" ]; then
+			if [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
+				R96=render96ex
+			elif [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git ]; then
+				R96=r96proto
+			elif [ -d "$BASEPATH"/r96alpha/build/"$VERSION"_"$TARGET"/res/.git ]; then
+				R96=r96alpha
 			fi
-			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			cp -r "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			if [ -f "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
-				echo Copying high quality sounds......
-				cp -r "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			if [ -n "$R96" ]; then
+				echo Copying textures from "$R96"...
+				if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+					mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+				fi
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
+				cp -r "$BASEPATH"/"$R96"/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
+				if [ -f "$BASEPATH"/"$R96"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
+					echo Copying high quality sounds......
+					cp -r "$BASEPATH"/"$R96"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+				fi
+				echo Updating textures from github...
+				cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+				git checkout gfx
+				git pull --no-rebase
 			fi
-			echo Updating textures from github...
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			git checkout gfx
-			git pull --no-rebase
-		elif [ "$PRESET" = "render96ex" ] && [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Copying textures from r96proto
-			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
-			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			cp -r "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			if [ -f "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
-				echo Copying high quality sounds......
-				cp -r "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
-			echo Updating render96 textures from github...
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			git checkout gfx
-			git pull --no-rebase
-		elif [ ! "PRESET" = "render96ex" ] && [ ! "PRESET" = "r96proto" ] && [ -d "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
+		elif [ -d "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Copying textures from sm64ex
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -816,7 +817,7 @@ else
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
 			git pull --no-rebase
-		elif [ ! "PRESET" = "render96ex" ] && [ ! "PRESET" = "r96proto" ] && [ -d "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/.git ]; then
+		elif [ -d "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Copying textures from sm64ex-coop
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -1125,30 +1126,35 @@ if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 	return
 elif [ "$CHEATER" = 0 ]; then
 	removecheater
-elif ! ([ -f enhancements/CHEATERv9*.zip ] || [ -f enhancements/CHEATER.coop.v2*.zip ]); then
+	return
+elif [ "$ANDROID" = "androidex" ] && [ ! -f enhancements/v9_r9ex.patch ]; then
 	removecheater
-	echo Getting CHEATER...
-	if [ "$ANDROID" = "androidex" ]; then
-		cd "$BASEPATH"/"$PRESET"/enhancements
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
-		unzip -q CHEATERv9.zip v9_r96ex.patch
-		CHEATERFILE=v9_r96ex.patch 
-	elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
-		cd "$BASEPATH"/"$PRESET"/enhancements
-		wget -q https://cdn.discordapp.com/attachments/755507981524795623/762583302074794024/CHEATER.coop.v2.patch.zip	
-		unzip -q CHEATER.coop.v2.patch.zip 
-		CHEATERFILE=CHEATER.coop.v2.patch
-	elif [ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]; then
-		cd "$BASEPATH"/"$PRESET"/enhancements
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/764327857823678464/CHEATERv9.5.zip
-		unzip -q CHEATERv9.5.zip CHEATER.patch 
-		CHEATERFILE=CHEATER.patch
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	wget -q https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
+	unzip -q CHEATERv9.zip v9_r96ex.patch
+	CHEATERFILE=v9_r96ex.patch 
+elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v2*.zip ]; then
+	removecheater
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	wget -q https://cdn.discordapp.com/attachments/755507981524795623/762583302074794024/CHEATER.coop.v2.patch.zip	
+	unzip -q CHEATER.coop.v2.patch.zip 
+	CHEATERFILE=CHEATER.coop.v2.patch
+elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ]; then
+	removecheater
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
+	if [ "$DYNOS" = 1 ]; then
+		unzip -q CHEATERv10.zip CHEATERv10_dynos.patch 
+		CHEATERFILE=CHEATERv10_dynos.patch
+	else
+		unzip -q CHEATERv10.zip CHEATERv10.patch 
+		CHEATERFILE=CHEATERv10.patch
 	fi
-	if [ -f "$CHEATERFILE" ]; then
-		echo Applying cheats...
-		cd "$BASEPATH"/"$PRESET"
-		git apply enhancements/"$CHEATERFILE" 
-	fi
+fi
+if [ -f "$CHEATERFILE" ]; then
+	echo Applying "$CHEATERFILE"...
+	cd "$BASEPATH"/"$PRESET"
+	git apply enhancements/"$CHEATERFILE" 
 fi
 }
 
@@ -1163,7 +1169,7 @@ elif [ -f enhancements/cheater*.patch ]; then
 	git apply -R enhancements/cheater*.patch
 	rm enhancements/cheater*.patch
 elif [ -f enhancements/v9_*.patch ]; then
-	echo Removing CHEATER...
+	echo Removing CHEATER v9...
 	git apply -R enhancements/v9_*.patch
 	rm enhancements/v9_*.patch
 fi
@@ -1492,30 +1498,30 @@ elif [ -f ~/.smlinuxUpdate ]; then
 else	     # The real start, the rest was script preperation and setup. 
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
-	echo '/---------------------------'"$TIMESTAMP"'-------------------------------------\'
-	echo "|                                                                              |"
-	echo "|     Super Mario 64 Install * Build * Update Script for Linux and macOS       |"
-	echo "|                                                                              |"
-	echo "|               Command Line Usage: smlinux <command> <options>                |"
-	echo "| Commands                                                                     |"
-	echo "|  update: Update existing sm64 source & build (preserves modifications)       |"
-	echo "|   build: Get sm64 source from github & build (renames existing folder)       |"
-	echo "|   clone: Get sm64 source from github & extract rom (without addons or build) |"
-	echo "|  config: Opens smlinuxcfg.txt in a text editor (without building)            |"
-	echo "|   reset: Resets smlinux configuration file to default settings               |"
-	echo "| depends: Install dependencies (automatic during first smlinux installation)  |"
-	echo "| upgrade: Upgrade smlinux to latest version from github (without building)    |"
-	echo "|   purge: Delete all files obtained or created by smlinux including sm64      |"
-	echo "|    help: Display all smlinux commands and options plus open faq url          |"
+	echo '/---------------------------'"$TIMESTAMP"'-----------------------------------\'
+	echo "|                                                                            |"
+	echo "|     Super Mario 64 Install * Build * Update Script for Linux and macOS     |"
+	echo "|                                                                            |"
+	echo "|               Command Line Usage: smlinux <command> <options>              |"
+	echo "| Commands                                                                   |"
+	echo "|  update: Update existing sm64 source & build (preserves modifications)     |"
+	echo "|   build: Get sm64 source from github & build (renames existing folder)     |"
+	echo "|   clone: Get sm64 source from github & extract rom (no addons or build)    |"
+	echo "|  config: Opens smlinuxcfg.txt in a text editor (without building)          |"
+	echo "|   reset: Resets smlinux configuration file to default settings             |"
+	echo "| depends: Install dependencies (automatic during smlinux installation)      |"
+	echo "| upgrade: Upgrade smlinux to latest version from github (without building)  |"
+	echo "|   purge: Delete all files obtained or created by smlinux including sm64    |"
+	echo "|    help: Display all smlinux commands and options plus open faq url        |"
 	if [ "$COMMAND" = "help" ]; then
-		echo "| rebuild: rebuild an existing or previously failed build with no changes      |"
-		echo "|                                                                              |"
-		echo "| Options:   --hd  install HD add-ons (ignore EnableHD=0/UpgradeHD=0)          |"
-		echo "|           --sgi  install Render96 SGI model pack (ignore InstallR96=0)       |"
-		echo "|        --config  prompt to edit config file before build (ignore CONFIG=0)   |"
-		echo "|       --depends  install dependencies before build                           |"
-		echo "|                                                                              |"
-		echo "--------------------------------------------------------------------------------"
+		echo "| rebuild: rebuild an existing or previously failed build with no changes    |"
+		echo "|                                                                            |"
+		echo "| Options:   --hd  install HD add-ons (ignore EnableHD=0/UpgradeHD=0)        |"
+		echo "|           --sgi  install Render96 SGI model pack (ignore InstallR96=0)     |"
+		echo "|        --config  prompt to edit config file before build (ignore CONFIG=0) |"
+		echo "|       --depends  install dependencies before build                         |"
+		echo "|                                                                            |"
+		echo "------------------------------------------------------------------------------"
 		tput setaf 7 # white text
 		if [ "$OP1" = "--noweb" ]; then
 			exit
@@ -1525,8 +1531,8 @@ else	     # The real start, the rest was script preperation and setup.
 		"$OPEN" https://github.com/enigma9o7/smlinux#frequently-asked-questions 
 		exit
 	else
-		echo "|                                                                              |"
-		echo "--------------------------------------------------------------------------------"
+		echo "|                                                                            |"
+		echo "------------------------------------------------------------------------------"
 	fi
 	greenecho [1] Preparing for "$COMMAND"...
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
@@ -1851,7 +1857,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 		true
 	elif [ "$EXTERNAL_DATA" = 0 ]; then
 		sleep 5
-	elif  ([ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]) && [ "$InstallHD" = 1 ]; then
+	elif [ "$GIT" = "render96/render96ex" ] && [ "$InstallHD" = 1 ]; then
 		sleep 30
 	else 
 		sleep 10
@@ -1949,6 +1955,9 @@ fi
 if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATER64_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
 	echo SM64 save file found.
 elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
+	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
+	echo Copied Save file from Render96
+elif [ "$PRESET" = "r96alpha" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
 	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
 	echo Copied Save file from Render96
 elif [ "$PRESET" = "render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
