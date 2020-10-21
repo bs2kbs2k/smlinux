@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1020-1528
+TIMESTAMP=2020-1020-1736
 
 domake(){
 #Here We go & music to build to
@@ -401,6 +401,7 @@ VERSION=us
 # Set MAXJOBS=n to limit cpu threads used during compile, i.e. MAXJOBS=1
 MAXJOBS=
 # [ options for sm64ex and its forks ] 
+DYNOS=1
 CHEATER=1
 BETTERCAMERA=1
 NODRAWINGDISTANCE=1
@@ -465,6 +466,7 @@ InstallR96=0
 DISCORD_SDK=1
 FPS60=0
 CHEATER=1
+DYNOS=1
 source "$SMLINUX"/smlinuxcfg.txt
 if [ -z $PRESET ] && [ ! -z $REPO ]; then
 	PRESET="$REPO"
@@ -475,11 +477,13 @@ if [ "$PRESET" = "sm64pc" ]; then
 	GIT=sm64ex/sm64pc
 	BRANCH=master
 	CHEATER=0
+	DYNOS=0
 elif [ "$PRESET" = "sm64-port" ]; then
 	GIT=sm64-port/sm64-port
 	BRANCH=master
 	EXTERNAL_DATA=0
 	CHEATER=0
+	DYNOS=0
 elif [ "$PRESET" = "sm64ex" ]; then
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
@@ -500,12 +504,14 @@ elif [ "$PRESET" = "sm64-portweb" ]; then
 	DISCORDRPC=0
 	FPS60=0
 	CHEATER=0
+	DYNOS=0
 elif [ "$PRESET" = "sm64nx" ]; then
 	GIT=teamsalta/sm64nx
 	BRANCH=master
 	EXTERNAL_DATA=0
 	FPS60=0
 	CHEATER=0
+	DYNOS=0
 elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96" ] || [ "$PRESET" = "r96ex" ]; then
 	PRESET=render96ex
 	GIT=render96/render96ex
@@ -550,6 +556,7 @@ elif [ "$PRESET" = "androidex" ] ; then
 	BRANCH=sm64ex_nightly
 	TARGET_WEB=0
 	TARGET_RPI=0
+	DYNOS=0  # might work need to test
 elif  [ "$PRESET" = "sm64-port-android-base" ]; then
 	ANDROID="$PRESET"
 	PRESET="sm64-port-android-base/app/jni/src"
@@ -558,7 +565,8 @@ elif  [ "$PRESET" = "sm64-port-android-base" ]; then
 	EXTERNAL_DATA=0
 	TARGET_WEB=0
 	TARGET_RPI=0
-	CHEATER=0	
+	CHEATER=0
+	DYNOS=0	
 elif  [ "$PRESET" = "mkstdos" ]; then
 	GIT=mkst/sm64-port
 	BRANCH=dos
@@ -568,6 +576,7 @@ elif  [ "$PRESET" = "mkstdos" ]; then
 	TARGET=dos		
 	InstallHD=0
 	CHEATER=0
+	DYNOS=0
 elif  [ "$PRESET" = "sm64dos" ]; then
 	GIT=fgsfdsfgs/sm64-port
 	BRANCH=dos
@@ -575,7 +584,8 @@ elif  [ "$PRESET" = "sm64dos" ]; then
 	TARGET_WEB=0
 	TARGET_RPI=0
 	TARGET=dos	
-	CHEATER=0	
+	CHEATER=0
+	DYNOS=0	
 fi
 if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
@@ -1090,6 +1100,25 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 fi
 }
 
+dodynos(){
+cd "$BASEPATH"/"$PRESET"
+if [ "$GIT" = "s4Ys369/cheaterex" ]; then
+	return
+elif [ "$DYNOS" = 0 ] && [ -f enhancements/DynOS.0.4.patch ]; then
+	echo Removing Dynamic Option System
+	git apply -R enhancements/DynOS*.patch
+	rm enhancements/DynOS*
+elif [ "$DYNOS" = 1 ] && [ ! -f enhancements/DynOS.0.4.patch ]; then
+    echo Applying Dynamic Option System
+    cd enhancements
+    wget https://drive.google.com/uc?id=1cuY8iI4teqiMmiwMOtcVIpZ9Yr2sm_DI -o dynos.zip
+    unzip dynos
+    rm dynos.zip
+    cd ..
+    git apply enhancements/DynOS*.patch
+fi
+}
+
 docheats(){
 cd "$BASEPATH"/"$PRESET"
 if [ "$GIT" = "s4Ys369/cheaterex" ]; then
@@ -1224,7 +1253,7 @@ elif [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"
 	GITVER=`git rev-parse --short HEAD`
 	echo '#!/bin/bash' >"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
-	echo cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$SHARE"/applications/"$PRESET".sh >>"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	echo cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SAVEDIR" >>"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	chmod +x "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	cd /Applications
@@ -1679,7 +1708,6 @@ elif [ "$COMMAND" = "update" ]; then
 	fi
 	git fetch
 	if [ "$(git diff HEAD origin/HEAD)" != "" ]; then
-		echo Attempting to merge updates....
 		git merge
 	fi
 	if [ "$?" = "1" ]; then
@@ -1750,6 +1778,7 @@ elif [ "$COMMAND" = "update" ]; then
 		zip -r -0 -u hdbase gfx
 		rm -rf gfx
 	fi
+	dodynos
 	docheats
 	domymenu
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1960,6 +1989,7 @@ fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
 	dofps
 fi
+dodynos
 docheats
 domymenu
 if [ "$PRESET" = "emm-ody" ] && [ ! -f "$BASEPATH"/"$PRESET"smo.cappy_assets.zip ]; then
