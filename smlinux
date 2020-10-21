@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1020-1736
+TIMESTAMP=2020-1020-1819
 
 domake(){
 #Here We go & music to build to
@@ -1532,6 +1532,10 @@ else	     # The real start, the rest was script preperation and setup.
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
 		if [ "$OSX_BUILD" = 1 ]; then
 			echo "Installing dependencies for macOS..."
+			if [ -d /Library/Developer/CommandLineTools/usr/bin ]; then
+				echo Installing Apple XCode Command Line Tools
+				xcode-select --install
+			fi
 			if ! command -v brew &> /dev/null; then
     			echo Installing Homebrew package manager...
 				bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -1868,7 +1872,8 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 		fi
 		mv "$BASEPATH"/"$PRESET" "$BASEPATH"/"$PRESET".old
 		if [ -d "$BASEPATH"/"$PRESET".old/.git  ]; then
-			printf "\n[3] Preparing sm64 source from github... \n"
+			echo
+			greenecho "[3] Preparing clean sm64 source..."
 			mkdir "$BASEPATH"/"$PRESET"
 			cd "$BASEPATH"/"$PRESET"
 			mv "$BASEPATH"/"$PRESET".old/.git .
