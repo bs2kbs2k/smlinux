@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1020-2042
+TIMESTAMP=2020-1020-2212
 
 domake(){
 #Here We go & music to build to
@@ -853,10 +853,13 @@ else
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/screenshots ]; then
 			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/screenshots
 		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
+		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ]; then
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res	
 			echo Getting High Quality Sounds...
 			wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
+		elif [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
+			echo "Removing HQ SoundPack (Not Compatible with Co-Op Beta2)"
+			rm "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip
 		fi
 	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$GIT" = "djoslin0/sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
 		pinkecho WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
