@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1020-2212
+TIMESTAMP=2020-1021-1403
 
 domake(){
 #Here We go & music to build to
@@ -151,19 +151,28 @@ elif [ "$PRESET" = "sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]
 	cd "$BASEPATH"/"$PRESET"
 	rm Makefile
 	git checkout Makefile
-elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+elif [ "$LEGACY_RES" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.zip ]; then
+	echo Preparing base resource pack...
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-	echo Creating Basepack...
-	zip -q -r -0 base gfx sound
 	if [ -f base.zip ]; then
-		rm -rf gfx sound
+		rm base.zip
 	fi
+	mv awesome-legacy.zip base.zip
+	unzip -q base text
 elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.zip ]; then
+	echo Renaming base resource pack base.zip...
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		if [ -f base.zip ]; then
 			rm base.zip
 		fi
 		mv awesome-legacy.zip base.zip
+elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+	echo Creating base resource pack...
+	zip -q -r -0 base gfx sound
+	if [ -f base.zip ]; then
+		rm -rf gfx sound
+	fi
 fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	killall -q -y1h mplayer
@@ -391,15 +400,11 @@ if [ ! -d "$SMLINUX" ]; then
 fi
 echo '# PRESET supports: sm64ex sm64nx sm64ex-coop render96ex cheaterex 
 # AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
-# AND: sm64pc sm64-port r96proto coop-unstable
+# AND: sm64pc sm64-port r96proto r96alpha
 PRESET=sm64ex
 InstallHD=1
 InstallR96=0
 FPS60=0
-# VERSION supports us jp eu (must correspond to rom version)
-VERSION=us
-# Set MAXJOBS=n to limit cpu threads used during compile, i.e. MAXJOBS=1
-MAXJOBS=
 # [ options for sm64ex and its forks ] 
 DYNOS=1
 CHEATER=1
@@ -417,7 +422,7 @@ TEXTSAVES=0
 DISCORD_SDK=1
 IMMEDIATELOAD=1
 # [ options for render96ex only ]
-LEGACY_RES=1
+LEGACY_RES=0
 # [ options for Android only ]
 TOUCH_CONTROLS=1
 ARMONLY=1
@@ -426,7 +431,11 @@ ENABLE_OPENGL_LEGACY=1
 # DOS_GL Supports dmesa (glide) or osmesa
 DOS_GL=osmesa
 ENABLE_OPENGL_LEGACY=1
-# [ Advanced Settings ]
+# [ Additional Settings ]
+# VERSION supports us jp eu (must correspond to rom version)
+VERSION=us
+# Set MAXJOBS=n to limit cpu threads used during compile, i.e. MAXJOBS=1
+MAXJOBS=
 # Set CONFIG=0 If you do not want to be automatically prompted before building.
 CONFIG=1
 # BASEPATH must exist and is where folders for each repo will be placed
@@ -454,7 +463,7 @@ OSX_BUILD=0
 TARGET_RPI=0
 TEXTSAVES=0
 TOUCH_CONTROLS=1
-LEGACY_RES=1
+LEGACY_RES=0
 BASEPATH=$HOME
 ARMONLY=1
 DEBUG=0
@@ -516,24 +525,23 @@ elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lowe
 	PRESET=render96ex
 	GIT=render96/render96ex
 	BRANCH=master
-	EXTERNAL_DATA=1
 	TEXTSAVES=1
-	InstallR96=1
+	LEGACY_RES=1
 elif [ "$PRESET" = "r96proto" ]; then
 	GIT=render96/render96ex
 	BRANCH=fastbuild_prototype
-	EXTERNAL_DATA=1
 	TEXTSAVES=1
 	DISCORDRPC=0
-	LEGACY_RES=0
 	CHEATER=0
+	DYNOS=0
 elif [ "$PRESET" = "r96alpha" ]; then
 	GIT=render96/render96ex
 	BRANCH=alpha
-	EXTERNAL_DATA=1
 	TEXTSAVES=1
 	DISCORDRPC=0
 	CHEATER=0
+	DYNOS=0
+	FPS60=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
@@ -551,6 +559,7 @@ elif  [ "$PRESET" = "coop-unstable" ]; then
 	NODRAWINGDISTANCE=1
 	FPS60=0
 	CHEATER=0
+	DYNOS=0
 elif  [ "$PRESET" = "sm64ex-coop" ]; then
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=coop
@@ -923,7 +932,7 @@ fi
 
 dosgi(){
 if  [ "$TARGET_WEB" = 1 ] || ([ "$EXTERNAL_DATA" = 0 ] && [ ! "$PRESET" = "sm64nx" ]); then
-	if(whiptail --title "SGI Model Warning" --yesno "SGI Models are unlikely to work without external data or for web Target." 10 50 --yes-button "Continue Anyway" --no-button "Cancel" --defaultno); then
+	if(whiptail --title "SGI Model Warning" --yesno "SGI Models are unlikely to work without external data or for web Target." 10 50 --yes-button "Install Anyway" --no-button "Proceed without Models" --defaultno); then
 		pinkecho WARNING: SGI Models may not build correctly on anything besides sm64ex-nightly
 		echo Proceeding anyway, but it may not be succesful.
 	else
@@ -1139,9 +1148,9 @@ elif [ "$ANDROID" = "androidex" ] && [ ! -f enhancements/v9_r9ex.patch ]; then
 elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v2*.zip ]; then
 	removecheater
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget -q https://cdn.discordapp.com/attachments/755507981524795623/762583302074794024/CHEATER.coop.v2.patch.zip	
-	unzip -q CHEATER.coop.v2.patch.zip 
-	CHEATERFILE=CHEATER.coop.v2.patch
+	wget -q https://cdn.discordapp.com/attachments/755507981524795623/767641043855212544/fix.CHEATER.coop.patch.zip
+	unzip -q fix.CHEATER.coop.patch.zip 
+	CHEATERFILE=fix.CHEATER.coop.patch
 elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ]; then
 	removecheater
 	cd "$BASEPATH"/"$PRESET"/enhancements
@@ -1166,18 +1175,25 @@ cd "$BASEPATH"/"$PRESET"
 if [ -f enhancements/CHEATER*.patch ]; then
 	echo Removing CHEATER...
 	git apply -R enhancements/CHEATER*.patch
-	rm enhancements/CHEATER*.patch
+	rm enhancements/CHEATER*
 elif [ -f enhancements/cheater*.patch ]; then
 	echo Removing CHEATER...
 	git apply -R enhancements/cheater*.patch
-	rm enhancements/cheater*.patch
+	rm enhancements/cheater*
 elif [ -f enhancements/v9_*.patch ]; then
 	echo Removing CHEATER v9...
 	git apply -R enhancements/v9_*.patch
 	rm enhancements/v9_*.patch
+elif [ -f enhancements/fix.CHEATER*.patch ]; then
+	echo Removing CHEATER...
+	git apply -R enhancements/fix.CHEATER*.patch
+	rm enhancements/fix.CHEATER*
 fi
-if [ -f enhancements/CHEATER* ]; then
-	rm enhancements/CHEATER*
+if [ -f enhancements/CHEATER*.zip ]; then
+	rm enhancements/CHEATER*.zip
+fi
+if [ -f enhancements/fix.CHEATER*.zip ]; then
+	rm enhancements/fix.CHEATER*.zip
 fi
 }
 
@@ -1501,7 +1517,7 @@ elif [ -f ~/.smlinuxUpdate ]; then
 else	     # The real start, the rest was script preperation and setup. 
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
-	echo '/---------------------------'"$TIMESTAMP"'-----------------------------------\'
+	echo '/------------------------------'"$TIMESTAMP"'--------------------------------\'
 	echo "|                                                                            |"
 	echo "|     Super Mario 64 Install * Build * Update Script for Linux and macOS     |"
 	echo "|                                                                            |"
@@ -2002,7 +2018,7 @@ if [ "$InstallHD" = 1 ]; then
 elif [ "$InstallR96" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
-	pinkecho WARNING: InstallHD Disabled in Config File so HD addons not being added.
+	pinkecho WARNING: InstallHD Disabled so HD addons not being added.
 fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
 	dofps
