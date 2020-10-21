@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1020-1819
+TIMESTAMP=2020-1020-1825
 
 domake(){
 #Here We go & music to build to
@@ -1532,7 +1532,7 @@ else	     # The real start, the rest was script preperation and setup.
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
 		if [ "$OSX_BUILD" = 1 ]; then
 			echo "Installing dependencies for macOS..."
-			if [ -d /Library/Developer/CommandLineTools/usr/bin ]; then
+			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
 				echo Installing Apple XCode Command Line Tools
 				xcode-select --install
 			fi
