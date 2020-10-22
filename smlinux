@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1022-1123
+TIMESTAMP=2020-1022-1140
 
 domake(){
 #Here We go & music to build to
@@ -198,9 +198,7 @@ sed -i.bak '855i\
         elif a == "-Wno-implicit-function-declaration":' assemble_sound.py
 sed -i.bak '856i\
             print("Warning flag; ignoring")' assemble_sound.py
-sed -i.bak 's|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc tabledesign extract_data_for_mio skyconv||g' Makefile
-sed -i.bak '1i\
-	PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc extract_data_for_mio skyconv' Makefile
+sed -i.bak 's|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc tabledesign extract_data_for_mio skyconv|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc extract_data_for_mio skyconv|g' Makefile
 sed -i.bak '2i\
 	CLANG := /usr/bin/clang' Makefile
 sed -i.bak '3i\
