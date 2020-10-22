@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-2053
+TIMESTAMP=2020-1021-2143
 
 domake(){
 #Here We go & music to build to
@@ -33,8 +33,8 @@ if [ "$OSX_BUILD" = 1 ]; then
 	elif [ "$GIT" = "render96/render96ex" ]; then
 		sed -i.bak 's/#include <malloc.h>/\/\/ # include <malloc.h>/g' "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c
 	fi
-	#sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
-    # sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
+	sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
+    sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
     sed -i.bak '855i\
         elif a == "-Wno-implicit-function-declaration":' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
 	sed -i '856i\
@@ -65,7 +65,7 @@ echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SD
 echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API
 if [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"/tools
-	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/g++-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	if [ ! -f skyconv ]; then
 		echo Dealing with that error...
 		gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
@@ -1916,7 +1916,6 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 		fi
 		mv "$BASEPATH"/"$ANDROID" "$BASEPATH"/"$ANDROID".old
 	else
-		pinkecho WARNING: "$PRESET" directory already exists!  Renaming to "$PRESET".old...
 		if [ -d "$BASEPATH"/"$PRESET".old ]; then
 			rm -rf "$BASEPATH"/"$PRESET".old
 		fi
@@ -1930,6 +1929,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			git checkout "$BRANCH" -- .
 			git pull --no-rebase
 		fi
+		pinkecho WARNING: "$PRESET" directory already existed so was renamed "$PRESET".old...
 	fi
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
