@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-2232
+TIMESTAMP=2020-1021-2337
 
 domake(){
 #Here We go & music to build to
@@ -172,8 +172,10 @@ sed -i.bak '855i\
 sed -i.bak '856i\
             print("Warning flag; ignoring")' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
 cd "$BASEPATH"/"$PRESET"/tools
-echo Preparing N64 Tools for macOS...
-gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+if [ ! -f skyconv ]; then
+	echo Preparing N64 Tools for macOS...
+	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+fi
 if [ ! -f skyconv ]; then
 	echo Dealing with that error...
 	gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
@@ -456,7 +458,7 @@ GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 # Linux command is only called during first install and is not used for macOS
-Linux="sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar"
+Linux="sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar pzip"
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
@@ -958,7 +960,7 @@ if  [ "$TARGET_WEB" = 1 ] || ([ "$EXTERNAL_DATA" = 0 ] && [ ! "$PRESET" = "sm64n
 		return
 	fi
 fi
-if  [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/render96* ]; then 
+if  [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/render96* ]; then 
 	echo Render96 already installed.
 	return
 fi
@@ -989,6 +991,10 @@ if [ "$PRESET" = "sm64nx" ]; then
 		cd "SGI Models"
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak
 	fi
+elif [ "$PRESET" = "r96alpha" ]; then
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	wget -q https://cdn.discordapp.com/attachments/730551213376143431/768498646676537344/RENDER96_V2.0.7z
+	SGIFILE=RENDER96_V2.0.7z 
 elif [ "$GIT" = "render96/render96ex" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/730551213376143431/745382037560492132/RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
@@ -1024,7 +1030,7 @@ fi
 if [ ! "$PRESET" = "sm64nx" ]; then
 	cd "$BASEPATH"/"$PRESET"
 	echo Applying Render96 SGI Models...
-	unzip -o enhancements/"$SGIFILE" 
+	7z x -aoa enhancements/"$SGIFILE" 
 fi
 if [ ! "$ANDROID" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/render96_android.patch ]; then
 	echo Applying Android patch for Render96 models
@@ -1588,7 +1594,7 @@ else   # The real start, the rest was script preperation and setup.
 				echo FATAL ERROR Could not install homebrew, thus cannot install other stuff.  
 				endnow
 			fi
-			brew install libxdg-basedir coreutils wget newt nano go unzip unrar python3 
+			brew install libxdg-basedir coreutils wget newt nano go zip unzip unrar p7zip python3 
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
 			go get github.com/machinebox/appify
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
