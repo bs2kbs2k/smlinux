@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-2150
+TIMESTAMP=2020-1021-2025
 
 domake(){
 #Here We go & music to build to
@@ -23,24 +23,6 @@ if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
 elif [ "$TARGET_WEB" = 1 ]; then
 	sed -i.bak 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=30MB/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
-if [ "$OSX_BUILD" = 1 ]; then
-    if [ "$EXTERNAL_DATA" = 1 ]; then 	
-    	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
-    fi
-    if [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
-		sed -i.bak 's/sdk\/discord_game_sdk.dylib/sdk\/libdiscord_game_sdk.dylib/g' "$BASEPATH"/"$PRESET"/Makefile
-		cp "$BASEPATH"/"$PRESET"/lib/discordsdk/discord_game_sdk.dylib "$BASEPATH"/"$PRESET"/lib/discordsdk/libdiscord_game_sdk.dylib
-	elif [ "$GIT" = "render96/render96ex" ]; then
-		sed -i.bak 's/#include <malloc.h>/\/\/ # include <malloc.h>/g' "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c
-	fi
-	sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
-    sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
-    sed -i.bak '855i\
-        elif a == "-Wno-implicit-function-declaration":' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
-	sed -i.bak '856i\
-            print("Warning flag; ignoring")' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
-fi
-
 if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 	checkphone
@@ -64,16 +46,6 @@ echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SDK ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL 
 echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API
 if [ "$OSX_BUILD" = 1 ]; then
-	cd "$BASEPATH"/"$PRESET"/tools
-	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
-	if [ ! -f skyconv ]; then
-		echo Dealing with that error...
-		gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
-		make OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
-	fi
-	if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
-		ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
-	fi
 	cd "$BASEPATH"/"$PRESET"
 	time gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API> "$SMLINUX"/buildlog.txt
 	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
@@ -180,8 +152,35 @@ elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARG
 		rm -rf gfx sound
 	fi
 fi
-if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
+if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ] && [ "$BuildMusic" = 1 ]; then
 	killall -q -y1h mplayer
+fi
+}
+
+macprep(){
+sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
+if [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
+	sed -i.bak 's/sdk\/discord_game_sdk.dylib/sdk\/libdiscord_game_sdk.dylib/g' "$BASEPATH"/"$PRESET"/Makefile
+	cp "$BASEPATH"/"$PRESET"/lib/discordsdk/discord_game_sdk.dylib "$BASEPATH"/"$PRESET"/lib/discordsdk/libdiscord_game_sdk.dylib
+elif [ "$GIT" = "render96/render96ex" ]; then
+	sed -i.bak 's/#include <malloc.h>/\/\/ # include <malloc.h>/g' "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c
+fi
+sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
+sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
+sed -i.bak '855i\
+        elif a == "-Wno-implicit-function-declaration":' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
+sed -i.bak '856i\
+            print("Warning flag; ignoring")' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
+cd "$BASEPATH"/"$PRESET"/tools
+echo Preparing N64 Tools for macOS...
+gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+if [ ! -f skyconv ]; then
+	echo Dealing with that error...
+	gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+	make OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+fi
+if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
+	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 fi
 }
 
@@ -438,13 +437,13 @@ ENABLE_OPENGL_LEGACY=1
 # [ Advanced Settings ]
 # Set MAXJOBS=n to limit cpu threads used during compile, i.e. MAXJOBS=1
 MAXJOBS=
-# Set CONFIG=0 If you do not want to be automatically prompted before building.
+# Set CONFIG=0 If you do not want to be automatically prompted before building
 CONFIG=1
 # BASEPATH must exist and is where folders for each repo will be placed
 BASEPATH=$HOME
 # Set UpdateHD=0 to prevent smlinux updating addons when rebuilding
 UpdateHD=1
-# Set BuildMusic=0 to prevent smlinux playing background music during make
+# Set BuildMusic=0 to prevent smlinux playing background music during compile
 BuildMusic=1
 [ Advanced Make Flags ]
 # VERSION supports us jp eu (must correspond to rom version)
@@ -1958,6 +1957,9 @@ greenecho [4] Extracting Assets from ROM...
 if [ "$PRESET" = "sm64nx" ]; then
 	prepnx
 else 	
+	if [ "$TARGET_OSX" = 1 ]; then
+		macprep
+	fi
 	cd "$BASEPATH"/"$PRESET"
 	./extract_assets.py "$VERSION"
 fi
