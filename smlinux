@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-2025
+TIMESTAMP=2020-1021-2232
 
 domake(){
 #Here We go & music to build to
@@ -1957,7 +1957,7 @@ greenecho [4] Extracting Assets from ROM...
 if [ "$PRESET" = "sm64nx" ]; then
 	prepnx
 else 	
-	if [ "$TARGET_OSX" = 1 ]; then
+	if [ "$OSX_BUILD" = 1 ]; then
 		macprep
 	fi
 	cd "$BASEPATH"/"$PRESET"
