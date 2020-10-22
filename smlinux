@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-2353
+TIMESTAMP=2020-1022-1037
 
 domake(){
 #Here We go & music to build to
@@ -174,6 +174,7 @@ sed -i.bak '856i\
 cd "$BASEPATH"/"$PRESET"/tools
 if [ ! -f skyconv ]; then
 	echo Preparing N64 Tools for macOS...
+	prepmacos
 	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
 if [ ! -f skyconv ]; then
@@ -185,6 +186,39 @@ if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/inclu
 	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 fi
 }
+prepmacos(){
+	cd "$BASEPATH"/"$PRESET"/
+	# grep -Rl '<SDL2/' * | xargs gsed -i 's|<SDL2/|<|g'
+
+	# gsed -i 's|gcc|/usr/local/bin/gcc-9|g' Makefile
+	# gsed -i 's|g++|/usr/local/bin/g++-9|g' Makefile
+	# gsed -i 's|DISCORDRPC ?= 0|DISCORDRPC ?= 1|g' Makefile
+	# gsed -i 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' Makefile
+	# gsed -i 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' tools/Makefile
+	# gsed -i 's|OSX_BUILD ?= 0|OSX_BUILD ?= 1|g' Makefile
+	# gsed -i '855i\        elif a == "-Wno-implicit-function-declaration":' tools/assemble_sound.py
+	# gsed -i '856i\            print("Warning flag; ignoring")' tools/assemble_sound.py
+	# gsed -i 's|gcc|/usr/local/bin/gcc-9|g' tools/Makefile
+	# gsed -i 's|g++|/usr/local/bin/g++-9|g' tools/Makefile
+	sed -i.bak 's|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc tabledesign extract_data_for_mio skyconv||g' tools/Makefile
+	sed -i.bak '1i\
+	PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc extract_data_for_mio skyconv' tools/Makefile
+	sed -i.bak '2i\
+	CLANG := /usr/bin/clang' tools/Makefile
+	sed -i.bak '3i\
+	CLANG_PROGRAMS := tabledesign' tools/Makefile
+	sed -i.bak '57i\
+	define CLANG_COMPILE' tools/Makefile
+	sed -i.bak '58i\
+	$(1): $($1_SOURCES)' tools/Makefile
+	sed -i '59i\
+		$(CLANG) $(CFLAGS) $($1_CFLAGS) $$^ -o $$@ $(LDFLAGS) $($1_LDFLAGS)' tools/Makefile
+	sed -i.bak '60i
+	\endef' tools/Makefile
+	sed -i.bak '62i\
+	$(foreach p,$(CLANG_PROGRAMS),$(eval $(call CLANG_COMPILE,$(p))))' tools/Makefile
+}
+
 
 theend(){
 if [ "$TARGET" = "web" ]; then
@@ -548,9 +582,7 @@ elif [ "$PRESET" = "r96alpha" ]; then
 	TEXTSAVES=1
 	InstallR96=1
 	DISCORDRPC=0
-	CHEATER=0
 	DYNOS=0
-	FPS60=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
@@ -656,8 +688,12 @@ doconfig(){
 if ! command -v whiptail &> /dev/null; then
     return
 elif (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 24 80 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
-	whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a text editor.\n\nWhen you exit your editor, smlinux will continue.\n(To exit pico/nano/micro editors use Control-X)\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1
-	editconfig	
+	if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a text editor.\n\nWhen you exit your editor, smlinux will continue.\n(To exit pico/nano/micro editors use Control-X)\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
+		editconfig	
+	else
+		echo smlinux aborted.
+		exit
+	fi
 fi
 }
 
