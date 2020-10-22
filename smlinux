@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-1709
+TIMESTAMP=2020-1021-1832
 
 domake(){
 #Here We go & music to build to
@@ -159,6 +159,7 @@ elif [ "$LEGACY_RES" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARG
 	fi
 	mv awesome-legacy.zip base.zip
 	unzip -q base text
+	zip -d base text
 elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.zip ]; then
 	echo Renaming base resource pack base.zip...
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -210,9 +211,9 @@ exit
 
 endnow(){
 echo "Script Ending Incomplete.  Contact #help-desk for support."
-	if [ "$OSX_BUILD" = 0 ] && [ "$TARGET_RPI" = 0 ]; then
-		"$OPEN" https://discord.gg/Ub6YHRm &
-	fi
+if [ "$TARGET_RPI" = 0 ]; then
+	"$OPEN" https://discord.gg/Ub6YHRm &
+fi
 echo Your smlinux internal timestamp is "$TIMESTAMP".
 echo If that is not recent, perhaps updates are not working.
 echo check https://github.com/enigma9o7/smlinux for the latest version.
@@ -220,7 +221,6 @@ echo
 exit
 }
 
-greenecho(){
 # 0    black     COLOR_BLACK     0,0,0
 # 1    red       COLOR_RED       1,0,0
 # 2    green     COLOR_GREEN     0,1,0
@@ -229,6 +229,7 @@ greenecho(){
 # 5    magenta   COLOR_MAGENTA   1,0,1
 # 6    cyan      COLOR_CYAN      0,1,1
 # 7    white     COLOR_WHITE     1,1,1
+greenecho(){
 tput setab 0  # black background
 tput setaf 2  # greeen text
 tput bold
@@ -237,7 +238,6 @@ tput sgr0 # reset
 tput setab 0  # black background
 tput setaf 7 # white text
 }
-
 pinkecho(){
 tput setab 0  # black background
 tput setaf 5  # magenta text
@@ -247,7 +247,6 @@ tput sgr0 # reset
 tput setab 0  # black background
 tput setaf 7 # white text
 }
-
 redecho(){
 tput setab 0  # black background
 tput setaf 1  # red text
@@ -452,7 +451,7 @@ GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 # Linux command is only called during first install and is not used for macOS
-Linux="sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer unzip unrar"
+Linux="sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar"
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
@@ -774,7 +773,7 @@ else
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git pull --no-rebase
 		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git ] ; then
-			echo Getting texture repository from old build...
+			echo Getting texture repository from old backup...
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
@@ -783,6 +782,20 @@ else
 			if [ -f "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
 				echo Copying high quality sounds......
 				cp "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip .
+			fi
+			echo Updating textures from github...
+			git checkout gfx
+			git pull --no-rebase
+		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git ] ; then
+			echo Getting texture repository from old build...
+			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
+			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git .
+			if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hq_sounds_v5.1.zip ]; then
+				echo Copying high quality sounds......
+				cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hq_sounds_v5.1.zip .
 			fi
 			echo Updating textures from github...
 			git checkout gfx
@@ -845,7 +858,7 @@ else
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
 		fi
 		if [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
-			if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
+			if [ "$GIT" = "render96/render96ex" ]; then
 				echo Downloading Render96 Textures... 
 				git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			else
@@ -854,7 +867,7 @@ else
 			fi
 		fi
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old ]; then
-			mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		fi
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes ]; then
 			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes
@@ -870,7 +883,7 @@ else
 			echo "Removing HQ SoundPack (Not Compatible with Co-Op Beta2)"
 			rm "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip
 		fi
-	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$PRESET" = "render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$GIT" = "djoslin0/sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
+	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$GIT" = "render96/render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$GIT" = "djoslin0/sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
 		pinkecho WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
 	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
 		echo External Data not supported for sm64-port repository, skipping.
@@ -911,7 +924,7 @@ fi
 
 dofps(){
 cd "$BASEPATH"/"$PRESET"
-if [ "$FPS60" = 1 ] && [ ! -f enhancements/60fps ]; then
+if [ "$FPS60" = 1 ] && [ ! -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
 	echo Applying 60fps patch...
 	git apply enhancements/60fps*.patch
 	touch enhancements/60fps
@@ -919,12 +932,12 @@ if [ "$FPS60" = 1 ] && [ ! -f enhancements/60fps ]; then
 		echo Enabling Vsync...
 		sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
 	fi
-elif [ "$FPS60" = 0 ] && [ -f enhancements/60fps ]; then
+elif [ "$FPS60" = 0 ] && [ -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
 	echo Removing 60fps patch...
 	git apply -R enhancements/60fps*.patch
 	rm enhancements/60fps
 	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-		echo Enabling Vsync...
+		echo Disabling Vsync...
 		sed -i.bak 's/vsync true/vsync valse/g' "$SAVEDIR"/sm64config.txt
 	fi
 fi
@@ -1507,14 +1520,13 @@ if [ "$COMMAND" = "purge" ] || [ "$1" = "--purge" ]; then
         exit
 fi
 
-if [ -f ~/.smlinuxUpdate ] && [ "$COMMAND" = "upgrade" ]; then 
+if [ -f ~/.smlinuxUpdate ]; then 
 	rm ~/.smlinuxUpdate
 	echo Script Update Complete.
-	exit
-elif [ -f ~/.smlinuxUpdate ]; then 
-	rm ~/.smlinuxUpdate
-	echo Script Update Complete.
-else	     # The real start, the rest was script preperation and setup. 
+	if [ "$COMMAND" = "upgrade" ]; then 
+		exit
+	fi
+else   # The real start, the rest was script preperation and setup. 
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
 	echo '/------------------------------'"$TIMESTAMP"'--------------------------------\'
@@ -1749,8 +1761,11 @@ elif [ "$COMMAND" = "update" ]; then
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 			git apply -R enhancements/60fps*.patch
 		fi
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
-			git apply -R enhancements/CHEATER.patch
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/DynOS*.patch ]; then
+			git apply -R enhancements/DynOS*.patch
+		fi
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
+			git apply -R enhancements/CHEATER*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 			git apply -R enhancements/menu-arrows.patch
@@ -1767,12 +1782,16 @@ elif [ "$COMMAND" = "update" ]; then
 			echo FPS60...
 			git apply enhancements/60fps*.patch
 		fi
+		if [ -f "$BASEPATH"/"$PRESET"/enhancements/DynOS*.patch ]; then
+			echo DynOS...
+			git apply enhancements/DynOS*.patch
+		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 			echo 3D Coins...
 			git apply enhancements/3d_coin*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
-			echo Cheater...
+			echo CHEATER...
 			git apply enhancements/CHEATER.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
@@ -1800,27 +1819,25 @@ elif [ "$COMMAND" = "update" ]; then
 		pinkecho WARNING: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
-	if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
-		dofps
-	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		zip -r -0 -u hdbase gfx
 		rm -rf gfx
 	fi
+	dofps
 	dodynos
 	docheats
 	domymenu
+fi
+if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
+	echo
+	greenecho [5] Compiling...
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
 		fi
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
 	fi
-	echo
-fi
-if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
-	greenecho [5] Compiling...
 	domake
 	echo
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
@@ -2020,9 +2037,7 @@ elif [ "$InstallR96" = 1 ]; then
 elif [ "$TARGET" = "pc" ]; then
 	pinkecho WARNING: InstallHD Disabled so HD addons not being added.
 fi
-if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps*.patch ]; then
-	dofps
-fi
+dofps
 dodynos
 docheats
 domymenu
