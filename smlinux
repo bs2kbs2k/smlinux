@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-2337
+TIMESTAMP=2020-1021-2353
 
 domake(){
 #Here We go & music to build to
@@ -534,6 +534,7 @@ elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lowe
 	BRANCH=master
 	TEXTSAVES=1
 	LEGACY_RES=1
+	InstallR96=1
 elif [ "$PRESET" = "r96proto" ]; then
 	GIT=render96/render96ex
 	BRANCH=fastbuild_prototype
@@ -545,6 +546,7 @@ elif [ "$PRESET" = "r96alpha" ]; then
 	GIT=render96/render96ex
 	BRANCH=alpha
 	TEXTSAVES=1
+	InstallR96=1
 	DISCORDRPC=0
 	CHEATER=0
 	DYNOS=0
@@ -896,7 +898,7 @@ else
 	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
 		echo External Data not supported for sm64-port repository, skipping.
 	fi
-	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V1* ] ; then
+	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ] ; then
 		echo "Render96 model pack found, skipping model application."
 	elif  [ "$InstallR96" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
 		dosgi
@@ -2005,13 +2007,13 @@ elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
 fi
 if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATER64_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
 	echo SM64 save file found.
-elif [ "$PRESET" = "r96proto" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
+elif [ "$GIT" = "render96/render96ex" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
 	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
 	echo Copied Save file from Render96
-elif [ "$PRESET" = "r96alpha" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
-	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
-	echo Copied Save file from Render96
-elif [ "$PRESET" = "render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
+elif [ "$GIT" = "render96/render96ex" ] && [ -f "$SHARE"/r96alpha/render96_save_file_0.sav ]; then
+	cp "$SHARE"/r96alpha/render96_save_file_0.sav "$SAVEDIR"
+	echo Copied Save file from Render96 Alpha
+elif [ "$GIT" = "render96/render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
 	cp "$SHARE"/r96proto/render96_save_file_0.sav "$SAVEDIR"
 	echo Copied Save file from Render96 Fastbuild_Prototype
 elif [ "$TEXTSAVES" = 1 ]; then
