@@ -33,8 +33,12 @@ if [ "$OSX_BUILD" = 1 ]; then
 	elif [ "$GIT" = "render96/render96ex" ]; then
 		sed -i.bak 's/#include <malloc.h>/\/\/ # include <malloc.h>/g' "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c
 	fi
-	sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
-    sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
+	#sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
+    # sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
+    sed -i.bak '855i\
+        elif a == "-Wno-implicit-function-declaration":' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
+	sed -i '856i\
+            print("Warning flag; ignoring")' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
 fi
 
 if [ ! "$ANDROID" = 0 ]; then
