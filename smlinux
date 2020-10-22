@@ -47,7 +47,7 @@ echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SD
 echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API
 if [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"
-	time gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API> "$SMLINUX"/buildlog.txt
+	time gmake CC=gcc-9 CXX=g++-9 CPP=g++-9 OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API> "$SMLINUX"/buildlog.txt
 	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
 		cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib
 	fi
@@ -178,11 +178,11 @@ cd "$BASEPATH"/"$PRESET"/tools
 if [ ! -f skyconv ]; then
 	prepmacos
 	echo Preparing N64 Tools for macOS...
-	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+	CFLAGS="$BASEPATH"/"$PRESET"/include gmake CC=gcc-9 CXX=g++-9 CPP=g++-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
 if [ ! -f skyconv ]; then
 	echo Trying other build methods to build tools...
-	gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+	gmake CC=gcc CXX=g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	make OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
 # rm Makefile assemble_sound.py
@@ -518,7 +518,13 @@ DISCORD_SDK=1
 FPS60=0
 CHEATER=1
 DYNOS=1
-source "$SMLINUX"/smlinuxcfg.txt
+if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
+	source "$SMLINUX"/smlinuxcfg.txt
+else
+	pinkecho WARNING: smlinuxcfg.txt not found.  Creatating and loading default...
+	makeconfig
+	source "$SMLINUX"/smlinuxcfg.txt
+fi
 if [ -z $PRESET ] && [ ! -z $REPO ]; then
 	PRESET="$REPO"
 elif [ -z $PRESET ]; then
@@ -1715,7 +1721,7 @@ else   # The real start, the rest was script preperation and setup.
 			echo
 		fi
 		if [ ! "$COMMAND" = "upgrade" ]; then
-			echo "Please select Super Mario 64 romfile to begin."	
+			redecho "Please select Super Mario 64 romfile to begin."	
 			if [ "$OSX_BUILD" = 1 ]; then
 				cd $HOME
 				USERFILE=$(osascript -e 'set macpath to choose file' -e 'set unixpath to posix path of macpath')
