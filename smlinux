@@ -176,12 +176,13 @@ if [ ! -f skyconv ]; then
 	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
 if [ ! -f skyconv ]; then
-	echo Dealing with that error...
+	echo Trying other build methods...
 	gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	make OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
-rm Makefile
+rm Makefile assemble_sound.py
 git checkout Makefile
+git checkout assemble_sound.py
 }
 prepmacos(){
 	# grep -Rl '<SDL2/' * | xargs gsed -i 's|<SDL2/|<|g'
@@ -211,7 +212,7 @@ sed -i.bak '58i\
 sed -i.bak '59i\
 		$(CLANG) $(CFLAGS) $($1_CFLAGS) $$^ -o $$@ $(LDFLAGS) $($1_LDFLAGS)' Makefile
 sed -i.bak '60i\
-	endef' tools/Makefile
+	endef' Makefile
 sed -i.bak '62i\
 	$(foreach p,$(CLANG_PROGRAMS),$(eval $(call CLANG_COMPILE,$(p))))' Makefile
 }
