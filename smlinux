@@ -170,6 +170,7 @@ if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/inclu
 	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 fi
 cd "$BASEPATH"/"$PRESET"/tools
+ln -s ../../include/stb include
 if [ ! -f skyconv ]; then
 	echo Preparing N64 Tools for macOS...
 	prepmacos
