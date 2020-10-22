@@ -47,7 +47,7 @@ echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SD
 echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API
 if [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"
-	time gmake CC=gcc-9 CXX=g++-9 CPP=g++-9 OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API> "$SMLINUX"/buildlog.txt
+	time gmake CC=gcc-9 CXX=g++-9 CPP=gcc-9 OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API> "$SMLINUX"/buildlog.txt
 	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
 		cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib
 	fi
@@ -165,57 +165,22 @@ if [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 elif [ "$GIT" = "render96/render96ex" ]; then
 	sed -i.bak 's/#include <malloc.h>/\/\/ # include <malloc.h>/g' "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c
 fi
-sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
+sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -Wno-implicit-function-declaration -DOSX_BUILD|g' "$BASEPATH"/"$PRESET"/Makefile #thanks dropbear
+sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra|CFLAGS := -I../include -I. -Wall -Wno-implicit-function-declaration -Wextra|g' "$BASEPATH"/"$PRESET"/tools/Makefile # thanks dropbear
 if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
 	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 fi
 cd "$BASEPATH"/"$PRESET"/tools
-# if [ ! -f tabledesign ]; then
-#   cd sdk-tools/tabledesign
-#	gmake
-#	cd ../..
-# fi
+
 if [ ! -f skyconv ]; then
-	prepmacos
 	echo Preparing N64 Tools for macOS...
-	gmake CC=gcc-9 CXX=g++-9 CPP=g++-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+	gmake CC=gcc-9 CXX=g++-9 CPP=gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
 if [ ! -f skyconv ]; then
 	echo Trying other build methods to build tools...
 	gmake CC=gcc CXX=g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	make OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
-# rm Makefile assemble_sound.py
-# git checkout Makefile
-# git checkout assemble_sound.py
-}
-prepmacos(){
-	# grep -Rl '<SDL2/' * | xargs gsed -i 's|<SDL2/|<|g'
-	# gsed -i 's|gcc|/usr/local/bin/gcc-9|g' Makefile
-	# gsed -i 's|g++|/usr/local/bin/g++-9|g' Makefile
-	# gsed -i 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' Makefile
-	# gsed -i 's|gcc|/usr/local/bin/gcc-9|g' tools/Makefile
-	# gsed -i 's|g++|/usr/local/bin/g++-9|g' tools/Makefile
-sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra|CFLAGS := -I../include -I. -Wall -Wno-implicit-function-declaration -Wextra|g' ./Makefile
-#sed -i.bak '855i\
-#        elif a == "-Wno-implicit-function-declaration":' assemble_sound.py
-# sed -i.bak '856i\
-#            print("Warning flag; ignoring")' assemble_sound.py
-# sed -i.bak 's|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc tabledesign extract_data_for_mio skyconv|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc extract_data_for_mio skyconv|g' ./Makefile
-#sed -i.bak '2i\
-#	CLANG := /usr/bin/clang' ./Makefile
-#sed -i.bak '3i\
-#	CLANG_PROGRAMS := tabledesign' ./Makefile
-#sed -i.bak '57i\
-#	define CLANG_COMPILE' ./Makefile
-#sed -i.bak '58i\
-#	$(1): $($1_SOURCES)' ./Makefile
-#sed -i.bak '59i\
-#		$(CLANG) $(CFLAGS) $($1_CFLAGS) $$^ -o $$@ $(LDFLAGS) $($1_LDFLAGS)' ./Makefile
-#sed -i.bak '60i\
-#	endef' ./Makefile
-#sed -i.bak '62i\
-#	$(foreach p,$(CLANG_PROGRAMS),$(eval $(call CLANG_COMPILE,$(p))))' ./Makefile
 }
 
 
