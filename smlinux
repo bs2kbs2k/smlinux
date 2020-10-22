@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-1403
+TIMESTAMP=2020-1021-1709
 
 domake(){
 #Here We go & music to build to
@@ -847,7 +847,7 @@ else
 		if [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
 			if [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
 				echo Downloading Render96 Textures... 
-				git clone --single-branch git://://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+				git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			else
 				echo Downloading Cleaner Aesthetics Textures...
 				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
