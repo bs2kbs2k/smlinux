@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1022-1054
+TIMESTAMP=2020-1022-1123
 
 domake(){
 #Here We go & music to build to
@@ -144,7 +144,7 @@ elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.z
 			rm base.zip
 		fi
 		mv awesome-legacy.zip base.zip
-elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/sound ]; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	echo Creating base resource pack...
 	zip -q -r -0 base gfx sound
@@ -166,7 +166,9 @@ elif [ "$GIT" = "render96/render96ex" ]; then
 	sed -i.bak 's/#include <malloc.h>/\/\/ # include <malloc.h>/g' "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c
 fi
 sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
-
+if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
+	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
+fi
 cd "$BASEPATH"/"$PRESET"/tools
 if [ ! -f skyconv ]; then
 	echo Preparing N64 Tools for macOS...
@@ -178,9 +180,8 @@ if [ ! -f skyconv ]; then
 	gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	make OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
-if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
-	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
-fi
+rm Makefile
+git checkout Makefile
 }
 prepmacos(){
 	# grep -Rl '<SDL2/' * | xargs gsed -i 's|<SDL2/|<|g'
@@ -207,7 +208,7 @@ sed -i.bak '57i\
 	define CLANG_COMPILE' Makefile
 sed -i.bak '58i\
 	$(1): $($1_SOURCES)' Makefile
-sed -i '59i\
+sed -i.bak '59i\
 		$(CLANG) $(CFLAGS) $($1_CFLAGS) $$^ -o $$@ $(LDFLAGS) $($1_LDFLAGS)' Makefile
 sed -i.bak '60i\
 	endef' tools/Makefile
