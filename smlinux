@@ -481,7 +481,7 @@ BASEPATH=$HOME
 UpdateHD=1
 # Set BuildMusic=0 to prevent smlinux playing background music during compile
 BuildMusic=1
-[ Advanced Make Flags ]
+# [ Advanced Make Flags ]
 # VERSION supports us jp eu (must correspond to rom version)
 VERSION=us
 DEBUG=0
