@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-1923
+TIMESTAMP=2020-1021-2053
 
 domake(){
 #Here We go & music to build to
@@ -23,7 +23,6 @@ if [ "$TARGET_WEB" = 1 ] && [ "$InstallHD" = 1 ]; then
 elif [ "$TARGET_WEB" = 1 ]; then
 	sed -i.bak 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=30MB/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
-
 if [ "$OSX_BUILD" = 1 ]; then
     if [ "$EXTERNAL_DATA" = 1 ]; then 	
     	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
@@ -31,9 +30,11 @@ if [ "$OSX_BUILD" = 1 ]; then
     if [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 		sed -i.bak 's/sdk\/discord_game_sdk.dylib/sdk\/libdiscord_game_sdk.dylib/g' "$BASEPATH"/"$PRESET"/Makefile
 		cp "$BASEPATH"/"$PRESET"/lib/discordsdk/discord_game_sdk.dylib "$BASEPATH"/"$PRESET"/lib/discordsdk/libdiscord_game_sdk.dylib
-	elif [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96proto" ]; then
+	elif [ "$GIT" = "render96/render96ex" ]; then
 		sed -i.bak 's/#include <malloc.h>/\/\/ # include <malloc.h>/g' "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c
 	fi
+	sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
+    sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
 fi
 
 if [ ! "$ANDROID" = 0 ]; then
@@ -60,7 +61,7 @@ echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SD
 echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API
 if [ "$OSX_BUILD" = 1 ]; then
 	cd "$BASEPATH"/"$PRESET"/tools
-	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/g++-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	if [ ! -f skyconv ]; then
 		echo Dealing with that error...
 		gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
