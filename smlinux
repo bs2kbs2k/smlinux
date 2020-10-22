@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1022-1258
+TIMESTAMP=2020-1022-1324
 
 domake(){
 #Here We go & music to build to
@@ -176,7 +176,7 @@ cd "$BASEPATH"/"$PRESET"/tools
 #	cd ../..
 # fi
 if [ ! -f skyconv ]; then
-	# prepmacos
+	prepmacos
 	echo Preparing N64 Tools for macOS...
 	gmake CC=/usr/local/bin/gcc-9 CXX=/usr/local/bin/g++-9 CPP=/usr/local/bin/gcc-9 OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
@@ -185,9 +185,9 @@ if [ ! -f skyconv ]; then
 	gmake CC=/usr/bin/gcc CXX=/usr/bin/g++ OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	make OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
-rm Makefile assemble_sound.py
-git checkout Makefile
-git checkout assemble_sound.py
+# rm Makefile assemble_sound.py
+# git checkout Makefile
+# git checkout assemble_sound.py
 }
 prepmacos(){
 	# grep -Rl '<SDL2/' * | xargs gsed -i 's|<SDL2/|<|g'
@@ -199,10 +199,10 @@ prepmacos(){
 	# gsed -i 's|gcc|/usr/local/bin/gcc-9|g' tools/Makefile
 	# gsed -i 's|g++|/usr/local/bin/g++-9|g' tools/Makefile
 sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' Makefile
-sed -i.bak '855i\
-        elif a == "-Wno-implicit-function-declaration":' assemble_sound.py
-sed -i.bak '856i\
-            print("Warning flag; ignoring")' assemble_sound.py
+#sed -i.bak '855i\
+#        elif a == "-Wno-implicit-function-declaration":' assemble_sound.py
+# sed -i.bak '856i\
+#            print("Warning flag; ignoring")' assemble_sound.py
 sed -i.bak 's|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc tabledesign extract_data_for_mio skyconv|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc extract_data_for_mio skyconv|g' Makefile
 sed -i.bak '2i\
 	CLANG := /usr/bin/clang' Makefile
