@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1022-1037
+TIMESTAMP=2020-1022-1046
 
 domake(){
 #Here We go & music to build to
@@ -213,8 +213,8 @@ prepmacos(){
 	$(1): $($1_SOURCES)' tools/Makefile
 	sed -i '59i\
 		$(CLANG) $(CFLAGS) $($1_CFLAGS) $$^ -o $$@ $(LDFLAGS) $($1_LDFLAGS)' tools/Makefile
-	sed -i.bak '60i
-	\endef' tools/Makefile
+	sed -i.bak '60i\
+	endef' tools/Makefile
 	sed -i.bak '62i\
 	$(foreach p,$(CLANG_PROGRAMS),$(eval $(call CLANG_COMPILE,$(p))))' tools/Makefile
 }
