@@ -5,11 +5,11 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-1832
+TIMESTAMP=2020-1021-1923
 
 domake(){
 #Here We go & music to build to
-if ( [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ] )  && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
+if command -v mplayer &> /dev/null && [ "$BuildMusic" = 1 ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	if [ -f "$BASEPATH"/"$PRESET"/sound/samples/sfx_mario/0C.aiff ]; then
 		sh -c 'mplayer -nolirc -really-quiet '"$BASEPATH"/"$PRESET"'/sound/samples/sfx_mario/0C.aiff;mplayer -nolirc -really-quiet -volume 40 -loop 0 '"$SMLINUX"'/File_Select_64_slowed_down.mp3&'
 	elif [ -f "$BASEPATH"/sm64ex/sound/samples/sfx_mario/0C.aiff ]; then
@@ -430,9 +430,7 @@ ENABLE_OPENGL_LEGACY=1
 # DOS_GL Supports dmesa (glide) or osmesa
 DOS_GL=osmesa
 ENABLE_OPENGL_LEGACY=1
-# [ Additional Settings ]
-# VERSION supports us jp eu (must correspond to rom version)
-VERSION=us
+# [ Advanced Settings ]
 # Set MAXJOBS=n to limit cpu threads used during compile, i.e. MAXJOBS=1
 MAXJOBS=
 # Set CONFIG=0 If you do not want to be automatically prompted before building.
@@ -441,11 +439,14 @@ CONFIG=1
 BASEPATH=$HOME
 # Set UpdateHD=0 to prevent smlinux updating addons when rebuilding
 UpdateHD=1
-# set DEBUG=1 if you want to make a debug build for some odd reason
+# Set BuildMusic=0 to prevent smlinux playing background music during make
+BuildMusic=1
+[ Advanced Make Flags ]
+# VERSION supports us jp eu (must correspond to rom version)
+VERSION=us
 DEBUG=0
 TARGET_WEB=0
 TARGET_RPI=0
-OSX_BUILD=0
 # [ GIT and BRANCH are ignored if PRESET is known ]
 GIT=sm64pc/sm64ex
 BRANCH=nightly
@@ -457,6 +458,7 @@ AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
+BuildMusic=1
 WINDOW_API=SDL2
 OSX_BUILD=0
 TARGET_RPI=0
