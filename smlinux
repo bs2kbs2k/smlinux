@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1021-2143
+TIMESTAMP=2020-1021-2150
 
 domake(){
 #Here We go & music to build to
@@ -37,7 +37,7 @@ if [ "$OSX_BUILD" = 1 ]; then
     sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
     sed -i.bak '855i\
         elif a == "-Wno-implicit-function-declaration":' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
-	sed -i '856i\
+	sed -i.bak '856i\
             print("Warning flag; ignoring")' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
 fi
 
@@ -1929,7 +1929,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			git checkout "$BRANCH" -- .
 			git pull --no-rebase
 		fi
-		pinkecho WARNING: "$PRESET" directory already existed so was renamed "$PRESET".old...
+		pinkecho WARNING: "$PRESET" directory already existed so was renamed "$PRESET".old.
 	fi
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
