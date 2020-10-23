@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1023-1328
+TIMESTAMP=2020-1023-1358
 
 domake(){
 #Here We go & music to build to
@@ -175,7 +175,7 @@ sed -i.bak '856i\
 12spaces1212print("ignoring")
 ' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py # thanks dropbear
 sed -i.bak 's|8spaces8elif|        elif|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
-sed -i.bak 's|12spaces1212printf|            printf|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
+sed -i.bak 's|12spaces1212print|            print|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
 if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
 	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 fi
