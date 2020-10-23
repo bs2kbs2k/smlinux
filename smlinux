@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1022-1715
+TIMESTAMP=2020-1022-1722
 
 domake(){
 #Here We go & music to build to
@@ -181,7 +181,7 @@ if [ ! -f skyconv ]; then
 	make OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	gmake
 fi
-if [ ! -f skyconf ]; then
+if [ ! -f skyconv ]; then
 	echo Failed to build N64 tools.  This is a smlinux problem not handling your macOS toolchain.
 	echo Please report problem to smlinux development team and hopefully it can be resolved.
 	endnow
