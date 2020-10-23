@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1022-2319
+TIMESTAMP=2020-1023-1045
 
 domake(){
 #Here We go & music to build to
@@ -1012,11 +1012,11 @@ if [ "$PRESET" = "sm64nx" ]; then
 	fi
 elif [ "$PRESET" = "r96alpha" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget -q https://cdn.discordapp.com/attachments/730551213376143431/768498646676537344/RENDER96_V2.0.7z
+	wget -q https://cdn.discordapp.com/attachments/730551213376143431/769147677300097024/RENDER96_V2.0.7z
 	SGIFILE=RENDER96_V2.0.7z 
 elif [ "$GIT" = "render96/render96ex" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget -q https://cdn.discordapp.com/attachments/730551213376143431/745382037560492132/RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
+	wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
 	SGIFILE=RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
 elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
