@@ -1017,7 +1017,7 @@ elif [ "$PRESET" = "r96alpha" ]; then
 elif [ "$GIT" = "render96/render96ex" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
-	SGIFILE=RENDER96_V1.4.2_Luigi_Fixed_Sound.zip
+	SGIFILE=RENDER96_V1.4.2_Luigi.zip
 elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://sm64pc.info/downloads/model_pack/render96_coop.zip
