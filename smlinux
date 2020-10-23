@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1022-1852
+TIMESTAMP=2020-1022-1922
 
 domake(){
 #Here We go & music to build to
@@ -46,6 +46,7 @@ echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SDK ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL 
 echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API
 if [ "$OSX_BUILD" = 1 ]; then
+	export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 	cd "$BASEPATH"/"$PRESET"
 	time gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API> "$SMLINUX"/buildlog.txt
 	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
@@ -178,8 +179,7 @@ fi
 if [ ! -f skyconv ]; then
 	echo Trying other compilers because initial tool build attempt failed...
 	gmake OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
-	make OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
-	gmake
+	make 
 fi
 if [ ! -f skyconv ]; then
 	echo Failed to build N64 tools.  This is a smlinux problem not handling your macOS toolchain.
