@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1022-1922
+TIMESTAMP=2020-1022-2013
 
 domake(){
 #Here We go & music to build to
@@ -166,8 +166,12 @@ if [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 elif [ "$GIT" = "render96/render96ex" ]; then
 	sed -i.bak 's/#include <malloc.h>/\/\/ # include <malloc.h>/g' "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c
 fi
-sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -Wno-implicit-function-declaration -DOSX_BUILD|g' "$BASEPATH"/"$PRESET"/Makefile #thanks dropbear
+sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -Wno-implicit-function-declaration -DOSX_BUILD|g' "$BASEPATH"/"$PRESET"/Makefile # thanks dropbear
 sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra|CFLAGS := -I../include -I. -Wall -Wno-implicit-function-declaration -Wextra|g' "$BASEPATH"/"$PRESET"/tools/Makefile # thanks dropbear
+sed -i.bak '855i\
+        elif a == "-Wno-implicit-function-declaration":' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py # thanks dropbear
+sed -i.bak '856i\
+            print("Warning flag; ignoring")' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py # thanks dropbear
 if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
 	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 fi
