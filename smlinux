@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1023-1358
+TIMESTAMP=2020-1023-1443
 
 domake(){
 #Here We go & music to build to
@@ -849,7 +849,6 @@ else
 				fi
 				echo Updating textures from github...
 				cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-				git remote add origin git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK
 				git checkout gfx
 				git pull --no-rebase
 			fi
@@ -2028,13 +2027,13 @@ if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATER64_save_file.b
 	echo SM64 save file found.
 elif [ "$GIT" = "render96/render96ex" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
 	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
-	echo Copied Save file from Render96
+	echo Copied Save file from render96ex
 elif [ "$GIT" = "render96/render96ex" ] && [ -f "$SHARE"/r96alpha/render96_save_file_0.sav ]; then
 	cp "$SHARE"/r96alpha/render96_save_file_0.sav "$SAVEDIR"
-	echo Copied Save file from Render96 Alpha
+	echo Copied Save file from r96alpha
 elif [ "$GIT" = "render96/render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_file_0.sav ]; then
 	cp "$SHARE"/r96proto/render96_save_file_0.sav "$SAVEDIR"
-	echo Copied Save file from Render96 Fastbuild_Prototype
+	echo Copied Save file from r96proto
 elif [ "$TEXTSAVES" = 1 ]; then
 	echo No compatible save files for this version.
 elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
