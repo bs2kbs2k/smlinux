@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1023-1443
+TIMESTAMP=2020-1023-1615
 
 domake(){
 #Here We go & music to build to
@@ -40,6 +40,12 @@ if [ "$PRESET" = "sm64nx" ]; then
 fi
 if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
+fi
+if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
+	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
+		rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
+	fi
+	mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
 fi
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI OSX_BUILD=$OSX_BUILD TEXTSAVES=$TEXTSAVES  -j"$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
@@ -537,8 +543,8 @@ elif [ "$PRESET" = "sm64-portweb" ]; then
 	FPS60=0
 	CHEATER=0
 	DYNOS=0
-elif [ "$PRESET" = "sm64nx" ]; then
-	GIT=teamsalta/sm64nx
+elif [ "$PRESET" = "sm64nx" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64nx" ] ; then
+	PRESET=sm64nx
 	BRANCH=master
 	EXTERNAL_DATA=0
 	FPS60=0
@@ -551,20 +557,23 @@ elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lowe
 	TEXTSAVES=1
 	LEGACY_RES=1
 	InstallR96=1
-elif [ "$PRESET" = "r96proto" ]; then
+elif [ "$PRESET" = "r96proto" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96proto" ] ; then
+	PRESET=r96proto
 	GIT=render96/render96ex
 	BRANCH=fastbuild_prototype
 	TEXTSAVES=1
 	DISCORDRPC=0
 	CHEATER=0
 	DYNOS=0
-elif [ "$PRESET" = "r96alpha" ]; then
+elif [ "$PRESET" = "r96alpha" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96alpha" ] ; then
+	PRESET=r96alpha
 	GIT=render96/render96ex
 	BRANCH=alpha
 	TEXTSAVES=1
 	InstallR96=1
 	DISCORDRPC=0
 	DYNOS=0
+	CHEATER=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
@@ -797,11 +806,11 @@ else
 			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 		fi
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git ] ; then
-			echo Updating textures from github...
+			echo Checking github for texture updates...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git pull --no-rebase
 		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git ] ; then
-			echo Getting texture repository from old backup...
+			echo Moving texture repository from old backup...
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
@@ -811,7 +820,7 @@ else
 				echo Copying high quality sounds......
 				cp "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip .
 			fi
-			echo Updating textures from github...
+			echo Updating textures from git...
 			git checkout gfx
 			git pull --no-rebase
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git ] ; then
@@ -825,7 +834,7 @@ else
 				echo Copying high quality sounds......
 				cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hq_sounds_v5.1.zip .
 			fi
-			echo Updating textures from github...
+			echo Updating textures from git...
 			git checkout gfx
 			git pull --no-rebase
 		elif [ "$GIT" = "render96/render96ex" ]; then
@@ -847,7 +856,7 @@ else
 					echo Copying high quality sounds......
 					cp -r "$BASEPATH"/"$R96"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 				fi
-				echo Updating textures from github...
+				echo Updating textures from git...
 				cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 				git checkout gfx
 				git pull --no-rebase
@@ -1864,12 +1873,6 @@ fi
 if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 	echo
 	greenecho [5] Compiling...
-	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
-		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
-			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
-		fi
-		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
-	fi
 	domake
 	echo
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
@@ -2103,8 +2106,11 @@ elif [ ! "$ANDROID" = 0 ]; then
 	mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
 elif [ "$TARGET" = "dos" ]; then
 	mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
+elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
+	mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
+	mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
 fi
-
 echo
 if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
 	greenecho [7] Creating Desktop Shortcut and Menu Entry...
