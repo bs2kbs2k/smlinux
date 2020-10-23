@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1023-1045
+TIMESTAMP=2020-1023-1328
 
 domake(){
 #Here We go & music to build to
@@ -169,11 +169,13 @@ fi
 sed -i.bak 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -Wno-implicit-function-declaration -DOSX_BUILD|g' "$BASEPATH"/"$PRESET"/Makefile # thanks dropbear
 sed -i.bak 's|CFLAGS := -I../include -I. -Wall -Wextra|CFLAGS := -I../include -I. -Wall -Wno-implicit-function-declaration -Wextra|g' "$BASEPATH"/"$PRESET"/tools/Makefile # thanks dropbear
 sed -i.bak '855i\
-        elif a == "-Wno-implicit-function-declaration":
+8spaces8elif a == "-Wno-implicit-function-declaration":
 ' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py # thanks dropbear
 sed -i.bak '856i\
-            print("ignoring")
+12spaces1212print("ignoring")
 ' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py # thanks dropbear
+sed -i.bak 's|8spaces8elif|        elif|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
+sed -i.bak 's|12spaces1212printf|            printf|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
 if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
 	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 fi
