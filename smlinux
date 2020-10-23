@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1023-1615
+TIMESTAMP=2020-1023-1625
 
 domake(){
 #Here We go & music to build to
@@ -511,21 +511,25 @@ if [ -z $PRESET ] && [ ! -z $REPO ]; then
 elif [ -z $PRESET ]; then
 	PRESET=sm64-"$BRANCH"
 fi
-if [ "$PRESET" = "sm64pc" ]; then
+if [ "$PRESET" = "sm64pc" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64pc" ]; then
+	PRESET=sm64pc
 	GIT=sm64ex/sm64pc
 	BRANCH=master
 	CHEATER=0
 	DYNOS=0
-elif [ "$PRESET" = "sm64-port" ]; then
+elif [ "$PRESET" = "sm64-port" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64-port" ]; then
+	PRESET=sm64-port
 	GIT=sm64-port/sm64-port
 	BRANCH=master
 	EXTERNAL_DATA=0
 	CHEATER=0
 	DYNOS=0
-elif [ "$PRESET" = "sm64ex" ]; then
+elif [ "$PRESET" = "sm64ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64ex" ]; then
+	PRESET=sm64ex
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
-elif [ "$PRESET" = "sm64exweb" ]; then
+elif [ "$PRESET" = "sm64exweb" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64exweb" ]; then
+	PRESET=sm64exweb
 	GIT=sm64pc/sm64ex
 	BRANCH=nightly
 	TARGET_WEB=1
@@ -533,7 +537,8 @@ elif [ "$PRESET" = "sm64exweb" ]; then
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
 	FPS60=0
-elif [ "$PRESET" = "sm64-portweb" ]; then
+elif [ "$PRESET" = "sm64-portweb" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64-portweb" ]; then
+	PRESET=sm64-portweb
 	GIT=sm64-port/sm64-port
 	BRANCH=master
 	TARGET_WEB=1
@@ -543,21 +548,21 @@ elif [ "$PRESET" = "sm64-portweb" ]; then
 	FPS60=0
 	CHEATER=0
 	DYNOS=0
-elif [ "$PRESET" = "sm64nx" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64nx" ] ; then
+elif [ "$PRESET" = "sm64nx" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64nx" ]; then
 	PRESET=sm64nx
 	BRANCH=master
 	EXTERNAL_DATA=0
 	FPS60=0
 	CHEATER=0
 	DYNOS=0
-elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96" ] || [ "$PRESET" = "r96ex" ]; then
+elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96ex" ]; then
 	PRESET=render96ex
 	GIT=render96/render96ex
 	BRANCH=master
 	TEXTSAVES=1
 	LEGACY_RES=1
 	InstallR96=1
-elif [ "$PRESET" = "r96proto" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96proto" ] ; then
+elif [ "$PRESET" = "r96proto" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96proto" ]; then
 	PRESET=r96proto
 	GIT=render96/render96ex
 	BRANCH=fastbuild_prototype
@@ -565,7 +570,7 @@ elif [ "$PRESET" = "r96proto" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:
 	DISCORDRPC=0
 	CHEATER=0
 	DYNOS=0
-elif [ "$PRESET" = "r96alpha" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96alpha" ] ; then
+elif [ "$PRESET" = "r96alpha" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96alpha" ]; then
 	PRESET=r96alpha
 	GIT=render96/render96ex
 	BRANCH=alpha
@@ -580,24 +585,26 @@ elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower
 	BRANCH=nightly
 	FPS60=0
 	CHEATER=0
-elif [ "$PRESET" = "emm-ody" ]; then
+elif [ "$PRESET" = "emm-ody" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "EMM-ODY" ]; then
+	PRESET=emm-ody
 	GIT=s4Ys369/cheaterex
 	BRANCH=emm-ody
 	FPS60=0
 	CHEATER=0
-elif  [ "$PRESET" = "coop-unstable" ]; then
+elif  [ "$PRESET" = "coop-unstable" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "coop-unstable" ]; then
+	PRESET=coop-unstable
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=unstable
 	NODRAWINGDISTANCE=1
 	FPS60=0
 	CHEATER=0
 	DYNOS=0
-elif  [ "$PRESET" = "sm64ex-coop" ]; then
+elif  [ "$PRESET" = "sm64ex-coop" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64ex-coop" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "coop" ] ; then
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=coop
 	NODRAWINGDISTANCE=1
 	FPS60=0
-elif [ "$PRESET" = "androidex" ] ; then
+elif [ "$PRESET" = "androidex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "androidex" ]; then
 	ANDROID="$PRESET"
 	PRESET="androidex/app/jni/src"
 	GIT=vdavid003/sm64-port-android-base
@@ -605,7 +612,7 @@ elif [ "$PRESET" = "androidex" ] ; then
 	TARGET_WEB=0
 	TARGET_RPI=0
 	DYNOS=0  # might work need to test
-elif  [ "$PRESET" = "sm64-port-android-base" ]; then
+elif  [ "$PRESET" = "sm64-port-android-base" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64-port-android-base" ] ; then
 	ANDROID="$PRESET"
 	PRESET="sm64-port-android-base/app/jni/src"
 	GIT=vdavid003/sm64-port-android-base
@@ -615,7 +622,8 @@ elif  [ "$PRESET" = "sm64-port-android-base" ]; then
 	TARGET_RPI=0
 	CHEATER=0
 	DYNOS=0	
-elif  [ "$PRESET" = "mkstdos" ]; then
+elif  [ "$PRESET" = "mkstdos" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "mkstdos" ] ; then
+	PRESET=mkstdos
 	GIT=mkst/sm64-port
 	BRANCH=dos
 	EXTERNAL_DATA=0
@@ -625,7 +633,8 @@ elif  [ "$PRESET" = "mkstdos" ]; then
 	InstallHD=0
 	CHEATER=0
 	DYNOS=0
-elif  [ "$PRESET" = "sm64dos" ]; then
+elif  [ "$PRESET" = "sm64dos" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64dos" ] ; then
+	PRESET=sm64dos
 	GIT=fgsfdsfgs/sm64-port
 	BRANCH=dos
 	EXTERNAL_DATA=0
