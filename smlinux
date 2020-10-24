@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1023-2304
+TIMESTAMP=2020-1024-0903
 
 domake(){
 #Here We go & music to build to
@@ -65,7 +65,7 @@ else
 fi
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
-		echo Reming x86 x64
+		echo Removing x86 x64
 		sed -i.bak "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
 	fi
 	if [ "$BRANCH" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ]; then
@@ -917,7 +917,7 @@ else
 			fi
 		fi
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old ]; then
-			mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		fi
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes ]; then
 			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes
@@ -2122,10 +2122,10 @@ elif [ ! "$ANDROID" = 0 ]; then
 elif [ "$TARGET" = "dos" ]; then
 	mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
-	mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-	mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
-	mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
+	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
 fi
 echo
 if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
