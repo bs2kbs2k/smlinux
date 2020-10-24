@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1023-1653
+TIMESTAMP=2020-1023-2144
 
 domake(){
 #Here We go & music to build to
@@ -2047,14 +2047,16 @@ elif [ "$GIT" = "render96/render96ex" ] && [ -f "$SHARE"/r96proto/render96_save_
 	cp "$SHARE"/r96proto/render96_save_file_0.sav "$SAVEDIR"
 	echo Copied Save file from r96proto
 elif [ "$TEXTSAVES" = 1 ]; then
-	echo No compatible save files for this version.
+	echo No compatible text save file found.
 elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
-	if [ "$PRESET" = "sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
+	if [ "$GIT" = "sm64-port/sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
 		cp "$SHARE"/sm64nx/sm64.sav "$SAVEDIR"/sm64_save_file.bin
 		echo Copied save file from sm64nx.
-	elif [ "$PRESET" = "sm64nx" ] && [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
+	elif [ "$GIT" = "teamsalta/sm64nx" ] && [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
 		cp "$SHARE"/sm64-port/sm64_save_file.bin "$SAVEDIR"/sm64.sav
 		echo Copied save file from sm64-port.
+	elif [ "$GIT" = "sm64-port/sm64-port" ] || [ "$GIT" = "teamsalta/sm64nx" ]; then
+		echo No compatible save file found.
 	elif [ -f "$SHARE"/sm64ex/sm64_save_file.bin ]; then
 		cp "$SHARE"/sm64ex/sm64_save_file.bin "$SAVEDIR"
 		echo Copied save file from sm64ex.
