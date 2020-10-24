@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1024-0903
+TIMESTAMP=2020-1024-0909
 
 domake(){
 #Here We go & music to build to
@@ -1338,7 +1338,7 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 		mv -f "$SHARE"/applications/"$PRESET".desktop /usr/share/applications
 	fi
 elif [ "$OSX_BUILD" = 1 ]; then
-	echo Creating macOS AppImage and Desktop Shortcut. ..
+	echo Creating macOS App Bundle and Desktop Shortcut. ..
  	if [ -f /Applications/'Super Mario 64 ('"$PRESET"')'.app ]; then
  		rm -rf /Applications/'Super Mario 64 ('"$PRESET"')'.app 
 	fi
