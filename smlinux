@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1024-0909
+TIMESTAMP=2020-1024-0923
 
 domake(){
 #Here We go & music to build to
@@ -2124,8 +2124,10 @@ elif [ "$TARGET" = "dos" ]; then
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
 	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
 	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
+	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res
 fi
 echo
 if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
