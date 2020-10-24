@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1023-2255
+TIMESTAMP=2020-1023-2304
 
 domake(){
 #Here We go & music to build to
@@ -2122,7 +2122,7 @@ elif [ ! "$ANDROID" = 0 ]; then
 elif [ "$TARGET" = "dos" ]; then
 	mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
-	mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/*.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+	mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
 	mv -u "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
