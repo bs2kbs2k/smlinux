@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1023-2209
+TIMESTAMP=2020-1023-2235
 
 domake(){
 #Here We go & music to build to
@@ -380,8 +380,12 @@ hashcheck
 if [ "$HASH" = "" ]; then
 	echo ROM failed initial hash check - attempting format conversion...
 	cd "$SMLINUX"
-	if [ ! -f "$SMLINUX"/n64swap.py ]; then
+	if [ ! -f n64swap.py ]; then
 		echo Getting conversion tools...
+		if ! command -v pip3 &> /dev/null; then
+			redecho ERROR: pip3 not installed.  Run smlinux depends or provide z64 rom.
+			endnow
+		fi
 		wget https://github.com/Brawl345/N64Swap/raw/master/n64swap.py
 		pip3 install numpy
 	fi
