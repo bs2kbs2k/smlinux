@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1024-0923
+TIMESTAMP=2020-1024-2148
 
 domake(){
 #Here We go & music to build to
@@ -653,7 +653,13 @@ if [ `uname` = "Darwin" ]; then
 fi
 if [ ! `uname -m` = "x86_64" ] || [ "$VERSION" = "jp" ]; then
 	DISCORDRPC=0
-	DISCORD_SDK=0
+	if [ "$PRESET" = "sm64ex-coop" ] && [ ! -f "$BASEPATH"/"$PRESET"/91.patch ]; then
+		cd "$BASEPATH"/"$PRESET"
+		echo "Applying 32-bit workaround..."
+		wget -q https://github.com/djoslin0/sm64ex-coop/pull/91.patch
+		git apply 91.patch
+		DISCORD_SDK=0
+	fi
 fi
 if [ "$TARGET_WEB" = 1 ]; then 
 	TARGET=web
