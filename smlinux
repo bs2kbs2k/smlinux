@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1026-1407
+TIMESTAMP=2020-1026-1452
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1299,8 +1299,8 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/741732375074963556/luigihudicon.png
 		mv luigihudicon.png "$SHARE"/icons/"$PRESET".png
 	elif [ "$PRESET" = "coop-unstable" ]; then 
-		wget -q https://cdn.discordapp.com/attachments/710334795674288139/741732375074963556/luigihudicon.png
-		mv luigihudicon.png "$SHARE"/icons/"$PRESET".png
+		wget -q https://cdn.discordapp.com/attachments/711253314855108629/770403905753972756/luigihead.png
+		mv luigihead.png "$SHARE"/icons/"$PRESET".png
 	elif [ -f "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png ]; then
 		cp "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png "$SHARE"/icons/"$PRESET".png
 		echo 16x16 image from ROM used.  Reccommend replacing "$SHARE"/icons/"$PRESET".png
