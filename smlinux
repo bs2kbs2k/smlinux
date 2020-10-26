@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1025-2104
+TIMESTAMP=2020-1026-1231
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1039,8 +1039,8 @@ if [ "$PRESET" = "sm64nx" ]; then
 	fi
 elif [ "$PRESET" = "r96alpha" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget -q https://cdn.discordapp.com/attachments/730551213376143431/769147677300097024/RENDER96_V2.0.7z
-	SGIFILE=RENDER96_V2.0.7z 
+	wget -q https://cdn.discordapp.com/attachments/730551213376143431/770181228027969576/RENDER96_V2.0_Hotfix.7z
+	SGIFILE=RENDER96_V2.0_Hotfix.7z
 elif [ "$GIT" = "render96/render96ex" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
