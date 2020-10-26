@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1026-1452
+TIMESTAMP=2020-1026-1534
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -108,7 +108,7 @@ if [ ! "$ANDROID" = 0 ]; then
 		if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip ]; then
 			cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip .
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
-			cp -ru "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* .
+			cp -rn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* .
 		fi
 		unzip -n -q base
 		zip -r -0 -u -q hdbase gfx sound
@@ -1071,7 +1071,7 @@ elif [ -d "$BASEPATH"/"$PRESET"/actors.bak ] && [ "$SGIFILE" = "render96_coop.zi
 elif [ "$SGIFILE" = "render96_coop.zip" ]; then
 	echo Saving original actors folder as actors.bak 	
 	cd "$BASEPATH"/"$PRESET"
-	cp -ru actors actors.bak
+	cp -rn actors actors.bak
 fi
 if [ ! "$PRESET" = "sm64nx" ]; then
 	cd "$BASEPATH"/"$PRESET"
@@ -1096,7 +1096,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		fi
 		git clone --single-branch git://github.com/enigma9o7/smlinux.git "$SMLINUX"
 		if [ -d "$SMLINUX".baq ]; then
-			cp -Ru "$SMLINUX".baq/* "$SMLINUX"/
+			cp -rn "$SMLINUX".baq/* "$SMLINUX"/
 			rm -rf "$SMLINUX".baq
 		fi
 		if [ ! -d "$SMLINUX"/.git ] ; then
