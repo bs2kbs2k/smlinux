@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1026-1320
+TIMESTAMP=2020-1026-1407
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1702,6 +1702,13 @@ else   # The real start, the rest was script preperation and setup.
 	if [ "$COMMAND" = "depends" ]; then
 		theend
 	fi
+	if [ -z "$MAXJOBS" ]; then
+		if [ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]; then 
+			MAXJOBS=$((`nproc` - 1))		
+		else 
+			MAXJOBS=`nproc`
+		fi
+	fi
 	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$PRESET" ]; then
 			ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
@@ -2039,7 +2046,7 @@ if [ "$COMMAND" = "clone" ]; then
 	theend
 fi
 echo
-greenecho [5] Applying Community Enhancements...
+greenecho [5] Applying Enhancements...
 SAVEDIR="$SHARE"/"$PRESET"
 if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 	echo Creating "$SAVEDIR" for save files.
