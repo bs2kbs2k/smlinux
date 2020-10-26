@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1026-1231
+TIMESTAMP=2020-1026-1320
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1643,11 +1643,6 @@ else   # The real start, the rest was script preperation and setup.
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
 		if [ "$OSX_BUILD" = 1 ]; then
 			echo "Installing dependencies for macOS..."
-			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
-				echo Installing Apple XCode Command Line Tools
-				xcode-select --install
-				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\n" 12 55 2>&1
-			fi
 			if ! command -v brew &> /dev/null; then
     			echo Installing Homebrew package manager...
 				bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -1659,6 +1654,11 @@ else   # The real start, the rest was script preperation and setup.
 			brew install libxdg-basedir coreutils wget newt nano go zip unzip unrar p7zip python3 
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
 			go get github.com/machinebox/appify
+			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
+				echo Installing Apple XCode Command Line Tools
+				xcode-select --install
+				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\n" 12 55 2>&1
+			fi
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 			echo "Updating package list and installing dependencies..."
 			sudo apt update
