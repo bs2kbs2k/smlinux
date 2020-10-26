@@ -5,9 +5,15 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1024-2148
+TIMESTAMP=2020-1025-1920
 
 domake(){
+if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
+	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
+		rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
+	fi
+	mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
+fi
 #Here We go & music to build to
 if command -v mplayer &> /dev/null && [ "$BuildMusic" = 1 ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ]; then
 	if [ -f "$BASEPATH"/"$PRESET"/sound/samples/sfx_mario/0C.aiff ]; then
@@ -41,12 +47,7 @@ fi
 if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
-if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
-	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
-		rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
-	fi
-	mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
-fi
+
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI OSX_BUILD=$OSX_BUILD TEXTSAVES=$TEXTSAVES  -j"$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SDK ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL 
@@ -2130,10 +2131,10 @@ elif [ "$TARGET" = "dos" ]; then
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
 	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res
+	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
-	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
-	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res
+	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
+	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
 fi
 echo
 if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
