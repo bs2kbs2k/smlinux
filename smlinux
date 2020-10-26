@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1025-1920
+TIMESTAMP=2020-1025-2104
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -349,7 +349,7 @@ fi
 
 domymenu(){	
 if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
-	if [ "$PRESET" = "androidex" ] || [ "$GIT" = "sm64pc/sm64ex" ] || [ "$PRESET" = "render96ex" ] || [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
+	if [ "$PRESET" = "androidex" ] || [ "$GIT" = "sm64pc/sm64ex" ] || [ "$GIT" = "render96/render96ex" ] || [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 		echo Applying menu arrows...
 		cd "$BASEPATH"/"$PRESET"
 		cp "$SMLINUX"/menu-arrows.patch enhancements
@@ -555,6 +555,7 @@ elif [ "$PRESET" = "sm64-portweb" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lo
 	DYNOS=0
 elif [ "$PRESET" = "sm64nx" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64nx" ]; then
 	PRESET=sm64nx
+	GIT=teamsalta/sm64nx
 	BRANCH=master
 	EXTERNAL_DATA=0
 	FPS60=0
@@ -754,14 +755,10 @@ prepnx(){
 mkdir "$BASEPATH"/"$PRESET"/build
 mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
-ln -s "$SAVEDIR"/sm64.sav "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sav 
-ln -s "$SAVEDIR"/sm64.log "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.log 
-ln -s "$SAVEDIR"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin
-ln -s "$SAVEDIR"/gamepad1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
-ln -s "$SAVEDIR"/keyboard1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
 ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
 cd "$BASEPATH"/"$PRESET"/tools
-make -j"$MAXJOBS"
+echo Preparing tools...
+make -j"$MAXJOBS" >/dev/null
 cd "$BASEPATH"/"$PRESET"/import
 python3 extract_assets.py
 python3 ../scripts/pak.py --source . --output "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak'
@@ -814,7 +811,7 @@ if [ "$PRESET" = "sm64nx" ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730431589749620736/nes.pak
 	fi
-	if [ "$InstallR96" = 1 ] && [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render 96" ]; then
+	if [ "$InstallR96" = 1 ] && [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures" ]; then
 		dosgi
 	fi
 else
@@ -1532,6 +1529,22 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 else
 	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 fi
+if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin ] && [ ! -f "$SHARE"/sm64nx/conf.bin ]; then
+	mv "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin "$SHARE"/sm64nx/
+	ln -s "$SAVEDIR"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin 
+fi
+if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/sm64.sav ] && [ ! -f "$SHARE"/sm64nx/sm64.sav ]; then
+	mv "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/sm64.sav "$SHARE"/sm64nx/
+	ln -s "$SAVEDIR"/sm64.sav "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sav 
+fi
+if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json ] && [ ! -f "$SHARE"/sm64nx/gamepad1.bindings.json ]; then
+	mv "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json "$SHARE"/sm64nx/
+	ln -s "$SAVEDIR"/gamepad1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
+fi
+if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json ] && [ ! -f "$SHARE"/sm64nx/keyboard1.bindings.json ]; then
+	mv "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json "$SHARE"/sm64nx/
+	ln -s "$SAVEDIR"keyboard1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
+fi
 
 if [ "$COMMAND" = "purge" ] || [ "$1" = "--purge" ]; then
 	
@@ -1912,14 +1925,24 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 	elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
 		echo "[6] Restoring Savefile, ROM and ROM Filesystem (paks)"
 		cp -rpn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
-		ln -s "$SAVEDIR"/sm64.sav "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sav 
-		ln -s "$SAVEDIR"/sm64.log "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.log 
-		ln -s "$SAVEDIR"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin
-	 	ln -s "$SAVEDIR"/gamepad1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
-		ln -s "$SAVEDIR"/keyboard1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
 		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
-	elif [ "$PRESET" = "sm64nx" ]; then
-		echo "[6] Preparing Savefile, ROM and ROM Filesystem (paks)"
+		if [ -f "$SAVEDIR"/sm64.sav ]; then
+			ln -s "$SAVEDIR"/sm64.sav "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sav 
+		fi
+		if [ -f "$SAVEDIR"/sm64.log ]; then
+			ln -s "$SAVEDIR"/sm64.log "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.log 
+		fi
+		if [ -f "$SAVEDIR"/conf.bin ]; then
+			ln -s "$SAVEDIR"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin
+		fi
+		if [ -f "$SAVEDIR"/gamepad1.bindings.json ]; then
+	 		ln -s "$SAVEDIR"/gamepad1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/gamepad1.bindings.json
+	 	fi
+	 	if [ -f "$SAVEDIR"/keyboard1.bindings.json ]; then
+			ln -s "$SAVEDIR"/keyboard1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
+		fi
+	elif [ "$GIT" = "teamsalta/sm64nx" ]; then
+		echo "[6] Preparing ROM and ROM Filesystem (paks)"
 		prepnx	
 	elif [ "$ANDROID" = 0 ]; then
 		greenecho [6] No resources found in previous build, skipping restore.
@@ -2022,7 +2045,7 @@ if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 	echo Creating "$SAVEDIR" for save files.
 	mkdir "$SAVEDIR"
 fi
-if [ -f "$SAVEDIR"/sm64config.txt ] || [ -f "$SAVEDIR"/CHEATER64config.txt ]; then
+if [ -f "$SAVEDIR"/sm64config.txt ] || [ -f "$SAVEDIR"/CHEATER64config.txt ] || [ -f "$SAVEDIR"/conf.bin ]; then
 	echo SM64 configuration file found.
 elif [ "$PRESET" = "sm64-port" ] || [ "$PRESET" = "sm64nx" ]; then
 	echo No compatible sm64 configuration files for this version, game will create one.
@@ -2048,6 +2071,18 @@ elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
 fi
 if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATER64_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
 	echo SM64 save file found.
+elif [ "$GIT" = "teamsalta/sm64nx" ] && [ -f "$SHARE"/sm64-port/sm64_save_file.bin ]; then
+	echo Copying save file from sm64-port...
+	cp "$SHARE"/sm64-port/sm64_save_file.bin "$SAVEDIR"/sm64.sav
+	ln -s "$SAVEDIR"/sm64.sav "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sav 
+	touch "$SAVEDIR"/sm64.log
+	ln -s "$SAVEDIR"/sm64.log "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.log 
+elif [ "$GIT" = "teamsalta/sm64nx" ]; then
+	touch "$SAVEDIR"/sm64.log
+	ln -s "$SAVEDIR"/sm64.log "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.log 
+elif [ "$GIT" = "sm64-port/sm64-port" ] && [ -f "$SHARE"/sm64nx/sm64.sav ]; then
+	cp "$SHARE"/sm64nx/sm64.sav "$SAVEDIR"/sm64_save_file.bin
+	echo Copied Save file from sm64nx
 elif [ "$GIT" = "render96/render96ex" ] && [ -f "$SHARE"/render96ex/render96_save_file_0.sav ]; then
 	cp "$SHARE"/render96ex/render96_save_file_0.sav "$SAVEDIR"
 	echo Copied Save file from render96ex
