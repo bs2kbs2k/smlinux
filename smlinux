@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1027-2211
+TIMESTAMP=2020-1028-1222
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1285,8 +1285,10 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 		mv Super_Mario_64.png "$SHARE"/icons/"$PRESET".png
 	elif [ "$PRESET" = "render96ex" ]; then
 		mv "$SMLINUX"/r96-icon.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$GIT" = "render96/render96ex" ]; then
+	elif [ "$PRESET" = "r96proto" ]; then
 		mv "$SMLINUX"/r96proto-icon.png "$SHARE"/icons/"$PRESET".png
+	elif [ "$PRESET" = "r96alpha" ]; then
+		mv "$SMLINUX"/R96alpha-icon.png "$SHARE"/icons/"$PRESET".png
 	elif [ "$PRESET" = "cheaterex" ]; then
 		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745150550382870548/bowser.png
 		mv bowser.png "$SHARE"/icons/"$PRESET".png
