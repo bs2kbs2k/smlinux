@@ -222,8 +222,9 @@ Alpine:
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 	
 Slax:
-	apt install sudo 
-	**must be done from command line** then smlinux will be able to install default debian dependencies
+
+	apt install sudo
+**must be done from command line** then use Ubuntu/debian
 	
 macOS:
 
