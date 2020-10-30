@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1028-1222
+TIMESTAMP=2020-1029-1737
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1220,7 +1220,7 @@ elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v2*
 	removecheater
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/755907254318006362/770448804512137236/CHEATER.coop.v3.patch.zip
-	unzip -q CHEATER.coop.patch.v3.zip 
+	unzip -q CHEATER.coop.v3.patch.zip 
 	CHEATERFILE=CHEATER.coop.v3.patch
 elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ]; then
 	removecheater
