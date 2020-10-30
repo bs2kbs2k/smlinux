@@ -221,11 +221,10 @@ Alpine:
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 	
-Slax:
+Slax: *must be done from command line not script - then leave`Linux=` default same as debian*
 
 	apt install sudo
-**must be done from command line** then use Ubuntu/debian
-	
+
 macOS:
 
 	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
@@ -247,10 +246,10 @@ Backup N64 cartridge with a dumper such as Retrode2 or Mr. Backup, from Wii with
 ## **How do I remove everything smlinux created during install?**
  
 	smlinux purge
-This erases everything created running smlinux including automatically created game saves and config files.
-This does not remove any packages installed as build tools or dependencies. Remove those with your package manager.
+This erases everything created using smlinux presets including automatically created game saves and config files.
+This does not remove any packages installed as build tools or dependencies; remove those with your package manager.
 (Development libraries can always safely be removed if you don't plan to build again, and binaries will still run.)
-This also does not restore or remove any prior sm64 folders backed up if you ran full install more that once (versus update);
+This also does not restore or remove any prior sm64 folders backed up if you ran full install more that once (versus update) or any user-defined repositories;
 delete those folders manually from any file manager.
 ## **How do I tell smlinux to download sm64 repositories to a folder other than home?**
 
