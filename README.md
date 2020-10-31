@@ -41,7 +41,7 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 
 
 **_macOS notes_**
-sm64nx and android builds not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  Feedback appreciated, so far confirmed working with all macOS 10.12 Sierra and newer.
+sm64nx and android builds not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  Feedback appreciated, so far confirmed working with Intel based macOS 10.12 Sierra and newer.
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
