@@ -83,7 +83,7 @@ On the sm64nx fork, Arredondo's HD Mario & Bowser and Cleaner Aesthetics texture
 
 ## **What does the InstallR96 option do?**
 
-For the render96ex preset, this will apply Render96's SGI model pack version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, while for sm64ex based forks, version 1.3 is used.    For r96alpha preset, the latest 2.0 modelpack is used.
+For the render96ex preset, this will apply Render96's SGI model pack version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is used, while for sm64ex based forks, version 1.3 is used.    For r96alpha and r96proto presets, the latest 2.0 modelpack is used.
 
 For sm64nx, this option will add paks for Render96's SGI Models (version 1.3) and Render96's HD textures and set them as defaults.  Be aware this model pak for sm64nx has minor visual problems and is no longer mainained.
 
