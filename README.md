@@ -37,7 +37,7 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 
 [<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
 
-[<strong>Click here for Linux distros that are not Ubuntu-based.</strong>](#what-about-distros-other-than-ubuntu)  
+[<strong>Click here for Linux distros that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 
 
 **_macOS notes_**
