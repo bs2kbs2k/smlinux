@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1101-1916
+TIMESTAMP=2020-1101-1053
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1204,16 +1204,20 @@ dodynos(){
 cd "$BASEPATH"/"$PRESET"
 if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 	return
-elif [ "$DYNOS" = 0 ] && [ -f enhancements/DynOS.0.4.patch ]; then
+elif [ "$DYNOS" = 0 ] && [ -f enhancements/DynOS.0.*.patch ]; then
 	echo Removing Dynamic Option System...
 	git apply -R enhancements/DynOS*.patch
 	rm enhancements/DynOS*
-elif [ "$DYNOS" = 1 ] && [ ! -f enhancements/DynOS.0.4.patch ]; then
-    echo Applying Dynamic Option System...
+elif [ "$DYNOS" = 1 ] && [ ! -f enhancements/DynOS.0.5.patch ]; then
+	if [ -f enhancements/DynOS.0.*.patch ]; then
+		echo Updating Dynamic Option System...
+		git apply -R enhancements/DynOS*.patch
+		rm enhancements/DynOS*
+	else
+    	echo Applying Dynamic Option System...
+    fi
     cd enhancements
-    wget -q "https://drive.google.com/uc?id=1cuY8iI4teqiMmiwMOtcVIpZ9Yr2sm_DI" -O dynos.zip
-    unzip -q dynos
-    rm dynos.zip
+    unzip -q "$SMLINUX"/DynOS*.zip
     cd ..
     git apply enhancements/DynOS*.patch
 fi
@@ -1866,6 +1870,8 @@ elif [ "$COMMAND" = "update" ]; then
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
 			git apply -R enhancements/CHEATER*.patch
+		else	
+			removecheater
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 			git apply -R enhancements/menu-arrows.patch
