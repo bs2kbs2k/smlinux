@@ -35,9 +35,9 @@ smlinux will be installed in the first directory in your path, usually ~/bin. Af
 
 If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
-[<strong>Jump to FAQ Table of Contents</strong>](#frequently-asked-questions) 
+[<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
 
-[<strong>Click here for Linux distros that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
+[<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 
 
 **_macOS notes_**
