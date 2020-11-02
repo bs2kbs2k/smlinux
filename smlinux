@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1030-1451
+TIMESTAMP=2020-1101-1916
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -842,6 +842,20 @@ else
 			echo Updating textures from git...
 			git checkout gfx
 			git pull --no-rebase
+		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET".old/res/.git ] ; then
+			echo Moving texture repository from old backup...
+			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
+			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			mv "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET".old/res/.git .
+			if [ -f "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET".old/res/hq_sounds_v5.1.zip ]; then
+				echo Copying high quality sounds......
+				cp "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET".old/res/hq_sounds_v5.1.zip .
+			fi
+			echo Updating textures from git...
+			git checkout gfx
+			git pull --no-rebase
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git ] ; then
 			echo Getting texture repository from old build...
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
@@ -1039,7 +1053,7 @@ if [ "$PRESET" = "sm64nx" ]; then
 		cd "SGI Models"
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak
 	fi
-elif [ "$PRESET" = "r96alpha" ]; then
+elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/730551213376143431/770181228027969576/RENDER96_V2.0_Hotfix.7z
 	SGIFILE=RENDER96_V2.0_Hotfix.7z
