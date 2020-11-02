@@ -26,7 +26,7 @@ OR
 	wget https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux;bash smlinux;rm smlinux
 	
 	
-That's all you have to do for mac and ubuntu based linux. You will be prompted to approve build options, specify your romfile,  and if needed provide password to install build tools.  smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
+That's all you have to do for mac and debian/ubuntu based linux. You will be prompted to approve build options, specify your romfile,  and if needed provide password to install build tools.  smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 (**Do not run smlinux as root; you will be prompted for password automatically if needed during installation.**)
 
 You must provide your own legally backed up Super Mario 64 ROM file during smlinux installation. 
