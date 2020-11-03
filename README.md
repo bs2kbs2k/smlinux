@@ -32,7 +32,7 @@ You must provide your own legally backed up Super Mario 64 ROM file.
 
 smlinux will be installed in the first directory in your path, usually ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in next screenshot) or use command line options (as shown in previous screenshot) to skip menu.  
 
-If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
+If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will allow make multiple jobs which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 [<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
 
