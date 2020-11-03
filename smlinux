@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1101-1053
+TIMESTAMP=2020-1102-1921
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -89,7 +89,7 @@ if [ ! "$ANDROID" = 0 ]; then
 		echo
 		TOUCH_CONTROLS=$TOUCH_CONTROLS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA VERSION=$VERSION TEXTSAVES=$TEXTSAVES ./gradlew installDebug -q
 	else
-		pinkecho WARNING: Phone not detected, building without installing.
+		pinkecho Warning: Phone not detected, building without installing.
 		echo
 		TOUCH_CONTROLS=$TOUCH_CONTROLS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA VERSION=$VERSION TEXTSAVES=$TEXTSAVES ./gradlew assembleDebug -q
 	fi
@@ -210,11 +210,11 @@ if [ "$TARGET" = "web" ]; then
 	echo
 	echo Python webserver will remain running until you kill python3.
 	echo Unless you forward a port you cannot connect from outside your local network.
-	pinkecho WARNING: emsdk environment is loaded.  Do not try to
+	pinkecho Warning: emsdk environment is loaded.  Do not try to
 	echo use this shell to build.  Exit and open new shell. 
 elif [ "$TARGET" = "dos" ]; then
 	echo
-	pinkecho WARNING: djgpp environment is loaded.  Do not try to 
+	pinkecho Warning: djgpp environment is loaded.  Do not try to 
 	echo use this shell to build.  Exit and open new shell. 
 fi
 echo
@@ -314,7 +314,7 @@ if [ -f /usr/bin/gcc ] || [ -f /bin/gcc ]; then
 		return
 	elif [ `gcc-9 -dumpfullversion -dumpversion` \> 7.99 ]; then
 		if [ "$OSX_BUILD" = 0 ]; then
-			pinkecho WARNING: Shouldnt be here should be mac only.
+			pinkecho Warning: Shouldnt be here should be mac only.
 		fi
 		echo gcc-9 confirmed
 		return
@@ -509,7 +509,7 @@ DYNOS=1
 if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
 	source "$SMLINUX"/smlinuxcfg.txt
 else
-	pinkecho WARNING: smlinuxcfg.txt not found.  Creatating and loading default...
+	pinkecho Warning: smlinuxcfg.txt not found.  Creatating and loading default...
 	makeconfig
 	source "$SMLINUX"/smlinuxcfg.txt
 fi
@@ -954,7 +954,7 @@ else
 			rm "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip
 		fi
 	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$GIT" = "render96/render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$GIT" = "djoslin0/sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
-		pinkecho WARNING: EXTERNAL_DATA=0 so skipping add-on textures and Sound
+		pinkecho Warning: EXTERNAL_DATA=0 so skipping add-on textures and Sound
 	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
 		echo External Data not supported for sm64-port repository, skipping.
 	fi
@@ -1016,7 +1016,7 @@ fi
 dosgi(){
 if  [ "$TARGET_WEB" = 1 ] || ([ "$EXTERNAL_DATA" = 0 ] && [ ! "$PRESET" = "sm64nx" ]); then
 	if(whiptail --title "SGI Model Warning" --yesno "SGI Models are unlikely to work without external data or for web Target." 10 50 --yes-button "Install Anyway" --no-button "Proceed without Models" --defaultno); then
-		pinkecho WARNING: SGI Models may not build correctly on anything besides sm64ex-nightly
+		pinkecho Warning: SGI Models may not build correctly on anything besides sm64ex-nightly
 		echo Proceeding anyway, but it may not be succesful.
 	else
 		return
@@ -1123,7 +1123,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		touch ~/.smlinuxUpdate
 		mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 		if [ ! -f "$PATHDIR"/smlinux ]; then
-			pinkecho WARNING: Could not write to first path directory.  Creating $HOME/bin.
+			pinkecho Warning: Could not write to first path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
 			echo Adding $HOME/bin to path...
@@ -1166,7 +1166,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				SMLINUX="$SHARE"/sm64pc
 				mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 				if [ ! -f "$PATHDIR"/smlinux ]; then
-					echo WARNING: Could not write to first path directory.  Creating $HOME/bin.
+					echo Warning: Could not write to first path directory.  Creating $HOME/bin.
 					touch "$HOME"/.smlinuxNopath
 					mkdir $HOME/bin
 					export PATH=$HOME/bin:$PATH
@@ -1296,39 +1296,13 @@ if [ ! -d "$SHARE"/applications ]; then
 	mkdir "$SHARE"/applications
 fi
 if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
-	echo Getting Icon...
-	if [ "$PRESET" = "sm64ex" ]; then
-		wget -q https://cdn.discordapp.com/attachments/711253314855108629/712146686834638890/sm64.png
-		mv sm64.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "sm64nx" ]; then 
-		wget -q https://cdn.discordapp.com/attachments/711253314855108629/719215654837682226/Super_Mario_64.png
-		mv Super_Mario_64.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "render96ex" ]; then
-		mv "$SMLINUX"/r96-icon.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "r96proto" ]; then
-		mv "$SMLINUX"/r96proto-icon.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "r96alpha" ]; then
-		mv "$SMLINUX"/R96alpha-icon.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "cheaterex" ]; then
-		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745150550382870548/bowser.png
-		mv bowser.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "emm-ody" ]; then
-		mv "$SMLINUX"/sm64hat-icon.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "sm64-port" ]; then 
-		wget -q https://cdn.discordapp.com/attachments/710334795674288139/745156574334550096/staricon.png
-		mv staricon.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "sm64ex-coop" ]; then 
-		wget -q https://cdn.discordapp.com/attachments/710334795674288139/741732375074963556/luigihudicon.png
-		mv luigihudicon.png "$SHARE"/icons/"$PRESET".png
-	elif [ "$PRESET" = "coop-unstable" ]; then 
-		wget -q https://cdn.discordapp.com/attachments/711253314855108629/770403905753972756/luigihead.png
-		mv luigihead.png "$SHARE"/icons/"$PRESET".png
-	elif [ -f "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png ]; then
+	echo Preparing Icon...
+	unzip "$SMLINUX"/icons "$PRESET".png -d "$SHARE"/icons
+	if [ ! -f "$SHARE"/icons/"$PRESET".* ] && [ -f "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png ]; then
 		cp "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png "$SHARE"/icons/"$PRESET".png
 		echo 16x16 image from ROM used.  Reccommend replacing "$SHARE"/icons/"$PRESET".png
 	else 
-		pinkecho WARNING: No icon found. 
-		echo Reccommend creating "$SHARE"/icons/"$PRESET".png
+		pinkecho Warning: No icon found. Please create "$SHARE"/icons/"$PRESET".png
 	fi	
 else
 	echo Icon already exists.
@@ -1802,7 +1776,7 @@ else   # The real start, the rest was script preperation and setup.
 				endnow
 			fi
 		else	
-			pinkecho WARNING: No ROM file found.  Please specify a romfile when you are ready to build.
+			pinkecho Warning: No ROM file found.  Please specify a romfile when you are ready to build.
 		fi
 	fi
 	echo
@@ -1810,7 +1784,7 @@ else   # The real start, the rest was script preperation and setup.
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
 		scriptUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	else
-		pinkecho WARNING: AutoUpdate Disabled. You might be using an old version of smlinux.
+		pinkecho Warning: AutoUpdate Disabled. You might be using an old version of smlinux.
 		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 	fi
 fi
@@ -1922,7 +1896,7 @@ elif [ "$COMMAND" = "update" ]; then
 		printf "SGI Selected, Processing...\n"
 		dosgi
 	else
-		pinkecho WARNING: HD add-ons and updates are disabled in smlinux configuration.
+		pinkecho Warning: HD add-ons and updates are disabled in smlinux configuration.
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
@@ -2012,7 +1986,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 fi
 if [ -d "$BASEPATH"/"$PRESET" ]; then
 	if [ ! "$ANDROID" = 0 ]; then
-		pinkecho WARNING: "$ANDROID" directory already exists! 
+		pinkecho Warning: "$ANDROID" directory already exists! 
 		echo Renaming to "$BASEPATH"/"$ANDROID".old...
 		if [ -d "$BASEPATH"/"$ANDROID".old ]; then
 			rm -rf "$BASEPATH"/"$ANDROID".old
@@ -2032,7 +2006,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			git checkout "$BRANCH" -- .
 			git pull --no-rebase
 		fi
-		pinkecho WARNING: "$PRESET" directory already existed so was renamed "$PRESET".old.
+		pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old.
 	fi
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
@@ -2162,7 +2136,7 @@ if [ "$InstallHD" = 1 ]; then
 elif [ "$InstallR96" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
-	pinkecho WARNING: InstallHD Disabled so HD addons not being added.
+	pinkecho Warning: InstallHD Disabled so HD addons not being added.
 fi
 dofps
 dodynos
