@@ -26,14 +26,15 @@ That's all you have to do for mac and debian/ubuntu based linux. You will be pro
 (1) provide password to install build tools (2) specify your romfile (3)  approve (or change) build options.  
 smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 **Do not run smlinux as root; you will be prompted for password if needed.**  
-You must provide your own legally backed up Super Mario 64 ROM file. 
+You must provide your own legally backed up Super Mario 64 ROM file.  
+  
+[<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 
 smlinux will be installed in the first directory in your path, usually ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in next screenshot) or use command line options (as shown in previous screenshot) to skip menu.  
 
 If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 [<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
-[<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 
 **_macOS notes_**
 sm64nx and android builds are not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  sm64ex,r96ex,sm64ex-coop and cheaterex all confirmed working with Intel based macOS 10.12 Sierra and newer.
