@@ -44,7 +44,7 @@ sm64nx and android builds are not working yet.  DOS builds will not be supported
 
 # Frequently Asked Questions
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
-* [<strong>What preset/repo/branch should I use?</strong>](#what-presetrepobranch-should-i-use)
+* [<strong>What preset/repo/branch should I use?</strong>](#what-presetrepositorybranch-should-i-use)
 * [<strong>What does the InstallHD option do?</strong>](#what-does-the-install-option-do)
 * [<strong>What does the InstallR96 option do?</strong>](#what-does-the-installr96-option-do)
 * [<strong>What does the FPS60 option do?</strong>](#what-does-the-fps60-option-do)
