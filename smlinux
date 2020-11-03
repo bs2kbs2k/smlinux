@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1103-1346  
+TIMESTAMP=2020-1103-1431
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1299,11 +1299,11 @@ if [ ! -d "$SHARE"/applications ]; then
 fi
 if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 	echo Preparing Icon...
-	unzip "$SMLINUX"/icons "$PRESET".png -d "$SHARE"/icons
+	unzip -q "$SMLINUX"/icons "$PRESET".png -d "$SHARE"/icons
 	if [ ! -f "$SHARE"/icons/"$PRESET".* ] && [ -f "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png ]; then
 		cp "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png "$SHARE"/icons/"$PRESET".png
-		echo 16x16 image from ROM used.  Reccommend replacing "$SHARE"/icons/"$PRESET".png
-	else 
+		pinkecho Warning: 16x16 image from ROM used for "$SHARE"/icons/"$PRESET".png
+	elif [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 		pinkecho Warning: No icon found. Please create "$SHARE"/icons/"$PRESET".png
 	fi	
 else
