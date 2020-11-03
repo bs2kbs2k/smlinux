@@ -16,7 +16,7 @@
  
 ## **Download & Installation Instructions**    
 
-Paste either of the following into a terminal then press Enter (*whichever works for your OS):*  
+Paste either of the following into a terminal then press Enter (*whichever works for your OS*):  
   
 `bash -c "$(curl -fsSL https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux)"`  
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **-OR-**  
@@ -25,7 +25,7 @@ Paste either of the following into a terminal then press Enter (*whichever works
 That's all you have to do for mac and debian/ubuntu based linux. You will be prompted to:  
 (1) provide password to install build tools (2) specify your romfile (3)  approve (or change) build options.  
 smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
-**Do not run smlinux as root; you will be prompted for password automatically if needed.**  
+**Do not run smlinux as root; you will be prompted for password if needed.**  
 You must provide your own legally backed up Super Mario 64 ROM file. 
 
 smlinux will be installed in the first directory in your path, usually ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in next screenshot) or use command line options (as shown in previous screenshot) to skip menu.  
