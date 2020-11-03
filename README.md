@@ -69,7 +69,7 @@ If you want to build for PC, the source repository from the team who decompiled 
 
 ## **What does the InstallHD option do?**
 
-This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch to most forks. 
+This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch to most forks except dos and render96ex. 
 
 On sm64pc/sm64ex based forks upscaled textures will aslo be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.  On the render96ex fork, Render96's HD rextures will be used instead, which are over 500MB so require additional download time, as well as more than 2GB of free memory and additional time to precache before game launches.  
 
