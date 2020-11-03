@@ -27,11 +27,11 @@ OR
 	
 	
 That's all you have to do for mac and debian/ubuntu based linux. You will be prompted to approve build options, specify your romfile,  and if needed provide password to install build tools.  smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
-(**Do not run smlinux as root; you will be prompted for password automatically if needed during installation.**)
+(**Do not run smlinux as root; you will be prompted for password automatically if needed.**)
 
 You must provide your own legally backed up Super Mario 64 ROM file during smlinux installation. 
 
-smlinux will be installed in the first directory in your path, usually ~/bin. After initial installation, just type `smlinux` when you want to use smlinux to update your current sm64 build or create another.  
+smlinux will be installed in the first directory in your path, usually ~/bin. After initial installation, just enter`smlinux` into a new terminal when you want to use smlinux to update your current sm64 build or create another.  
 
 If for some reason the process freezes during compilation, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will run make with multiple jobs at once which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
