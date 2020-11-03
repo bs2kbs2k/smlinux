@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1102-1940  
+TIMESTAMP=2020-1103-1346  
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -1451,8 +1451,8 @@ elif command -v whiptail &> /dev/null; then
 	compactbutton=blue,black   # ok button'
 	if ! COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
 	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and macOS" \
-	"update" "update sm64 source and rebuild it" ON \
 	"build" "get clean sm64 source and build it" OFF \
+	"update" "update sm64 source and rebuild it" ON \
 	"clone" "get clean sm64 source and extract rom" OFF \
 	"reset" "reset smlinux config file to default" OFF \
 	"config" "edit smlinux config file only" OFF \
@@ -2008,7 +2008,14 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			git checkout "$BRANCH" -- .
 			git pull --no-rebase
 		fi
-		pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old.
+		if [ ! -f Makefile ]; then
+			pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old 
+			pinkecho However smlinux was unable to use it to restore clean source.
+			cd "$BASEPATH"
+			rm -rf "$PRESET"
+		else
+			pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old.
+		fi
 	fi
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
