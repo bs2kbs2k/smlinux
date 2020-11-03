@@ -71,7 +71,7 @@ If you want to build for PC, the source repository from the team who decompiled 
 
 This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch to most forks. 
 
-On sm64pc/sm64ex based forks upscaled textures will aslo be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.  On the render96ex fork, Render96's HD rextures will be used instead, which are over 700MB so require additional download time, as well as more than 2GB of free memory and additional time to precache before game launches.  
+On sm64pc/sm64ex based forks upscaled textures will aslo be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.  On the render96ex fork, Render96's HD rextures will be used instead, which are over 500MB so require additional download time, as well as more than 2GB of free memory and additional time to precache before game launches.  
 
 On the sm64nx fork, Arredondo's HD Mario & Bowser and Cleaner Aesthetics textures are set as defaults, along with a few other small add-on paks which can be enabled from the in-game mod selection menu, including an HD Luigi model replacement.
 
