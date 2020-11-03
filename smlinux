@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1103-1508
+TIMESTAMP=2020-1103-1528
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1410,6 +1410,7 @@ fi
 ####################################### The Beginning ########################################
 
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
+SAVEDIR="$SHARE"/"$PRESET"
 SMLINUX="$SHARE"/sm64pc
 LAUNCH_DIR=$(pwd)
 
@@ -2055,7 +2056,6 @@ if [ "$COMMAND" = "clone" ]; then
 fi
 echo
 greenecho [5] Applying Enhancements...
-SAVEDIR="$SHARE"/"$PRESET"
 if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 	echo Creating "$SAVEDIR" for save files.
 	mkdir "$SAVEDIR"
