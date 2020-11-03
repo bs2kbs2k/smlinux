@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1102-1921
+TIMESTAMP=2020-1102-1940  
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
@@ -60,8 +60,10 @@ if [ "$OSX_BUILD" = 1 ]; then
 else
 	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API > "$SMLINUX"/buildlog.txt
 fi
-cp "$SMLINUX"/smlinuxcfg.txt "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/smlinuxcfg.logged
-date >> "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/smlinuxcfg.logged
+if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
+	cp "$SMLINUX"/smlinuxcfg.txt "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/smlinuxcfg.logged
+	date >> "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/smlinuxcfg.logged
+fi
 if [ ! "$ANDROID" = 0 ]; then
 	if [ "ARMONLY" = 1 ]; then
 		echo Removing x86 x64
