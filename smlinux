@@ -1506,7 +1506,13 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo smlinux configuration file not found, so making a new one...
 		makeconfig
 		doconfig
-	elif [ ! "$COMMAND" = "help" ] && [ ! "$COMMAND" = "depends" ] && [ ! "$COMMAND" = "rebuild" ]; then
+	elif [ "$COMMAND" = "rebuild" ]; then 
+		if [ "$2" = "--config" ] || [ "$3" = "--config" ] ||[ "$4" = "--config" ] ||[ "$5" = "--config" ]; then
+			doconfig
+		elif [ "$2" = "config" ] || [ "$3" = "config" ] ||[ "$4" = "config" ] ||[ "$5" = "config" ]; then
+			doconfig
+		fi
+	elif [ ! "$COMMAND" = "help" ] && [ ! "$COMMAND" = "depends" ]; then
 		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 		if [ "$CONFIG" = 1 ]; then 
 			doconfig
@@ -2203,10 +2209,12 @@ rungame
 if [ -f "$HOME"/.smlinuxNopath ]; then
 	rm "$HOME"/.smlinuxNopath
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-	zenity --info --text="You did not have a home folder in your path so "$HOME"/bin was created.\n\nRestart terminal or type \n\n    PATH=\$HOME/bin:\$PATH\n\nbefore running smlinux again." --title="Your installation is complete." --width=500	
+	zenity --info --text="You did not have a home folder in your path so "$HOME"/bin was created.\n\nRestart terminal before running smlinux again." --title="Your installation is complete." --width=500 &disown
 	echo
 	echo You did not have a home folder in your path so "$HOME"/bin was created.
-	printf 'nRestart terminal or type \n\n      PATH=$HOME/bin:$PATH\n\nbefore running smlinux again.\n\n'
+	echo Restart terminal before running smlinux again.
+	sleep 8
+	kill $PPID
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 4
 elif  [ "$GIT" = "render96/render96ex" ] && [ "$InstallHD" = 1 ]; then
