@@ -187,7 +187,7 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 
 
 ## **What about distros other than Ubuntu?**
-*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch and Fedora also confirmed working by users.*
+*Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch Fedora & OpenSuse confirmed working by users.*
 
 Change your `Linux=` command string during first install to one that works with your distro such as those listed below, or paste the command directly into a terminal first.  smlinux only installs dependendencies automatically during the very first installation; if you wish to force reinstallation run `smlinux depends` or add ` --depends` to next `smlinux update` or `smlinux build`.
 
