@@ -1,11 +1,11 @@
 #!/bin/bash
 # Super Mario 64 Install * Build * Update Script for Linux and macOS
 # This scrupt will do everything required to build & install Super Mario 64 under Ubuntu or macOS.
-# Other distros will need to edit config file when prompted to change Linux= command.
+# Other distros will need to edit config file when prompted to set Linux= command.
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
-# Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1104-1251
+# Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
+TIMESTAMP=2020-1104-1400
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -237,7 +237,7 @@ exit
 
 
 endnow(){
-redecho "Script Ending Incomplete.  Contact #help-desk for support."
+redecho "smlinux ending incomplete.  Contact #help-desk for support."
 if [ "$TARGET_RPI" = 0 ]; then
 	"$OPEN" https://discord.gg/Ub6YHRm &
 fi
@@ -481,7 +481,7 @@ GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 # Linux command is only called during first install and is not used for macOS
-Linux="sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip"
+Linux="sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity"
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
@@ -1501,7 +1501,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo
 		exit
 	elif [ "$COMMAND" = "upgrade" ]; then
-		echo Script upgrade only proceeding...
+		echo smlinux script upgrade only proceeding...
 	elif [ ! -f "$SMLINUX"/smlinuxcfg.txt ]; then
 		echo smlinux configuration file not found, so making a new one...
 		makeconfig
@@ -1672,21 +1672,14 @@ else   # The real start, the rest was script preperation and setup.
 				xcode-select --install
 				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\n" 12 55 2>&1
 			fi
+		elif command -v apt &> /dev/null && [ "$USER" = "root" ]; then
+			echo "Updating package list and installing dependencies..."
+			apt update
+			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl1.2-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 			echo "Updating package list and installing dependencies..."
 			sudo apt update
-			if [ "$WINDOW_API" = "SDL1" ]; then
-				sudo apt install libsdl1.2-dev
-			fi
-			$Linux
-		elif ! command -v sudo &> /dev/null && command -v apt &> /dev/null && [ "$USER" = "root" ]; then
-			echo "Updating package list and installing dependencies..."
-			apt update
-			apt install -y sudo
-			if [ "$WINDOW_API" = "SDL1" ]; then
-				apt install libsdl1.2-dev
-			fi
-			$Linux
+			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl1.2-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 		else
 			echo "Installing Linux dependencies specified in smlinux configuration file..."
 			$Linux
@@ -2021,7 +2014,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			cd "$BASEPATH"
 			rm -rf "$PRESET"
 		else
-			pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old.
+			pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old
 		fi
 	fi
 fi
