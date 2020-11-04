@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1103-2158
+TIMESTAMP=2020-1103-2223
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -842,6 +842,7 @@ else
 			echo Updating textures from git...
 			git checkout gfx
 			git pull --no-rebase
+			git checkout gfx
 		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET".old/res/.git ] ; then
 			echo Moving texture repository from old backup...
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
@@ -856,6 +857,7 @@ else
 			echo Updating textures from git...
 			git checkout gfx
 			git pull --no-rebase
+			git checkout gfx
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git ] ; then
 			echo Getting texture repository from old build...
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
@@ -870,6 +872,7 @@ else
 			echo Updating textures from git...
 			git checkout gfx
 			git pull --no-rebase
+			got checkout gfx
 		elif [ "$GIT" = "render96/render96ex" ]; then
 			if [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
 				R96=render96ex
@@ -893,6 +896,7 @@ else
 				cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 				git checkout gfx
 				git pull --no-rebase
+				git checkout gfx
 			fi
 		elif [ -d "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Copying textures from sm64ex
@@ -909,6 +913,7 @@ else
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
 			git pull --no-rebase
+			git checkout gfx
 		elif [ -d "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Copying textures from sm64ex-coop
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
@@ -924,6 +929,7 @@ else
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
 			git pull --no-rebase
+			git checkout gfx
 		elif [  -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
 		fi
@@ -1338,7 +1344,7 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 		mv -f "$SHARE"/applications/"$PRESET".desktop /usr/share/applications
 	fi
 elif [ "$OSX_BUILD" = 1 ]; then
-	echo Creating macOS App Bundle and Desktop Shortcut. ..
+	echo Creating macOS App Bundle and Desktop Shortcut...
  	if [ -f /Applications/'Super Mario 64 ('"$PRESET"')'.app ]; then
  		rm -rf /Applications/'Super Mario 64 ('"$PRESET"')'.app 
 	fi
@@ -2006,6 +2012,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			mv "$BASEPATH"/"$PRESET".old/.git .
 			git checkout "$BRANCH" -- .
 			git pull --no-rebase
+			git checkout "$BRANCH" -- .
 		fi
 		if [ ! -f Makefile ]; then
 			pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old 
