@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1103-1528
+TIMESTAMP=2020-1103-1547
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -242,8 +242,6 @@ if [ "$TARGET_RPI" = 0 ]; then
 	"$OPEN" https://discord.gg/Ub6YHRm &
 fi
 echo Your smlinux internal timestamp is "$TIMESTAMP".
-echo If that is not recent, perhaps updates are not working.
-echo check https://github.com/enigma9o7/smlinux for the latest version.
 echo
 exit
 }
@@ -2039,15 +2037,14 @@ if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 elif [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
 	ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 fi
-
+if [ "$OSX_BUILD" = 1 ]; then
+	macprep
+fi
 echo
 greenecho [4] Extracting Assets from ROM...
 if [ "$PRESET" = "sm64nx" ]; then
 	prepnx
 else 	
-	if [ "$OSX_BUILD" = 1 ]; then
-		macprep
-	fi
 	cd "$BASEPATH"/"$PRESET"
 	./extract_assets.py "$VERSION"
 fi
