@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1104-0404
+TIMESTAMP=2020-1104-1230
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -174,7 +174,7 @@ export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 if [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 	sed -i.bak 's/sdk\/discord_game_sdk.dylib/sdk\/libdiscord_game_sdk.dylib/g' "$BASEPATH"/"$PRESET"/Makefile
 	cp "$BASEPATH"/"$PRESET"/lib/discordsdk/discord_game_sdk.dylib "$BASEPATH"/"$PRESET"/lib/discordsdk/libdiscord_game_sdk.dylib
-elif [ "$GIT" = "render96/render96ex" ]; then
+elif [ -f "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c ]; then
 	sed -i.bak 's/#include <malloc.h>/\/\/ # include <malloc.h>/g' "$BASEPATH"/"$PRESET"/tools/n64graphics_ci_dir/exoquant/exoquant.c
 fi
 if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
@@ -201,8 +201,8 @@ if [ ! -f skyconv ]; then
 	make 
 fi
 if [ ! -f skyconv ]; then
-	echo Failed to build N64 tools.  This is a smlinux problem not handling your macOS toolchain.
-	echo Please report problem to smlinux development team and hopefully it can be resolved.
+	redecho Failed to build N64 tools.  smlinux cannot handle macOS toolchain.
+	redecho Please report problem to smlinux development team for resolution.
 	endnow
 fi
 }
@@ -237,7 +237,7 @@ exit
 
 
 endnow(){
-echo "Script Ending Incomplete.  Contact #help-desk for support."
+redecho "Script Ending Incomplete.  Contact #help-desk for support."
 if [ "$TARGET_RPI" = 0 ]; then
 	"$OPEN" https://discord.gg/Ub6YHRm &
 fi
@@ -770,7 +770,7 @@ if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak' ];
 	endnow
 else
 	echo could now get hash for ...ummmm.... forgot... got hash so dont care anymore... 
-	echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak' created.
+	echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak' created succesfully.
 fi
 }
 
@@ -1689,9 +1689,7 @@ else   # The real start, the rest was script preperation and setup.
 			$Linux
 		fi
 	fi
-	if [ "$COMMAND" = "upgrade" ]; then
-		echo Already prepared.
-	elif [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
+	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		echo "Installing required build tools for sm64nx..."
 		pip3 install pillow zstandard tqdm xxhash
 		gcccheck
@@ -1707,7 +1705,7 @@ else   # The real start, the rest was script preperation and setup.
 	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "This is not first build, skipping dependencies."
 	else
-		echo "Done."
+		echo "Prepared."
 	fi
 	if [ "$COMMAND" = "depends" ]; then
 		theend
