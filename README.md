@@ -194,9 +194,9 @@ Change your `Linux=` command string during first install to one that works with 
 If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  The Ubuntu list is confirmed compatible with WSL, Debian 9 and Ubuntu 18/20 but other versions also likely work.  Some build targets depend on additional packages not listed below, for example Android builds require android-sdk, web targets emscriptem sdk, dos targets djgpp, which smlinux will only install when needed.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8; users of distros without apt wanting to build sm64nx will need to do this manually.
 
 
-Debian / Ubuntu: *does not need to be specified, provided for reference*  
+Debian / Ubuntu: *does not need to be specified*  
 
-	sudo apt install build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
+	sudo apt install zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev  libsdl1.2-dev libusb-1.0-0-dev libzstd-dev mplayer
 	
 Arch: 
     
