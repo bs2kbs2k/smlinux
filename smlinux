@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Sript updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1104-1230
+TIMESTAMP=2020-1104-1251
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -713,7 +713,7 @@ fi
 
 editconfig(){
 echo Looking for a text editor...
-EDITORS=kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:nano:pico:micro:jed:emacs:vim:vi
+EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
 IFS=":"
 for editor in $EDITORS; do
 	$editor "$SMLINUX"/smlinuxcfg.txt
@@ -1664,6 +1664,9 @@ else   # The real start, the rest was script preperation and setup.
 			brew install libxdg-basedir coreutils wget newt nano go zip unzip unrar p7zip python3 
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
 			go get github.com/machinebox/appify
+			if [ ! ~/.nanorc ]; then
+				echo "include /usr/local/share/nano/*.nanorc" >~/.nanorc
+			fi
 			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
 				echo Installing Apple XCode Command Line Tools
 				xcode-select --install
