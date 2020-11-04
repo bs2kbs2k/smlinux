@@ -22,7 +22,7 @@ Paste either of the following into a terminal then press Enter (*whichever works
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **-OR-**  
 `wget https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux;bash smlinux;rm smlinux`
 	
-That's all you have to do for mac and debian/ubuntu based linux. You will be prompted to:  
+That's all you have to do for macOS and debian/ubuntu based linux. You will be prompted to:  
 (1) provide password to install build tools (2) specify your romfile (3)  approve (or change) build options.  
 smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 **Do not run smlinux as root; you will be prompted for password if needed.**  
@@ -189,17 +189,19 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 ## **What about distros other than Ubuntu?**
 *Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch and Fedora also confirmed working by users.*
 
-Change your `Linux=` command string during first install to one that works with your distro such as those listed below, or paste the command directly into a terminal first the run smlinux with `Linux=""` (or just ignore the one-time apt error).  smlinux only installs dependendencies automatically during the very first installation; if you wish to force reinstallation run `smlinux depends` or add ` --depends` to next `smlinux update` or `smlinux build`.
+Change your `Linux=` command string during first install to one that works with your distro such as those listed below, or paste the command directly into a terminal first.  smlinux only installs dependendencies automatically during the very first installation; if you wish to force reinstallation run `smlinux depends` or add ` --depends` to next `smlinux update` or `smlinux build`.
 
 If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  The Ubuntu list is confirmed compatible with WSL, Debian 9 and Ubuntu 18/20 but other versions also likely work.  Some build targets depend on additional packages not listed below, for example Android builds require android-sdk, web targets emscriptem sdk, dos targets djgpp, which smlinux will only install when needed.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8; users of distros without apt wanting to build sm64nx will need to do this manually.
 
-Arch: 
-    
-	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity
-Debian / Ubuntu:  
+
+Debian / Ubuntu: *does not need to be specified, provided for reference*  
 
 	sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 	
+Arch: 
+    
+	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity
+
 Fedora  / Red Hat:
 
 	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++
@@ -217,10 +219,6 @@ Alpine:
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 	
-Slax: *must be done from command line - not script - then leave`Linux=` as debian default*
-
-	apt install sudo
-
 macOS:
 
 	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
