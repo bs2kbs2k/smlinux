@@ -196,7 +196,7 @@ If your distribution needs additional dependencies not listed here, please let m
 
 Debian / Ubuntu: *does not need to be specified, provided for reference*  
 
-	sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
+	sudo apt install build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 	
 Arch: 
     
