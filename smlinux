@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1104-1923
+TIMESTAMP=2020-1104-2001
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1662,7 +1662,7 @@ else   # The real start, the rest was script preperation and setup.
 				endnow
 			fi
 			brew install libxdg-basedir coreutils wget newt nano go zip unzip unrar p7zip python3 
-			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile 
+			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 			go get github.com/machinebox/appify
 			if [ ! ~/.nanorc ]; then
 				echo "include /usr/local/share/nano/*.nanorc" >~/.nanorc
@@ -1933,7 +1933,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 		greenecho [6] Restoring External Resources...
 		cp -rpn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
-		echo "[6] Restoring Savefile, ROM and ROM Filesystem (paks)"
+		greenecho "[6] Restoring ROM and ROM Filesystem (paks)"
 		cp -rpn "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs/. "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
 		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
 		if [ -f "$SAVEDIR"/sm64.sav ]; then
@@ -1957,7 +1957,6 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 	elif [ "$ANDROID" = 0 ]; then
 		greenecho [6] No resources found in previous build, skipping restore.
 	fi
-	echo
 	if [ "$TARGET" = "web" ]; then
 		greenecho [7] "$COMMAND" complete.  
 	elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/*.apk ]; then
