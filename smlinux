@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1104-2001
+TIMESTAMP=2020-1105-1143
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1352,7 +1352,11 @@ elif [ "$OSX_BUILD" = 1 ]; then
 	GITVER=`git rev-parse --short HEAD`
 	echo '#!/bin/bash' >"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	echo cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" >>"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
-	echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SAVEDIR" >>"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	if [ "$GIT" = "teamsalta/sm64nx" ]; then
+		echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e >>"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	else
+		echo "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e --cheats --savepath "$SAVEDIR" >>"$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
+	fi
 	chmod +x "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
 	cd /Applications
 	~/go/bin/appify -name 'Super Mario 64 ('"$PRESET"')' -icon "$SHARE"/icons/"$PRESET".png -author smlinux --version "$GITVER" --id "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.sh
@@ -1665,7 +1669,7 @@ else   # The real start, the rest was script preperation and setup.
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 			go get github.com/machinebox/appify
 			if [ ! ~/.nanorc ]; then
-				echo "include /usr/local/share/nano/*.nanorc" >~/.nanorc
+				echo '"include /usr/local/share/nano/*.nanorc"' >~/.nanorc
 			fi
 			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
 				echo Installing Apple XCode Command Line Tools
@@ -2021,14 +2025,14 @@ fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	cd "$BASEPATH"
 	if [ ! "$ANDROID" = 0 ]; then
-		printf "\n[3] Downloading Android source from github... \n"
+		greenecho "[3] Downloading sm64 Android source from "$GIT" repository..."
 		git clone git://github.com/"$GIT" -b "$BRANCH" "$ANDROID"
 		cd "$ANDROID"
 		git submodule init
 		git submodule update
 		./getSDL.sh
 	else
-		printf "\n[3] Downloading sm64 source from github... \n"
+		greenecho "[3] Downloading sm64 source from "$GIT" repository... "
 		git clone git://github.com/"$GIT" -b "$BRANCH" "$PRESET"
 	fi
 fi
