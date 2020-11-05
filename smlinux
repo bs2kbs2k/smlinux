@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1104-1808
+TIMESTAMP=2020-1104-1923
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -196,7 +196,7 @@ if [ ! -f skyconv ]; then
 	gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
 if [ ! -f skyconv ]; then
-	pinkecho Warning: trying other compilers because initial tool build attempt failed...
+	pinkecho Warning: Tool build attempt failed with gcc-9.  Trying other compilers...
 	gmake OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 	make 
 fi
@@ -206,7 +206,6 @@ if [ ! -f skyconv ]; then
 	endnow
 fi
 }
-
 theend(){
 if [ "$TARGET" = "web" ]; then
 	echo
@@ -789,17 +788,17 @@ if [ "$PRESET" = "sm64nx" ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~OWO Mod"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730420038024036362/owo.pak
 	fi
-	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro" ]; then
-		echo Getting NES Retro Theme...
-		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro"
-		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro"
-		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730431589749620736/nes.pak
-	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~HD Luigi" ]; then
 		echo Getting HD Luigi...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~HD Luigi"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~HD Luigi"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730425786452017222/luigi.pak
+	fi
+	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro" ]; then
+		echo Getting NES Retro Theme...
+		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro"
+		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro"
+		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730431589749620736/nes.pak
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"HD Mario . Bowser" ]; then
 		echo "Getting HD Mario & Bowser..."
@@ -1787,7 +1786,7 @@ else   # The real start, the rest was script preperation and setup.
 			pinkecho Warning: No ROM file found.  Please specify a romfile when you are ready to build.
 		fi
 	fi
-	greenecho [2] Checking Github for smlinux updates....
+	greenecho [2] Checking smlinux github repository for updates....
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
 		scriptUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	else
@@ -1884,6 +1883,8 @@ elif [ "$COMMAND" = "update" ]; then
 			echo Menu Arrows...
 			git apply enhancements/menu-arrows.patch
 		fi
+	else
+		echo "$GIT" is up to date.
 	fi
 	if [ ! "$ANDROID" = 0 ]; then
 		git submodule init
