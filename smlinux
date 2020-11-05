@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1104-1400
+TIMESTAMP=2020-1104-1808
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -817,18 +817,19 @@ if [ "$PRESET" = "sm64nx" ]; then
 		dosgi
 	fi
 else
-	if [ "$EXTERNAL_DATA" = 1 ] ; then
-		if [ ! -d "$BASEPATH"/"$PRESET"/build ] ; then 
+	if [ "$EXTERNAL_DATA" = 1 ]; then
+		if [ ! -d "$BASEPATH"/"$PRESET"/build ]; then 
 			mkdir "$BASEPATH"/"$PRESET"/build
 		fi
-		if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] ; then 
+		if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then 
 			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 		fi
-		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git ] ; then
+		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Checking github for texture updates...
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			git checkout gfx
 			git pull --no-rebase
-		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git ] ; then
+		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git ]; then
 			echo Moving texture repository from old backup...
 			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -1999,7 +2000,6 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 		fi
 		mv "$BASEPATH"/"$PRESET" "$BASEPATH"/"$PRESET".old
 		if [ -d "$BASEPATH"/"$PRESET".old/.git  ]; then
-			echo
 			greenecho "[3] Preparing clean sm64 source..."
 			mkdir "$BASEPATH"/"$PRESET"
 			cd "$BASEPATH"/"$PRESET"
@@ -2193,11 +2193,9 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 	rm "$HOME"/.smlinuxNopath
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 	zenity --info --text="You did not have a home folder in your path so "$HOME"/bin was created.\n\nRestart terminal before running smlinux again." --title="Your installation is complete." --width=500 &disown
-	echo
 	echo You did not have a home folder in your path so "$HOME"/bin was created.
 	echo Restart terminal before running smlinux again.
-	sleep 8
-	kill $PPID
+	kill -9 $PPID
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 4
 elif  [ "$GIT" = "render96/render96ex" ] && [ "$InstallHD" = 1 ]; then
