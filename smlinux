@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1106-0935
+TIMESTAMP=2020-1106-1158
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -568,7 +568,6 @@ elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lowe
 	BRANCH=master
 	TEXTSAVES=1
 	LEGACY_RES=1
-	InstallR96=1
 elif [ "$PRESET" = "r96proto" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96proto" ]; then
 	PRESET=r96proto
 	GIT=render96/render96ex
@@ -582,22 +581,23 @@ elif [ "$PRESET" = "r96alpha" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:
 	GIT=render96/render96ex
 	BRANCH=alpha
 	TEXTSAVES=1
-	InstallR96=1
 	DISCORDRPC=0
+	EXTERNAL_DATA=1
 	DYNOS=0
-	CHEATER=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
 	FPS60=0
 	CHEATER=0
+	DYNOS=0
 elif [ "$PRESET" = "emm-ody" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "EMM-ODY" ]; then
 	PRESET=emm-ody
 	GIT=s4Ys369/cheaterex
 	BRANCH=emm-ody
 	FPS60=0
 	CHEATER=0
+	DYNOS=0
 elif  [ "$PRESET" = "coop-unstable" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "coop-unstable" ]; then
 	PRESET=coop-unstable
 	GIT=djoslin0/sm64ex-coop
@@ -964,9 +964,9 @@ else
 	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
 		echo External Data not supported for sm64-port repository, skipping.
 	fi
-	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ] ; then
+	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ]; then
 		echo "Render96 model pack found, skipping model application."
-	elif  [ "$InstallR96" = 1 ] && [ "$EXTERNAL_DATA" = 1 ]; then
+	elif [ "$EXTERNAL_DATA" = 1 ] && ( [ "$InstallR96" = 1 ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96alpha" ] ); then
 		dosgi
 	elif [ ! "$TARGET" = "dos" ] &&  [ ! "$GIT" = "render96/render96ex" ] ; then
 		cd "$BASEPATH"/"$PRESET" 
@@ -1028,7 +1028,7 @@ if  [ "$TARGET_WEB" = 1 ] || ([ "$EXTERNAL_DATA" = 0 ] && [ ! "$PRESET" = "sm64n
 		return
 	fi
 fi
-if  [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/render96* ]; then 
+if  [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ]; then 
 	echo Render96 already installed.
 	return
 fi
@@ -1238,16 +1238,23 @@ elif [ "$CHEATER" = 0 ]; then
 	return
 elif [ "$ANDROID" = "androidex" ] && [ ! -f enhancements/v9_r9ex.patch ]; then
 	removecheater
-	cd "$BASEPATH"/"$PRESET"/enhancements
+	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
 	unzip -q CHEATERv9.zip v9_r96ex.patch
 	CHEATERFILE=v9_r96ex.patch 
 elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v2*.zip ]; then
 	removecheater
-	cd "$BASEPATH"/"$PRESET"/enhancements
+	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/755907254318006362/770448804512137236/CHEATER.coop.v3.patch.zip
 	unzip -q CHEATER.coop.v3.patch.zip 
 	CHEATERFILE=CHEATER.coop.v3.patch
+elif [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.alpha.zip ]; then
+	removecheater
+	cd enhancements
+	wget -q https://cdn.discordapp.com/attachments/716459185230970880/773916280247549952/CHEATERv11.alpha.zip
+	unzip -jq CHEATERv11.alpha.zip CHEATERv11.alpha/CHEATERv11.alpha_dynos.patch
+	unzip -jqo CHEATERv11.alpha.zip CHEATERv11.alpha/sound/* -d ../sound
+	CHEATERFILE=CHEATERv11.alpha_dynos.patch
 elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ]; then
 	removecheater
 	cd "$BASEPATH"/"$PRESET"/enhancements
