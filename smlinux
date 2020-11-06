@@ -130,7 +130,7 @@ if [ ! "$ANDROID" = 0 ]; then
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hdbase.zip ]; then
 			adb push "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hdbase.zip /sdcard/Android/data/com.vdavid003.sm64port/files/
-		elif [ "$EXTERNAL_DATA" = 1] && [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/base.zip ]; then
+		elif [ "$EXTERNAL_DATA" = 1 ] && [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/base.zip ]; then
 			adb push "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/base.zip /sdcard/Android/data/com.vdavid003.sm64port/files/
 		fi
 	fi
