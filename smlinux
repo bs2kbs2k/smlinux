@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1106-1158
+TIMESTAMP=2020-1106-1405
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -931,10 +931,14 @@ else
 			git checkout gfx
 			git pull --no-rebase
 			git checkout gfx
-		elif [  -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
+		elif [  -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
 		fi
-		if [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ] ; then
+		if [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
+				pinkecho Warning: Something didnt go right with texture update.  If this message happens need debug.
+				rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+			fi
 			if [ "$GIT" = "render96/render96ex" ]; then
 				echo Downloading Render96 Textures... 
 				git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -1003,7 +1007,13 @@ dofps(){
 cd "$BASEPATH"/"$PRESET"
 if [ "$FPS60" = 1 ] && [ ! -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
 	echo Applying 60fps patch...
-	git apply enhancements/60fps*.patch --reject
+	if [ "$GIT" = "render96/render96ex" ]; then
+		pinkecho Force applying 60fps patch with --reject...
+		git apply enhancements/60fps*.patch --reject
+	else
+		echo Applying 60fps patch...
+		git apply enhancements/60fps*.patch 
+	fi
 	touch enhancements/60fps
 	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Enabling Vsync...
@@ -1011,7 +1021,11 @@ if [ "$FPS60" = 1 ] && [ ! -f enhancements/60fps ] && [ -f enhancements/60fps*.p
 	fi
 elif [ "$FPS60" = 0 ] && [ -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
 	echo Removing 60fps patch...
-	git apply -R enhancements/60fps*.patch --reject
+	if [ "$GIT" = "render96/render96ex" ]; then
+		git apply -R enhancements/60fps*.patch --reject
+	else
+		git apply -R enhancements/60fps*.patch 
+	fi
 	rm enhancements/60fps
 	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Disabling Vsync...
@@ -1099,7 +1113,7 @@ fi
 if [ ! "$PRESET" = "sm64nx" ]; then
 	cd "$BASEPATH"/"$PRESET"
 	echo Applying Render96 SGI Models...
-	7z x -aoa enhancements/"$SGIFILE" 
+	7z x -aoa enhancements/"$SGIFILE" >/dev/null
 fi
 if [ ! "$ANDROID" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/render96_android.patch ]; then
 	echo Applying Android patch for Render96 models
