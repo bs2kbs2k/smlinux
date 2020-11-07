@@ -584,7 +584,6 @@ elif [ "$PRESET" = "r96alpha" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:
 	DISCORDRPC=0
 	EXTERNAL_DATA=1
 	DYNOS=0
-	CHEATER=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
@@ -1285,7 +1284,11 @@ fi
 if [ -f "$CHEATERFILE" ]; then
 	echo Applying "$CHEATERFILE"...
 	cd "$BASEPATH"/"$PRESET"
-	git apply enhancements/"$CHEATERFILE" 
+	if [ "$PRESET" = "r96alpha" ]; then
+		git apply enhancements/"$CHEATERFILE" --reject
+	else
+		git apply enhancements/"$CHEATERFILE" 
+	fi
 fi
 }
 
