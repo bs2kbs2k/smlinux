@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1106-1802
+TIMESTAMP=2020-1106-1843
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -584,7 +584,7 @@ elif [ "$PRESET" = "r96alpha" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:
 	DISCORDRPC=0
 	EXTERNAL_DATA=1
 	DYNOS=0
-	CHEATER=0
+	# CHEATER=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
@@ -1268,7 +1268,8 @@ elif [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.alpha.zip ]; t
 	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/773916280247549952/CHEATERv11.alpha.zip
 	unzip -jq CHEATERv11.alpha.zip CHEATERv11.alpha/CHEATERv11.alpha_dynos.patch
-	unzip -jqo CHEATERv11.alpha.zip CHEATERv11.alpha/sound/* -d ../sound
+	unzip -jo CHEATERv11.alpha.zip CHEATERv11.alpha/sound/samples/streamed_audio/23_custom_zawar.aiff -d ../sound/samples/streamed_audio
+	unzip -jo CHEATERv11.alpha.zip CHEATERv11.alpha/sound/sequences/us/23_custom_zawar.m64 -d ../sound/sequences/us
 	CHEATERFILE=CHEATERv11.alpha_dynos.patch
 elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ]; then
 	removecheater
@@ -1286,7 +1287,7 @@ if [ -f "$CHEATERFILE" ]; then
 	echo Applying "$CHEATERFILE"...
 	cd "$BASEPATH"/"$PRESET"
 	if [ "$PRESET" = "r96alpha" ]; then
-		git apply enhancements/"$CHEATERFILE" --reject
+		git apply enhancements/"$CHEATERFILE" --reject 
 	else
 		git apply enhancements/"$CHEATERFILE" 
 	fi
