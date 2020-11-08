@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1107-1924
+TIMESTAMP=2020-1108-1200
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1757,6 +1757,9 @@ else   # The real start, the rest was script preperation and setup.
 			echo "Installing Linux dependencies specified in smlinux configuration file..."
 			$Linux
 		fi
+	elif ! command -v gcc &> /dev/null; then
+		redecho ERROR: The GNU Compiler Collection is not installed.  Please install dependencies.
+		endnow
 	fi
 	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		echo "Installing required build tools for sm64nx..."
