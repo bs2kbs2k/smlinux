@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1107-0918
+TIMESTAMP=2020-1107-1415
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -610,6 +610,18 @@ elif  [ "$PRESET" = "sm64ex-coop" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lo
 	BRANCH=coop
 	NODRAWINGDISTANCE=1
 	FPS60=0
+elif [ "$PRESET" = "r96droid" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96droid" ]; then
+	ANDROID="$PRESET"
+	PRESET="r96droid/app/jni/src"
+	GIT=vdavid003/sm64-port-android-base
+	BRANCH=sm64ex_nightly
+	TARGET_WEB=0
+	TARGET_RPI=0
+	DISCORDRPC=0
+	DYNOS=0  # might work need to test
+	CHEATER=0 # might work need to test
+	TEXTSAVES=1
+	LEGACY_RES=1
 elif [ "$PRESET" = "androidex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "androidex" ]; then
 	ANDROID="$PRESET"
 	PRESET="androidex/app/jni/src"
@@ -617,6 +629,7 @@ elif [ "$PRESET" = "androidex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower
 	BRANCH=sm64ex_nightly
 	TARGET_WEB=0
 	TARGET_RPI=0
+	DISCORDRPC=0 # possibly could work untested
 	DYNOS=0  # might work need to test
 elif  [ "$PRESET" = "sm64-port-android-base" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64-port-android-base" ] ; then
 	ANDROID="$PRESET"
@@ -871,7 +884,7 @@ else
 			git checkout gfx
 			git pull --no-rebase
 			git checkout gfx
-		elif [ "$GIT" = "render96/render96ex" ]; then
+		elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 			if [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
 				R96=render96ex
 			elif [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git ]; then
@@ -936,7 +949,7 @@ else
 				pinkecho Warning: Something didnt go right with texture update.  If this message happens need debug.
 				rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			fi
-			if [ "$GIT" = "render96/render96ex" ]; then
+			if [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 				echo Downloading Render96 Textures... 
 				git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			else
@@ -1075,7 +1088,7 @@ elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/730551213376143431/773393231979216916/RENDER96_V2.0_Hotfix_Better_Cam_Fix.zip
 	SGIFILE=RENDER96_V2.0_Hotfix_Better_Cam_Fix.zip
-elif [ "$GIT" = "render96/render96ex" ]; then
+elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
 	SGIFILE=RENDER96_V1.4.2_Luigi.zip
@@ -1089,7 +1102,6 @@ else
 	mv RENDER96_V1.3.7z RENDER96_V1.3.zip
 	SGIFILE=RENDER96_V1.3.zip
 fi
-removecheater
 if [ -d "$BASEPATH"/"$PRESET"/actors.bak ] && [ ! "$SGIFILE" = "render96_coop.zip" ]; then
 	echo Restoring default actors...
 	cd "$BASEPATH"/"$PRESET"/enhancements
@@ -1108,6 +1120,7 @@ elif [ "$SGIFILE" = "render96_coop.zip" ]; then
 	cp -rn actors actors.bak
 fi
 if [ ! "$PRESET" = "sm64nx" ]; then
+	removecheater
 	cd "$BASEPATH"/"$PRESET"
 	echo Applying Render96 SGI Models...
 	7z x -aoa enhancements/"$SGIFILE" >/dev/null
@@ -1256,13 +1269,13 @@ if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 elif [ "$CHEATER" = 0 ]; then
 	removecheater
 	return
-elif [ "$ANDROID" = "androidex" ] && [ ! -f enhancements/v9_r9ex.patch ]; then
+elif [ "$ANDROID" = "androidex" ] && [ ! -f enhancements/CHEATERv9.zip ]; then
 	removecheater
 	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
 	unzip -q CHEATERv9.zip v9_r96ex.patch
 	CHEATERFILE=v9_r96ex.patch 
-elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v3*.zip ]; then
+elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v3.patch.zip ]; then
 	removecheater
 	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/755907254318006362/770448804512137236/CHEATER.coop.v3.patch.zip
@@ -1280,7 +1293,7 @@ elif [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.alpha.zip ]; t
 		rm "$SAVEDIR"/DynOSconfig.cfg
 	fi
 	CHEATERFILE=CHEATERv11.alpha_dynos.patch
-elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ]; then
+elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ] && [ "$DYNOS" = 1 ]; then
 	removecheater
 	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/773268203895783444/CHEATERv11.ex.zip
@@ -1966,8 +1979,9 @@ elif [ "$COMMAND" = "update" ]; then
 		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
 	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+		echo Updating Android basepack...
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-		zip -r -0 -u hdbase gfx
+		zip -q0ur hdbase gfx
 		rm -rf gfx
 	fi
 	dofps
@@ -2026,7 +2040,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 	elif [ "$ANDROID" = 0 ] && [ "$TARGET" = "pc" ] ; then
 		greenecho [7] Verifying Menu Entry....
 		makedesktop
-		greenecho [8] smlinux "$COMMAND" complete.  
+		greenecho [8] smlinux "$COMMAND" complete. Testing application launch... 
 	elif [ ! "$ANDROID" = 0 ]; then
 		mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
 		greenecho [7] smlinux "$COMMAND" complete.   
@@ -2213,10 +2227,10 @@ if [ "$PRESET" = "emm-ody" ] && [ ! -f "$BASEPATH"/"$PRESET"smo.cappy_assets.zip
     wget -q https://cdn.discordapp.com/attachments/723992726319792140/754402820588961882/smo.cappy_assets.zip
     unzip -q -o smo.cappy_assets
 fi
-if [ "$BRANCH" = "sm64ex_nightly" ] && [ ! "$TOUCH_CONTROLS" = 1 ]; then
+if [ "$BRANCH" = "sm64ex_nightly" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/pro1.patch ]; then
+	echo "Applying Pro¹ Android Customizations..."
 	cd "$BASEPATH"/"$PRESET"
 	cp "$SMLINUX"/pro1.patch enhancements
-	echo "Applying Pro¹ Customizations..."
 	git apply enhancements/pro1.patch
 fi
 greenecho [6] Compiling...
