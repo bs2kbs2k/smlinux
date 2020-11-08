@@ -428,7 +428,7 @@ fi
 echo '# PRESET supports: sm64ex sm64nx sm64ex-coop render96ex cheaterex 
 # AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
 # AND: sm64pc sm64-port r96proto r96alpha
-PRESET=sm64ex
+PRESET=cheaterex
 InstallHD=1
 InstallR96=0
 FPS60=0
