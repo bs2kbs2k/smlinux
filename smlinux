@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1107-1415
+TIMESTAMP=2020-1107-1924
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -33,7 +33,7 @@ if [ ! "$ANDROID" = 0 ]; then
 	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 	checkphone
 	if [ "$GOTPHONE" = 1 ]; then
-		zenity --info --text='\nPhone Detected.  Be sure to grant it debugging permission.\n\nExisting copies must also be uninstalled before this window closes itself.' --title="Preparing for Android Installation...." --width=500 &disown
+		zenity --info --text='\nPhone Detected.  Be sure to grant it debugging permission.\n\nExisting copies must also be uninstalled before this window closes itself.' --title="Preparing for Android Installation...." --width=510 &disown
 	else
 		echo "If you want the app installed to your Android device,"
 		echo "plug it in now via USB and grant it debugging permission."
@@ -1127,7 +1127,7 @@ if [ ! "$PRESET" = "sm64nx" ]; then
 fi
 if [ ! "$ANDROID" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/render96_android.patch ]; then
 	echo Applying Android patch for Render96 models
-	git apply enhancements/render96_android.patch --reject
+	git apply enhancements/render96_android.patch
 fi
 }
 	
@@ -2269,6 +2269,9 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 	zenity --info --text="You did not have a home folder in your path so "$HOME"/bin was created.\n\nRestart terminal before running smlinux again." --title="Your installation is complete." --width=500 &disown
 	echo You did not have a home folder in your path so "$HOME"/bin was created.
 	echo Restart terminal before running smlinux again.
+	echo
+	redecho Please close this terminal.
+	sleep 666
 	kill -9 $PPID
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 4
