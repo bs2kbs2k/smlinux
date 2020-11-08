@@ -1716,7 +1716,7 @@ else   # The real start, the rest was script preperation and setup.
 		else
 			echo "More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions"
 		fi
-		"$OPEN" https://github.com/enigma9o7/smlinux#frequently-asked-questions 
+		"$OPEN" "https://github.com/enigma9o7/smlinux#frequently-asked-questions"
 		exit
 	else
 		echo "|                                                                            |"
