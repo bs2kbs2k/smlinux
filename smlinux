@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1108-2000
+TIMESTAMP=2020-1109-1510
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -480,7 +480,7 @@ GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 # Linux command is only called during first install and is not used for macOS
-Linux="pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 git make mingw-w64-i686-gcc unzip zip unrar p7zip nano --noconfirm -needed"
+Linux="pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 python3-pip git make mingw-w64-i686-gcc unzip zip unrar p7zip nano --noconfirm -needed"
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
@@ -1648,52 +1648,25 @@ if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json ] 
 	ln -s "$SAVEDIR"keyboard1.bindings.json "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/keyboard1.bindings.json
 fi
 
-if [ "$COMMAND" = "purge" ] || [ "$1" = "--purge" ]; then
-	
-	echo Wiping...
-	rm -rf "$BASEPATH"/sm64pc
-	rm -rf "$BASEPATH"/sm64ex
-	rm -rf "$BASEPATH"/sm64-port
-	rm -rf "$BASEPATH"/sm64nx
-	rm -rf "$BASEPATH"/render96ex
-	rm -rf "$BASEPATH"/r96proto
-	rm -rf "$BASEPATH"/cheaterex
-	rm -rf "$BASEPATH"/sm64ex-coop
-	rm -rf "$BASEPATH"/sm64-port-android.base
-	rm -rf "$BASEPATH"/sm64pc.old
-	rm -rf "$BASEPATH"/sm64ex.old
-	rm -rf "$BASEPATH"/sm64-port.old
-	rm -rf "$BASEPATH"/sm64nx.old
-	rm -rf "$BASEPATH"/render96ex.old
-	rm -rf "$BASEPATH"/r96proto.old
-	rm -rf "$BASEPATH"/cheaterex.old
-	rm -rf "$BASEPATH"/sm64ex-coop.old
-	rm -rf "$BASEPATH"/sm64-port-android.base.old
-	rm -rf "$SMLINUX"
-	rm -rf "$SHARE"/sm64ex	
-	rm -rf "$SHARE"/sm64-port
-	rm -rf "$SHARE"/sm64nx
-	rm -rf "$SHARE"/render96ex
-	rm -rf "$SHARE"/r96proto
-	rm -rf "$SHARE"/cheaterex
-	rm -rf "$SHARE"/sm64ex-coop
-	rm "$SHARE"/icons/sm64*
-	rm "$SHARE"/icons/render96ex*
-	rm "$SHARE"/icons/r96proto*
-	rm "$SHARE"/icons/cheaterex*
-	rm "$SHARE"/applications/sm64*
-	rm "$SHARE"/applications/render96ex*
-	rm "$SHARE"/applications/r96proto*
-	rm "$SHARE"/applications/cheaterex*
-	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/sm64*.desktop
-	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/render96ex*.desktop
-	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/r96proto*.desktop
-	rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/cheaterex*.desktop
-	rm $HOME/Downloads/smlinux.*
+if [ "$COMMAND" = "purge" ]; then
+	redecho Wiping folder, backup, savedir, icon, and shortcuts...
+	for preset in sm64ex sm64nx sm64ex-coop render96ex cheaterex sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex sm64pc sm64-port r96proto r96alpha emm-ody coop-unstable
+do
+	printf $preset
+	rm -rf "$BASEPATH"/$preset "$BASEPATH"/$preset.old "$SHARE"/$preset
+	printf "..."
+	rm "$SHARE"/icons/$preset.* "$SHARE"/applications/$preset.desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}/$preset*
+	if [ "$TARGET_OSX" = 1 ]; then
+		rm -rf /Applications/$preset
+	elif [ `uname -o` = "Msys" ]; then
+		rm "$USERPROFILE"'/Desktop/Super Mario 64 ('"$preset"')'.url
+	fi
+done
+	echo	
 	echo Note this did not remove any packages installed as build tools or dependencies.
 	echo Remove those with your package manager.  Devel libraries can always safely be removed.
 	echo And of course you must delete smlinux itself from "$PATHDIR"
-        exit
+    exit
 fi
 
 if [ -f ~/.smlinuxUpdate ]; then 
