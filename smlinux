@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1108-1827
+TIMESTAMP=2020-1108-1851
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -683,7 +683,11 @@ elif [ ! "$TARGET" = "dos" ]; then
 fi
 if [ -z "$MAXJOBS" ]; then
 	if [ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]; then 
-		MAXJOBS=$((`nproc` - 1))		
+		if ( `nproc` = 1 ); then
+			MAXJOBS=1
+		else
+			MAXJOBS=$((`nproc` - 1))		
+		fi
 	else 
 		MAXJOBS=`nproc`
 	fi
