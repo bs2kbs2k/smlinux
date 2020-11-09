@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1108-1851
+TIMESTAMP=2020-1108-1919
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -2100,7 +2100,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			mkdir "$BASEPATH"/"$PRESET"
 			cd "$BASEPATH"/"$PRESET"
 			mv "$BASEPATH"/"$PRESET".old/.git .
-			git reset
+			git reset --quiet
 			git pull --no-rebase
 			git checkout "$BRANCH" -- .
 		fi
