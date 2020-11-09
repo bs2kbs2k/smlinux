@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1108-1933
+TIMESTAMP=2020-1108-2000
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1775,6 +1775,9 @@ else   # The real start, the rest was script preperation and setup.
 		else
 			echo "Installing Linux dependencies specified in smlinux configuration file..."
 			$Linux
+			if [ ! ~/.nanorc ] && [ -d /usr/share/nano ]; then #for msys
+				echo '"include /usr/share/nano/*.nanorc"' >~/.nanorc
+			fi
 		fi
 	elif ! command -v gcc &> /dev/null; then
 		redecho ERROR: The GNU Compiler Collection is not installed.  Please install dependencies.
