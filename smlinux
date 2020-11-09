@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1108-1218
+TIMESTAMP=2020-1108-1653
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -228,7 +228,7 @@ if [ -d "$BASEPATH"/"$PRESET"/.git ]; then
 	cd "$BASEPATH"/"$PRESET"
 	git log -1 --format=%cd
 fi
-echo Please exit or close this terminal window!
+pinkecho Please exit or close this terminal window!
 tput setaf 7 # back to white
 echo
 exit
@@ -480,7 +480,7 @@ GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
 # Linux command is only called during first install and is not used for macOS
-Linux="sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity"
+Linux="pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 git make mingw-w64-x86_i686-gcc unzip zip unrar p7zip nano"
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
@@ -1382,8 +1382,15 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 else
 	printf "Icon already exists. "
 fi
-
-if [ ! -f "$SHARE"/applications/"$PRESET".desktop ] && [ "$OSX_BUILD" = 0 ]; then
+if [ `uname -o` = "Msys" ]; then
+	SHORTY="$USERPROFILE"/Desktop/'Super Mario 64 \("$PRESET"\)'.url
+	if [ ! -f "$SHORTY" ]; then
+		echo [InternetShortcut]>"$SHORTY"
+		echo URL="file:///"`cygpath -w "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e` --cheats --savepath `cygpath -w "$SAVEDIR"`>>"$SHORTY"
+		echo IconFile=`cygpath -w "$SHARE"/icons/sm64ex.png`>>"$SHORTY"
+		echo IconIndex=0>>"$SHORTY"
+	fi
+elif [ ! -f "$SHARE"/applications/"$PRESET".desktop ] && [ "$OSX_BUILD" = 0 ]; then
 	echo Creating desktop shorcut and menu entry...
 	echo '[Desktop Entry]
 Encoding=UTF-8
