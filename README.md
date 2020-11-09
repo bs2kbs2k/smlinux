@@ -229,7 +229,7 @@ MinGW64:
 	
 MinGW32:
 
-	pacman -S mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 git make mingw-w64-x86_i686-gcc unzip zip unrar p7zip nano
+	pacman -S mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 git make mingw-w64-i686-gcc unzip zip unrar p7zip nano
 
 ## **How do I create my rom file?**
 
