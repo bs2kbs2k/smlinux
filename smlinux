@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1108-1653
+TIMESTAMP=2020-1108-1729
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1383,7 +1383,7 @@ else
 	printf "Icon already exists. "
 fi
 if [ `uname -o` = "Msys" ]; then
-	SHORTY="$USERPROFILE"/Desktop/'Super Mario 64 \("$PRESET"\)'.url
+	SHORTY="$USERPROFILE"'/Desktop/Super Mario 64 \('"$PRESET"'\)'.url
 	if [ ! -f "$SHORTY" ]; then
 		echo [InternetShortcut]>"$SHORTY"
 		echo URL="file:///"`cygpath -w "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e` --cheats --savepath `cygpath -w "$SAVEDIR"`>>"$SHORTY"
