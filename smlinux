@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1109-1530
+TIMESTAMP=2020-1109-1556
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -147,8 +147,8 @@ elif [ "$LEGACY_RES" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARG
 		rm base.zip
 	fi
 	mv awesome-legacy.zip base.zip
-	unzip -q base text
-	zip -d base text
+	unzip -q base texts
+	zip -d base texts
 elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.zip ]; then
 	echo Renaming base resource pack base.zip...
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
@@ -1697,6 +1697,9 @@ if [ -f ~/.smlinuxUpdate ]; then
 	if [ "$COMMAND" = "upgrade" ]; then 
 		exit
 	fi
+elif [ "$COMMAND" = "upgrade" ]; then
+	greenecho Checking smlinux github repository for updates....
+	scriptUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 else   # The real start, the rest was script preperation and setup. 
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
@@ -1768,7 +1771,7 @@ else   # The real start, the rest was script preperation and setup.
 			sudo apt update
 			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl1.2-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 		else
-			echo "Installing Linux dependencies specified in smlinux configuration file..."
+			echo "Installing dependencies specified in smlinux configuration file..."
 			$Linux
 			if [ ! ~/.nanorc ] && [ -d /usr/share/nano ]; then #for msys
 				echo '"include /usr/share/nano/*.nanorc"' >~/.nanorc
@@ -1810,7 +1813,7 @@ else   # The real start, the rest was script preperation and setup.
 		if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$PRESET" ]; then
 			ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 		fi
-	elif [ ! "$COMMAND" = "upgrade" ]; then
+	else
 		echo "Verifying ROM..."
 		cd "$LAUNCH_DIR"
 		if [ -f "$1" ]; then 
@@ -1841,43 +1844,41 @@ else   # The real start, the rest was script preperation and setup.
 			redecho "ERROR: Specified file is not original Super Mario 64 ROM image or VERSION set wrong."
 			echo
 		fi
-		if [ ! "$COMMAND" = "upgrade" ]; then
-			redecho "Please select Super Mario 64 romfile to begin."	
-			if [ "$OSX_BUILD" = 1 ]; then
-				cd $HOME
-				USERFILE=$(osascript -e 'set macpath to choose file' -e 'set unixpath to posix path of macpath')
-			else
-				exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-				USERFILE=`zenity --file-selection --title="Select your Super Mario 64 romfile" --filename $HOME/ --file-filter='romfiles | *.z64 *.v64 *.n64' --file-filter='allfiles | *'`
-			fi
+		redecho "Please select Super Mario 64 romfile to begin."	
+		if [ "$OSX_BUILD" = 1 ]; then
+			cd $HOME
+			USERFILE=$(osascript -e 'set macpath to choose file' -e 'set unixpath to posix path of macpath')
+		else
+			exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+			USERFILE=`zenity --file-selection --title="Select your Super Mario 64 romfile" --filename $HOME/ --file-filter='romfiles | *.z64 *.v64 *.n64' --file-filter='allfiles | *'`
+		fi
+		if [ -f "$USERFILE" ]; then
+			cp "$USERFILE" "$SMLINUX"/baserom."$VERSION".z64
+			vettrom
+		fi
+		if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+			echo
+			echo "ERROR: Something didnt work like it was supposed to!"
+			echo "Try dragging and dropping romfile into this terminal window from file manager."
+			echo "Some terminals (including macOS) will paste the filename when you do that."
+			echo "If that does not work, some filenmanagers (like pcmanfm) you can right click the"
+			echo "file to select \"copy path\" then paste it here followed by enter. "
+			echo "Lastly, you can try typing the full path and filename then press enter."
+			echo "If that still does not work, romfile must be corrupt or its a smlinux problem."
+			echo
+			printf "Filename? "
+			read USERFILE
 			if [ -f "$USERFILE" ]; then
 				cp "$USERFILE" "$SMLINUX"/baserom."$VERSION".z64
 				vettrom
 			fi
-			if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-				echo
-				echo "ERROR: Something didnt work like it was supposed to!"
-				echo "Try dragging and dropping romfile into this terminal window from file manager."
-				echo "Some terminals (including macOS) will paste the filename when you do that."
-				echo "If that does not work, some filenmanagers (like pcmanfm) you can right click the"
-				echo "file to select \"copy path\" then paste it here followed by enter. "
-				echo "Lastly, you can try typing the full path and filename then press enter."
-				echo "If that still does not work, romfile must be corrupt or its a smlinux problem."
-				echo
-				printf "Filename? "
-				read USERFILE
-				if [ -f "$USERFILE" ]; then
-					cp "$USERFILE" "$SMLINUX"/baserom."$VERSION".z64
-					vettrom
-				fi
-			fi
-			if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-				echo smlinux exiting incomplete. Need valid Super mario 64 N64 romfile to proceed.
-				endnow
-			fi
-		else	
-			pinkecho Warning: No ROM file found.  Please specify a romfile when you are ready to build.
 		fi
+		if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+			echo smlinux exiting incomplete. Need valid Super mario 64 N64 romfile to proceed.
+			endnow
+		fi
+	else	
+		pinkecho Warning: No ROM file found.  Please specify a romfile when you are ready to build.
 	fi
 	greenecho [2] Checking smlinux github repository for updates....
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
