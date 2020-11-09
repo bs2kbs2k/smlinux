@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1109-1510
+TIMESTAMP=2020-1109-1530
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1653,12 +1653,34 @@ if [ "$COMMAND" = "purge" ]; then
 	for preset in sm64ex sm64nx sm64ex-coop render96ex cheaterex sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex sm64pc sm64-port r96proto r96alpha emm-ody coop-unstable
 do
 	printf $preset
-	rm -rf "$BASEPATH"/$preset "$BASEPATH"/$preset.old "$SHARE"/$preset
-	printf "..."
-	rm "$SHARE"/icons/$preset.* "$SHARE"/applications/$preset.desktop ${XDG_DESKTOP_DIR:-$HOME/Desktop}/$preset*
-	if [ "$TARGET_OSX" = 1 ]; then
+	if [ -d "$BASEPATH"/$preset ]; then
+		rm -rf "$BASEPATH"/$preset 
+	fi
+	printf "."
+	if [ -d "$BASEPATH"/$preset.old ]; then
+		rm -rf "$BASEPATH"/$preset.old
+	fi
+	printf "."
+	if [ -d "$SHARE"/$preset ]; then
+		rm -rf "$SHARE"/$preset
+	fi
+	printf "."
+	if [ -f "$SHARE"/icons/$preset.* ]; then
+		rm "$SHARE"/icons/$preset.* 
+	fi
+	printf "."
+		if [ -f "$SHARE"/applications/$preset.desktop ]; then
+		rm "$SHARE"/applications/$preset.desktop
+	fi
+	printf "."
+	if [ -f ${XDG_DESKTOP_DIR:-$HOME/Desktop}/$preset* ]; then
+		rm ${XDG_DESKTOP_DIR:-$HOME/Desktop}/$preset*
+	fi
+	printf "."
+	if [ -d /Applications/$preset ]; then #macOS
 		rm -rf /Applications/$preset
-	elif [ `uname -o` = "Msys" ]; then
+	fi 
+	if [ -f "$USERPROFILE"'/Desktop/Super Mario 64 ('"$preset"')'.url ]; then #windows
 		rm "$USERPROFILE"'/Desktop/Super Mario 64 ('"$preset"')'.url
 	fi
 done
