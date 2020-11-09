@@ -1372,7 +1372,11 @@ if [ ! -d "$SHARE"/applications ]; then
 fi
 if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 	echo Preparing Icon...
-	unzip -q "$SMLINUX"/icons "$PRESET".png -d "$SHARE"/icons
+	if [ `uname -o` = "Msys" ]; then
+		unzip -q "$SMLINUX"/icons "$PRESET".ico -d "$SHARE"/icons
+	else
+		unzip -q "$SMLINUX"/icons "$PRESET".png -d "$SHARE"/icons
+	fi
 	if [ ! -f "$SHARE"/icons/"$PRESET".* ] && [ -f "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png ]; then
 		cp "$BASEPATH"/"$PRESET"/textures/segment2/segment2.05A00.rgba16.png "$SHARE"/icons/"$PRESET".png
 		pinkecho Warning: 16x16 image from ROM used for "$SHARE"/icons/"$PRESET".png
@@ -1385,10 +1389,14 @@ fi
 if [ `uname -o` = "Msys" ]; then
 	SHORTY="$USERPROFILE"'/Desktop/Super Mario 64 ('"$PRESET"')'.url
 	if [ ! -f "$SHORTY" ]; then
+		echo Creating Windows desktop shorcut... 
 		echo [InternetShortcut]>"$SHORTY"
-		echo URL="file:///"`cygpath -w "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e` --cheats --savepath `cygpath -w "$SAVEDIR"`>>"$SHORTY"
-		echo IconFile=`cygpath -w "$SHARE"/icons/sm64ex.png`>>"$SHORTY"
+		# echo URL="file:///"`cygpath -w "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e` --cheats --savepath `cygpath -w "$SAVEDIR"`>>"$SHORTY"
+		echo URL="file:///"`cygpath -w "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e` >>"$SHORTY"
+		echo IconFile=`cygpath -w "$SHARE"/icons/"$PRESET".ico`>>"$SHORTY"
 		echo IconIndex=0>>"$SHORTY"
+	else
+		echo Windows Desktop shortcut already exists.
 	fi
 elif [ ! -f "$SHARE"/applications/"$PRESET".desktop ] && [ "$OSX_BUILD" = 0 ]; then
 	echo Creating desktop shorcut and menu entry...
