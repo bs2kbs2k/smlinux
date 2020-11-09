@@ -683,7 +683,7 @@ elif [ ! "$TARGET" = "dos" ]; then
 fi
 if [ -z "$MAXJOBS" ]; then
 	if [ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]; then 
-		if ( `nproc` = 1 ); then
+		if [ `nproc` = 1 ]; then
 			MAXJOBS=1
 		else
 			MAXJOBS=$((`nproc` - 1))		
@@ -2100,7 +2100,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			mkdir "$BASEPATH"/"$PRESET"
 			cd "$BASEPATH"/"$PRESET"
 			mv "$BASEPATH"/"$PRESET".old/.git .
-			git checkout "$BRANCH" -- .
+			git reset
 			git pull --no-rebase
 			git checkout "$BRANCH" -- .
 		fi
