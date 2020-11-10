@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1109-1818
+TIMESTAMP=2020-1109-1822
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1767,7 +1767,7 @@ else   # The real start, the rest was script preperation and setup.
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 			go get github.com/machinebox/appify
 			if [ ! ~/.nanorc ]; then
-				echo '"include /usr/local/share/nano/*.nanorc"' >"$HOME"/.nanorc
+				echo 'include /usr/local/share/nano/*.nanorc' >"$HOME"/.nanorc
 			fi
 			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
 				echo Installing Apple XCode Command Line Tools
@@ -1786,7 +1786,7 @@ else   # The real start, the rest was script preperation and setup.
 			echo "Installing dependencies specified in smlinux configuration file..."
 			$Linux
 			if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then #for msys
-				echo '"include /usr/share/nano/*.nanorc"' >~/.nanorc
+				echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
 			fi
 		fi
 	elif ! command -v gcc &> /dev/null; then
