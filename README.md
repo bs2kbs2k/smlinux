@@ -43,7 +43,7 @@ sm64nx and android builds are not working yet.  DOS builds will not be supported
 For native builds under Microsoft Windows, you must first install msys2 and run smlinux from the included mingw terminal. sm64nx and android builds are not working yet.  DOS builds will not be supported.  Because whiptail is not available for msys, smlinux will have no menus and config file will open automatically. 
 
 **32-bit notes** 
-sm64nx is not supported.   Discord Rich Presence is not suppored.  Some older 60fps patches didnt work with 32-bit but smlinux wont apply those.  Everything else should work fine.
+sm64nx and Discord Rich Presence are not suppored.
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
