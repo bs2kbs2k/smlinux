@@ -1877,7 +1877,6 @@ else   # The real start, the rest was script preperation and setup.
 			echo smlinux exiting incomplete. Need valid Super mario 64 N64 romfile to proceed.
 			endnow
 		fi
-	else	
 		pinkecho Warning: No ROM file found.  Please specify a romfile when you are ready to build.
 	fi
 	greenecho [2] Checking smlinux github repository for updates....
