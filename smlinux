@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1109-1617
+TIMESTAMP=2020-1109-1726
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -43,6 +43,13 @@ if [ ! "$ANDROID" = 0 ]; then
 fi
 if [ "$PRESET" = "sm64nx" ]; then
 	sed -i.bak 's/-no-pie -lpthread -lzstd/-no-pie -lpthread -lzstd -lstdc++fs/g' "$BASEPATH"/"$PRESET"/Makefile
+fi
+if [ ! `uname -m` = "x86_64" ] && [ "$PRESET" = "sm64ex-coop" ] && [ ! -f "$BASEPATH"/"$PRESET"/91.patch ]; then
+	cd "$BASEPATH"/"$PRESET"
+	echo "Applying 32-bit workaround..."
+	wget -q https://github.com/djoslin0/sm64ex-coop/pull/91.patch
+	git apply 91.patch
+	DISCORD_SDK=0
 fi
 if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
@@ -668,13 +675,6 @@ if [ `uname` = "Darwin" ]; then
 fi
 if [ ! `uname -m` = "x86_64" ] || [ "$VERSION" = "jp" ]; then
 	DISCORDRPC=0
-	if [ "$PRESET" = "sm64ex-coop" ] && [ ! -f "$BASEPATH"/"$PRESET"/91.patch ]; then
-		cd "$BASEPATH"/"$PRESET"
-		echo "Applying 32-bit workaround..."
-		wget -q https://github.com/djoslin0/sm64ex-coop/pull/91.patch
-		git apply 91.patch
-		DISCORD_SDK=0
-	fi
 fi
 if [ "$TARGET_WEB" = 1 ]; then 
 	TARGET=web
@@ -1520,6 +1520,10 @@ elif command -v firefox &> /dev/null; then
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
 	OPEN=firefox
+elif [ `uname -o` = "Msys" ];then
+	mapfile -t -d: <<<"$PATH"
+	PATHDIR="${MAPFILE[0]}"
+	OPEN=start
 else 
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
