@@ -22,7 +22,7 @@ Paste either of the following into a terminal then press Enter (*whichever works
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **-OR-**  
 `wget https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux;bash smlinux;rm smlinux`
 	
-That's all you have to do for debian/ubuntu based linux - or macOS! You will be prompted to:  
+That's all you have to do for debian/ubuntu based linux, macOS, or msys2! You may first be prompted to:  
 (1) provide password to install build tools (2) specify your romfile (3)  approve (or change) build options.  
 smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 You must provide your own legally backed up Super Mario 64 ROM file.  
@@ -40,7 +40,7 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 sm64nx and android builds are not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  sm64ex,r96ex,sm64ex-coop and cheaterex all confirmed working with Intel based macOS 10.12 Sierra and newer.
 
 **Windows notes**
-For native builds under Microsoft Windows, you must first install msys2 and run smlinux from the included mingw terminal. sm64nx and android builds are not working yet.  DOS builds will not be supported.  No user interaction tools are available (no whiptail support) so config file opens automatically.  Confirmed working Windows 7 32 and 64-bit.
+For native builds under Microsoft Windows, you must first install msys2 and run smlinux from the included mingw terminal. sm64nx and android builds are not working yet.  DOS builds will not be supported.  Because no whiptail support, no menus and configfile opens automatically.  Confirmed working Windows 7 32 and 64-bit.
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
