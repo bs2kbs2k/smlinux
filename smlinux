@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1109-1602
+TIMESTAMP=2020-1109-1617
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1686,7 +1686,7 @@ do
 done
 	echo	
 	echo Note this did not remove any packages installed as build tools or dependencies.
-	echo Remove those with your package manager.  Devel libraries can always safely be removed.
+	echo Remove those with your package manager.
 	echo And of course you must delete smlinux itself from "$PATHDIR"
     exit
 fi
@@ -1710,8 +1710,8 @@ else   # The real start, the rest was script preperation and setup.
 	echo "|               Command Line Usage: smlinux <command> <options>              |"
 	echo "| Commands                                                                   |"
 	echo "|  update: Update existing sm64 source & build (preserves modifications)     |"
-	echo "|   build: Get sm64 source from github & build (renames existing folder)     |"
-	echo "|   clone: Get sm64 source from github & extract rom (no addons or build)    |"
+	echo "|   build: Get/reset sm64 source repository & build (renames existing folder)|"
+	echo "|   clone: Get/reset sm64 source repository & extract rom (no addons/build)  |"
 	echo "|  config: Opens smlinuxcfg.txt in a text editor (without building)          |"
 	echo "|   reset: Resets smlinux configuration file to default settings             |"
 	echo "| depends: Install dependencies (automatic during smlinux installation)      |"
@@ -1877,7 +1877,6 @@ else   # The real start, the rest was script preperation and setup.
 			echo smlinux exiting incomplete. Need valid Super mario 64 N64 romfile to proceed.
 			endnow
 		fi
-		pinkecho Warning: No ROM file found.  Please specify a romfile when you are ready to build.
 	fi
 	greenecho [2] Checking smlinux github repository for updates....
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
@@ -1905,9 +1904,9 @@ if [ "$COMMAND" = "rebuild" ]; then
 		fi
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	else
-		greenecho [3] Skipping backups.
+		greenecho [3] Skipping source updates and build backups.
 	fi
-	greenecho [4] Skipping updates.
+	greenecho [4] Skipping modifications.
 elif [ "$COMMAND" = "update" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
