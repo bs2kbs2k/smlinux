@@ -40,7 +40,10 @@ If for some reason the process freezes during compilation, perhaps on pc with lo
 sm64nx and android builds are not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  sm64ex,r96ex,sm64ex-coop and cheaterex all confirmed working with Intel based macOS 10.12 Sierra and newer.
 
 **Windows notes**
-For native builds under Microsoft Windows, you must first install msys2 and run smlinux from the included mingw terminal. sm64nx and android builds are not working yet.  DOS builds will not be supported.  Because no whiptail support, no menus and configfile opens automatically.  Confirmed working Windows 7 32 and 64-bit.
+For native builds under Microsoft Windows, you must first install msys2 and run smlinux from the included mingw terminal. sm64nx and android builds are not working yet.  DOS builds will not be supported.  Because whiptail is not available for msys, smlinux will have no menus and config file will open automatically. 
+
+**32-bit notes** 
+sm64nx is not supported.   Discord Rich Presence is not suppored.  Some older 60fps patches didnt work with 32-bit but smlinux wont apply those.  Everything else should work fine.
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
