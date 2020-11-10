@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1109-1726
+TIMESTAMP=2020-1109-1756
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1563,7 +1563,10 @@ elif command -v whiptail &> /dev/null; then
 		COMMAND=help
 		OP1="--noweb"
 	fi
-
+else
+	pinkecho Warning: Newt/Whiptail is not installed so no menu will be offered.
+	pinkecho Press Control-X to exit nano when configfile is presented.
+	CONFIG=1 # force config if no whiptail for menu - i.e. Msys
 fi
 export NEWT_COLORS='
 roottext=magenta,black     # title on top
