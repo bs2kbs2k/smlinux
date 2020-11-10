@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1109-1822
+TIMESTAMP=2020-1109-2006
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1916,7 +1916,7 @@ if [ "$COMMAND" = "rebuild" ]; then
 		fi
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	else
-		greenecho [3] Skipping source updates and build backups.
+		greenecho [3] Skipping source update and old build rename.
 	fi
 	greenecho [4] Skipping modifications.
 elif [ "$COMMAND" = "update" ]; then
