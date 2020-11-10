@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1109-1756
+TIMESTAMP=2020-1109-1818
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1565,9 +1565,10 @@ elif command -v whiptail &> /dev/null; then
 	fi
 else
 	pinkecho Warning: Newt/Whiptail is not installed so no menu will be offered.
-	pinkecho Press Control-X to exit nano when configfile is presented.
-	CONFIG=1 # force config if no whiptail for menu - i.e. Msys
+	COMMAND=help
+	OP1="--noweb"	
 fi
+
 export NEWT_COLORS='
 roottext=magenta,black     # title on top
 root=,black                # background
@@ -1614,7 +1615,11 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 	elif [ ! "$COMMAND" = "help" ] && [ ! "$COMMAND" = "depends" ]; then
 		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 		if [ "$CONFIG" = 1 ]; then 
-			doconfig
+			if ! command -v whiptail &> /dev/null; then
+				editconfig
+			else
+				doconfig
+			fi
 		fi
 	fi
 	if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
@@ -1762,7 +1767,7 @@ else   # The real start, the rest was script preperation and setup.
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 			go get github.com/machinebox/appify
 			if [ ! ~/.nanorc ]; then
-				echo '"include /usr/local/share/nano/*.nanorc"' >~/.nanorc
+				echo '"include /usr/local/share/nano/*.nanorc"' >"$HOME"/.nanorc
 			fi
 			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
 				echo Installing Apple XCode Command Line Tools
@@ -1780,7 +1785,7 @@ else   # The real start, the rest was script preperation and setup.
 		else
 			echo "Installing dependencies specified in smlinux configuration file..."
 			$Linux
-			if [ ! ~/.nanorc ] && [ -d /usr/share/nano ]; then #for msys
+			if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then #for msys
 				echo '"include /usr/share/nano/*.nanorc"' >~/.nanorc
 			fi
 		fi
