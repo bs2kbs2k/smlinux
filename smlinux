@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1110-1939
+TIMESTAMP=2020-1110-1946
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1289,7 +1289,7 @@ elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ]; then
 		rm "$SAVEDIR"/DynOSconfig.cfg
 	fi
 	CHEATERFILE=CHEATERv11.ex_dynos.patch 
-elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ]; then
+elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ] && [ ! "$PRESET" = "sm64ex" ] && [ ! "$PRESET" = "r96alpha" ]; then
 	removecheater
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
