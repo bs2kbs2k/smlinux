@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1111-0025
+TIMESTAMP=2020-1111-0032
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -871,31 +871,31 @@ if [ "$PRESET" = "sm64nx" ]; then
 		echo Getting oWo...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~OWO Mod"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~OWO Mod"
-		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730420038024036362/owo.pak
+		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730420038024036362/owo.pak &
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~HD Luigi" ]; then
 		echo Getting HD Luigi...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~HD Luigi"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~HD Luigi"
-		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730425786452017222/luigi.pak
+		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730425786452017222/luigi.pak &
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro" ]; then
 		echo Getting NES Retro Theme...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"~NES Retro"
-		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730431589749620736/nes.pak
+		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730431589749620736/nes.pak &
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"HD Mario . Bowser" ]; then
 		echo "Getting HD Mario & Bowser..."
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"HD Mario . Bowser"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"HD Mario . Bowser"
-		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730425308989227158/arredondo.pak
+		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730425308989227158/arredondo.pak &
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Cleaner Aesthetics" ]; then
 		echo Getting Cleaner Aesthetics Textures...
 		mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Cleaner Aesthetics"
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Cleaner Aesthetics"
-		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730430152957362191/cleaner.pak
+		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730430152957362191/cleaner.pak &disown
 	fi
 	if [ "$InstallR96" = 1 ] && [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures" ]; then
 		dosgi
@@ -961,13 +961,13 @@ else
 				if [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx ]; then
 					cd "$SMLINUX"
 					echo Starting Render96 Texture Download... 
-					git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK &
+					git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK &disown
 				fi
 				ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			elif [ ! -d "$SMLINUX"/Cleaner-Aesthetics ]; then
 				cd "$SMLINUX"
 				echo Starting Cleaner Aesthetics Texture Download...
-				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics &
+				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics &disown
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			else
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
@@ -1048,7 +1048,7 @@ if [ "$PRESET" = "sm64nx" ]; then
 	echo Getting Render96 Texture Pak...
 	mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures"
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures"
-	wget https://sm64pc.info/downloads/texture_pack/render96_hd.pak
+	wget -https://sm64pc.info/downloads/texture_pack/render96_hd.pak &disown
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/
 	if [ -d "Cleaner Aesthetics" ]; then
 		mv "Cleaner Aesthetics" "~Cleaner Aesthetics"
@@ -1063,7 +1063,7 @@ if [ "$PRESET" = "sm64nx" ]; then
 		echo Getting Render96 SGI Models...
 		mkdir "SGI Models"
 		cd "SGI Models"
-		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak
+		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak &
 	fi
 elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
