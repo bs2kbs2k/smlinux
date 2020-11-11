@@ -268,7 +268,7 @@ sed -i.bak 's|8spaces8elif|        elif|g' "$BASEPATH"/"$PRESET"/tools/assemble_
 sed -i.bak 's|12spaces1212print|            print|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
 cd "$BASEPATH"/"$PRESET"/tools
 if [ ! -f skyconv ]; then
-	echo Preparing N64 Tools for macOS...
+	greenecho Preparing N64 Tools for macOS...
 	gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
 fi
 if [ ! -f skyconv ]; then
