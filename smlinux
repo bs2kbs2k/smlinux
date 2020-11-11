@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1110-1946
+TIMESTAMP=2020-1111-0016
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -200,7 +200,7 @@ do
 		mkdir Cleaner-Aesthetics
 		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git Cleaner-Aesthetics
 		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx Cleaner-Aesthetics
-		ln -s Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/
+		ln -s Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
 		break
 	fi
 done
@@ -208,7 +208,7 @@ done
 do
 	if [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git ] && [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		rm -rf $BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx $BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git
-		ln -s Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/
+		ln -s Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
 	fi
 done
 	for preset in render96ex r96alpha r96proto render96ex.old r96alpha.old r96proto.old
@@ -219,7 +219,7 @@ do
 		mkdir RENDER96-HD-TEXTURE-PACK
 		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git RENDER96-HD-TEXTURE-PACK
 		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx RENDER96-HD-TEXTURE-PACK
-		ln -s RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/
+		ln -s RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
 		break
 	fi
 done
@@ -227,7 +227,7 @@ done
 do
 	if [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git ] && [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		rm -rf "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git
-		ln -s RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/
+		ln -s RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
 	fi
 done
 	for preset in sm64ex sm64nx sm64ex-coop render96ex cheaterex sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex sm64pc sm64-port r96proto r96alpha emm-ody coop-unstable
@@ -948,7 +948,7 @@ else
 		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ] && [ `uname -m` = "x86_64" ]; then
 			if [ ! -f "$SMLINUX"/hq_sounds_v5.1.zip ]; then
 				echo Getting High Quality Sounds...
-				wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip -P "$SMLINUX"
+				wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip -P "$SMLINUX" &
 			fi
 			ln -s "$SMLINUX"/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip	
 		elif [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! `uname -m` = "x86_64" ]; then
