@@ -1,11 +1,11 @@
 #!/bin/bash
 # Super Mario 64 Install * Build * Update Script for Linux and macOS
-# This scrupt will do everything required to build & install Super Mario 64 under Ubuntu or macOS.
-# Other distros will need to edit config file when prompted to set Linux= command.
+# This script will build & install Super Mario 64 under Ubuntu or macOS.
+# Other distros must edit config file when prompted to set Linux= command.
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
-# Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1110-1718
+# Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
+TIMESTAMP=2020-1110-1745
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -584,7 +584,7 @@ DYNOS=1
 if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
 	source "$SMLINUX"/smlinuxcfg.txt
 else
-	pinkecho Warning: smlinuxcfg.txt not found.  Creatating and loading default...
+	pinkecho Warning: smlinuxcfg.txt not found.  Creating and loading default...
 	makeconfig
 	source "$SMLINUX"/smlinuxcfg.txt
 fi
