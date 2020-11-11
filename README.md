@@ -37,10 +37,10 @@ smlinux will be installed in the first directory in your path or ~/bin. After in
 If for some reason the compilation freezes, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will allow make multiple jobs which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 **_macOS notes_**
-sm64nx and android builds are not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  sm64ex,r96ex,sm64ex-coop and cheaterex all confirmed working with Intel based macOS 10.12 Sierra and newer.
+sm64ex,r96ex,sm64ex-coop and cheaterex all confirmed working with Intel based macOS 10.12 Sierra and newer.  sm64nx and android builds are not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or apple xcode command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  
 
 **Windows notes**
-Not all features supported.  For native builds under Microsoft Windows, you must first install msys2 and run smlinux from the included mingw terminal. sm64nx and android builds are not working yet.  DOS builds will not be supported.  Because whiptail is not available for msys, smlinux will have no menus and config file will open automatically. 
+For native builds under Microsoft Windows, you must first install msys2 and run smlinux from the included mingw terminal. sm64nx and android builds are not working yet.  DOS builds will not be supported.  Because whiptail is not available for msys, smlinux will have no prompts and config file will open automatically. 
 
 **32-bit notes** 
 sm64nx and Discord Rich Presence are not suppored.
