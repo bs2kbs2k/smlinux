@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1110-1834
+TIMESTAMP=2020-1110-1911
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1562,11 +1562,11 @@ fi
 if [ ! -d "$SHARE" ]; then 
 	mkdir "$SHARE"
 fi
+if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; then
+	# update paths from old versions of smlinux that shared sm64pc folder for configfile
+	pathupdate
+fi
 if [ ! -f ~/.smlinuxUpdate ]; then
-	if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; then
-		# update paths from old versions of smlinux that shared sm64pc folder for configfile
-		pathupdate
-	fi
 	if [ "$COMMAND" = "config" ]; then
 		editconfig
 		echo "Thank you for editing your smlinux config file." 
