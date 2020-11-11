@@ -196,11 +196,11 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 ## **What about distros other than Ubuntu?**
 *Tested on Bodhi 5.1,32 & 64-bit, so should work as-is on recent Ubuntu/debian. Arch Fedora & OpenSuse confirmed working by users.*
 
-Change your `Linux=` command string during first install to one that works with your distro such as those listed below, or paste the command directly into a terminal first.  smlinux only installs dependendencies automatically during the very first installation; if you wish to force reinstallation run `smlinux depends` or add ` --depends` to `smlinux update` or `smlinux build`.
+Change your `Linux=` command string during first install to one that works with your distribution such as those listed below, or paste the command directly into a terminal first.  smlinux only installs dependendencies automatically during the very first installation; if you wish to force reinstallation run `smlinux depends` or add ` --depends` to `smlinux update` or `smlinux build`.
 
-If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  The Ubuntu list is confirmed compatible with WSL, Debian 9 and Ubuntu 18/20 but other versions also likely work.  Some build targets depend on additional packages not listed below, for example Android builds require android-sdk and openjava-jdk and dos targets require djgpp, which smlinux only installs when needed.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8.  Users of distros without apt will need to pre-install gcc-8 and JDK in those situations.
+If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  The defaults are compatible with WSL, Debian 9 and Ubuntu 18/20 but other versions also likely work.  Some build targets depend on additional packages not listed below, for example Android builds require android-sdk and openjava-jdk and dos targets require djgpp, which smlinux only installs when those targets are specified.  If gcc --version does not report 8 or newer when building sm64nx, smlinux will attempt first to install gcc-9 then if unsuccesful gcc-8.  Users of distros without apt will need to pre-install gcc-8 or JDK for such targets.
 
-debian/ubuntu: *does not need to be specified; automatic if apt is available*  
+debian/ubuntu: *does not need to be specified; automatic if apt is found*  
 
 	sudo apt install zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev  libsdl1.2-dev libusb-1.0-0-dev libzstd-dev mplayer
 	
