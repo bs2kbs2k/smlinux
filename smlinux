@@ -797,13 +797,11 @@ fi
 }
 
 editconfig(){
-echo Looking for a text editor...
 EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
 IFS=":"
 for editor in $EDITORS; do
 	$editor "$SMLINUX"/smlinuxcfg.txt
 	if [ $? -eq 0 ]; then
-		echo "$PATHDIR"/smlinux: line $(($LINENO - 2))":" "$editor": wow! command found!
 		return
 	fi
 done
