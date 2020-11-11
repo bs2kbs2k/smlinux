@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1110-1924
+TIMESTAMP=2020-1110-1939
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1340,7 +1340,7 @@ if [ -f enhancements/fix.CHEATER*.zip ]; then
 	rm enhancements/fix.CHEATER*.zip
 fi
 if [ -f enhancements/DynOS.0.5.cheater ]; then
-	rm DynOS.0.5.cheater
+	rm enhancements/DynOS.0.5.cheater
 fi
 }
 
@@ -1802,11 +1802,9 @@ else   # The real start, the rest was script preperation and setup.
 			MAXJOBS=`nproc`
 		fi
 	fi
-	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-		if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ] && [ -d "$BASEPATH"/"$PRESET" ]; then
-			ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
-		fi
-	else
+	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ] && [ -d "$BASEPATH"/"$PRESET" ] && [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
+		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
+	elif [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		echo "Verifying ROM..."
 		cd "$LAUNCH_DIR"
 		if [ -f "$1" ]; then 
