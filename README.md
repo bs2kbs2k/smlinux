@@ -149,8 +149,9 @@ You can also just edit the configuration file with any text editor.
 
 ## **Where are my configuration files and saved games stored?**
 
-~/.local/share/sm64pc smlinux and sm64pc/ex master  
-~/.local/share/sm64ex sm64ex nightly  
+~/.local/share/smlinux smlinux  
+~/.local/share/sm64pc sm64pc/ex master  
+~/.local/share/sm64ex sm64pc/ex nightly  
 ~/.local/share/render96ex render96ex *only if launched with shortcut*  
 ~/.local/share/sm64ex-coop sm64ex-coop   
 ~/.local/share/cheaterex cheaterex *only if launched with shortcut*    
@@ -159,13 +160,13 @@ You can also just edit the configuration file with any text editor.
 
 ## **Are there any cheats?**
 
-On all forks besides sm64-port, some cheats are built in and enabled automatically if launched from shortcut and available in options menu.  On compatible sm64ex based forks additional cheats are applied with $4Y$'s CHEATER patch.
+On all forks besides sm64-port, some cheats are built in and enabled automatically if launched from shortcut and available in options menu.  On compatible sm64ex based forks additional cheats are applied with $4Y$'s CHEATER patch and PeachyPeaches Dynamic Option System.
 
 ## **How do I apply external data such as textures?**
 
 Texture and sound packs can be added to the appropriate resource folder after build.
 
-sm64pc/sm64ex:  
+sm64pc/sm64ex based versions:  
 Put the zipfile (or gfx or sound folder) directly into build/us_pc/res and the next time you run the game it'll use it automatically.  The zip file must contain a "gfx" and/or "sound" folder. Do not move or remove base.zip, it should remain in "res" as fallback.
   
 sm64nx:  
