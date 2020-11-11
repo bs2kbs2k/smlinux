@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1111-0016
+TIMESTAMP=2020-1111-0025
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -901,6 +901,37 @@ if [ "$PRESET" = "sm64nx" ]; then
 		dosgi
 	fi
 else
+	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ]; then
+		echo "Render 96 SGI model pack found, skipping model application."
+	elif [ "$EXTERNAL_DATA" = 1 ] && ( [ "$InstallR96" = 1 ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96alpha" ] ); then
+		dosgi
+	elif [ ! "$TARGET" = "dos" ] &&  [ ! "$GIT" = "render96/render96ex" ] ; then
+		cd "$BASEPATH"/"$PRESET" 
+		if [ ! -d actors.bak ]; then
+			cp -r actors actors.bak
+		fi
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_Mario_Model.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ];  then
+			wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip -P enhancements
+			echo Applying HD Mario...
+			unzip -o -q enhancements/Old_School_HD_Mario_Model
+		fi
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ];  then
+			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar -P enhancements
+			echo Applying HD Bowser...
+			unrar x -o+ -idq enhancements/hd_bowser
+		fi
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ "$ANDROID" = 0 ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ]; then
+			if [ "$PRESET" = "sm64pc" ]; then
+				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch -P enhancements
+			else
+				wget -q https://cdn.discordapp.com/attachments/721806706547490868/725041183700680807/3d_coin_v2_nightly.patch -P enhancements
+			fi
+			if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
+				echo Applying 3D Coin Patch...
+				git apply enhancements/3d_coin_v2*.patch
+			fi
+		fi
+	fi
 	if [ "$EXTERNAL_DATA" = 1 ]; then
 		if [ ! -d "$BASEPATH"/"$PRESET"/build ]; then 
 			mkdir "$BASEPATH"/"$PRESET"/build
@@ -959,37 +990,6 @@ else
 		pinkecho Warning: EXTERNAL_DATA=0 so skipping add-on textures and sounds
 	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
 		echo External Data not supported for sm64-port repository, skipping.
-	fi
-	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ]; then
-		echo "Render 96 SGI model pack found, skipping model application."
-	elif [ "$EXTERNAL_DATA" = 1 ] && ( [ "$InstallR96" = 1 ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96alpha" ] ); then
-		dosgi
-	elif [ ! "$TARGET" = "dos" ] &&  [ ! "$GIT" = "render96/render96ex" ] ; then
-		cd "$BASEPATH"/"$PRESET" 
-		if [ ! -d actors.bak ]; then
-			cp -r actors actors.bak
-		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_Mario_Model.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ];  then
-			wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip -P enhancements
-			echo Applying HD Mario...
-			unzip -o -q enhancements/Old_School_HD_Mario_Model
-		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ];  then
-			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar -P enhancements
-			echo Applying HD Bowser...
-			unrar x -o+ -idq enhancements/hd_bowser
-		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ "$ANDROID" = 0 ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ]; then
-			if [ "$PRESET" = "sm64pc" ]; then
-				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch -P enhancements
-			else
-				wget -q https://cdn.discordapp.com/attachments/721806706547490868/725041183700680807/3d_coin_v2_nightly.patch -P enhancements
-			fi
-			if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
-				echo Applying 3D Coin Patch...
-				git apply enhancements/3d_coin_v2*.patch
-			fi
-		fi
 	fi
 fi
 }
