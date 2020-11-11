@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1110-1911
+TIMESTAMP=2020-1110-1924
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -925,7 +925,7 @@ else
 			cd "$SMLINUX"/Cleaner-Aesthetics
 			git pull --no-rebase &
 		fi
-		if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+		if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 			if [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 				if [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx ]; then
 					cd "$SMLINUX"
@@ -1932,11 +1932,7 @@ elif [ "$COMMAND" = "update" ]; then
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/DynOS*.patch ]; then
 			git apply -R enhancements/DynOS*.patch
 		fi
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER*.patch ]; then
-			git apply -R enhancements/CHEATER*.patch
-		else	
-			removecheater
-		fi
+		removecheater
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 			git apply -R enhancements/menu-arrows.patch
 		fi
@@ -1959,10 +1955,6 @@ elif [ "$COMMAND" = "update" ]; then
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 			echo 3D Coins...
 			git apply enhancements/3d_coin*.patch
-		fi
-		if [ -f "$BASEPATH"/"$PRESET"/enhancements/CHEATER.patch ]; then
-			echo CHEATER...
-			git apply enhancements/CHEATER.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 			echo Menu Arrows...
