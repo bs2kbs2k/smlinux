@@ -250,7 +250,7 @@ This also does not remove any user-defined repositories; delete those folders ma
 ## **How do I tell smlinux to download sm64 repositories to a folder other than home?**
 
 	
-Set BASEPATH= to any existing path that you have permission to write to, for example `BASEPATH=~/mario`.
+Set `BASEPATH` to any existing directory that you have permission to write to, for example `BASEPATH=~/mario`.
 
 	mkdir ~/mario
 	smlinux config
