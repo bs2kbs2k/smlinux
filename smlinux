@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1111-0032
+TIMESTAMP=2020-1111-1119
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -200,7 +200,7 @@ do
 		mkdir Cleaner-Aesthetics
 		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git Cleaner-Aesthetics
 		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx Cleaner-Aesthetics
-		ln -s Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
+		ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
 		break
 	fi
 done
@@ -208,7 +208,7 @@ done
 do
 	if [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git ] && [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		rm -rf $BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx $BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git
-		ln -s Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
+		ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
 	fi
 done
 	for preset in render96ex r96alpha r96proto render96ex.old r96alpha.old r96proto.old
@@ -219,7 +219,7 @@ do
 		mkdir RENDER96-HD-TEXTURE-PACK
 		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git RENDER96-HD-TEXTURE-PACK
 		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx RENDER96-HD-TEXTURE-PACK
-		ln -s RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
+		ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
 		break
 	fi
 done
@@ -227,7 +227,7 @@ done
 do
 	if [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git ] && [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		rm -rf "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git
-		ln -s RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
+		ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx
 	fi
 done
 	for preset in sm64ex sm64nx sm64ex-coop render96ex cheaterex sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex sm64pc sm64-port r96proto r96alpha emm-ody coop-unstable
@@ -1621,7 +1621,7 @@ else
 	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 fi
 SAVEDIR="$SHARE"/"$PRESET"
-echo smlinux: "$COMMAND" "$PRESET" "$GIT" "$BRANCH"
+echo smlinux:"$COMMAND" "$GIT"-"$BRANCH" "$PRESET"
 if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin ] && [ ! -f "$SHARE"/sm64nx/conf.bin ]; then
 	mv "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin "$SHARE"/sm64nx/
 	ln -s "$SAVEDIR"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin 
