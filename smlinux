@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1110-1745
+TIMESTAMP=2020-1110-1834
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1795,7 +1795,7 @@ else   # The real start, the rest was script preperation and setup.
 	if [ "$COMMAND" = "depends" ]; then
 		theend
 	fi
-	if [ -z "$MAXJOBS" ]; then
+	if [ -z "$MAXJOBS" ]; then # cannot do til after depends
 		if [ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]; then 
 			MAXJOBS=$((`nproc` - 1))		
 		else 
@@ -1803,7 +1803,7 @@ else   # The real start, the rest was script preperation and setup.
 		fi
 	fi
 	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-		if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]  && [ -d "$BASEPATH"/"$PRESET" ]; then
+		if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ] && [ -d "$BASEPATH"/"$PRESET" ]; then
 			ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 		fi
 	else
@@ -2089,7 +2089,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 		fi
 		mv "$BASEPATH"/"$PRESET" "$BASEPATH"/"$PRESET".old
 		if [ -d "$BASEPATH"/"$PRESET".old/.git  ]; then
-			greenecho "[3] Preparing clean sm64 source..."
+			greenecho [3] Resetting "$PRESET" and updating source from repository...
 			mkdir "$BASEPATH"/"$PRESET"
 			cd "$BASEPATH"/"$PRESET"
 			mv "$BASEPATH"/"$PRESET".old/.git .
