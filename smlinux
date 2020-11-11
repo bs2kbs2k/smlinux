@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1111-1126
+TIMESTAMP=2020-1111-1133
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1800,7 +1800,7 @@ else   # The real start, the rest was script preperation and setup.
 			MAXJOBS=`nproc`
 		fi
 	fi
-	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ] && [ -d "$BASEPATH"/"$PRESET" ] && [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
+	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ] && [ -d "$BASEPATH"/"$PRESET" ] && [ ! -e "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
 		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 	elif [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		echo "Verifying ROM..."
@@ -1863,7 +1863,7 @@ else   # The real start, the rest was script preperation and setup.
 			fi
 		fi
 		if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-			echo smlinux exiting incomplete. Need valid Super mario 64 N64 romfile to proceed.
+			echo smlinux exiting incomplete. Need valid Super Mario 64 romfile to proceed.
 			endnow
 		fi
 	fi
