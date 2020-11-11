@@ -112,7 +112,7 @@ if [ ! "$ANDROID" = 0 ]; then
 	cd "$BASEPATH"/"$PRESET"
 	rm Android.mk
 	git checkout Android.mk
-	if [ "$EXTERNAL_DATA" = 1 ] && [ "$InstallHD" = 1 ]; then
+	if [ "$EXTERNAL_DATA" = 1 ] && [ "$InstallHD" = 1 ] && [ -d "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug ]; then
 		echo Preparing external data for transfer...
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip ]; then
@@ -124,7 +124,7 @@ if [ ! "$ANDROID" = 0 ]; then
 		zip -r -0 -u -q hdbase gfx sound
 		ln -s "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hdbase.zip "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/hdbase.zip
 		rm -rf sound gfx
-	elif [ "$EXTERNAL_DATA" = 1 ]; then
+	elif [ "$EXTERNAL_DATA" = 1 ] && [ -d "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug ]; then
 		ln -s "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/base.zip "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/base.zip
 	fi
 	checkphone
@@ -359,7 +359,7 @@ tput setaf 7 # white text
 
 androidsdk(){
 if command -v sudo &> /dev/null && command -v apt &> /dev/null && [ ! -d /usr/lib/android-sdk ]; then
-	sudo apt install android-sdk -y
+	sudo apt install android-sdk openjdk-8-jdk -y
 fi
 if [ ! -f "$BASEPATH"/android-sdk/tools/bin/sdkmanager ]; then
 	cd "$BASEPATH"
