@@ -141,7 +141,7 @@ Note `--config` is only necessary if `CONFIG=0`and/or you havent edited your sml
 
 
 ## **How to I configure options like controllers, camera, rumble, etc?**
-*dont not apply to sm64-port repository*
+*does not apply to sm64-port repository*
 
 Pause then press R with controller or R_Shift with keyboard. For the controller settings, it is recommended to keep the first column for keyboard controls and using the middle for controller. Use the third column if you want additional keys/buttons assigned to the same function, or for mouse buttons. Be sure to map something to L for use with the camera or cheats. I personally enable mouse control for camera increase center aggression significantly. 
 
