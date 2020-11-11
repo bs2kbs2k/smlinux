@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0 in configfile.
-TIMESTAMP=2020-1109-2006
+TIMESTAMP=2020-1110-1718
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -173,6 +173,75 @@ elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARG
 fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ] && [ "$BuildMusic" = 1 ]; then
 	killall -q -y1h mplayer
+fi
+}
+
+pathupdate(){
+echo old smlinux file structure found....
+SMLINUX="$SHARE"/sm64pc
+loadconfig
+SMLINUX="$SHARE"/smlinux
+if [ ! -d "$SHARE"/smlinux/.git ] &&  [ -d "$SHARE"/sm64pc/.git ]; then
+	echo Moving smlinux repository to "$SMLINUX"
+	if [ -d "$SMLINUX" ]; then
+		mv "$SMLINUX" "$SMLINUX".old
+	fi
+	mv "$SHARE"/sm64pc "$SMLINUX"
+	cd "$SMLINUX"
+	if [ -f sm64config.txt ] || [ -f sm64_save_file.bin ]; then
+		mkdir "$SHARE"/sm64pc
+		mv sm64* "$SHARE"/sm64pc
+	fi
+	for preset in sm64ex sm64ex-coop cheaterex sm64pc androidex/app/jni/src sm64ex.old sm64ex-coop.old cheaterex.old sm64pc.old androidex.old/app/jni/src
+do
+	if [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git ] && [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+		echo Moving Cleaner Aesthetics Textures repository to:
+		echo "$SHARE"/smlinux/Cleaner-Aesthetics
+		mkdir Cleaner-Aesthetics
+		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git Cleaner-Aesthetics
+		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx Cleaner-Aesthetics
+		ln -s Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/
+		break
+	fi
+done
+	for preset in sm64ex sm64ex-coop cheaterex sm64pc androidex/app/jni/src
+do
+	if [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git ] && [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+		rm -rf $BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx $BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git
+		ln -s Cleaner-Aesthetics/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/
+	fi
+done
+	for preset in render96ex r96alpha r96proto render96ex.old r96alpha.old r96proto.old
+do
+	if [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git ] && [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+		echo Moving Render 96 HD Texture repository to:
+		echo "$SHARE"/smlinux/RENDER96-HD-TEXTURE-PACK...
+		mkdir RENDER96-HD-TEXTURE-PACK
+		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git RENDER96-HD-TEXTURE-PACK
+		mv "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx RENDER96-HD-TEXTURE-PACK
+		ln -s RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/
+		break
+	fi
+done
+	for preset in render96ex r96alpha r96proto
+do
+	if [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git ] && [ -d "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
+		rm -rf "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/.git
+		ln -s RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$preset"/build/"$VERSION"_"$TARGET"/res/
+	fi
+done
+	for preset in sm64ex sm64nx sm64ex-coop render96ex cheaterex sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex sm64pc sm64-port r96proto r96alpha emm-ody coop-unstable
+do
+	if [ -d "$BASEPATH"/"$preset" ]; then
+		for version in us jp eu sh
+	do
+		if [ -f "$SMLINUX"/baserom."$version".z64 ] && [ -f "$BASEPATH"/"$preset"/baserom."$version".z64 ]; then
+			rm "$BASEPATH"/"$preset"/baserom."$version".z64
+			ln -s "$SMLINUX"/baserom."$version".z64 "$BASEPATH"/"$preset"/baserom."$version".z64
+		fi
+	done
+	fi
+done
 fi
 }
 
@@ -440,7 +509,7 @@ InstallHD=1
 InstallR96=0
 FPS60=0
 # [ options for sm64ex and its forks ] 
-DYNOS=1
+DYNOS=0
 CHEATER=1
 BETTERCAMERA=1
 NODRAWINGDISTANCE=1
@@ -575,6 +644,7 @@ elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lowe
 	BRANCH=master
 	TEXTSAVES=1
 	LEGACY_RES=1
+	# DYNOS=0
 elif [ "$PRESET" = "r96proto" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96proto" ]; then
 	PRESET=r96proto
 	GIT=render96/render96ex
@@ -838,153 +908,60 @@ else
 		if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then 
 			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 		fi
+		if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then 
+			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+		fi
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Checking github for texture updates...
+			echo Git found in external resources.  Checking for updates...  # deprecated
 			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 			git checkout gfx
-			git pull --no-rebase
-		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Moving texture repository from old backup...
-			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			mv "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/.git .
-			if [ -f "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
-				echo Copying high quality sounds......
-				cp "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip .
-			fi
+			git pull --no-rebase &
+		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ] && [ "$GIT" = "render96/render96ex" ]; then
 			echo Updating textures from git...
-			git checkout gfx
-			git pull --no-rebase
-			git checkout gfx
-		elif [ -d "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET".old/res/.git ] ; then
-			echo Moving texture repository from old backup...
-			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			mv "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET".old/res/.git .
-			if [ -f "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET".old/res/hq_sounds_v5.1.zip ]; then
-				echo Copying high quality sounds......
-				cp "$BASEPATH"/"$PRESET".old/build/"$VERSION"_"$TARGET".old/res/hq_sounds_v5.1.zip .
-			fi
+			cd "$SMLINUX"/RENDER96-HD-TEXTURE-PACK
+			git pull --no-rebase &
+		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 			echo Updating textures from git...
-			git checkout gfx
-			git pull --no-rebase
-			git checkout gfx
-		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git ] ; then
-			echo Getting texture repository from old build...
-			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git .
-			if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hq_sounds_v5.1.zip ]; then
-				echo Copying high quality sounds......
-				cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hq_sounds_v5.1.zip .
-			fi
-			echo Updating textures from git...
-			git checkout gfx
-			git pull --no-rebase
-			git checkout gfx
-		elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
-			if [ -d "$BASEPATH"/render96ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
-				R96=render96ex
-			elif [ -d "$BASEPATH"/r96proto/build/"$VERSION"_"$TARGET"/res/.git ]; then
-				R96=r96proto
-			elif [ -d "$BASEPATH"/r96alpha/build/"$VERSION"_"$TARGET"/res/.git ]; then
-				R96=r96alpha
-			fi
-			if [ -n "$R96" ]; then
-				echo Copying textures from "$R96"...
-				if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-					mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-				fi
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-				cp -r "$BASEPATH"/"$R96"/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-				if [ -f "$BASEPATH"/"$R96"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
-					echo Copying high quality sounds......
-					cp -r "$BASEPATH"/"$R96"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-				fi
-				echo Updating textures from git...
-				cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-				git checkout gfx
-				git pull --no-rebase
-				git checkout gfx
-			fi
-		elif [ -d "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Copying textures from sm64ex
-			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
-			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			cp -r "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			if [ -f "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
-				echo Copying high quality sounds......
-				cp -r "$BASEPATH"/sm64ex/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
-			echo Updating textures from github...
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			git checkout gfx
-			git pull --no-rebase
-			git checkout gfx
-		elif [ -d "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/.git ]; then
-			echo Copying textures from sm64ex-coop
-			if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-				mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
-			mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			cp -r "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/.git/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/.git
-			if [ -f "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ]; then
-				echo Copying high quality sounds......
-				cp -r "$BASEPATH"/sm64ex-coop/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
-			echo Updating textures from github...
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			git checkout gfx
-			git pull --no-rebase
-			git checkout gfx
-		elif [  -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old
+			cd "$SMLINUX"/Cleaner-Aesthetics
+			git pull --no-rebase &
 		fi
-		if [  ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res ]; then
-				pinkecho Warning: Something didnt go right with texture update.  If this message happens need debug.
-				rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-			fi
+		if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 			if [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
-				echo Downloading Render96 Textures... 
-				git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+				if [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx ]; then
+					cd "$SMLINUX"
+					echo Starting Render96 Texture Download... 
+					git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK &
+				fi
+				ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
+			elif [ ! -d "$SMLINUX"/Cleaner-Aesthetics ]; then
+				cd "$SMLINUX"
+				echo Starting Cleaner Aesthetics Texture Download...
+				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics &
+				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			else
-				echo Downloading Cleaner Aesthetics Textures...
-				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			fi
-		fi
-		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old ]; then
-			mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res.old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		fi
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes ]; then
 			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes
 		fi
-		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/screenshots ]; then
-			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/screenshots
-		fi
 		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ] && [ `uname -m` = "x86_64" ]; then
-			cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res	
-			echo Getting High Quality Sounds...
-			wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip
+			if [ ! -f "$SMLINUX"/hq_sounds_v5.1.zip ]; then
+				echo Getting High Quality Sounds...
+				wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip -P "$SMLINUX"
+			fi
+			ln -s "$SMLINUX"/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip	
 		elif [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! `uname -m` = "x86_64" ]; then
 			echo "Removing HQ SoundPack (Not Compatible with Co-Op Beta2 or 32-bit)"
 			rm "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip
 		fi
 	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$GIT" = "render96/render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$GIT" = "djoslin0/sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
-		pinkecho Warning: EXTERNAL_DATA=0 so skipping add-on textures and Sound
+		pinkecho Warning: EXTERNAL_DATA=0 so skipping add-on textures and sounds
 	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
 		echo External Data not supported for sm64-port repository, skipping.
 	fi
 	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ]; then
-		echo "Render96 model pack found, skipping model application."
+		echo "Render 96 SGI model pack found, skipping model application."
 	elif [ "$EXTERNAL_DATA" = 1 ] && ( [ "$InstallR96" = 1 ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96alpha" ] ); then
 		dosgi
 	elif [ ! "$TARGET" = "dos" ] &&  [ ! "$GIT" = "render96/render96ex" ] ; then
@@ -1201,8 +1178,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 					mapfile -t -d: <<<"$PATH"
 					PATHDIR="${MAPFILE[0]}"
 				fi
-				SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
-				SMLINUX="$SHARE"/sm64pc
+				SMLINUX=${XDG_DATA_HOME:-$HOME/.local/share}/smlinux
 				mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 				if [ ! -f "$PATHDIR"/smlinux ]; then
 					echo Warning: Could not write to first path directory.  Creating $HOME/bin.
@@ -1297,7 +1273,7 @@ elif [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.alpha.zip ]; t
 		rm "$SAVEDIR"/DynOSconfig.cfg
 	fi
 	CHEATERFILE=CHEATERv11.alpha_dynos.patch
-elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ] && [ "$DYNOS" = 1 ]; then
+elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ]; then
 	removecheater
 	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/773268203895783444/CHEATERv11.ex.zip
@@ -1319,6 +1295,7 @@ elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
 	if [ "$DYNOS" = 1 ]; then
 		dodynos
+		cd "$BASEPATH"/"$PRESET"/enhancements
 		unzip -q CHEATERv10.zip CHEATERv10_dynos.patch 
 		CHEATERFILE=CHEATERv10_dynos.patch
 	else
@@ -1506,7 +1483,7 @@ fi
 ####################################### The Beginning ########################################
 
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
-SMLINUX="$SHARE"/sm64pc
+SMLINUX="$SHARE"/smlinux
 LAUNCH_DIR=$(pwd)
 
 if [ `uname` = "Darwin" ]; then
@@ -1586,6 +1563,10 @@ if [ ! -d "$SHARE" ]; then
 	mkdir "$SHARE"
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
+	if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; then
+		# update paths from old versions of smlinux that shared sm64pc folder for configfile
+		pathupdate
+	fi
 	if [ "$COMMAND" = "config" ]; then
 		editconfig
 		echo "Thank you for editing your smlinux config file." 
@@ -1642,7 +1623,7 @@ else
 	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 fi
 SAVEDIR="$SHARE"/"$PRESET"
-echo smlinux "$COMMAND" "$PRESET" "$GIT" "$BRANCH"
+echo smlinux: "$COMMAND" "$PRESET" "$GIT" "$BRANCH"
 if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin ] && [ ! -f "$SHARE"/sm64nx/conf.bin ]; then
 	mv "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin "$SHARE"/sm64nx/
 	ln -s "$SAVEDIR"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin 
@@ -2021,13 +2002,16 @@ elif [ "$COMMAND" = "update" ]; then
 	domymenu
 fi
 if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
-	greenecho [5] Compiling...
+	greenecho [5] Recompiling "$PRESET"...
 	domake
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
-		redecho "ERROR: Build Failure - output file not found."  
+		redecho ERROR: "$PRESET" Build Failure - output file not found.
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 			echo "Restoring previous build..."
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then 
+				if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed ]; then
+					rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed
+				fi
 				mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed
 			fi
 			mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
@@ -2109,9 +2093,9 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			mkdir "$BASEPATH"/"$PRESET"
 			cd "$BASEPATH"/"$PRESET"
 			mv "$BASEPATH"/"$PRESET".old/.git .
-			git reset --quiet
-			git pull --no-rebase
 			git checkout "$BRANCH" -- .
+			git reset --quiet --hard 
+			git pull --no-rebase			
 		fi
 		if [ ! -f Makefile ]; then
 			pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old 
@@ -2264,7 +2248,7 @@ if [ "$BRANCH" = "sm64ex_nightly" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/p
 	cp "$SMLINUX"/pro1.patch enhancements
 	git apply enhancements/pro1.patch
 fi
-greenecho [6] Compiling...
+greenecho [6] Compiling "$PRESET"...
 domake
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	echo
@@ -2279,7 +2263,9 @@ elif [ ! "$ANDROID" = 0 ]; then
 elif [ "$TARGET" = "dos" ]; then
 	mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
-	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git ]; then
+		mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
+	fi
 	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
