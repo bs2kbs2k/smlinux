@@ -198,7 +198,7 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 
 Change your `Linux=` command string to one that works with your distribution such as those listed below, or paste the command directly into a terminal.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
 
-Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk` and dos targets require `djgpp`, which smlinux only installs when those targets are specified.  If `gcc --version` does not report 8 or newer when building sm64nx, smlinux will attempt first to install `gcc-9` then if unsuccesful `gcc-8`.  Users of distros without apt will need to install appropriate gcc or JDK as needed for such targets in addition to what is listed below.
+Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk` and dos targets require `djgpp`, which smlinux only installs when those targets are specified.  If `gcc --version` does not report 8 or newer when building sm64nx, smlinux will install `gcc-9` or if unsuccesful `gcc-8`.  Users of distros without apt will need to install appropriate gcc or JDK as needed for such targets in addition to what is listed below.
 
 If smlinux detects `apt`the following packages known to work with 32/64-bit Debian 9, Ubuntu 18/20 and WSL are installed automatically:
 
