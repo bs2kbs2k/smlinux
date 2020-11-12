@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1111-1519
+TIMESTAMP=2020-1111-1643
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1673,10 +1673,23 @@ do
 	if [ -d /Applications/$preset ]; then #macOS
 		rm -rf /Applications/$preset
 	fi 
+	printf "."
 	if [ -f "$USERPROFILE"'/Desktop/Super Mario 64 ('"$preset"')'.url ]; then #windows
 		rm "$USERPROFILE"'/Desktop/Super Mario 64 ('"$preset"')'.url
 	fi
 done
+	printf "."
+	if [ -d "$BASEPATH"/djgpp ]; then
+		rm -rf "$BASEPATH"/djgpp
+	fi
+	printf "."
+	if [ -d "$BASEPATH"/android-sdk ]; then
+		rm -rf "$BASEPATH"/android-sdk
+	fi
+	printf "."
+	if [ -d "$BASEPATH"/emsdk ]; then
+		rm -rf "$BASEPATH"/emsdk
+	fi
 	echo	
 	echo Note this did not remove any packages installed as build tools or dependencies.
 	echo Remove those with your package manager.
@@ -1805,7 +1818,7 @@ else   # The real start, the rest was script preperation and setup.
 			MAXJOBS=`nproc`
 		fi
 	fi
-	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ] && [ -d "$BASEPATH"/"$PRESET" ] && [ ! -e "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
+	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ] && [ -d "$BASEPATH"/"$PRESET" ] && [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
 		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 	elif [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		echo "Verifying ROM..."
