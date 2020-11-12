@@ -196,13 +196,17 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 ## **What about distros other than Ubuntu?**
 *Developed under Bodhi 5.1 so should work as-is on recent Ubuntu/Debian. Arch Fedora & OpenSuse confirmed working by users.*
 
-Change your `Linux=` command string during first install to one that works with your distribution such as those listed below, or paste the command directly into a terminal first.  smlinux only installs dependendencies automatically during the very first installation; if you wish to force reinstallation run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
+Change your `Linux=` command string to one that works with your distribution such as those listed below, or paste the command directly into a terminal.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
 
 Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk` and dos targets require `djgpp`, which smlinux only installs when those targets are specified.  If `gcc --version` does not report 8 or newer when building sm64nx, smlinux will attempt first to install `gcc-9` then if unsuccesful `gcc-8`.  Users of distros without apt will need to install appropriate gcc or JDK as needed for such targets in addition to what is listed below.
 
-If smlinux detects `apt`, a debian base is assumed and packages known to work with 32/64-bit Debian 9, Ubuntu 18/20 and WSL are installed automatically:.
+If smlinux detects `apt`the following packages known to work with 32/64-bit Debian 9, Ubuntu 18/20 and WSL are installed automatically:
 
-	sudo apt install zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libsdl1.2-dev libusb-1.0-0-dev libzstd-dev mplayer
+	zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libsdl1.2-dev libusb-1.0-0-dev libzstd-dev mplayer
+	macOS:
+If smlinux detects macOS these packages are installed automatically with brew:
+
+	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
 	
 Arch/Manjaro: 
     
@@ -223,9 +227,7 @@ Void:
 Alpine:
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
-macOS:
 
-	brew install libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
 minGW64: 
 	
 	pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 python3 python3-pip git make mingw-w64-x86_64-gcc unzip zip unrar p7zip nano
