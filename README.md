@@ -203,8 +203,8 @@ Some build targets depend on additional packages not listed below, for example A
 If smlinux detects `apt`the following packages known to work with 32/64-bit Debian 9, Ubuntu 18/20 and WSL are installed automatically:
 
 	zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libsdl1.2-dev libusb-1.0-0-dev libzstd-dev mplayer
-	macOS:
-If smlinux detects macOS these packages are installed automatically with brew:
+
+If smlinux detects macOS the following packages are installed automatically with brew:
 
 	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
 	
