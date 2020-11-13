@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1113-1325
+TIMESTAMP=2020-1113-1407
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1441,13 +1441,17 @@ else
 fi
 }
 rungame(){
-if [ "$bgdl" = "r96" ] && [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx/textures ]; then
+if [ "$bgdl" = "r96" ] && [ -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx/textures ]; then
+	ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
+elif [ "$bgdl" = "r96" ] && [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx/textures ]; then
 	echo Waiting for Render 96 texture pack to finish downloading...
 	while [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx/textures ] # dont put a semicolon here
 do
 	sleep 1
 done
 	ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
+elif [ "$bgdl" = "ca" ] && [ -d "$SMLINUX"/Cleaner-Aesthetics/gfx/textures ]; then
+	ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 elif [ "$bgdl" = "ca" ] && [ ! -d "$SMLINUX"/Cleaner-Aesthetics/gfx/textures ]; then
 	echo Waiting for Cleaner Aesthetics texture pack to finish downloading...
 	while [ ! -d "$SMLINUX"/Cleaner-Aesthetics/gfx/textures ] # dont put a semicolon here
