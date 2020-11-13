@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1113-1120
+TIMESTAMP=2020-1113-1229
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -959,20 +959,20 @@ else
 			git pull --no-rebase &
 		fi
 		if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-			if [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
-				if [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx ]; then
-					cd "$SMLINUX"
-					echo Starting Render96 Texture Download... 
-					git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK &disown
-					bgdl=1 # background download in progress
-				fi
+			if ([ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]) && [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx ]; then
+				cd "$SMLINUX"
+				echo Starting Render96 Texture Download... 
+				git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK &disown
+				bgdl=r96 # background download in progress
+				# ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
+			elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 				ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			elif [ ! -d "$SMLINUX"/Cleaner-Aesthetics ]; then
 				cd "$SMLINUX"
 				echo Starting Cleaner Aesthetics Texture Download...
 				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics &disown
-				bgdl=1 # background download in progress
-				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
+				bgdl=ca # background download in progress
+				# ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			else
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			fi
@@ -1438,12 +1438,20 @@ else
 fi
 }
 rungame(){
-if [ "$bgdl" = 1 ] && [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures ]; then
-	echo Waiting for texture pack to finish downloading...
-	while [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures ] # dont put a semicolon here
+if [ "$bgdl" = "r96" ] && [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx/textures ]; then
+	echo Waiting for Render 96 texture pack to finish downloading...
+	while [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx/textures ] # dont put a semicolon here
 do
-  sleep 1
+	sleep 1
 done
+	ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
+elif [ "$bgdl" = "ca" ] && [ ! -d "$SMLINUX"/Cleaner-Aesthetics/gfx/textures ]; then
+	echo Waiting for Cleaner Aesthetics texture pack to finish downloading...
+	while [ ! -d "$SMLINUX"/Cleaner-Aesthetics/gfx/textures ] # dont put a semicolon here
+do
+	sleep 1
+done
+	ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 fi
 if [ "$TARGET_WEB"  = 1 ]; then 
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
