@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1111-1643
+TIMESTAMP=2020-1113-1120
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -166,7 +166,7 @@ elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.z
 elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/sound ]; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	echo Creating base resource pack...
-	zip -q -r -0 base gfx sound
+	zip -q0r base gfx sound
 	if [ -f base.zip ]; then
 		rm -rf gfx sound
 	fi
@@ -306,6 +306,10 @@ if [ -d "$BASEPATH"/"$PRESET"/.git ]; then
 fi
 pinkecho Please exit or close this terminal window!
 tput setaf 7 # back to white
+
+if [ `uname -o` = "Msys" ] && command -v zenity &> /dev/null; then
+	zenity --info --text="Shits done yo." &disown
+fi
 echo
 exit
 }
@@ -785,7 +789,7 @@ fi
 
 doconfig(){
 if ! command -v whiptail &> /dev/null; then
-    return
+    editconfig
 elif (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 24 80 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
 	if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a text editor.\n\nWhen you exit your editor, smlinux will continue.\n(To exit pico/nano/micro editors use Control-X)\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
 		editconfig	
@@ -960,12 +964,14 @@ else
 					cd "$SMLINUX"
 					echo Starting Render96 Texture Download... 
 					git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK &disown
+					bgdl=1 # background download in progress
 				fi
 				ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			elif [ ! -d "$SMLINUX"/Cleaner-Aesthetics ]; then
 				cd "$SMLINUX"
 				echo Starting Cleaner Aesthetics Texture Download...
 				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics &disown
+				bgdl=1 # background download in progress
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			else
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
@@ -1432,9 +1438,17 @@ else
 fi
 }
 rungame(){
+if [ "$bgdl" = 1 ] && [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures ]; then
+	echo Waiting for texture pack to finish downloading...
+	while [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures ] # dont put a semicolon here
+do
+  sleep 1
+done
+fi
 if [ "$TARGET_WEB"  = 1 ]; then 
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	ln -s sm64.us.f3dex2e.html index.html
+	echo Starting python webserver and launching web browser...
 	python3 -m http.server 8100 &
 	if [ -f /usr/bin/firefox ]; then
 		firefox --new-window http://localhost:8100&disown
@@ -1443,6 +1457,7 @@ if [ "$TARGET_WEB"  = 1 ]; then
 	fi
 elif [ ! "$ANDROID" = 0 ] ; then
 	if [ "$GOTPHONE" = 1 ]; then
+		echo Testing application launch...
 		adb shell am start -n com.vdavid003.sm64port/.sm64portActivity
 		if [ "$EXTERNAL_DATA" = 1 ]; then
 			echo 
@@ -1459,22 +1474,28 @@ elif [ ! "$ANDROID" = 0 ] ; then
 	fi
 	"$OPEN" "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
 elif [ "$GIT"  = "djoslin0/sm64ex-coop" ] ; then
+	echo Testing Double Application Launch...
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --server 7777 --cheats --savepath "$SAVEDIR" --skip-intro &
-	sleep 0.3
+	sleep 3
 	./sm64.us.f3dex2e --client 127.0.0.1 7777 --cheats --savepath ! --skip-intro &
 elif [ "$TARGET" = "dos" ] &&  command -v dosbox-x &> /dev/null; then
+	echo Testing launch with dosbox-x...
 	dosbox-x "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
 elif [ "$TARGET" = "dos" ] &&  command -v dosbox &> /dev/null; then
+	echo Testing launch with dosbox...
 	dosbox "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
 elif [ "$TARGET" = "dos" ]; then
 	echo Cannot test DOS Version from Linux!  Try Dosbox or FreeDOS in VirtualBox.
 	"$OPEN" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 elif [ "$OSX_BUILD" = 1 ]; then
+	echo Testing application launch...
 	/Applications/'Super Mario 64 ('"$PRESET"')'.app/Contents/MacOS/'Super Mario 64 ('"$PRESET"')'.app &
 elif command -v gtk-launch &> /dev/null; then
+	echo Testing application launch...
 	gtk-launch "$PRESET" &disown
-else
+elif [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.us.f3dex2e ]; then
+	echo Testing execution...
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --cheats --savepath "$SAVEDIR" --skip-intro &disown
 fi
@@ -1596,11 +1617,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 	elif [ ! "$COMMAND" = "help" ] && [ ! "$COMMAND" = "depends" ]; then
 		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 		if [ "$CONFIG" = 1 ]; then 
-			if ! command -v whiptail &> /dev/null; then
-				editconfig
-			else
-				doconfig
-			fi
+			doconfig
 		fi
 	fi
 	if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
@@ -2061,7 +2078,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 	elif [ "$ANDROID" = 0 ] && [ "$TARGET" = "pc" ] ; then
 		greenecho [7] Verifying Menu Entry....
 		makedesktop
-		greenecho [8] smlinux "$COMMAND" complete. Testing application launch... 
+		greenecho [8] smlinux "$COMMAND" complete. 
 	elif [ ! "$ANDROID" = 0 ]; then
 		mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
 		greenecho [7] smlinux "$COMMAND" complete.   
@@ -2284,7 +2301,7 @@ if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
 else
 	greenecho [7] Skipping menu entry for non PC version.
 fi
-greenecho [8] Build Succesful!  Testing Application Launch.
+greenecho [8] Build Succesful! 
 rungame
 if [ -f "$HOME"/.smlinuxNopath ]; then
 	rm "$HOME"/.smlinuxNopath
