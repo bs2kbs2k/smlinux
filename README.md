@@ -40,7 +40,7 @@ If for some reason the compilation freezes, perhaps on pc with low memory, then 
 sm64ex,r96ex,sm64ex-coop and cheaterex all confirmed working with Intel based macOS 10.12 Sierra and newer.  sm64nx and android builds are not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or Apple X-code command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  You may also be prompted to grant terminal permission to your Desktop or Applications folder for shortcut installation.  
 
 **Windows notes**
-For native builds under Microsoft Windows, you must first install msys2 and run smlinux from the included mingw terminal. sm64nx and android builds are not working yet.  DOS builds will not be supported.  Because whiptail is not available for msys, smlinux will run in legacy mode with no prompts and config file will open automatically. 
+For Android & DOS builds use WSL.  For native builds under Microsoft Windows, first install msys2 and run smlinux from the included mingw terminal. sm64nx builds are not working yet.  Because whiptail is not available for msys, smlinux will run in legacy mode with no prompts and config file will open automatically. 
 
 **32-bit notes** 
 sm64nx and Discord Rich Presence are not suppored.
@@ -194,13 +194,13 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 
 
 ## **What about distros other than Ubuntu?**
-*Developed under Bodhi 5.1 so should work as-is on recent Ubuntu/Debian. Arch Fedora & OpenSuse confirmed working by users.*
+*Developed under Bodhi 5.1 and tested under Slax so should work automatically on Ubuntu and Debian. Arch Fedora OpenSuSE confirmed working by users.*
 
 Change your `Linux=` command string to one that works with your distribution such as those listed below, or paste the command directly into a terminal.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
 
 Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk` and dos targets require `djgpp`, which smlinux only installs when those targets are specified.  If `gcc --version` does not report 8 or newer when building sm64nx, smlinux will install `gcc-9` or if unsuccesful `gcc-8`.  Users of distros without apt will need to install appropriate gcc or JDK as needed for such targets in addition to what is listed below.
 
-If smlinux detects `apt`the following packages known to work with 32/64-bit Debian 9, Ubuntu 18/20 and WSL are installed automatically:
+If smlinux detects `apt`the following packages are installed automatically:
 
 	zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libsdl1.2-dev libusb-1.0-0-dev libzstd-dev mplayer
 
