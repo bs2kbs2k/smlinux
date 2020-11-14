@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1113-2025
+TIMESTAMP=2020-1113-2045
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1595,7 +1595,7 @@ if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; 
 	pathupdate
 fi
 if command -v pip3 &> /dev/null; then # new dependency for python config GUI
-	if [ "`pip3 list --format=legacy | grep numpy`" = "" ]; then
+	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
 		echo Installing Numpy for python config editor...
  		pip3 install numpy 
  	fi
