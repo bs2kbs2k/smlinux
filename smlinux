@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1113-2200
+TIMESTAMP=2020-1113-2208
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -790,7 +790,7 @@ doconfig(){
 if ! command -v whiptail &> /dev/null; then
     editconfig
 elif (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 24 80 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
-	if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a GUI.\n\nWhen you exit the GUI, smlinux will continue.\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
+		if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in an editor.\n\nWhen you save and exit configuration, smlinux will begin.\n(To exit pico/nano/micro editors use Control-X)\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
 		editconfig	
 	else
 		echo smlinux aborted.
@@ -800,9 +800,7 @@ fi
 }
 
 editconfig(){
-if [ ! "`pip3 list --format=columns | grep numpy`" = "" ] || !([ "$TARGET_OSX" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]) ; then
-	python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt 
-else
+if [ "`pip3 list --format=columns | grep numpy`" = "" ] || !([ "$TARGET_OSX" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]) ; then
 	EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
 	IFS=":"
 	for editor in $EDITORS; do
@@ -811,6 +809,8 @@ else
 			return
 		fi
 	done
+else
+	python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt 
 fi
 }
 
