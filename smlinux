@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1114-1003
+TIMESTAMP=2020-1114-1018
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1833,9 +1833,10 @@ else   # The real start, the rest was script preperation and setup.
 	elif ! command -v gcc &> /dev/null; then
 		redecho ERROR: The GNU Compiler Collection is not installed.  Please install dependencies.
 		endnow
-	elif [ ! -d /Library/Developer/CommandLineTools/usr/bin ] && [ "$TARGET_OSX" = 1 ]; then
-		redecho ERROR: Apple X-code command line tools not found.  Please install manually.
-		endnow
+	elif [ "$TARGET_OSX" = 1 ] && [ ! -d /Library/Developer/CommandLineTools/usr/bin ] ; then
+		pinkecho Warning: Apple X-code command line tools not found.  Triggering installation...
+		xcode-select --install
+		whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\n" 12 55 2>&1
 	fi
 	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		echo "Installing required build tools for sm64nx..."
