@@ -210,7 +210,7 @@ If smlinux detects macOS the following packages are installed automatically with
 	
 Arch/Manjaro: 
     
-	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity
+	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar 
 
 Fedora/Red Hat:
 
