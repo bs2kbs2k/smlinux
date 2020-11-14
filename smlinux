@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1113-2227
+TIMESTAMP=2020-1114-0957
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -970,7 +970,7 @@ else
 			elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 				echo Updating Render96 Textures...
 				cd RENDER96-HD-TEXTURE-PACK
-				git pull &
+				git pull --no-rebase &
 				ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			elif [ ! -d "$SMLINUX"/Cleaner-Aesthetics ]; then
 				echo Starting Cleaner Aesthetics Texture Download...
@@ -979,7 +979,7 @@ else
 			else
 				echo Updating Cleaner Aesthetic Textures...
 				cd Cleaner-Aesthetics
-				git pull &
+				git pull --no-rebase &
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			fi
 		fi
@@ -1610,8 +1610,9 @@ if command -v pip3 &> /dev/null; then # new dependency for python config GUI
 		echo Installing Numpy for python config editor...
  		pip3 install numpy 
  	fi
- 	if [ `uname` = "Darwin" ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ] ; then
+ 	if [ `uname` = "Darwin" ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]; then
 		echo Installing python qt5 for config editor...
+		echo I know this sometimes fails on macOS Sierra but havent found solution yet.
  		pip3 install PyQt5
  	fi
 fi
@@ -1831,6 +1832,9 @@ else   # The real start, the rest was script preperation and setup.
 		pip3 install numpy
 	elif ! command -v gcc &> /dev/null; then
 		redecho ERROR: The GNU Compiler Collection is not installed.  Please install dependencies.
+		endnow
+	elif [ ! -f /Library/Developer/CommandLineTools/usr/bin/xcrun ] && [ "$TARGET_OSX" = 1 ]; then
+		redecho ERROR: Apple X-code command line tools not found.  Please install manually.
 		endnow
 	fi
 	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
