@@ -87,7 +87,7 @@ class ConfigWindow(QMainWindow):
 		super().__init__()
 
 		# Sets the title
-		self.setWindowTitle("smlinux Configuration")
+		self.setWindowTitle("smlinux configuration")
 		mainLayout = QVBoxLayout()
 		container = QWidget()
 		container.setLayout(mainLayout)
@@ -103,62 +103,47 @@ class ConfigWindow(QMainWindow):
 		# as seen in the config file. This is what you edit to add more settings.
 		# Check the comment for "ConfigSetting()" to see the arguments.
 		self.configDict = {
-			"PRESET": ConfigSetting("Preset: ", "dropdown", dropdownOptions = ["sm64ex",
-																			"sm64nx",
-																			"sm64ex-coop",
-																			"render96ex",
-																			"cheaterex",
-																			"sm64dos",
-																			"sm64-portweb",
-																			"sm64exweb",
-																			"sm64-port-android-base",
-																			"androidex",
-																			"sm64pc",
-																			"sm64-port",
-																			"r96proto",
-																			"r96alpha"]),
-			"InstallHD": ConfigSetting("Install HD: ", "check"),
-			"InstallR96": ConfigSetting("Install Render 96 :", "check"),
-			"FPS60": ConfigSetting("60 Frames per Second: ", "check"),
-			"DYNOS": ConfigSetting("DynOS: ", "check", tooltip = "Option for sm64ex and its forks"),
-			"CHEATER": ConfigSetting("Cheats: ", "check", tooltip = "Option for sm64ex and its forks"),
-			"BETTERCAMERA": ConfigSetting("Better Camera: ", "check", tooltip = "Option for sm64ex and its forks"),
-			"NODRAWINGDISTANCE": ConfigSetting("Disable Drawing Distance: ", "check", tooltip = "Option for sm64ex and its forks"),
-			"TEXTURE_FIX": ConfigSetting("Texture Fix: ", "check", tooltip = "Option for sm64ex and its forks"),
-			"EXTERNAL_DATA": ConfigSetting("External Data: ", "check", tooltip = "Option for sm64ex and its forks"),
-			"DISCORDRPC": ConfigSetting("Discord Rich Presence: ", "check", tooltip = "Option for sm64ex and its forks"),
-			"RENDER_API": ConfigSetting("Rendering API: ", "dropdown", tooltip = "Supports GL (2.1+) or GL_LEGACY (1.1+)", dropdownOptions = ["GL",
-																																		"GL_LEGACY"]),
-			"WINDOW_API": ConfigSetting("Window API: ", "dropdown", tooltip = "Supports SDL2 or SDL1 (1.2)", dropdownOptions = ["SDL2",
-																																"SDL1"]),
-			"TEXTSAVES": ConfigSetting("Text Saves: ", "check"),
-			"DISCORD_SDK": ConfigSetting("Discord SDK: ", "check", tooltip = "Option for sm64ex-coop only"),
-			"IMMEDIATELOAD": ConfigSetting("Immediate Load: ", "check", tooltip = "Option for sm64ex-coop only"),
-			"LEGACY_RES": ConfigSetting("Legacy Resolution: ", "check", tooltip = "Option for render96ex only"),
-			"TOUCH_CONTROLS": ConfigSetting("Touch Controls: ", "check", tooltip = "Option for Android only"),
-			"ARMONLY": ConfigSetting("ARM Only: ", "check", tooltip = "Option for Android only"),
-			"ENABLE_OPENGL_LEGACY": ConfigSetting("Enable OpenGL Legacy: ", "check", tooltip = "Option for DOS only"),
-			"DOS_GL": ConfigSetting("DOS GL: ", "dropdown", tooltip = "Supports dmesa (glide) or osmesa", dropdownOptions = ["dmesa",
-																															"osmesa"]),
-			"MAXJOBS": ConfigSetting("Compilation Thread Limit: ", "line", tooltip = "Set to limit cpu threads used during compile"),
-			"CONFIG": ConfigSetting("Prompt to Configure Before Building: ", "check", tooltip = "Uncheck if you do not want to be automatically prompted before building"),
-			"BASEPATH": ConfigSetting("Base Folder: ", "line", tooltip = "Base folder must exist and is where folders for each repo will be placed"),
-			"UpdateHD": ConfigSetting("Update HD: ", "check", tooltip = "Uncheck to prevent smlinux updating addons when rebuilding"),
-			"BuildMusic": ConfigSetting("Build Music: ", "check", tooltip = "Uncheck to prevent smlinux playing background music during compile"),
-			"VERSION": ConfigSetting("Version: ", "dropdown", tooltip = "Advanced Make Flag", dropdownOptions = ["us",
-																												"jp",
-																												"eu"]),
-			"DEBUG": ConfigSetting("Debug: ", "check", tooltip = "Advanced Make Flag"),
-			"TARGET_WEB": ConfigSetting("Target Web: ", "check", tooltip = "Advanced Make Flag"),
-			"TARGET_RPI": ConfigSetting("Target RPI: ", "check", tooltip = "Advanced Make Flag"),
-			"GIT": ConfigSetting("Git Repository: ", "line", tooltip = "GIT and BRANCH are ignored if PRESET is known"),
-			"BRANCH": ConfigSetting("Branch: ", "line", tooltip = "GIT and BRANCH are ignored if PRESET is known"),
-			"Linux": ConfigSetting("Dependencies: ", "line", tooltip = "Must be set to command appropriate to your distribution. See FAQ."),
-			"AutoUpdate": ConfigSetting("Auto Update: ", "check", tooltip = "Uncheck to prevent smlinux updating itself")
+			"PRESET": ConfigSetting("Preset", "dropdown", dropdownOptions = ["sm64ex","sm64nx","sm64ex-coop","render96ex","cheaterex","sm64dos","sm64-portweb","sm64exweb","sm64-port-android-base","androidex","sm64pc","sm64-port","r96proto","r96alpha","UserDefined"]),
+			"VERSION": ConfigSetting("ROM Version", "dropdown", tooltip = "Must correspond to ROM region", dropdownOptions = ["us","jp","eu"]),
+			"RENDER_API": ConfigSetting("RENDER_API", "dropdown", tooltip = "Supports GL (2.1+) or GL_LEGACY (1.1+)", dropdownOptions = ["GL","GL_LEGACY","D3D11"]),
+			"WINDOW_API": ConfigSetting("WINDOW_API", "dropdown", tooltip = "Supports SDL2 or SDL1 (1.2)", dropdownOptions = ["SDL2","SDL1"]),
+			"MAXJOBS": ConfigSetting("Maximum Jobs", "line", tooltip = "Set to limit cpu threads used during compile"),
+			"BASEPATH": ConfigSetting("Base Folder", "line", tooltip = "Base folder must exist and is where folders for each repo will be placed"),
+			"InstallHD": ConfigSetting("Install HD", "check", tooltip = "Install Upscale Add-ons described in FAQ"),
+			"UpdateHD": ConfigSetting("Update HD", "check", tooltip = "Update HD Add-ons when rebuilding"),
+			"InstallR96": ConfigSetting("Install R96 Models", "check", tooltip = "Install Render 96 Model Pack"),
+			"FPS60": ConfigSetting("60fps patch", "check", tooltip="Apply 60fps patch if included in repo"),
+			"DYNOS": ConfigSetting("DynOS patch", "check", tooltip = "Apply Dynamic Option System by PeachyPeach"),
+			"CHEATER": ConfigSetting("CHEATER patch", "check", tooltip = "Apply CHEATER by s4ys"),
+			
+			"BETTERCAMERA": ConfigSetting("BETTERCAMERA", "check", tooltip = "Build Option for sm64ex and its forks"),
+			"NODRAWINGDISTANCE": ConfigSetting("NODRAWINGDISTANCE", "check", tooltip = "Build Option for sm64ex and its forks"),
+			"TEXTURE_FIX": ConfigSetting("TEXTURE_FIX", "check", tooltip = "Build Option for sm64ex and its forks"),
+			"EXTERNAL_DATA": ConfigSetting("EXTERNAL_DATA", "check", tooltip = "Build Option for sm64ex and its forks"),
+			"DISCORDRPC": ConfigSetting("DISCORDRPC", "check", tooltip = "Build Option for sm64ex and its forks"),
+			"TEXTSAVES": ConfigSetting("TEXTSAVES", "check", tooltip = "Build Option for sm64ex and its forks"),
+			"DEBUG": ConfigSetting("DEBUG", "check", tooltip = "Advanced Build Option"),
+			"TARGET_WEB": ConfigSetting("TARGET_WEB", "check", tooltip = "Build Web Version with emsdk"),
+			"TARGET_RPI": ConfigSetting("TARGET_RPI", "check", tooltip = "Build Raspberry Pi version"),
+			"DISCORD_SDK": ConfigSetting("DISCORD_SDK (Co-op)", "check", tooltip = "Build option for sm64ex-coop only"),
+			"IMMEDIATELOAD": ConfigSetting("IMMEDIATELOAD (Co-op)", "check", tooltip = "Build option for sm64ex-coop only"),
+			"LEGACY_RES": ConfigSetting("LEGACY_RES (R96)", "check", tooltip = "Built option for render96ex only"),
+
+			"DOS_GL": ConfigSetting("DOS_GL: ", "dropdown", tooltip = "Supports dmesa (glide) or osmesa", dropdownOptions = ["dmesa","osmesa"]),
+			"ENABLE_OPENGL_LEGACY": ConfigSetting("ENABLE_OPENGL_LEGACY (DOS)", "check", tooltip = "Option for DOS only"),
+			"TOUCH_CONTROLS": ConfigSetting("Android TOUCH_CONTROLS", "check", tooltip = "Build option for Android only"),
+			"ARMONLY": ConfigSetting("Android ARM Only", "check", tooltip = "Prevent x86 builds for Android"),
+			"BuildMusic": ConfigSetting("Build Music", "check", tooltip = "Play music in the background while compiling"),
+			"AutoUpdate": ConfigSetting("Automatic Updates", "check", tooltip = "Update smlinux before build"),
+			"CONFIG": ConfigSetting("Prompt to Configure Before Next Build", "check", tooltip = "Prompt to edit configuration file before building"),
+			"GIT": ConfigSetting("Git Repository", "line", tooltip = "GIT and BRANCH are ignored if PRESET is known"),
+			"BRANCH": ConfigSetting("Branch", "line", tooltip = "GIT and BRANCH are ignored if PRESET is known"),
+			"Linux": ConfigSetting("Linux", "line", tooltip = "Must be set to command appropriate to your distribution. See FAQ."),
+			
 		}
 
 		# Change this variable to adjust the layout of the options.
-		itemsPerColumn = 17
+		itemsPerColumn = 12
 
 		# This loops through the dictionary and adds all the settings to the menu.
 		# This may be out of order depending on your version of Python 3.
