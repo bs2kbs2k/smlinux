@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1113-2130
+TIMESTAMP=2020-1113-2140
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1599,7 +1599,8 @@ if command -v pip3 &> /dev/null; then # new dependency for python config GUI
 		echo Installing Numpy for python config editor...
  		pip3 install numpy 
  	fi
- 	if [ "$TARGET_OSX" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ] ; then
+ 	if [ `uname` = "Darwin" ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ] ; then
+		echo Installing python qt5 for config editor...
  		pip3 install PyQt5
  	fi
 fi
