@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1113-2208
+TIMESTAMP=2020-1113-2227
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -800,7 +800,7 @@ fi
 }
 
 editconfig(){
-if [ "`pip3 list --format=columns | grep numpy`" = "" ] || !([ "$TARGET_OSX" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]) ; then
+if [ "`pip3 list --format=columns | grep numpy`" = "" ] || ([ "$TARGET_OSX" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]) ; then
 	EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
 	IFS=":"
 	for editor in $EDITORS; do
