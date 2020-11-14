@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1114-1317
+TIMESTAMP=2020-1114-1336
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1627,28 +1627,9 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo smlinux configuration file has been reset to default.
 		echo
 		exit
-	elif [ "$COMMAND" = "upgrade" ]; then
-		echo smlinux script upgrade only proceeding...
-	elif [ ! -f "$SMLINUX"/smlinuxcfg.txt ]; then
-		echo smlinux configuration file not found, so making a new one...
-		makeconfig
-		doconfig
-	elif [ "$COMMAND" = "rebuild" ]; then 
-		if [ "$2" = "--config" ] || [ "$3" = "--config" ] ||[ "$4" = "--config" ] ||[ "$5" = "--config" ]; then
-			doconfig
-		elif [ "$2" = "config" ] || [ "$3" = "config" ] ||[ "$4" = "config" ] ||[ "$5" = "config" ]; then
-			doconfig
-		fi
-	elif [ ! "$COMMAND" = "help" ] && [ ! "$COMMAND" = "depends" ]; then
-		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
-		if [ "$CONFIG" = 1 ]; then 
-			doconfig
-		fi
 	fi
-	if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
-		echo Loading "$SMLINUX"/smlinuxcfg.txt...
-		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
-	fi
+	echo Loading "$SMLINUX"/smlinuxcfg.txt...
+	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	#Play a sound clip for no reason - thank you for playing my game.
 	if [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ]; then
 		if [ -f "$BASEPATH"/sm64pc/sound/samples/sfx_mario_peach/0D.aiff ]; then
@@ -1837,6 +1818,10 @@ else   # The real start, the rest was script preperation and setup.
 		pinkecho Warning: Apple X-code command line tools not found.  Triggering installation...
 		xcode-select --install
 		whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\n" 12 55 2>&1
+	fi
+	if [ ! "$COMMAND" = "help" ] && [ ! "$COMMAND" = "depends" ] && [ "$CONFIG" = 1 ]; then 
+		doconfig
+		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	fi
 	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		echo "Installing required build tools for sm64nx..."
