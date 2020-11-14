@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1113-2045
+TIMESTAMP=2020-1113-2130
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1599,6 +1599,9 @@ if command -v pip3 &> /dev/null; then # new dependency for python config GUI
 		echo Installing Numpy for python config editor...
  		pip3 install numpy 
  	fi
+ 	if [ "$TARGET_OSX" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ] ; then
+ 		pip3 install PyQt5
+ 	fi
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$COMMAND" = "config" ]; then
@@ -1786,6 +1789,7 @@ else   # The real start, the rest was script preperation and setup.
 			brew install libxdg-basedir coreutils wget newt nano go zip unzip unrar p7zip python3 
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 			go get github.com/machinebox/appify
+			pip3 install numpy PyQt5
 			if [ ! ~/.nanorc ]; then
 				echo 'include /usr/local/share/nano/*.nanorc' >"$HOME"/.nanorc
 			fi
