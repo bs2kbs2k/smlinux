@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1113-1407
+TIMESTAMP=2020-1113-2025
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -469,7 +469,6 @@ if [ "$HASH" = "" ]; then
 			endnow
 		fi
 		wget https://github.com/Brawl345/N64Swap/raw/master/n64swap.py
-		pip3 install numpy
 	fi
 	# Try V64
 	mv "$romfile".z64 "$romfile".v64
@@ -791,7 +790,7 @@ doconfig(){
 if ! command -v whiptail &> /dev/null; then
     editconfig
 elif (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 24 80 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
-	if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a text editor.\n\nWhen you exit your editor, smlinux will continue.\n(To exit pico/nano/micro editors use Control-X)\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
+	if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in a GUI.\n\nWhen you exit the GUI, smlinux will continue.\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
 		editconfig	
 	else
 		echo smlinux aborted.
@@ -801,14 +800,7 @@ fi
 }
 
 editconfig(){
-EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
-IFS=":"
-for editor in $EDITORS; do
-	$editor "$SMLINUX"/smlinuxcfg.txt
-	if [ $? -eq 0 ]; then
-		return
-	fi
-done
+python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt 
 }
 
 loademsdk(){
@@ -950,11 +942,11 @@ else
 			git checkout gfx
 			git pull --no-rebase &
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ] && [ "$GIT" = "render96/render96ex" ]; then
-			echo Updating textures from git...
+			echo Starting Render 96 texture update....
 			cd "$SMLINUX"/RENDER96-HD-TEXTURE-PACK
 			git pull --no-rebase &
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-			echo Updating textures from git...
+			echo Staring Cleaner Aesthetics textures update...
 			cd "$SMLINUX"/Cleaner-Aesthetics
 			git pull --no-rebase &
 		fi
@@ -1602,13 +1594,15 @@ if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; 
 	# update paths from old versions of smlinux that shared sm64pc folder for configfile
 	pathupdate
 fi
+if command -v pip3 &> /dev/null; then # new dependency for python config GUI
+	if [ "`pip3 list --format=legacy | grep numpy`" = "" ]; then
+		echo Installing Numpy for python config editor...
+ 		pip3 install numpy 
+ 	fi
+fi
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$COMMAND" = "config" ]; then
 		editconfig
-		echo "Thank you for editing your smlinux config file." 
-		echo "Do you know how to write a GUI to edit it?"
-		echo "If so I would love to use it as a front end."
-		echo
 		exit
 	elif [ "$COMMAND" = "reset" ]; then
 		rm "$SMLINUX"/smlinuxcfg.txt
@@ -1818,6 +1812,7 @@ else   # The real start, the rest was script preperation and setup.
 				echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
 			fi
 		fi
+		pip3 install numpy
 	elif ! command -v gcc &> /dev/null; then
 		redecho ERROR: The GNU Compiler Collection is not installed.  Please install dependencies.
 		endnow
