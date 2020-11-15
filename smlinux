@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1114-1649
+TIMESTAMP=2020-1114-2247
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -800,17 +800,17 @@ fi
 }
 
 editconfig(){
-if ! command -v pip3 &> /dev/null || [ ! -f "$SMLINUX"/config.py ] || [ "`pip3 list --format=columns | grep numpy`" = "" ] || ([ "$TARGET_OSX" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]) ; then
-	EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
-	IFS=":"
-	for editor in $EDITORS; do
-		$editor "$SMLINUX"/smlinuxcfg.txt
-		if [ $? -eq 0 ]; then
-			return
-		fi
-	done
-else
-	python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt 
+if command -v pip3 &> /dev/null && [ ! -f "$SMLINUX"/config.py ] ; then
+	if ! python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt 
+		EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
+		IFS=":"
+		for editor in $EDITORS; do
+			$editor "$SMLINUX"/smlinuxcfg.txt
+			if [ $? -eq 0 ]; then
+				return
+			fi
+		done
+	fi
 fi
 }
 
@@ -1603,12 +1603,8 @@ if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; 
 fi
 if command -v pip3 &> /dev/null; then # new dependencies for python config GUI
 	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
-		echo Installing Numpy for python config editor...
+		echo Installing libraries for python config editor...
  		pip3 install numpy 
- 	fi
- 	if [ `uname` = "Darwin" ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]; then
-		echo Installing python qt5 for config editor...
-		echo I know this sometimes fails on macOS Sierra but havent found solution yet.
  		pip3 install PyQt5
  	fi
 fi
@@ -1779,7 +1775,6 @@ else   # The real start, the rest was script preperation and setup.
 			brew install libxdg-basedir coreutils wget newt nano go zip unzip unrar p7zip python3 
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 			go get github.com/machinebox/appify
-			pip3 install PyQt5
 			if [ ! ~/.nanorc ]; then
 				echo 'include /usr/local/share/nano/*.nanorc' >"$HOME"/.nanorc
 			fi
@@ -1810,6 +1805,7 @@ else   # The real start, the rest was script preperation and setup.
 			wget -q https://raw.githubusercontent.com/enigma9o7/smlinux/master/config.py -P "$SMLINUX"
 		fi
 		pip3 install numpy
+		pip3 install PyQt5
 	elif ! command -v gcc &> /dev/null; then
 		redecho ERROR: The GNU Compiler Collection is not installed.  Please install dependencies.
 		endnow
@@ -1897,15 +1893,15 @@ else   # The real start, the rest was script preperation and setup.
 		fi
 		if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 			echo
-			echo "ERROR: Something didnt work like it was supposed to!"
+			redecho "Error processing ROM: Something did not work like it was supposed to!"
+			echo "An unmodified Super Mario 64 romfile in big endian (Z64) format is needed."
 			echo "Try dragging and dropping romfile into this terminal window from file manager."
-			echo "Some terminals (including macOS) will paste the filename when you do that."
-			echo "If that does not work, some filenmanagers (like pcmanfm) you can right click the"
+			echo "If that does not work, some file managers (like pcmanfm) you can right click the"
 			echo "file to select \"copy path\" then paste it here followed by enter. "
 			echo "Lastly, you can try typing the full path and filename then press enter."
 			echo "If that still does not work, romfile must be corrupt or its a smlinux problem."
 			echo
-			printf "Filename? "
+			printf "Filename? >"
 			read USERFILE
 			if [ -f "$USERFILE" ]; then
 				cp "$USERFILE" "$SMLINUX"/baserom."$VERSION".z64
