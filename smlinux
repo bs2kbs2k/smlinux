@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1114-2255
+TIMESTAMP=2020-1114-2347
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1155,13 +1155,8 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			echo Adding $HOME/bin to path...
 			echo 'export PATH=$HOME/bin:$PATH' >>~/.bashrc
 			export PATH=$HOME/bin:$PATH
-			if [ "$OSX_BUILD" = 1 ]; then	
-				PATHDIR=$HOME/bin
-			else
-				mapfile -t -d: <<<"$PATH"
-				PATHDIR="${MAPFILE[0]}"
-			fi
-			mv -f "$SMLINUX"/smlinux "$PATHDIR"
+			PATHDIR=$HOME/bin
+			mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 			if [ ! -f "$PATHDIR"/smlinux ]; then
 				redecho ERROR - Could not add to path.  Run without AutoUpdate enabled.
 				echo smlinux exiting incomplete.
@@ -1180,7 +1175,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			git merge
 			if [ ! -f "$SMLINUX"/smlinux ]; then
 				redecho "ERROR: Script Update Unsuccesful."
-				echo "Try #help-desk if script udpates continue to fail"
+				echo "Try #help-desk if script updates continue to fail."
 			else
 				echo 'if [ `uname` = "Darwin" ]; then	
 					PATHDIR=/usr/local/bin
@@ -1194,9 +1189,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 					echo Warning: Could not write to first path directory.  Creating $HOME/bin.
 					touch "$HOME"/.smlinuxNopath
 					mkdir $HOME/bin
-					export PATH=$HOME/bin:$PATH
-					mapfile -t -d: <<<"$PATH"
-					PATHDIR="${MAPFILE[0]}"
+					PATHDIR="$HOME"/bin
 					mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 					if [ ! -f "$PATHDIR"/smlinux ]; then
 						echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
@@ -1607,6 +1600,9 @@ if command -v pip3 &> /dev/null; then # new dependencies for python config GUI
  		pip3 install numpy 
  		pip3 install PyQt5
  	fi
+	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
+		pip install numpy # this worked on ubuntu 16 
+	fi
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$COMMAND" = "config" ]; then
