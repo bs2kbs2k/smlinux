@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1115-0858
+TIMESTAMP=2020-1115-0946
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1179,9 +1179,10 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			else
 				echo 'if [ `uname` = "Darwin" ]; then	
 					PATHDIR=/usr/local/bin
-				else
-					mapfile -t -d: <<<"$PATH"
+				elif mapfile -t -d: <<<"$PATH"; then
 					PATHDIR="${MAPFILE[0]}"
+				else
+					PATHDIR="$HOME"/bin
 				fi
 				SMLINUX=${XDG_DATA_HOME:-$HOME/.local/share}/smlinux
 				mv -f "$SMLINUX"/smlinux "$PATHDIR"/
