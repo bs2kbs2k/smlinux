@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1114-2247
+TIMESTAMP=2020-1114-2253
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -801,7 +801,7 @@ fi
 
 editconfig(){
 if command -v pip3 &> /dev/null && [ ! -f "$SMLINUX"/config.py ] ; then
-	if ! python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt 
+	if ! python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt; then 
 		EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
 		IFS=":"
 		for editor in $EDITORS; do
