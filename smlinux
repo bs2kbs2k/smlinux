@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1114-1631
+TIMESTAMP=2020-1114-1649
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1128,7 +1128,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo Installing smlinux into "$PATHDIR"... 	
 		if [ "$USER" = "root" ]; then
 			redecho WARNING: smlinux being installed as root.
-			pinkecho smlinux updates may not work correctly if you run as a regular user.
+			pinkecho smlinux updates may not work correctly if you run again as a regular user.
 		fi
 		if [ -d "$SMLINUX" ]; then
 			if [ -d "$SMLINUX".baq ]; then
@@ -2325,8 +2325,11 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 	echo You did not have a home folder in your path so "$HOME"/bin was created.
 	echo Restart terminal before running smlinux again.
 	echo
+	for i in {1..30}
+do
 	redecho Please close this terminal.
-	sleep 666
+	sleep 30
+done
 	kill -9 $PPID
 elif [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 4
