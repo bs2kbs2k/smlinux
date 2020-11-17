@@ -198,15 +198,17 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 
 Change your `Linux=` command string to one that works with your distribution such as those listed below, or paste the command directly into a terminal.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
 
-Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk` and dos targets require `djgpp`, which smlinux only installs when those targets are specified.  If `gcc --version` does not report 8 or newer when building sm64nx, smlinux will install `gcc-9` or if unsuccesful `gcc-8`.  Users of distros without apt will need to install appropriate gcc or JDK as needed for such targets in addition to what is listed below.
+Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk` and dos targets require `djgpp`, which smlinux only installs when those targets are specified.  If `gcc --version` does not report 8 or newer when building sm64nx, smlinux will install `gcc-9` or if unsuccesful `gcc-8`.  Users of distros without apt will need to install appropriate gcc, sdl1.2, or JDK as needed for such targets in addition to what is listed below.
 
 If smlinux detects `apt`the following packages are installed automatically:
 
-	zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libsdl1.2-dev libusb-1.0-0-dev libzstd-dev mplayer
+	zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
 
 If smlinux detects macOS the following packages are installed automatically with brew:
 
 	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
+
+For other distibutions user should set Linux= as follows:
 	
 Arch/Manjaro: 
     
