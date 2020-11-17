@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1117-1105
+TIMESTAMP=2020-1117-1309
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -544,8 +544,6 @@ MAXJOBS=
 CONFIG=1
 # BASEPATH must exist and is where folders for each repo will be placed
 BASEPATH=$HOME
-# Set UpdateHD=0 to prevent smlinux updating addons when rebuilding
-UpdateHD=1
 # Set BuildMusic=0 to prevent smlinux playing background music during compile
 BuildMusic=1
 # [ Advanced Make Flags ]
@@ -766,7 +764,6 @@ if [ -z "$MAXJOBS" ]; then
 	fi
 fi
 if [ "$2" = "--hd" ] || [ "$3" = "--hd" ] ||[ "$4" = "--hd" ] ||[ "$5" = "--hd" ]; then
-	UpdateHD=1
 	InstallHD=1
 fi
 if [ "$2" = "--sgi" ] || [ "$3" = "--sgi" ] ||[ "$4" = "--sgi" ] ||[ "$5" = "--sgi" ]; then
@@ -2022,14 +2019,14 @@ elif [ "$COMMAND" = "update" ]; then
 		fi
 	fi
 	greenecho [4] Applying pre-build modifications...
-	if [ "$UpdateHD" = 1 ] && [ "$InstallHD" = 1 ]; then
+	if [ "$InstallHD" = 1 ]; then
 		dohd
 	elif [ "$InstallR96" = 1 ]; then
 		printf "SGI Selected, Processing...\n"
 		dosgi
 	else
-		pinkecho Warning: HD add-ons and updates are disabled in smlinux configuration.
-		echo set InstallHD=1 and UpdatehD=1 if you would like these installed and udpated.
+		pinkecho Warning: HD add-ons are disabled in smlinux configuration.
+		echo set InstallHD=1 if you would like these installed and udpated.
 	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		echo Updating Android basepack...
