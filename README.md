@@ -208,32 +208,32 @@ If smlinux detects macOS the following packages are installed automatically with
 
 	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
 
-For other distibutions user should set Linux= as follows:
+**For other Linux distibutions user should set Linux= as follows:**
 	
-Arch/Manjaro: 
+Arch/Manjaro
     
 	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar 
 
-Fedora/Red Hat:
+Fedora/Red Hat
 
 	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++
-openSuSE:
+openSuSE
 
 	sudo zypper in gcc make python3 glew-devel libSDL2-devel zenity libzstd-devel audiofile-devel
-Solus:
+Solus
 	
 	sudo eopkg install make gcc python3 audiofile-devel glew-devel sdl2-devel zenity
-Void: 
+Void 
 
 	sudo xbps-install -S base-devel python3 audiofile-devel SDL2-devel glew-devel zstd zenity
-Alpine:
+Alpine
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 
-minGW64: 
+minGW64 
 	
 	pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 python3 python3-pip git make mingw-w64-x86_64-gcc unzip zip unrar p7zip nano
-minGW32:
+minGW32
 
 	pacman -S mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 python3-pip git make mingw-w64-i686-gcc unzip zip unrar p7zip nano
 
