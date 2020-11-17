@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1117-1032
+TIMESTAMP=2020-1117-1105
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1481,11 +1481,11 @@ elif [ ! "$ANDROID" = 0 ] ; then
 		echo 
 	fi
 	"$OPEN" "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
-elif [ "$GIT"  = "djoslin0/sm64ex-coop" ] ; then
+elif [ "$GIT"  = "djoslin0/sm64ex-coop" ] && [ ! `nproc` = 1 ]; then
 	echo Testing Double Application Launch...
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --server 7777 --cheats --savepath "$SAVEDIR" --skip-intro &
-	sleep 3
+	sleep 10
 	./sm64.us.f3dex2e --client 127.0.0.1 7777 --cheats --savepath ! --skip-intro &
 elif [ "$TARGET" = "dos" ] &&  command -v dosbox-x &> /dev/null; then
 	echo Testing launch with dosbox-x...
@@ -1494,7 +1494,7 @@ elif [ "$TARGET" = "dos" ] &&  command -v dosbox &> /dev/null; then
 	echo Testing launch with dosbox...
 	dosbox "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
 elif [ "$TARGET" = "dos" ]; then
-	echo Cannot test DOS Version from Linux!  Try Dosbox or FreeDOS in VirtualBox.
+	echo Cannot test DOS Version fom Linux!  Try Dosbox or FreeDOS in VirtualBox.
 	"$OPEN" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 elif [ "$OSX_BUILD" = 1 ]; then
 	echo Testing application launch...
@@ -1832,6 +1832,12 @@ else   # The real start, the rest was script preperation and setup.
 	elif [ "$TARGET" = "dos" ]; then
 		echo "Loading djgpp for DOS Target..."
 		dodos
+	elif [ "$WINDOW_API" = "SDL1" ] && command -v sudo &> /dev/null && command -v apt &> /dev/null && ! command -v sdl-config &> /dev/null; then
+		echo Installing SDL1 Development Libraries...
+		sudo apt install libsdl1.2-dev 
+	elif [ "$WINDOW_API" = "SDL1" ] && [ "$USER" = "root" ] && command -v apt &> /dev/null && ! command -v sdl-config &> /dev/null; then
+		echo Installing SDL1 Development Libraries...
+		apt install libsdl1.2-dev 
 	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "This is not first build, skipping dependencies."
 	else
