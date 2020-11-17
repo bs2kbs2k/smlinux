@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1115-1059
+TIMESTAMP=2020-1117-1032
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1790,11 +1790,11 @@ else   # The real start, the rest was script preperation and setup.
 		elif command -v apt &> /dev/null && [ "$USER" = "root" ]; then
 			echo "Updating package list and installing dependencies..."
 			apt update
-			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl1.2-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
+			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 			echo "Updating package list and installing dependencies..."
 			sudo apt update
-			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl1.2-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
+			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 		else
 			echo "Installing dependencies specified in smlinux configuration file..."
 			$Linux
