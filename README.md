@@ -1,4 +1,5 @@
 #  smlinux -Super Mario Linux- Install Build Update Script
+[<strong>Click here to jump to Frequenty Asked Questions</strong>](#frequently-asked-questions)  
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.png>
 
@@ -34,7 +35,6 @@ You must provide your own legally backed up Super Mario 64 ROM file.
 	
 The first time smlinux installs itself to either the first directory in your path or ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to the skip menu.  
 
-[<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions)  
 [<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
