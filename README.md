@@ -26,7 +26,7 @@ Paste either of the following into a terminal then press Enter/Return (*whicheve
 (1) provide password to install build tools (2) specify your romfile (3)  approve or change build options.  
 smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 You must provide your own legally backed up Super Mario 64 ROM file.  
-*Do not run smlinux as root; you will be prompted for password if needed.*  
+*Do not run smlinux as root; you will be prompted for sudo password if needed.*  
   
 [<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 
