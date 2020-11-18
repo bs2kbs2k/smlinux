@@ -50,10 +50,10 @@ For Android & DOS builds use WSL.  For native builds under Microsoft Windows, fi
 sm64nx and Discord Rich Presence are not suppored.
 
 # Frequently Asked Questions
-* [<strong>What is smlinux for?</strong>](#what-does-smlinux-do)
-* [<strong>How to download and install?</strong>](#download--installation-instructions)      
-* [<strong>Where is the smlinux script? How do I run it again?</strong>](#how-do-i-run-smlinux-again)
-* [<strong>What preset/repo/branch should I use?</strong>](#what-presetrepositorybranch-should-i-use)
+* [<strong>What does smlinux do?</strong>](#what-does-smlinux-do)
+* [<strong>How do I download and install smlinux?</strong>](#download--installation-instructions)      
+* [<strong>How do I run smlinux again? Where did it install itself to?</strong>](#how-do-i-run-smlinux-again)
+* [<strong>What preset/repo/branch should I chose?</strong>](#what-presetrepositorybranch-should-i-use)
 * [<strong>What does the InstallHD option do?</strong>](#what-does-the-install-option-do)
 * [<strong>What does the InstallR96 option do?</strong>](#what-does-the-installr96-option-do)
 * [<strong>What does the FPS60 option do?</strong>](#what-does-the-fps60-option-do)
