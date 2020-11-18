@@ -30,7 +30,7 @@ smlinux will then run unattended and before the time you finish reading the FAQ 
 You must provide your own legally backed up Super Mario 64 ROM file.  
 *Do not run smlinux as root; you will be prompted for sudo password if needed.* 
 
-[<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
+[<strong>Click here for Linux distributions that are not ubuntu or debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 ## **How do I run smlinux again?**
 	smlinux
 	
