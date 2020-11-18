@@ -46,7 +46,6 @@ For Android & DOS builds use WSL.  For native builds under Microsoft Windows, fi
 sm64nx and Discord Rich Presence are not suppored.
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
 
 # Frequently Asked Questions
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
