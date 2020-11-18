@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1117-1837
+TIMESTAMP=2020-1118-1052
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -593,6 +593,8 @@ if [ -z $PRESET ] && [ ! -z $REPO ]; then
 	PRESET="$REPO"
 elif [ -z $PRESET ]; then
 	PRESET=sm64-"$BRANCH"
+elif [ "$PRESET" = "UserDefined" ]; then
+	PRESET=USERDEF
 fi
 if [ "$PRESET" = "sm64pc" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64pc" ]; then
 	PRESET=sm64pc
