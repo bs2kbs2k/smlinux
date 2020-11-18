@@ -27,12 +27,12 @@ Paste either of the following into a terminal then press Enter/Return (*whicheve
 smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 You must provide your own legally backed up Super Mario 64 ROM file.  
 *Do not run smlinux as root; you will be prompted for sudo password if needed.*  
-  
-[<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
+[<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
 
 smlinux will be installed in the first directory in your path or ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to skip menu.  
 
-[<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
+[<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 
 If for some reason the compilation freezes, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will allow make multiple jobs which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
@@ -44,8 +44,6 @@ For Android & DOS builds use WSL.  For native builds under Microsoft Windows, fi
 
 **32-bit notes** 
 sm64nx and Discord Rich Presence are not suppored.
-
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
 # Frequently Asked Questions
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
