@@ -1,6 +1,6 @@
 #  smlinux -Super Mario Linux- Install Build Update Script
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.png>
 
 # 
 1. Installs Required Packages (build tools & dependencies)
@@ -30,7 +30,7 @@ You must provide your own legally backed up Super Mario 64 ROM file.
   
 [<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 
-smlinux will be installed in the first directory in your path or ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in next screenshot) or use command line options (as shown in previous screenshot) to skip menu.  
+smlinux will be installed in the first directory in your path or ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to skip menu.  
 
 [<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
 
@@ -45,7 +45,7 @@ For Android & DOS builds use WSL.  For native builds under Microsoft Windows, fi
 **32-bit notes** 
 sm64nx and Discord Rich Presence are not suppored.
 
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot2.jpg>
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot3.jpg>
 
 # Frequently Asked Questions
