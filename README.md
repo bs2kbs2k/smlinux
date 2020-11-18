@@ -28,15 +28,15 @@ Paste either of the following into a terminal then press Enter/Return (*whicheve
 smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 You must provide your own legally backed up Super Mario 64 ROM file.  
 *Do not run smlinux as root; you will be prompted for sudo password if needed.*  
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
-[<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
 
-## **How do I use smlinux again?**
+## **How do I run smlinux again?**
 	smlinux
 	
 The first time smlinux installs itself to either the first directory in your path or ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to the skip menu.  
 
+[<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
 [<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
 If for some reason the compilation freezes, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will allow make multiple jobs which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
@@ -52,7 +52,7 @@ sm64nx and Discord Rich Presence are not suppored.
 # Frequently Asked Questions
 * [<strong>What is smlinux for?</strong>](#what-does-smlinux-do)
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
-* [<strong>Where is the smlinux script? How do I run it again?</strong>](#how-do-i-use-smlinux-again)
+* [<strong>Where is the smlinux script? How do I run it again?</strong>](#how-do-i-run-smlinux-again)
 * [<strong>What preset/repo/branch should I use?</strong>](#what-presetrepositorybranch-should-i-use)
 * [<strong>What does the InstallHD option do?</strong>](#what-does-the-install-option-do)
 * [<strong>What does the InstallR96 option do?</strong>](#what-does-the-installr96-option-do)
