@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1118-1052
+TIMESTAMP=2020-1118-1134
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -94,7 +94,7 @@ if [ ! "$ANDROID" = 0 ]; then
 	fi
 	cd "$BASEPATH"/"$ANDROID"
 	checkphone
-	echo Android Package Kit build starting...
+	bluecho Android Package Kit build starting...
 	killall -q zenity
 	if [ "$GOTPHONE" = 1 ]; then
 		echo Do not disconnect phone until complete.
@@ -113,7 +113,7 @@ if [ ! "$ANDROID" = 0 ]; then
 	rm Android.mk
 	git checkout Android.mk
 	if [ "$EXTERNAL_DATA" = 1 ] && [ "$InstallHD" = 1 ] && [ -d "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug ]; then
-		echo Preparing external data for transfer...
+		bluecho Preparing external data for transfer...
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip ]; then
 			cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/hdbase.zip .
@@ -148,7 +148,7 @@ elif [ "$GIT" = "teamsalta/sm64nx" ] || ( [ "$TARGET_WEB" = 1 ] && [ "$InstallHD
 	rm Makefile
 	git checkout Makefile
 elif [ "$LEGACY_RES" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.zip ]; then
-	echo Preparing base resource pack...
+	bluecho Preparing base resource pack...
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	if [ -f base.zip ]; then
 		rm base.zip
@@ -165,7 +165,7 @@ elif [ -f  "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/awesome-legacy.z
 		mv awesome-legacy.zip base.zip
 elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/sound ]; then
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-	echo Creating base resource pack...
+	bluecho Creating base resource pack...
 	zip -q0r base gfx sound
 	if [ -f base.zip ]; then
 		rm -rf gfx sound
@@ -360,6 +360,15 @@ tput sgr0 # reset
 tput setab 0  # black background
 tput setaf 7 # white text
 }
+bluecho(){
+tput setab 0  # black background
+tput setaf 4  # red text
+tput bold
+echo "$@"
+tput sgr0 # reset
+tput setab 0  # black background
+tput setaf 7 # white text
+}
 
 androidsdk(){
 if command -v sudo &> /dev/null && command -v apt &> /dev/null && [ ! -d /usr/lib/android-sdk ]; then
@@ -431,7 +440,7 @@ fi
 domymenu(){	
 if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
 	if [ "$PRESET" = "androidex" ] || [ "$GIT" = "sm64pc/sm64ex" ] || [ "$GIT" = "render96/render96ex" ] || [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
-		echo Applying menu arrows...
+		bluecho Applying menu arrows...
 		cd "$BASEPATH"/"$PRESET"
 		cp "$SMLINUX"/menu-arrows.patch enhancements
 		git apply enhancements/menu-arrows.patch
@@ -847,7 +856,7 @@ mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
 ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
 cd "$BASEPATH"/"$PRESET"/tools
-echo Preparing tools...
+bluecho Preparing tools...
 make -j"$MAXJOBS" >/dev/null
 cd "$BASEPATH"/"$PRESET"/import
 python3 extract_assets.py
@@ -864,7 +873,7 @@ fi
 
 dohd(){ 
 if [ "$PRESET" = "sm64nx" ]; then 
-	echo "Getting add-on pakfiles..."
+	bluecho "Getting add-on pakfiles..."
 	if [ ! -d "$BASEPATH"/"$PRESET"/build ] ; then mkdir "$BASEPATH"/"$PRESET"/build
 	fi
 	if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] ; then mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
@@ -916,12 +925,12 @@ else
 		fi
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_Mario_Model.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ];  then
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip -P enhancements
-			echo Applying HD Mario...
+			bluecho Applying HD Mario...
 			unzip -o -q enhancements/Old_School_HD_Mario_Model
 		fi
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ];  then
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar -P enhancements
-			echo Applying HD Bowser...
+			bluecho Applying HD Bowser...
 			unrar x -o+ -idq enhancements/hd_bowser
 		fi
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ "$ANDROID" = 0 ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ]; then
@@ -931,7 +940,7 @@ else
 				wget -q https://cdn.discordapp.com/attachments/721806706547490868/725041183700680807/3d_coin_v2_nightly.patch -P enhancements
 			fi
 			if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
-				echo Applying 3D Coin Patch...
+				bluecho Applying 3D Coin Patch...
 				git apply enhancements/3d_coin_v2*.patch
 			fi
 		fi
@@ -952,31 +961,31 @@ else
 			git checkout gfx
 			git pull --no-rebase &
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ] && [ "$GIT" = "render96/render96ex" ]; then
-			echo Starting Render 96 texture update....
+			bluecho Starting Render 96 texture update....
 			cd "$SMLINUX"/RENDER96-HD-TEXTURE-PACK
 			git pull --no-rebase &
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
-			echo Staring Cleaner Aesthetics textures update...
+			bluecho Staring Cleaner Aesthetics textures update...
 			cd "$SMLINUX"/Cleaner-Aesthetics
 			git pull --no-rebase &
 		fi
 		cd "$SMLINUX"
 		if [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 			if ([ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]) && [ ! -d RENDER96-HD-TEXTURE-PACK ]; then
-				echo Starting Render96 Texture Download... 
+				bluecho Starting Render96 Texture Download... 
 				git clone --single-branch git://github.com/pokeheadroom/RENDER96-HD-TEXTURE-PACK &disown
 				bgdl=r96 # background download in progress
 			elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
-				echo Updating Render96 Textures...
+				bluecho Starting Render96 Textures Update...
 				cd RENDER96-HD-TEXTURE-PACK
 				git pull --no-rebase &
 				ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			elif [ ! -d "$SMLINUX"/Cleaner-Aesthetics ]; then
-				echo Starting Cleaner Aesthetics Texture Download...
+				bluecho Starting Cleaner Aesthetics Texture Download...
 				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics &disown
 				bgdl=ca # background download in progress
 			else
-				echo Updating Cleaner Aesthetic Textures...
+				bluecho Updating Cleaner Aesthetic Textures...
 				cd Cleaner-Aesthetics
 				git pull --no-rebase &
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
@@ -987,7 +996,7 @@ else
 		fi
 		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ] && [ `uname -m` = "x86_64" ]; then
 			if [ ! -f "$SMLINUX"/hq_sounds_v5.1.zip ]; then
-				echo Getting High Quality Sounds...
+				bluecho Getting High Quality Sounds...
 				wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip -P "$SMLINUX" &
 			fi
 			ln -s "$SMLINUX"/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip	
@@ -1006,21 +1015,21 @@ fi
 dofps(){
 cd "$BASEPATH"/"$PRESET"
 if [ "$FPS60" = 1 ] && [ ! -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
-	echo Applying 60fps patch...
+	bluecho Applying 60fps patch...
 	if [ "$GIT" = "render96/render96ex" ]; then
 		pinkecho Force applying 60fps patch with --reject...
 		git apply enhancements/60fps*.patch --reject
 	else
-		echo Applying 60fps patch...
+		bluecho Applying 60fps patch...
 		git apply enhancements/60fps*.patch 
 	fi
 	touch enhancements/60fps
 	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-		echo Enabling Vsync...
+		bluecho Enabling Vsync...
 		sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
 	fi
 elif [ "$FPS60" = 0 ] && [ -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
-	echo Removing 60fps patch...
+	bluecho Removing 60fps patch...
 	if [ "$GIT" = "render96/render96ex" ]; then
 		git apply -R enhancements/60fps*.patch --reject
 	else
@@ -1048,13 +1057,13 @@ if  [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] ||
 	return
 fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
-	echo Removing 3D coins...
+	bluecho Removing 3D coins...
 	cd "$BASEPATH"/"$PRESET"
 	git apply -R enhancements/3d_coin*.patch
 	rm enhancements/3d_coin*.patch
 fi
 if [ "$PRESET" = "sm64nx" ]; then
-	echo Getting Render96 Texture Pak...
+	bluecho Starting Render96 Texture Pak Download...
 	mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures"
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures"
 	wget -https://sm64pc.info/downloads/texture_pack/render96_hd.pak &disown
@@ -1069,7 +1078,7 @@ if [ "$PRESET" = "sm64nx" ]; then
 		mv "~SGI Models" "SGI Models"
 	fi
 	if [ ! -d "SGI Models" ]; then
-		echo Getting Render96 SGI Models...
+		bluecho Getting Render96 SGI Models...
 		mkdir "SGI Models"
 		cd "SGI Models"
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak &
@@ -1112,7 +1121,7 @@ fi
 if [ ! "$PRESET" = "sm64nx" ]; then
 	removecheater
 	cd "$BASEPATH"/"$PRESET"
-	echo Applying Render96 SGI Models...
+	bluecho Applying Render96 SGI Models...
 	7z x -aoa enhancements/"$SGIFILE" >/dev/null
 fi
 if [ ! "$ANDROID" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/render96_android.patch ]; then
@@ -1124,7 +1133,7 @@ fi
 scriptUpdate(){
 if [ ! -f ~/.smlinuxUpdate ]; then 
 	if [ ! -f "$PATHDIR"/smlinux ] || [ ! -d "$SMLINUX"/.git ] ; then
-		echo Installing smlinux into "$PATHDIR"... 	
+		bluecho Installing smlinux into "$PATHDIR"... 	
 		if [ "$USER" = "root" ]; then
 			redecho WARNING: smlinux being installed as root.
 			pinkecho smlinux updates may not work correctly if you run again as a regular user.
@@ -1151,7 +1160,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			pinkecho Warning: Could not write to first path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
-			echo Adding $HOME/bin to bash path...
+			bluecho Adding $HOME/bin to bash path...
 			echo 'export PATH=$HOME/bin:$PATH' >>~/.bashrc
 			export PATH=$HOME/bin:$PATH
 			PATHDIR=$HOME/bin
@@ -1219,16 +1228,16 @@ cd "$BASEPATH"/"$PRESET"
 if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 	return
 elif [ "$DYNOS" = 0 ] && [ -f enhancements/DynOS.0.*.patch ]; then
-	echo Removing Dynamic Option System...
+	bluecho Removing Dynamic Option System...
 	git apply -R enhancements/DynOS*.patch
 	rm enhancements/DynOS*
 elif [ "$DYNOS" = 1 ] && !( [ -f enhancements/DynOS.0.5.* ] || [ -f enhancements/dynos.patch ]); then
 	if [ -f enhancements/DynOS.0.*.patch ]; then
-		echo Updating Dynamic Option System...
+		bluecho Updating Dynamic Option System...
 		git apply -R enhancements/DynOS*.patch
 		rm enhancements/DynOS*
 	else
-    	echo Applying Dynamic Option System...
+    	bluecho Applying Dynamic Option System...
     fi
     if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
 		rm "$SAVEDIR"/DynOSconfig.cfg
@@ -1301,7 +1310,7 @@ elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [
 	fi
 fi
 if [ -f "$CHEATERFILE" ]; then
-	echo Applying "$CHEATERFILE"...
+	bluecho Applying "$CHEATERFILE"...
 	cd "$BASEPATH"/"$PRESET"
 	git apply enhancements/"$CHEATERFILE" --reject 
 fi
@@ -1310,19 +1319,19 @@ fi
 removecheater(){
 cd "$BASEPATH"/"$PRESET"
 if [ -f enhancements/CHEATER*.patch ]; then
-	echo Removing CHEATER...
+	bluecho Removing CHEATER...
 	git apply -R enhancements/CHEATER*.patch
 	rm enhancements/CHEATER*
 elif [ -f enhancements/cheater*.patch ]; then
-	echo Removing CHEATER...
+	bluecho Removing CHEATER...
 	git apply -R enhancements/cheater*.patch
 	rm enhancements/cheater*
 elif [ -f enhancements/v9_*.patch ]; then
-	echo Removing CHEATER v9...
+	bluecho Removing CHEATER v9...
 	git apply -R enhancements/v9_*.patch
 	rm enhancements/v9_*.patch
 elif [ -f enhancements/fix.CHEATER*.patch ]; then
-	echo Removing CHEATER...
+	bluecho Removing CHEATER...
 	git apply -R enhancements/fix.CHEATER*.patch
 	rm enhancements/fix.CHEATER*
 fi
@@ -1345,7 +1354,7 @@ if [ ! -d "$SHARE"/applications ]; then
 	mkdir "$SHARE"/applications
 fi
 if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
-	echo Preparing Icon...
+	bluecho Preparing Icon...
 	if [ `uname -o` = "Msys" ]; then
 		unzip -q "$SMLINUX"/icons "$PRESET".ico -d "$SHARE"/icons
 	else
@@ -1363,7 +1372,7 @@ fi
 if [ `uname -o` = "Msys" ]; then
 	SHORTY="$USERPROFILE"'/Desktop/Super Mario 64 ('"$PRESET"')'.url
 	if [ ! -f "$SHORTY" ]; then
-		echo Creating Windows desktop shorcut... 
+		bluecho Creating Windows desktop shorcut... 
 		echo [InternetShortcut]>"$SHORTY"
 		# echo URL="file:///"`cygpath -w "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e` --cheats --savepath `cygpath -w "$SAVEDIR"`>>"$SHORTY"
 		echo URL="file:///"`cygpath -w "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e` >>"$SHORTY"
@@ -1373,7 +1382,7 @@ if [ `uname -o` = "Msys" ]; then
 		echo Windows Desktop shortcut already exists.
 	fi
 elif [ ! -f "$SHARE"/applications/"$PRESET".desktop ] && [ "$OSX_BUILD" = 0 ]; then
-	echo Creating desktop shorcut and menu entry...
+	bluecho Creating desktop shorcut and menu entry...
 	echo '[Desktop Entry]
 Encoding=UTF-8
 Type=Application
@@ -1402,7 +1411,7 @@ echo Name=Super Mario 64 \("$PRESET"\) >>"$SHARE"/applications/"$PRESET".desktop
 		mv -f "$SHARE"/applications/"$PRESET".desktop /usr/share/applications
 	fi
 elif [ "$OSX_BUILD" = 1 ]; then
-	echo Creating macOS App Bundle and Desktop Shortcut...
+	bluecho Creating macOS App Bundle and Desktop Shortcut...
  	if [ -f /Applications/'Super Mario 64 ('"$PRESET"')'.app ]; then
  		rm -rf /Applications/'Super Mario 64 ('"$PRESET"')'.app 
 	fi
@@ -1430,7 +1439,7 @@ rungame(){
 if [ "$bgdl" = "r96" ] && [ -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx/textures ]; then
 	ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 elif [ "$bgdl" = "r96" ] && [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx/textures ]; then
-	echo Waiting for Render 96 texture pack to finish downloading...
+	bluecho Waiting for Render 96 texture pack to finish downloading...
 	while [ ! -d "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx/textures ] # dont put a semicolon here
 do
 	sleep 1
@@ -1439,7 +1448,7 @@ done
 elif [ "$bgdl" = "ca" ] && [ -d "$SMLINUX"/Cleaner-Aesthetics/gfx/textures ]; then
 	ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 elif [ "$bgdl" = "ca" ] && [ ! -d "$SMLINUX"/Cleaner-Aesthetics/gfx/textures ]; then
-	echo Waiting for Cleaner Aesthetics texture pack to finish downloading...
+	bluecho Waiting for Cleaner Aesthetics texture pack to finish downloading...
 	while [ ! -d "$SMLINUX"/Cleaner-Aesthetics/gfx/textures ] # dont put a semicolon here
 do
 	sleep 1
@@ -1449,7 +1458,7 @@ fi
 if [ "$TARGET_WEB"  = 1 ]; then 
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	ln -s sm64.us.f3dex2e.html index.html
-	echo Starting python webserver and launching web browser...
+	bluecho Starting python webserver and launching web browser...
 	python3 -m http.server 8100 &
 	if [ -f /usr/bin/firefox ]; then
 		firefox --new-window http://localhost:8100&disown
@@ -1458,7 +1467,7 @@ if [ "$TARGET_WEB"  = 1 ]; then
 	fi
 elif [ ! "$ANDROID" = 0 ] ; then
 	if [ "$GOTPHONE" = 1 ]; then
-		echo Testing application launch...
+		bluecho Testing application launch...
 		adb shell am start -n com.vdavid003.sm64port/.sm64portActivity
 		if [ "$EXTERNAL_DATA" = 1 ]; then
 			echo 
@@ -1475,28 +1484,28 @@ elif [ ! "$ANDROID" = 0 ] ; then
 	fi
 	"$OPEN" "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
 elif [ "$GIT"  = "djoslin0/sm64ex-coop" ] && [ ! `nproc` = 1 ]; then
-	echo Testing Double Application Launch...
+	bluecho Testing Double Application Launch...
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --server 7777 --cheats --savepath "$SAVEDIR" --skip-intro &
 	sleep 10
 	./sm64.us.f3dex2e --client 127.0.0.1 7777 --cheats --savepath ! --skip-intro &
 elif [ "$TARGET" = "dos" ] &&  command -v dosbox-x &> /dev/null; then
-	echo Testing launch with dosbox-x...
+	bluecho Testing launch with dosbox-x...
 	dosbox-x "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
 elif [ "$TARGET" = "dos" ] &&  command -v dosbox &> /dev/null; then
-	echo Testing launch with dosbox...
+	bluecho Testing launch with dosbox...
 	dosbox "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe &disown
 elif [ "$TARGET" = "dos" ]; then
 	echo Cannot test DOS Version fom Linux!  Try Dosbox or FreeDOS in VirtualBox.
 	"$OPEN" "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 elif [ "$OSX_BUILD" = 1 ]; then
-	echo Testing application launch...
+	bluecho Testing App Bundle Shortcut launch...
 	/Applications/'Super Mario 64 ('"$PRESET"')'.app/Contents/MacOS/'Super Mario 64 ('"$PRESET"')'.app &
 elif command -v gtk-launch &> /dev/null; then
-	echo Testing application launch...
+	bluecho Testing application launch...
 	gtk-launch "$PRESET" &disown
 elif [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.us.f3dex2e ]; then
-	echo Testing execution...
+	bluecho Testing execution...
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --cheats --savepath "$SAVEDIR" --skip-intro &disown
 fi
@@ -1614,7 +1623,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		echo
 		exit
 	fi
-	echo Loading "$SMLINUX"/smlinuxcfg.txt...
+	bluecho Loading "$SMLINUX"/smlinuxcfg.txt...
 	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	#Play a sound clip for no reason - thank you for playing my game.
 	if [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ]; then
@@ -1761,9 +1770,9 @@ else   # The real start, the rest was script preperation and setup.
 	greenecho [1] Preparing for "$COMMAND"...
 	if [ ! -d "$SMLINUX"/.git ] || [ "$DEPENDS" = 1 ] || [ "$COMMAND" = "depends" ]; then
 		if [ "$OSX_BUILD" = 1 ]; then
-			echo "Installing dependencies for macOS..."
+			bluecho "Installing dependencies for macOS..."
 			if ! command -v brew &> /dev/null; then
-    			echo Installing Homebrew package manager...
+    			bluecho Installing Homebrew package manager...
 				bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 			fi
 			if ! command -v brew &> /dev/null; then
@@ -1785,15 +1794,15 @@ else   # The real start, the rest was script preperation and setup.
 				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\n" 12 55 2>&1
 			fi
 		elif command -v apt &> /dev/null && [ "$USER" = "root" ]; then
-			echo "Updating package list and installing dependencies..."
+			bluecho "Updating package list and installing dependencies..."
 			apt update
 			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
-			echo "Updating package list and installing dependencies..."
+			bluecho "Updating package list and installing dependencies..."
 			sudo apt update
 			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 		else
-			echo "Installing dependencies specified in smlinux configuration file..."
+			bluecho "Installing dependencies specified in smlinux configuration file..."
 			$Linux
 			if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then #for msys
 				echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
@@ -1817,23 +1826,23 @@ else   # The real start, the rest was script preperation and setup.
 		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	fi
 	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
-		echo "Installing required build tools for sm64nx..."
+		bluecho "Installing required build tools for sm64nx..."
 		pip3 install pillow zstandard tqdm xxhash
 		gcccheck
 	elif [ ! "$ANDROID" = 0 ]; then
-		echo "Loading Android SDK..."
+		bluecho "Loading Android SDK..."
 		androidsdk
 	elif [ "$TARGET_WEB" = 1 ]; then
-		echo "Loading Enscriptem for Web Target..."
+		bluecho "Loading Enscriptem for Web Target..."
 		loademsdk
 	elif [ "$TARGET" = "dos" ]; then
-		echo "Loading djgpp for DOS Target..."
+		bluecho "Loading djgpp for DOS Target..."
 		dodos
 	elif [ "$WINDOW_API" = "SDL1" ] && command -v sudo &> /dev/null && command -v apt &> /dev/null && ! command -v sdl-config &> /dev/null; then
-		echo Installing SDL1 Development Libraries...
+		bluecho Installing SDL1 Development Libraries...
 		sudo apt install libsdl1.2-dev 
 	elif [ "$WINDOW_API" = "SDL1" ] && [ "$USER" = "root" ] && command -v apt &> /dev/null && ! command -v sdl-config &> /dev/null; then
-		echo Installing SDL1 Development Libraries...
+		bluecho Installing SDL1 Development Libraries...
 		apt install libsdl1.2-dev 
 	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "This is not first build, skipping dependencies."
@@ -1968,7 +1977,7 @@ elif [ "$COMMAND" = "update" ]; then
 	fi
 	if [ "$?" = "1" ]; then
 		cd "$BASEPATH"/"$PRESET"
-		echo Source update attempt failed, removing patches...
+		bluecho Source update attempt failed, removing patches...
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 			git apply -R enhancements/3d_coin*.patch
 		fi
@@ -1989,7 +1998,7 @@ elif [ "$COMMAND" = "update" ]; then
 		else
 			echo Update Succesful.
 		fi
-		echo Reapplying previously removed patches...
+		bluecho Reapplying previously removed patches...
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 			echo FPS60...
 			git apply enhancements/60fps*.patch
@@ -2022,7 +2031,7 @@ elif [ "$COMMAND" = "update" ]; then
 	if [ "$InstallHD" = 1 ]; then
 		dohd
 	elif [ "$InstallR96" = 1 ]; then
-		printf "SGI Selected, Processing...\n"
+		pinkecho Warning: Render96 models selected without InstallHD.
 		dosgi
 	else
 		pinkecho Warning: HD add-ons are disabled in smlinux configuration.
@@ -2032,7 +2041,7 @@ elif [ "$COMMAND" = "update" ]; then
 		echo Updating Android basepack...
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 		zip -q0ur hdbase gfx
-		rm -rf gfx
+		# rm -rf gfx
 	fi
 	dofps
 	docheats
@@ -2045,7 +2054,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 		redecho ERROR: "$PRESET" Build Failure - output file not found.
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
-			echo "Restoring previous build..."
+			bluecho "Restoring previous build..."
 			if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then 
 				if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed ]; then
 					rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed
