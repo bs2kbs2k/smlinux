@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1117-1642
+TIMESTAMP=2020-1117-1837
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1590,7 +1590,7 @@ if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; 
 	# update paths from old versions of smlinux that shared sm64pc folder for configfile
 	pathupdate
 fi
-if command -v pip3 &> /dev/null; then # new dependencies for python config GUI
+if command -v pip3 &> /dev/null; then # check new dependencies for python config GUI
 	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
 		echo Installing libraries for python config editor...
 		pip3 install --upgrade pip
@@ -1630,7 +1630,11 @@ else
 	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 fi
 SAVEDIR="$SHARE"/"$PRESET"
-echo smlinux:"$COMMAND" "$GIT"-"$BRANCH" "$PRESET"
+if [ "$COMMAND" = "help" ] || [ "$COMMAND" = "reset" ] || [ "$COMMAND" = "config" ] || [ "$COMMAND" = "purge" ]; then
+	echo smlinux:"$COMMAND" "$2" "$3" "$4" "$5" "$6"
+else
+	echo smlinux:"$COMMAND" "$GIT"-"$BRANCH" "$PRESET" "$2" "$3" "$4" "$5" "$6"
+fi
 if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin ] && [ ! -f "$SHARE"/sm64nx/conf.bin ]; then
 	mv "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin "$SHARE"/sm64nx/
 	ln -s "$SAVEDIR"/conf.bin "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/conf.bin 
