@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1117-1309
+TIMESTAMP=2020-1117-1642
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1143,13 +1143,13 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			echo smlinux exiting incomplete.
 			exit
 		fi
-		touch ~/.smlinuxUpdate
+		touch $HOME/.smlinuxUpdate
 		mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 		if [ ! -f "$PATHDIR"/smlinux ]; then
 			pinkecho Warning: Could not write to first path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
-			echo Adding $HOME/bin to path...
+			echo Adding $HOME/bin to bash path...
 			echo 'export PATH=$HOME/bin:$PATH' >>~/.bashrc
 			export PATH=$HOME/bin:$PATH
 			PATHDIR=$HOME/bin
@@ -1160,7 +1160,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				exit
 			fi
 		else
-			echo smlinux succefully added to path.
+			greenecho smlinux succefully added to path - enter smlinux to run again
 		fi
 		chmod +x "$PATHDIR"/smlinux
 		cd "$LAUNCH_DIR"
@@ -1171,8 +1171,8 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		if [ "$(git diff HEAD origin/HEAD -- smlinux)" != "" ]; then
 			git merge
 			if [ ! -f "$SMLINUX"/smlinux ]; then
-				redecho "ERROR: Script Update Unsuccesful."
-				echo "Try #help-desk if script updates continue to fail."
+				pinkecho "Warning: smlinux repository updated but new script not found"
+				echo This could be normal if only the readme, icons, or config editor updated.
 			else
 				echo 'if [ `uname` = "Darwin" ]; then	
 					PATHDIR=/usr/local/bin
@@ -1190,17 +1190,12 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 					PATHDIR="$HOME"/bin
 					mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 					if [ ! -f "$PATHDIR"/smlinux ]; then
-						echo ERROR - Could not add to path.  Run without AutoUpdate enabled.
+						echo ERROR - Could not write "$PATHDIR"/smlinux 
+						echo Run again with AutoUpdate disabled.
 						exit
 					fi
 				fi
 				chmod +x "$PATHDIR"/smlinux
-				if [ -f "$HOME"/Downloads/smlinux ]; then mv -f "$HOME"/Downloads/smlinux "$HOME"/Downloads/smlinux.old.backup
-				fi
-				if [ -f "$HOME"/Downloads/smlinux.sh ]; then mv -f "$HOME"/Downloads/smlinux.sh "$HOME"/Downloads/smlinux.old.backup
-				fi
-				if [ -f "$HOME"/Downloads/smlinux.txt ]; then mv -f "$HOME"/Downloads/smlinux.txt "$HOME"/Downloads/smlinux.old.backup
-				fi	
 				exec smlinux "$@"' > ~/.smlinuxUpdate
 				chmod +x ~/.smlinuxUpdate
 				cd "$LAUNCH_DIR"
@@ -1225,7 +1220,7 @@ elif [ "$DYNOS" = 0 ] && [ -f enhancements/DynOS.0.*.patch ]; then
 	echo Removing Dynamic Option System...
 	git apply -R enhancements/DynOS*.patch
 	rm enhancements/DynOS*
-elif [ "$DYNOS" = 1 ] && [ ! -f enhancements/DynOS.0.5.* ]; then
+elif [ "$DYNOS" = 1 ] && !( [ -f enhancements/DynOS.0.5.* ] || [ -f enhancements/dynos.patch ]); then
 	if [ -f enhancements/DynOS.0.*.patch ]; then
 		echo Updating Dynamic Option System...
 		git apply -R enhancements/DynOS*.patch
@@ -1285,7 +1280,6 @@ elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ]; then
 		cd enhancements
 		rm DynOS*
 	fi
-	touch DynOS.0.5.cheater
 	if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
 		rm "$SAVEDIR"/DynOSconfig.cfg
 	fi
@@ -2130,18 +2124,19 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			greenecho [3] Resetting "$PRESET" and updating source from repository...
 			mkdir "$BASEPATH"/"$PRESET"
 			cd "$BASEPATH"/"$PRESET"
-			mv "$BASEPATH"/"$PRESET".old/.git .
+			cp -r "$BASEPATH"/"$PRESET".old/.git .
 			git checkout "$BRANCH" -- .
 			git reset --quiet --hard 
 			git pull --no-rebase			
 		fi
-		if [ ! -f Makefile ]; then
+		if [ ! -f Makefile ] || [ ! -d .git ]; then
 			pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old 
 			pinkecho However smlinux was unable to use it to restore clean source.
 			cd "$BASEPATH"
 			rm -rf "$PRESET"
 		else
-			pinkecho Warning: "$PRESET" directory already existed so was renamed "$PRESET".old
+			pinkecho Warning: Existing "$PRESET" directory saved as "$PRESET".old
+			echo It is safe to delete the old folder if you do not want it.
 		fi
 	fi
 fi
