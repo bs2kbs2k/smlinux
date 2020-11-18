@@ -32,6 +32,8 @@ You must provide your own legally backed up Super Mario 64 ROM file.
 [<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
 
 ## **How do I use smlinux again?**
+	smlinux
+	
 The first time smlinux installs itself to either the first directory in your path or ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to the skip menu.  
 
 [<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
