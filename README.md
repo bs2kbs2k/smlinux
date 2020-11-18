@@ -2,6 +2,7 @@
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.png>
 
+## **What does smlinux do?**  
 #
 1. Installs Required Packages (build tools & dependencies)
 2. Installs latest version of itself to user path 
