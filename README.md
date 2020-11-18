@@ -7,7 +7,7 @@
 1. Installs Required Packages (build tools & dependencies)
 2. Installs latest version of itself to user path 
 3. Clones (downloads) sm64 source repository from Github
-4. Extract Assets from ROM and prepares for use
+4. Extract assets from ROM and prepares for use
 5. Optionally applies community sourced upscale modifications 
 6. Makes (compiles and links) into binary
 7. Creates Menu Entry & Desktop Shortcut
@@ -31,7 +31,8 @@ You must provide your own legally backed up Super Mario 64 ROM file.
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 [<strong>Click here for Frequenty Asked Questions</strong>](#frequently-asked-questions) 
 
-smlinux will be installed in the first directory in your path or ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to skip menu.  
+## **How do I use smlinux again?**
+The first time smlinux installs itself to either the first directory in your path or ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to the skip menu.  
 
 [<strong>Click here for Linux distributions that are not debian based.</strong>](#what-about-distros-other-than-ubuntu)  
 
@@ -47,7 +48,9 @@ For Android & DOS builds use WSL.  For native builds under Microsoft Windows, fi
 sm64nx and Discord Rich Presence are not suppored.
 
 # Frequently Asked Questions
+* [<strong>What is smlinux for?</strong>](#what-does-smlinux-do)
 * [<strong>How to download and install?</strong>](#download--installation-instructions)      
+* [<strong>Where is the smlinux script? How do I run it again?</strong>](#how-do-i-use-smlinux-again)
 * [<strong>What preset/repo/branch should I use?</strong>](#what-presetrepositorybranch-should-i-use)
 * [<strong>What does the InstallHD option do?</strong>](#what-does-the-install-option-do)
 * [<strong>What does the InstallR96 option do?</strong>](#what-does-the-installr96-option-do)
