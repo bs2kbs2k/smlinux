@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1118-1813
+TIMESTAMP=2020-1118-1827
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -2106,13 +2106,13 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 	elif [ "$ANDROID" = 0 ] && [ "$TARGET" = "pc" ] ; then
 		greenecho [7] Verifying Menu Entry....
 		makedesktop
-		greenecho [8] smlinux "$COMMAND" complete. 
+		bluecho smlinux "$COMMAND" complete. 
 	elif [ ! "$ANDROID" = 0 ]; then
 		mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
-		greenecho [7] smlinux "$COMMAND" complete.   
+		bluecho smlinux "$COMMAND" complete.   
 	elif [ "$TARGET" = "dos" ]; then
 		mv "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e.exe "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.exe
-		greenecho [7] smlinux "$COMMAND" complete.  
+		bluecho smlinux "$COMMAND" complete.  
 	fi
 	rungame
 	if [ "$TARGET" = "dos" ] && [ ! -f /usr/bin/dosbox ]; then
@@ -2330,7 +2330,7 @@ if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
 else
 	greenecho [7] Skipping menu entry for non PC version.
 fi
-greenecho [8] Build Succesful! 
+bluecho Build Succesful! 
 rungame
 if [ -f "$HOME"/.smlinuxNopath ]; then
 	rm "$HOME"/.smlinuxNopath
@@ -2339,9 +2339,13 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 	echo You did not have a home folder in your path so "$HOME"/bin was created.
 	echo Restart terminal before running smlinux again.
 	echo
+	greenecho smlinux is complete 
 	for i in {1..30}
 do
-	redecho Please close this terminal.
+	tput setab 0  # black background
+	tput setaf 1  # red text
+	tput bold
+	printf "Please close this terminal.  "
 	sleep 30
 done
 	kill -9 $PPID
