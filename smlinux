@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1118-1831
+TIMESTAMP=2020-1118-1836
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1175,7 +1175,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				exit
 			fi
 		else
-			greenecho smlinux succefully added to path - enter smlinux to run again
+			bluecho smlinux succesfully added to path - enter smlinux to run anytime
 		fi
 		chmod +x "$PATHDIR"/smlinux
 		cd "$LAUNCH_DIR"
