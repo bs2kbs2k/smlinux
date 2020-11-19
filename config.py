@@ -133,7 +133,7 @@ class ConfigWindow(QMainWindow):
 			"ENABLE_OPENGL_LEGACY": ConfigSetting("ENABLE_OPENGL_LEGACY (DOS)", "check", tooltip = "see dos github"),
 			"TOUCH_CONTROLS": ConfigSetting("TOUCH_CONTROLS (Android)", "check", tooltip = "Enable touschsceen Overlay (Android only)"),
 			"ARMONLY": ConfigSetting("ARM Only (Android)", "check", tooltip = "Prevent x86 builds (Android only)"),
-			"USERDEF": ConfigSetting("User Defined Name", "line", tooltip = "Used for foldername if PRESET=UserDefined"),
+			#"USERDEF": ConfigSetting("User Defined Name", "line", tooltip = "Used for foldername if PRESET=UserDefined"),
 			"GIT": ConfigSetting("User Defined Git", "line", tooltip = "GIT and BRANCH are ignored if PRESET is known"),
 			"BRANCH": ConfigSetting("User Defined Branch", "line", tooltip = "GIT and BRANCH are ignored if PRESET is known"),
 			"Linux": ConfigSetting("Linux", "line", tooltip = "Must be set to command appropriate to your distribution. See FAQ."),
