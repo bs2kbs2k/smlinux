@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1118-1836
+TIMESTAMP=2020-1118-1935
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1645,9 +1645,9 @@ else
 	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 fi
 SAVEDIR="$SHARE"/"$PRESET"
-if [ "$COMMAND" = "help" ] || [ "$COMMAND" = "reset" ] || [ "$COMMAND" = "config" ] || [ "$COMMAND" = "purge" ]; then
+if  [ "$COMMAND" = "reset" ] || [ "$COMMAND" = "config" ] || [ "$COMMAND" = "purge" ] || [ "$COMMAND" = "upgrade" ]; then
 	echo smlinux:"$COMMAND" "$2" "$3" "$4" "$5" "$6"
-else
+elif [ ! "$COMMAND" = "help" ]; then
 	echo smlinux:"$COMMAND" "$GIT"-"$BRANCH" "$PRESET" "$2" "$3" "$4" "$5" "$6"
 fi
 if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin ] && [ ! -f "$SHARE"/sm64nx/conf.bin ]; then
