@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1118-1827
+TIMESTAMP=2020-1118-1831
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1716,6 +1716,7 @@ done
 	if [ -d "$BASEPATH"/emsdk ]; then
 		rm -rf "$BASEPATH"/emsdk
 	fi
+	rm -rf "$SMLINUX"
 	echo	
 	echo Note this did not remove any packages installed as build tools or dependencies.
 	echo Remove those with your package manager.
