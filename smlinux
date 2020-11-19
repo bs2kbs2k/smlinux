@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1118-1935
+TIMESTAMP=2020-1118-2019
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1605,7 +1605,9 @@ if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; 
 	# update paths from old versions of smlinux that shared sm64pc folder for configfile
 	pathupdate
 fi
-if command -v pip3 &> /dev/null; then # check new dependencies for python config GUI
+if [ `uname -o` = "Msys" ]; then
+	pacman -S mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy --noconfirm --needed
+elif command -v pip3 &> /dev/null; then # check new dependencies for python config GUI
 	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
 		echo Installing libraries for python config editor...
 		pip3 install --upgrade pip
