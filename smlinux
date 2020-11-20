@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1425
+TIMESTAMP=2020-1120-1558
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -777,7 +777,7 @@ if [ -z "$MAXJOBS" ]; then
 		MAXJOBS=`nproc`
 	fi
 fi
-SDL_API=$WINDOW_API
+SDL_API="$WINDOW_API"
 if [ "$RENDER_API" = "D3D11" ]; then
 	WINDOW_API=DXGI
 	if [ ! `uname -o` = "Msys" ]; then
