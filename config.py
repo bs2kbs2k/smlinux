@@ -106,12 +106,12 @@ class ConfigWindow(QMainWindow):
 			"PRESET": ConfigSetting("Preset", "dropdown", dropdownOptions = [ "UserDefined", "sm64pc", "sm64-port", "sm64-portweb", "sm64dos", "sm64nx", "sm64ex", "sm64exweb", "sm64ex-coop", "androidex", "cheaterex", "render96ex","r96proto","r96alpha","sm64-port-android-base"],tooltip="Unless Userdefined, overrides settings including GIT and BRANCH (see FAQ)."),
 			"VERSION": ConfigSetting("ROM Version", "dropdown", tooltip = "Must correspond to ROM region", dropdownOptions = ["us","jp","eu"]),
 			"RENDER_API": ConfigSetting("RENDER_API", "dropdown", tooltip = "Linux and macOS support GL (OpenGL 2.1+) or GL_LEGACY (OpenGL 1.1+).  D3D11 (DirectX 11) is also offered for Windows.(sm64ex-based repos only)", dropdownOptions = ["GL","GL_LEGACY","D3D11"]),
-			"WINDOW_API": ConfigSetting("WINDOW_API", "dropdown", tooltip = "Supports SDL2 or SDL 1.2 (sm64ex-based repos only)", dropdownOptions = ["SDL2","SDL1"]),
+			"WINDOW_API": ConfigSetting("SDL Version", "dropdown", tooltip = "CONTROLLER_API AUDIO_API Support SDL2 or SDL 1.2 (sm64ex-based repos only)", dropdownOptions = ["SDL2","SDL1"]),
 			"MAXJOBS": ConfigSetting("Maximum Jobs", "dropdown", dropdownOptions = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "12", "15", "" ], tooltip = "Maximum cpu threads used during compile.  Undefined will try to use all."),
 			"BASEPATH": ConfigSetting("Base Folder", "line", tooltip = "Must be valid existing path. Folders for each repo cloned will be placed there."),
 			"InstallHD": ConfigSetting("Install HD Add-ons", "check", tooltip = "Install Upscale Add-ons described in FAQ"),
 			"InstallR96": ConfigSetting("Install R96 Models", "check", tooltip = "Install Render 96 SGI Model Pack (sm64ex-based repos only)"),
-			"UpdateHD": ConfigSetting("Make a Sandwhich", "check", tooltip = "No longer using this option but unsure how to remove from gui editor without error"),
+			"UpdateHD": ConfigSetting("Make a Sandwhich", "check", tooltip = "Contains Dairy Products, Egg based prdoducts, Whole Grain products (that include gluten and wheat germ), Meat, Fruit and Vegetables.\nPrepared in a kitchen where food containing nuts was previously prepared."),
 			"FPS60": ConfigSetting("60fps patch", "check", tooltip="Apply 60fps patch if included in repo"),
 			"DYNOS": ConfigSetting("DynOS patch", "check", tooltip = "Apply Dynamic Option System by PeachyPeach (sm64ex-based repos only)"),
 			"CHEATER": ConfigSetting("CHEATER patch", "check", tooltip = "Apply CHEATER by s4ys (sm64ex-based repos only)"),
@@ -125,7 +125,7 @@ class ConfigWindow(QMainWindow):
 			"DEBUG": ConfigSetting("DEBUG", "check", tooltip = "Advanced Build Option"),
 			"TARGET_WEB": ConfigSetting("TARGET_WEB", "check", tooltip = "Build Web Version with emsdk"),
 			"TARGET_RPI": ConfigSetting("TARGET_RPI", "check", tooltip = "Build Raspberry Pi version"),
-			"LEGACY_RES": ConfigSetting("LEGACY_RES (R96)", "check", tooltip = "Advanced Build Option (render96ex only)"),
+			"LEGACY_RES": ConfigSetting("LEGACY_RES (R96ex)", "check", tooltip = "Advanced Build Option (render96ex only)"),
 			"DISCORD_SDK": ConfigSetting("DISCORD_SDK (Co-op)", "check", tooltip = "Enable Discord Integration (sm64ex-coop only)"),
 			"IMMEDIATELOAD": ConfigSetting("IMMEDIATELOAD (Co-op)", "check", tooltip = "Advaned Build Option (sm64ex-coop only)"),
 
@@ -133,10 +133,9 @@ class ConfigWindow(QMainWindow):
 			"ENABLE_OPENGL_LEGACY": ConfigSetting("ENABLE_OPENGL_LEGACY (DOS)", "check", tooltip = "see dos github"),
 			"TOUCH_CONTROLS": ConfigSetting("TOUCH_CONTROLS (Android)", "check", tooltip = "Enable touschsceen Overlay (Android only)"),
 			"ARMONLY": ConfigSetting("ARM Only (Android)", "check", tooltip = "Prevent x86 builds (Android only)"),
-			#"USERDEF": ConfigSetting("User Defined Name", "line", tooltip = "Used for foldername if PRESET=UserDefined"),
 			"GIT": ConfigSetting("User Defined Git", "line", tooltip = "GIT and BRANCH are ignored if PRESET is known"),
 			"BRANCH": ConfigSetting("User Defined Branch", "line", tooltip = "GIT and BRANCH are ignored if PRESET is known"),
-			"Linux": ConfigSetting("Linux", "line", tooltip = "Must be set to command appropriate to your distribution. See FAQ."),
+			"Linux": ConfigSetting("User Defined Linux", "line", tooltip = "Must be set to command appropriate to your distribution. See FAQ."),
 			"CONFIG": ConfigSetting("Prompt to configure before each build", "check", tooltip = "Prompt to edit configuration file before building"),
 			"BuildMusic": ConfigSetting("Play background music during build", "check", tooltip = "Play music in the background while compiling"),
 			"AutoUpdate": ConfigSetting("Update smlinux before each build", "check", tooltip = "Update smlinux before build"),
@@ -173,7 +172,7 @@ class ConfigWindow(QMainWindow):
 		#saveAndCancelLayout.addWidget(cancelButton)
 		
 		saveButton = QPushButton()
-		saveButton.setText("Save and Exit")
+		saveButton.setText("CONTINUE (Save and Exit)")
 		saveButton.clicked.connect(self.saveAndExit)
 		saveAndCancelLayout.addWidget(saveButton)
 
