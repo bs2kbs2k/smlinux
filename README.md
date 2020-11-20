@@ -199,9 +199,9 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 ## **What about distros other than Ubuntu?**
 *Developed under Bodhi 5.1 and tested under Slax so should work automatically on Ubuntu and Debian. Arch Fedora OpenSuSE confirmed working by users.*
 
-Change your `Linux=` command string to one that works with your distribution such as those listed below, or paste the command directly into a terminal.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
+Set your `Linux=` command string to one that works with your distribution such as those listed below, or paste the command directly into a terminal.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
 
-Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk` and dos targets require `djgpp`, which smlinux only installs when those targets are specified.  If `gcc --version` does not report 8 or newer when building sm64nx, smlinux will install `gcc-9` or if unsuccesful `gcc-8`.  Users of distros without apt will need to install appropriate gcc, sdl1.2, or JDK as needed for such targets in addition to what is listed below.
+Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk`, dos targets require `djgpp`, web targets enscripten, sm64nx requires gcc version 8 or newer, and sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of distros without apt will need to install appropriate gcc, sdl1.2, or JDK as needed for such targets in addition to what is listed below.
 
 If smlinux detects `apt`the following packages are installed automatically:
 
@@ -211,7 +211,12 @@ If smlinux detects macOS the following packages are installed automatically with
 
 	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
 
-**For other Linux distibutions user should set Linux= as follows:**
+If smlinux detects msys the following packages are installed automaitcally with pacman:  
+  	
+64bit: `mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano`  
+32ibt: `mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano`
+
+**For other Linux distibutions user should use the following:** and let me know if any additional packages or distros should be added.
 	
 Arch/Manjaro
     
@@ -232,13 +237,6 @@ Void
 Alpine
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
-
-minGW64 
-	
-	pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 python3 python3-pip git make mingw-w64-x86_64-gcc unzip zip unrar p7zip nano
-minGW32
-
-	pacman -S mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 python3-pip git make mingw-w64-i686-gcc unzip zip unrar p7zip nano
 
 ## **How do I create my rom file?**
 
