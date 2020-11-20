@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1118-2051
+TIMESTAMP=2020-1119-1618
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -513,9 +513,8 @@ makeconfig(){
 if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
-echo '# PRESET supports: sm64ex sm64nx sm64ex-coop render96ex cheaterex 
-# AND: sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex 
-# AND: sm64pc sm64-port r96proto r96alpha
+echo '# PRESET supports: sm64pc sm64-port sm64nx sm64ex sm64ex-coop cheaterex 
+# AND: render96ex r96alpha sm64dos sm64exweb androidex AND MORE IN FAQ!
 PRESET=cheaterex
 InstallHD=1
 InstallR96=0
@@ -523,16 +522,15 @@ FPS60=0
 # [ options for sm64ex and its forks ] 
 DYNOS=0
 CHEATER=0
-BETTERCAMERA=1
 NODRAWINGDISTANCE=1
-TEXTURE_FIX=1
 EXTERNAL_DATA=1
+BETTERCAMERA=1
+TEXTURE_FIX=1
 DISCORDRPC=1
-# RENDER_API supports GL (2.1+) or GL_LEGACY (1.1+)
-RENDER_API=GL
-# WINDOW_API supports SDL2 or SDL1 (1.2)
-WINDOW_API=SDL2
 TEXTSAVES=0
+RENDER_API=GL
+WINDOW_API=SDL2
+# [ Additional Options Follow ]
 # [ options for sm64ex-coop only ]
 DISCORD_SDK=1
 IMMEDIATELOAD=1
@@ -542,7 +540,7 @@ LEGACY_RES=0
 TOUCH_CONTROLS=1
 ARMONLY=1
 # [ options for DOS only ]
-ENABLE_OPENGL_LEGACY=1
+ENABLE_OPENGL_LEGACY=1 
 # DOS_GL Supports dmesa (glide) or osmesa
 DOS_GL=osmesa
 ENABLE_OPENGL_LEGACY=1
@@ -565,8 +563,8 @@ TARGET_RPI=0
 GIT=sm64pc/sm64ex
 BRANCH=nightly
 # [ Linux must be set to command appropriate to your distribution. See FAQ. ]
-# Linux command is only called during first install and is not used for macOS
-Linux="pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc mingw-w64-i686-glew mingw-w64-i686-SDL2 python3 python3-pip git make mingw-w64-i686-gcc unzip zip unrar p7zip nano --noconfirm --needed"
+# Linux dependencies command. ignored or debian/macOS/msys
+Linux=
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 }
@@ -1605,9 +1603,7 @@ if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; 
 	# update paths from old versions of smlinux that shared sm64pc folder for configfile
 	pathupdate
 fi
-if [ `uname -o` = "Msys" ]; then
-	pacman -S mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy --noconfirm --needed
-elif command -v pip3 &> /dev/null; then # check new dependencies for python config GUI
+if [ ! `uname -o` = "Msys" ] && command -v pip3 &> /dev/null; then # check new dependencies for python config GUI
 	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
 		echo Installing libraries for python config editor...
 		pip3 install --upgrade pip
@@ -1808,8 +1804,16 @@ else   # The real start, the rest was script preperation and setup.
 			bluecho "Updating package list and installing dependencies..."
 			sudo apt update
 			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
+		elif [ `uname -o` = "Msys" ]; then
+			blueecho Downloading and installing needed dependencies...
+			if [ `uname -m` = "x86_64" ]; then
+				pacman -S mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano --noconfirm --needed
+			else
+				pacman -S mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano --noconfirm --needed
+			fi
 		else
-			bluecho "Installing dependencies specified in smlinux configuration file..."
+			bluecho "Installing dependencies specified in smlinux configuration file:"
+			echo "$Linux"
 			$Linux
 			if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then #for msys
 				echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
@@ -2307,7 +2311,7 @@ greenecho [6] Compiling "$PRESET"...
 domake
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	echo
-	redecho ERROR: Build Failure.  Expected binary file not found.
+	redecho ERROR: "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e was not built.
 	endnow
 elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
 	echo
