@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1119-1730
+TIMESTAMP=2020-1119-1745
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -560,10 +560,9 @@ DEBUG=0
 TARGET_WEB=0
 TARGET_RPI=0
 # [ GIT and BRANCH are ignored if PRESET is known ]
-GIT=sm64pc/sm64ex
-BRANCH=nightly
-# [ Linux must be set to command appropriate to your distribution. See FAQ. ]
-# Linux dependencies command. ignored or debian/macOS/msys
+GIT=
+BRANCH=
+# [ Linux dependencies command appropriate for your distribution. See FAQ. ]
 Linux=
 # Set AutoUpdate=0 to prevent smlinux updating itself
 AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
@@ -587,8 +586,10 @@ ANDROID=0
 InstallR96=0
 DISCORD_SDK=1
 FPS60=0
-CHEATER=1
-DYNOS=1
+CHEATER=0
+DYNOS=0
+GIT=sm64pc/sm64ex
+BRANCH=master
 if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
 	source "$SMLINUX"/smlinuxcfg.txt
 else
