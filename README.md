@@ -213,8 +213,8 @@ If smlinux detects macOS the following packages are installed automatically with
 
 If smlinux detects msys the following packages are installed automaitcally with pacman:  
   	
-	mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano
-	mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano
+	64-bit: mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano
+	32-bit: mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano
 
 **For other Linux distibutions user should use the following:** and let me know if any additional packages or distros should be added.
 	
