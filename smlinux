@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1119-1745
+TIMESTAMP=2020-1119-1834
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1051,13 +1051,13 @@ if  [ "$TARGET_WEB" = 1 ] || ([ "$EXTERNAL_DATA" = 0 ] && [ ! "$PRESET" = "sm64n
 		return
 	fi
 fi
-if  [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ]; then 
+	cd "$BASEPATH"/"$PRESET"
+if  [ -d build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f enhancements/RENDER96_V1* ] || [ -f enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ enhancements/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip ]; then 
 	echo Render96 already installed.
 	return
 fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
 	bluecho Removing 3D coins...
-	cd "$BASEPATH"/"$PRESET"
 	git apply -R enhancements/3d_coin*.patch
 	rm enhancements/3d_coin*.patch
 fi
@@ -1084,8 +1084,8 @@ if [ "$PRESET" = "sm64nx" ]; then
 	fi
 elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget -q https://cdn.discordapp.com/attachments/730551213376143431/773393231979216916/RENDER96_V2.0_Hotfix_Better_Cam_Fix.zip
-	SGIFILE=RENDER96_V2.0_Hotfix_Better_Cam_Fix.zip
+	wget -q https://sm64pc.info/downloads/conversion_pack/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
+	SGIFILE=RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
 elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
