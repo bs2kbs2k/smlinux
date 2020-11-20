@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1119-1714
+TIMESTAMP=2020-1119-1730
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1855,13 +1855,10 @@ else   # The real start, the rest was script preperation and setup.
 	elif [ "$WINDOW_API" = "SDL1" ] && [ "$USER" = "root" ] && command -v apt &> /dev/null && ! command -v sdl-config &> /dev/null; then
 		bluecho Installing SDL1 Development Libraries...
 		apt install libsdl1.2-dev 
-	elif [ ! "$COMMAND" = "depends" ] && [ "$DEPENDS" = 0 ] && [ -d "$SMLINUX"/.git ]; then
+	elif [ ! "$COMMAND" = "depends" ] && [ ! "$DEPENDS" = 1 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "This is not first build, skipping dependencies."
 	else
 		echo "Prepared."
-	fi
-	if [ "$COMMAND" = "depends" ]; then
-		theend
 	fi
 	if [ -z "$MAXJOBS" ]; then # cannot do til after depends
 		if [ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]; then 
@@ -1946,7 +1943,9 @@ else   # The real start, the rest was script preperation and setup.
 	fi
 fi
 
-if [ "$COMMAND" = "rebuild" ]; then
+if [ "$COMMAND" = "depends" ]; then
+		theend
+elif [ "$COMMAND" = "rebuild" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
 		redecho ERROR: No "$BASEPATH"/"$PRESET" folder to rebuild!
