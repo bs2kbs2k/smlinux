@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1119-1834
+TIMESTAMP=2020-1119-1848
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1052,8 +1052,8 @@ if  [ "$TARGET_WEB" = 1 ] || ([ "$EXTERNAL_DATA" = 0 ] && [ ! "$PRESET" = "sm64n
 	fi
 fi
 	cd "$BASEPATH"/"$PRESET"
-if  [ -d build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f enhancements/RENDER96_V1* ] || [ -f enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ enhancements/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip ]; then 
-	echo Render96 already installed.
+if  [ -d build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f enhancements/RENDER96_V1* ] || [ -f enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f enhancements/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip ]; then 
+	echo Render 96 Models already installed.
 	return
 fi
 if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
