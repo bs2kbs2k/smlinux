@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1849
+TIMESTAMP=2020-1120-1909
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -44,7 +44,7 @@ fi
 if [ "$PRESET" = "sm64nx" ]; then
 	sed -i.bak 's/-no-pie -lpthread -lzstd/-no-pie -lpthread -lzstd -lstdc++fs/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
-if [ ! `uname -m` = "x86_64" ] && [ "$PRESET" = "sm64ex-coop" ] && [ ! -f "$BASEPATH"/"$PRESET"/91.patch ]; then
+if [ "$BITS" = 32 ] && [ "$PRESET" = "sm64ex-coop" ] && [ ! -f "$BASEPATH"/"$PRESET"/91.patch ]; then
 	cd "$BASEPATH"/"$PRESET"
 	echo "Applying 32-bit workaround..."
 	wget -q https://github.com/djoslin0/sm64ex-coop/pull/91.patch
@@ -575,7 +575,6 @@ AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
 loadconfig(){
 BuildMusic=1
 WINDOW_API=SDL2
-OSX_BUILD=0
 TARGET_RPI=0
 TEXTSAVES=0
 TOUCH_CONTROLS=1
@@ -755,17 +754,7 @@ elif  [ "$PRESET" = "sm64dos" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:
 	CHEATER=0
 	DYNOS=0	
 fi
-if [ `uname` = "Darwin" ]; then
-	OSX_BUILD=1
-elif [ `uname -o` = "Msys" ]; then
-	MSYS=1
-	if [ `uname -m` = "x86_64" ]; then
-		BITS=64
-	else
-		BITS=32
-	fi
-fi
-if [ ! `uname -m` = "x86_64" ] || [ "$VERSION" = "jp" ] || [ "RENDER_API" = "D3D11" ]; then
+if [ "$BITS" = 32 ] || [ "$VERSION" = "jp" ] || [ "RENDER_API" = "D3D11" ]; then
 	DISCORDRPC=0
 fi
 if [ "$TARGET_WEB" = 1 ]; then 
@@ -1011,13 +1000,13 @@ else
 		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes ]; then
 			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes
 		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ] && [ `uname -m` = "x86_64" ]; then
+		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ] && [ "$BITS" = 64 ]; then
 			if [ ! -f "$SMLINUX"/hq_sounds_v5.1.zip ]; then
 				bluecho Getting High Quality Sounds...
 				wget -q https://github.com/MapAnon/sm64-pc-hq-sounds/releases/download/5.1/hq_sounds_v5.1.zip -P "$SMLINUX" &
 			fi
 			ln -s "$SMLINUX"/hq_sounds_v5.1.zip "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip	
-		elif [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! `uname -m` = "x86_64" ]; then
+		elif [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ "$BITS" = 32 ]; then
 			echo "Removing HQ SoundPack (Not Compatible with Co-Op Beta2 or 32-bit)"
 			rm "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip
 		fi
@@ -1549,19 +1538,26 @@ elif command -v xdg-open &> /dev/null; then
 		export PATH="$HOME"/bin:$PATH
 	fi
 	OPEN=xdg-open
+elif [ `uname -o` = "Msys" ]; then
+    MSYS=1
+	mapfile -t -d: <<<"$PATH"
+	PATHDIR="${MAPFILE[0]}"
+	OPEN=start
 elif command -v firefox &> /dev/null; then
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
 	OPEN=firefox
-elif [ "$MSYS" = 1 ];then
-	mapfile -t -d: <<<"$PATH"
-	PATHDIR="${MAPFILE[0]}"
-	OPEN=start
 else 
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
 	OPEN=echo
 fi
+if [ `uname -m` = "x86_64" ]; then
+	BITS=64
+else
+	BITS=32
+fi
+
 if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then
 	COMMAND=build
 elif [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "/?" ]; then
@@ -1825,7 +1821,7 @@ else   # The real start, the rest was script preperation and setup.
 			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 		elif [ "$MSYS" = 1 ]; then
 			bluecho Downloading and installing needed dependencies...
-			if [ `uname -m` = "x86_64" ]; then
+			if [ "$BITS" = 64 ]; then
 				pacman -S mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano --noconfirm --needed
 			else
 				pacman -S mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano --noconfirm --needed
