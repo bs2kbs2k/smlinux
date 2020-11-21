@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1558
+TIMESTAMP=2020-1120-1657
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -758,7 +758,7 @@ fi
 if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
 fi
-if [ ! `uname -m` = "x86_64" ] || [ "$VERSION" = "jp" ]; then
+if [ ! `uname -m` = "x86_64" ] || [ "$VERSION" = "jp" ] || [ "RENDER_API" = "D3D11" ]; then
 	DISCORDRPC=0
 fi
 if [ "$TARGET_WEB" = 1 ]; then 
