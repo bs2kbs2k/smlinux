@@ -195,26 +195,27 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 
 
 ## **What about distros other than Ubuntu?**
-*Developed under Bodhi 5.1 and tested under Slax so should work automatically on Ubuntu and Debian. Arch Fedora OpenSuSE confirmed working by users.*
+*Developed under Bodhi 5.1 and tested under Slax so should work automatically on Ubuntu and Debian.  
+Arch Fedora OpenSuSE confirmed working by users.*
 
-Set your `Linux=` command string to one that works with your distribution such as those listed below, or paste the command directly into a terminal.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
+Paste the command string recccommended below for your distribution directly into a terminal before running smlinux, or set your `Linux=` command string to one that works with your distribution such as those listed below.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
 
-Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk`, dos targets require `djgpp`, web targets enscripten, sm64nx requires gcc version 8 or newer, and sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of distros without apt will need to install appropriate gcc, sdl1.2, or JDK as needed for such targets in addition to what is listed below.
+Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk`, dos targets require `djgpp`, web targets enscripten, sm64nx requires gcc version 8 or newer, or using sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of distros without apt will need to install appropriate gcc, sdl1.2, or JDK as needed for such targets in addition to what is listed below.
 
-If smlinux detects `apt`the following packages are installed automatically:
+If smlinux detects `apt`it is used to install the following packages:
 
 	zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
 
-If smlinux detects macOS the following packages are installed automatically with brew:
+If smlinux detects macOS the following packages are installed with brew:
 
 	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
 
-If smlinux detects msys the following packages are installed automaitcally with pacman:  
+If smlinux detects msys2 the following packages are installed with pacman:  
   	
 	64-bit: mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano
 	32-bit: mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano
 
-**For other Linux distibutions user should use the following:** and let me know if any additional packages or distros should be added.
+**For other Linux distibutions use the following:** and let me know if any additional packages or distros should be added.
 	
 Arch/Manjaro
     
