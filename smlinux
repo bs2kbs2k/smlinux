@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1657
+TIMESTAMP=2020-1120-1849
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -311,7 +311,7 @@ fi
 pinkecho Please exit or close this terminal window!
 tput setaf 7 # back to white
 
-if [ `uname -o` = "Msys" ] && command -v zenity &> /dev/null; then
+if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then
 	zenity --info --text="Shits done yo." &disown
 fi
 echo
@@ -757,6 +757,13 @@ elif  [ "$PRESET" = "sm64dos" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:
 fi
 if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
+elif [ `uname -o` = "Msys" ]; then
+	MSYS=1
+	if [ `uname -m` = "x86_64" ]; then
+		BITS=64
+	else
+		BITS=32
+	fi
 fi
 if [ ! `uname -m` = "x86_64" ] || [ "$VERSION" = "jp" ] || [ "RENDER_API" = "D3D11" ]; then
 	DISCORDRPC=0
@@ -780,7 +787,7 @@ fi
 SDL_API="$WINDOW_API"
 if [ "$RENDER_API" = "D3D11" ]; then
 	WINDOW_API=DXGI
-	if [ ! `uname -o` = "Msys" ]; then
+	if [ ! "$MSYS" = 1 ]; then
 		redecho WARNING: Direct X is only for Microsoft Windows.
 	fi
 fi
@@ -1369,7 +1376,7 @@ if [ ! -d "$SHARE"/applications ]; then
 fi
 if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 	bluecho Preparing Icon...
-	if [ `uname -o` = "Msys" ]; then
+	if [ "$MSYS" = 1 ]; then
 		unzip -q "$SMLINUX"/icons "$PRESET".ico -d "$SHARE"/icons
 	else
 		unzip -q "$SMLINUX"/icons "$PRESET".png -d "$SHARE"/icons
@@ -1383,7 +1390,7 @@ if [ ! -f "$SHARE"/icons/"$PRESET".* ]; then
 else
 	printf "Icon already exists. "
 fi
-if [ `uname -o` = "Msys" ]; then
+if [ "$MSYS" = 1 ]; then
 	SHORTY="$USERPROFILE"'/Desktop/Super Mario 64 ('"$PRESET"')'.url
 	if [ ! -f "$SHORTY" ]; then
 		bluecho Creating Windows desktop shorcut... 
@@ -1546,7 +1553,7 @@ elif command -v firefox &> /dev/null; then
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
 	OPEN=firefox
-elif [ `uname -o` = "Msys" ];then
+elif [ "$MSYS" = 1 ];then
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
 	OPEN=start
@@ -1615,7 +1622,7 @@ if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; 
 	# update paths from old versions of smlinux that shared sm64pc folder for configfile
 	pathupdate
 fi
-if [ ! `uname -o` = "Msys" ] && command -v pip3 &> /dev/null; then # check new dependencies for python config GUI
+if [ ! "$MSYS" = 1 ] && command -v pip3 &> /dev/null; then # check new dependencies for python config GUI
 	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
 		echo Installing libraries for python config editor...
 		pip3 install --upgrade pip
@@ -1816,7 +1823,7 @@ else   # The real start, the rest was script preperation and setup.
 			bluecho "Updating package list and installing dependencies..."
 			sudo apt update
 			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
-		elif [ `uname -o` = "Msys" ]; then
+		elif [ "$MSYS" = 1 ]; then
 			bluecho Downloading and installing needed dependencies...
 			if [ `uname -m` = "x86_64" ]; then
 				pacman -S mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano --noconfirm --needed
@@ -1861,12 +1868,25 @@ else   # The real start, the rest was script preperation and setup.
 	elif [ "$TARGET" = "dos" ]; then
 		bluecho "Loading djgpp for DOS Target..."
 		dodos
-	elif [ "$WINDOW_API" = "SDL1" ] && command -v sudo &> /dev/null && command -v apt &> /dev/null && ! command -v sdl-config &> /dev/null; then
-		bluecho Installing SDL1 Development Libraries...
-		sudo apt install libsdl1.2-dev 
-	elif [ "$WINDOW_API" = "SDL1" ] && [ "$USER" = "root" ] && command -v apt &> /dev/null && ! command -v sdl-config &> /dev/null; then
-		bluecho Installing SDL1 Development Libraries...
-		apt install libsdl1.2-dev 
+	elif [ "$WINDOW_API" = "SDL1" ] && ! command -v sdl-config &> /dev/null; then
+		bluecho Installing SDL 1.2 development libraries...
+		if command -v apt &> /dev/null; then
+			if command -v sudo &> /dev/null; then
+				sudo apt install libsdl1.2-dev 
+			elif [ "$USER" = "root" ]; then
+				apt install libsdl1.2-dev
+			fi
+		elif [ "$MSYS" ] = 1; then
+			if [ "$BITS" = 64 ]; then
+				pacman -S mingw-w64-x86_64-SDL --noconfirm --needed
+			elif [ "$BITS" = 32 ]; then
+				pacman -S mingw-w64-i686-SDL --noconfirm --needed
+			fi
+		fi
+		if ! command -v sdl-config &> /dev/null; then
+			redecho ERROR: Could not install SDL 1.2 libraries.  Install sdl1 or try sdl2.
+			endnow
+		fi
 	elif [ ! "$COMMAND" = "depends" ] && [ ! "$DEPENDS" = 1 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "This is not first build, skipping dependencies."
 	else
