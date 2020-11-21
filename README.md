@@ -1,8 +1,6 @@
 #  smlinux -Super Mario Linux- Install Build Update Script
 [<strong>Click here to jump to Frequenty Asked Questions</strong>](#frequently-asked-questions)  
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
-<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.png>
-
 ## **What does smlinux do?**
 #
 1. Installs Required Packages (build tools & dependencies)
@@ -15,7 +13,7 @@
 8. Launches Super Mario 64 on your Personal Computer or Android Device!
 
 ...and! you can use it again later to quickly rebuild and sync to the latest updates from github.
- 
+<img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.png> 
 ## **Download & Installation Instructions**    
 
 Paste either of the following into a terminal then press Enter/Return (*whichever works for your OS*):  
