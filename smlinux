@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1909
+TIMESTAMP=2020-1120-1514
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -58,21 +58,21 @@ cd "$BASEPATH"/"$PRESET"
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI OSX_BUILD=$OSX_BUILD TEXTSAVES=$TEXTSAVES  -j"$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC 
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SDK ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL 
-echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API
+echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API "$FLAGS"
 if [ "$OSX_BUILD" = 1 ]; then
 	echo CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" TARGET_OSX=1 
 	if [ "$EXTERNAL_DATA" = 1 ]; then
 	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
 	fi
-	time gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API> "$SMLINUX"/buildlog.txt
+	time gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API "$FLAGS"> "$SMLINUX"/buildlog.txt
 	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
 		cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib
 	fi
 elif [ "$TARGET_RPI" = 1 ] && [ `uname -m` = "aarch64" ]; then
 	echo TARGET_ARCH=arm64
-	time make TARGET_ARCH=arm64 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API > "$SMLINUX"/buildlog.txt
+	time make TARGET_ARCH=arm64 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API "$FLAGS"> "$SMLINUX"/buildlog.txt
 else
-	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API > "$SMLINUX"/buildlog.txt
+	time make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API "$FLAGS"> "$SMLINUX"/buildlog.txt
 fi
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
 	cp "$SMLINUX"/smlinuxcfg.txt "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/smlinuxcfg.logged
@@ -84,7 +84,7 @@ if [ ! "$ANDROID" = 0 ]; then
 		sed -i.bak "s/v8a', 'x86', 'x86_64'/v8a'/g" "$BASEPATH"/"$PRESET"/../../build.gradle
 	fi
 	if [ "$BRANCH" = "sm64ex" ] || [ "$BRANCH" = "sm64ex_nightly" ]; then
-		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG  WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API> "$SMLINUX"/buildlog.txt
+		make BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG  WINDOW_API=$WINDOW_API CONTROLLER_API=$WINDOW_API AUDIO_API=$WINDOW_API $FLAGS> "$SMLINUX"/buildlog.txt
 		sed -i.bak '/include $(BUILD_SHARED_LIBRARY)/i TEXTURE_FIX ?= 0\nNODRAWINGDISTANCE ?= 0\nBETTERCAMERA ?= 0\nifeq ($(TEXTURE_FIX),1)\n  LOCAL_CFLAGS += -DTEXTURE_FIX\nendif\nifeq ($(NODRAWINGDISTANCE),1)\n  LOCAL_CFLAGS += -DNODRAWINGDISTANCE\nendif\nifeq ($(BETTERCAMERA),1)\n  LOCAL_CFLAGS += -DBETTERCAMERA\nendif\n' "$BASEPATH"/"$PRESET"/Android.mk
 	fi
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
@@ -273,12 +273,12 @@ sed -i.bak 's|12spaces1212print|            print|g' "$BASEPATH"/"$PRESET"/tools
 cd "$BASEPATH"/"$PRESET"/tools
 if [ ! -f skyconv ]; then
 	greenecho [3.5] Preparing N64 Tools for macOS...
-	gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+	gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS" "$FLAGS"
 fi
 if [ ! -f skyconv ]; then
 	pinkecho Warning: Tool build attempt failed with gcc-9.  Trying other compilers...
-	gmake OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
-	make 
+	gmake OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS" "$FLAGS"
+	make "$FLAGS"
 fi
 if [ ! -f skyconv ]; then
 	redecho Failed to build N64 tools.  smlinux cannot handle macOS toolchain.
@@ -405,7 +405,7 @@ if [ -f /usr/bin/gcc ] || [ -f /bin/gcc ]; then
 		echo gcc 8 or higher confirmed
 		return
 	elif [ `gcc-9 -dumpfullversion -dumpversion` \> 7.99 ]; then
-		if [ "$OSX_BUILD" = 0 ]; then
+		if [ ! "$OSX_BUILD" = 1 ]; then
 			pinkecho Warning: Shouldnt be here should be mac only.
 		fi
 		echo gcc-9 confirmed
@@ -518,12 +518,12 @@ if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
 echo '# PRESET supports: sm64pc sm64-port sm64nx sm64ex sm64ex-coop cheaterex 
-# AND: render96ex r96alpha sm64dos sm64exweb androidex AND MORE IN FAQ!
+# ALSO render96ex r96alpha sm64dos sm64exweb androidex AND MORE IN FAQ!
 PRESET=cheaterex
 InstallHD=1
-InstallR96=0
+InstallSGI=0
 FPS60=0
-# [ options for sm64ex and its forks ] 
+# [ Options for sm64ex and its forks ] 
 DYNOS=0
 CHEATER=0
 NODRAWINGDISTANCE=1
@@ -533,48 +533,46 @@ TEXTURE_FIX=1
 DISCORDRPC=1
 TEXTSAVES=0
 RENDER_API=GL
-WINDOW_API=SDL2
-# [ Additional Options Follow ]
-# [ options for sm64ex-coop only ]
-DISCORD_SDK=1
-IMMEDIATELOAD=1
-# [ options for render96ex only ]
-LEGACY_RES=0
-# [ options for Android only ]
-TOUCH_CONTROLS=1
-ARMONLY=1
-# [ options for DOS only ]
-ENABLE_OPENGL_LEGACY=1 
-# DOS_GL Supports dmesa (glide) or osmesa
-DOS_GL=osmesa
-ENABLE_OPENGL_LEGACY=1
-# [ Advanced Settings ]
+SDL_API=SDL2
+# [ Additional Options ]
 # Set MAXJOBS=n to limit cpu threads used during compile, i.e. MAXJOBS=1
 MAXJOBS=
-# Set CONFIG=0 If you do not want to be automatically prompted before building
-CONFIG=1
 # BASEPATH must exist and is where folders for each repo will be placed
 BASEPATH=$HOME
+# Set CONFIG=0 If you do not want to be automatically prompted before building
+CONFIG=1
 # Set BuildMusic=0 to prevent smlinux playing background music during compile
 BuildMusic=1
+# Set AutoUpdate=0 to prevent smlinux updating itself
+AutoUpdate=1
 # [ Advanced Make Flags ]
 # VERSION supports us jp eu (must correspond to rom version)
 VERSION=us
 DEBUG=0
 TARGET_WEB=0
 TARGET_RPI=0
-# [ GIT and BRANCH are ignored if PRESET is known ]
+# [ Options for sm64ex-coop only ]
+DISCORD_SDK=1
+IMMEDIATELOAD=1
+# [ Options for render96ex only ]
+LEGACY_RES=0
+# [ Options for Android only ]
+TOUCH_CONTROLS=1
+ARMONLY=1
+# [ Options for DOS only ]
+ENABLE_OPENGL_LEGACY=1 
+# DOS_GL Supports dmesa (glide) or osmesa
+DOS_GL=osmesa
+ENABLE_OPENGL_LEGACY=1
+# [ GIT and BRANCH are ignored when PRESET is known ]
 GIT=
 BRANCH=
-# [ Linux dependencies command appropriate for your distribution. See FAQ. ]
-Linux=
-# Set AutoUpdate=0 to prevent smlinux updating itself
-AutoUpdate=1' > "$SMLINUX"/smlinuxcfg.txt
+# [ Depracated Linux dependencies installation command string. ]
+FLAGS=' >"$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
 BuildMusic=1
-WINDOW_API=SDL2
 TARGET_RPI=0
 TEXTSAVES=0
 TOUCH_CONTROLS=1
@@ -586,7 +584,7 @@ IMMEDIATELOAD=1
 DOS_GL=osmesa
 ENABLE_OPENGL_LEGACY=1
 ANDROID=0
-InstallR96=0
+InstallSGI=0
 DISCORD_SDK=1
 FPS60=0
 CHEATER=0
@@ -762,33 +760,28 @@ if [ "$TARGET_WEB" = 1 ]; then
 elif [ ! "$TARGET" = "dos" ]; then
 	TARGET=pc
 fi
-if [ -z "$MAXJOBS" ]; then
-	if [ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]; then 
-		if [ `nproc` = 1 ]; then
-			MAXJOBS=1
-		else
-			MAXJOBS=$((`nproc` - 1))		
-		fi
-	else 
-		MAXJOBS=`nproc`
-	fi
+if [ -z "$MAXJOBS" ] && [ ! `nproc` = 1 ] && ([ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]); then 
+	MAXJOBS=$((`nproc` - 1))		
+else 
+	MAXJOBS=`nproc`
 fi
-SDL_API="$WINDOW_API"
 if [ "$RENDER_API" = "D3D11" ]; then
 	WINDOW_API=DXGI
 	if [ ! "$MSYS" = 1 ]; then
 		redecho WARNING: Direct X is only for Microsoft Windows.
 	fi
+else
+	WINDOW_API="$SDL_API"
 fi
 if [ "$2" = "--hd" ] || [ "$3" = "--hd" ] ||[ "$4" = "--hd" ] ||[ "$5" = "--hd" ]; then
 	InstallHD=1
 fi
 if [ "$2" = "--sgi" ] || [ "$3" = "--sgi" ] ||[ "$4" = "--sgi" ] ||[ "$5" = "--sgi" ]; then
 	EXTERNAL_DATA=1
-	InstallR96=1
+	InstallSGI=1
 elif [ "$2" = "--SGI" ] || [ "$3" = "--SGI" ] ||[ "$4" = "--SGI" ] ||[ "$5" = "--SGI" ]; then
 	EXTERNAL_DATA=1
-	InstallR96=1
+	InstallSGI=1
 fi
 if [ "$2" = "--config" ] || [ "$3" = "--config" ] ||[ "$4" = "--config" ] ||[ "$5" = "--config" ]; then
 	CONFIG=1
@@ -814,7 +807,15 @@ fi
 }
 
 editconfig(){
-if command -v pip3 &> /dev/null && [ -f "$SMLINUX"/config.py ] ; then
+if [ "$NANO" = 1 ]; then
+	nano "$SMLINUX"/smlinuxcfg.txt
+elif command -v pip3 &> /dev/null && [ -f "$SMLINUX"/config.py ] ; then
+	if [ ! "$PRESET" = "UserDefined" ]; then # clear values
+		sed -i.bak '/^BRANCH=/d' "$SMLINUX"/smlinuxcfg.txt # delete line
+		sed -i.bak '/^GIT=/d' "$SMLINUX"/smlinuxcfg.txt # delete line
+		echo "GIT=" >>"$SMLINUX"/smlinuxcfg.txt
+		echo "BRANCH=" >>"$SMLINUX"/smlinuxcfg.txt
+	fi
 	if ! python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt; then 
 		EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
 		IFS=":"
@@ -863,7 +864,7 @@ mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
 ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
 cd "$BASEPATH"/"$PRESET"/tools
 bluecho Preparing tools...
-make -j"$MAXJOBS" >/dev/null
+make -j"$MAXJOBS" "$FLAGS">/dev/null
 cd "$BASEPATH"/"$PRESET"/import
 python3 extract_assets.py
 python3 ../scripts/pak.py --source . --output "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/'!!base.pak'
@@ -916,13 +917,13 @@ if [ "$PRESET" = "sm64nx" ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Cleaner Aesthetics"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730430152957362191/cleaner.pak &disown
 	fi
-	if [ "$InstallR96" = 1 ] && [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures" ]; then
+	if [ "$InstallSGI" = 1 ] && [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures" ]; then
 		dosgi
 	fi
 else
 	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ]; then
 		echo "Render 96 SGI model pack found, skipping model application."
-	elif [ "$EXTERNAL_DATA" = 1 ] && ( [ "$InstallR96" = 1 ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96alpha" ] ); then
+	elif [ "$EXTERNAL_DATA" = 1 ] && ( [ "$InstallSGI" = 1 ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96alpha" ] ); then
 		dosgi
 	elif [ ! "$TARGET" = "dos" ] &&  [ ! "$GIT" = "render96/render96ex" ] ; then
 		cd "$BASEPATH"/"$PRESET" 
@@ -1391,7 +1392,7 @@ if [ "$MSYS" = 1 ]; then
 	else
 		echo Windows Desktop shortcut already exists.
 	fi
-elif [ ! -f "$SHARE"/applications/"$PRESET".desktop ] && [ "$OSX_BUILD" = 0 ]; then
+elif [ ! -f "$SHARE"/applications/"$PRESET".desktop ] && [ ! "$OSX_BUILD" = 1 ]; then
 	bluecho Creating desktop shorcut and menu entry...
 	echo '[Desktop Entry]
 Encoding=UTF-8
@@ -1593,9 +1594,14 @@ elif command -v whiptail &> /dev/null; then
 		OP1="--noweb"
 	fi
 else
-	pinkecho Warning: Newt Whiptail is not installed so no menu will be offered.
-	COMMAND=help
-	OP1="--noweb"	
+	redecho Error: whiptail is not installed so command menu cannot be displayed.
+	greenecho You must specify a command, for example smlinux help or smlinux build.
+	exit
+fi
+if [ "$2" = "--nano" ] || [ "$3" = "--nano" ] ||[ "$4" = "--nano" ] ||[ "$5" = "--nano" ]; then
+	NANO=1
+elif [ "$2" = "nano" ] || [ "$2" = "-nano" ] ||[ "$3" = "nano" ] ||[ "$3" = "-nano" ]; then
+	NANO=1
 fi
 
 export NEWT_COLORS='
@@ -1617,6 +1623,17 @@ fi
 if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; then
 	# update paths from old versions of smlinux that shared sm64pc folder for configfile
 	pathupdate
+fi
+#update users config file fields 
+sed -i.bak 's/WINDOW_API=/SDL_API=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
+sed -i.bak 's/InstallR96=/InstallSGI=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
+sed -i.bak '/^UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+sed -i.bak '/^UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+sed -i.bak '/^Linux=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+sed -i.bak '/Linux must be set/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+sed -i.bak '/Depracated/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+if ! grep -q "FLAGS=" "$SMLINUX"/smlinuxcfg.txt; then
+	echo "FLAGS=" >>"$SMLINUX"/smlinuxcfg.txt
 fi
 if [ ! "$MSYS" = 1 ] && command -v pip3 &> /dev/null; then # check new dependencies for python config GUI
 	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
@@ -1750,7 +1767,6 @@ else   # The real start, the rest was script preperation and setup.
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
 	echo '/------------------------------'"$TIMESTAMP"'----------------------------\'
-	echo "|                                                                        |"
 	echo "|   Super Mario 64 Install * Build * Update Script for Linux and macOS   |"
 	echo "|                                                                        |"
 	echo "|          Command Line Usage: smlinux <command> <options>               |"
@@ -1767,19 +1783,16 @@ else   # The real start, the rest was script preperation and setup.
 	if [ "$COMMAND" = "help" ]; then
 		echo "| rebuild: rebuild existing or previously failed build with no changes   |"
 		echo "|                                                                        |"
-		echo "| Options:   --hd  install HD add-ons (ignore EnableHD=0/UpgradeHD=0)    |"
-		echo "|           --sgi  install Render96 SGI model pack (ignore InstallR96=0) |"
+		echo "| Options:   --hd  install HD add-ons (ignore InstallHD=0)               |"
+		echo "|           --sgi  install Render96 SGI model pack (ignore InstallSGI=0) |"
 		echo "|        --config  prompt to edit config before build (ignore CONFIG=0)  |"
-		echo "|       --depends  install dependencies before build                     |"
+		echo "|          --nano  use nano instead of GUI to edit configuration file    |"
 		echo "|                                                                        |"
 		echo "--------------------------------------------------------------------------"
 		tput setaf 7 # white text
-		if [ "$OP1" = "--noweb" ]; then
-			exit
-		else
-			echo "More help at https://github.com/enigma9o7/smlinux#frequently-asked-questions"
+		if [ ! "$OP1" = "--noweb" ]; then
+			"$OPEN" "https://github.com/enigma9o7/smlinux#frequently-asked-questions"
 		fi
-		"$OPEN" "https://github.com/enigma9o7/smlinux#frequently-asked-questions"
 		exit
 	else
 		echo "|                                                                        |"
@@ -1826,11 +1839,15 @@ else   # The real start, the rest was script preperation and setup.
 			else
 				pacman -S mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano --noconfirm --needed
 			fi
+		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then # i dont run arch
+			blueecho pacman found. trying dependencies for arch 
+			blueecho only tested on manjaro vm.  if u run arch plz lmk if u need anything else
+			sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar
 		else
 			bluecho "Installing dependencies specified in smlinux configuration file:"
 			echo "$Linux"
 			$Linux
-			if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then #for msys
+			if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then # for msys
 				echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
 			fi
 		fi
@@ -1887,13 +1904,6 @@ else   # The real start, the rest was script preperation and setup.
 		echo "This is not first build, skipping dependencies."
 	else
 		echo "Prepared."
-	fi
-	if [ -z "$MAXJOBS" ]; then # cannot do til after depends
-		if [ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]; then 
-			MAXJOBS=$((`nproc` - 1))		
-		else 
-			MAXJOBS=`nproc`
-		fi
 	fi
 	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ] && [ -d "$BASEPATH"/"$PRESET" ] && [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
 		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
@@ -2068,7 +2078,7 @@ elif [ "$COMMAND" = "update" ]; then
 	greenecho [4] Applying pre-build modifications...
 	if [ "$InstallHD" = 1 ]; then
 		dohd
-	elif [ "$InstallR96" = 1 ]; then
+	elif [ "$InstallSGI" = 1 ]; then
 		pinkecho Warning: Render96 models selected without InstallHD.
 		dosgi
 	else
@@ -2187,7 +2197,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			cd "$BASEPATH"
 			rm -rf "$PRESET"
 		fi
-		pinkecho Existing "$PRESET" folder saved as "$PRESET".old and is safe to delete.
+		pinkecho Previous "$PRESET" folder was saved as "$PRESET".old and is safe to delete.
 	fi
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
@@ -2310,7 +2320,7 @@ elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 fi
 if [ "$InstallHD" = 1 ]; then 
 	dohd
-elif [ "$InstallR96" = 1 ]; then
+elif [ "$InstallSGI" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
 	pinkecho Warning: InstallHD Disabled so HD addons not being added.
