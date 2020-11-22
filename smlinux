@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1848
+TIMESTAMP=2020-1120-1929
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1092,16 +1092,25 @@ if [ "$PRESET" = "sm64nx" ]; then
 	fi
 elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget -q https://sm64pc.info/downloads/conversion_pack/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
+	wget https://sm64pc.info/downloads/conversion_pack/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
 	SGIFILE=RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
 elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
+	wget https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
 	SGIFILE=RENDER96_V1.4.2_Luigi.zip
 elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget -q https://sm64pc.info/downloads/model_pack/render96_coop.zip
+	wget https://sm64pc.info/downloads/model_pack/render96_coop.zip
 	SGIFILE=render96_coop.zip
+elif [ "$GIT" = "s4Ys369/cheaterex" ]; then
+	if [ -f "$BASEPATH"/"$PRESET"/enhancements/captain_toad_stars*.patch ]; then
+		cd "$BASEPATH"/"$PRESET"
+		git apply -R enhancements/captain_toad_stars*.patch
+	fi
+	cd "$BASEPATH"/"$PRESET"/enhancements
+	wget https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
+	mv RENDER96_V1.3.7z RENDER96_V1.3.zip
+	SGIFILE=RENDER96_V1.3.zip
 else
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
@@ -1329,7 +1338,9 @@ fi
 
 removecheater(){
 cd "$BASEPATH"/"$PRESET"
-if [ -f enhancements/CHEATER*.patch ]; then
+if [ "$GIT" = "s4Ys369/cheaterex" ]; then
+	return
+elif [ -f enhancements/CHEATER*.patch ]; then
 	bluecho Removing CHEATER...
 	git apply -R enhancements/CHEATER*.patch
 	rm enhancements/CHEATER*
