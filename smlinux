@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1929
+TIMESTAMP=2020-1120-1950
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1085,18 +1085,20 @@ if [ "$PRESET" = "sm64nx" ]; then
 		mv "~SGI Models" "SGI Models"
 	fi
 	if [ ! -d "SGI Models" ]; then
-		bluecho Getting Render96 SGI Models...
+		blueecho Downloading Render 96 SGI Model Pack V1.3nx...
 		mkdir "SGI Models"
 		cd "SGI Models"
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak &
 	fi
 elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget https://sm64pc.info/downloads/conversion_pack/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
+	blueecho Downloading Render 96 SGI Model Pack V2.0
+	wget -q https://sm64pc.info/downloads/conversion_pack/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
 	SGIFILE=RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
 elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
+	blueecho Downloading Render 96 SGI Model Pack V1.4.2
+	wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
 	SGIFILE=RENDER96_V1.4.2_Luigi.zip
 elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 	cd "$BASEPATH"/"$PRESET"/enhancements
@@ -1108,11 +1110,13 @@ elif [ "$GIT" = "s4Ys369/cheaterex" ]; then
 		git apply -R enhancements/captain_toad_stars*.patch
 	fi
 	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
+	blueecho Downloading Render 96 SGI Model Pack V1.3
+	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
 	mv RENDER96_V1.3.7z RENDER96_V1.3.zip
 	SGIFILE=RENDER96_V1.3.zip
 else
 	cd "$BASEPATH"/"$PRESET"/enhancements
+	blueecho Downloading Render 96 SGI Model Pack V1.3
 	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
 	mv RENDER96_V1.3.7z RENDER96_V1.3.zip
 	SGIFILE=RENDER96_V1.3.zip
