@@ -109,7 +109,7 @@ class ConfigWindow(QMainWindow):
 			"SDL_API": ConfigSetting("SDL API", "dropdown", tooltip = "CONTROLLER_API AUDIO_API Support SDL2 or SDL 1.2 (sm64ex-based repos only)", dropdownOptions = ["SDL2","SDL1"]),
 			"MAXJOBS": ConfigSetting("Maximum Jobs", "dropdown", dropdownOptions = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "12", "15", "" ], tooltip = "Maximum cpu threads used during compile.\nUndefined will try to use all."),
 			"BASEPATH": ConfigSetting("Base Folder", "line", tooltip = "Must be valid existing path.\nFolders for each repo cloned will be placed there."),
-			"InstallHD": ConfigSetting("Install HD Add-ons", "check", tooltip = "Install Upscale Add-ons described in FAQ"),
+			"InstallHD": ConfigSetting("Install HD Add-ons", "check", tooltip = "Install HD Add-ons when applicable including\nHD Mario & Bowser Models, 3D Coins,\nUpscaled Textures & High Quality Sounds - see FAQ"),
 			"InstallSGI": ConfigSetting("Install SGI Models", "check", tooltip = "Install Render 96 SGI Model Pack\n(sm64ex-based repos only)"),
 			"FPS60": ConfigSetting("60fps patch", "check", tooltip="Apply 60fps patch if included in repository"),
 			"DYNOS": ConfigSetting("DynOS patch", "check", tooltip = "Apply Dynamic Option System by PeachyPeach\n(sm64ex-based repos only)"),
