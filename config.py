@@ -170,7 +170,7 @@ class ConfigWindow(QMainWindow):
 		#saveAndCancelLayout.addWidget(cancelButton)
 		
 		saveButton = QPushButton()
-		saveButton.setText("Save Configuration / Exit Editor / Continue")
+		saveButton.setText("Okay")
 		saveButton.clicked.connect(self.saveAndExit)
 		saveAndCancelLayout.addWidget(saveButton)
 
