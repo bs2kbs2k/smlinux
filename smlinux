@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1807
+TIMESTAMP=2020-1120-1812
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1831,7 +1831,7 @@ else   # The real start, the rest was script preperation and setup.
 			if [ ! ~/.nanorc ]; then
 				echo 'include /usr/local/share/nano/*.nanorc' >"$HOME"/.nanorc
 			fi
-			touch ~/Applications/writetest # requests permission, used for shortcut later
+			touch /Applications/writetest # requests permission, used for shortcut later
 			touch "$HOME"/Desktop/writetest # requests permission, used for shortcut later
 			rm ~/Applications/writetest "$HOME"/Desktop/writetest
 			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
