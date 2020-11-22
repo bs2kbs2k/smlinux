@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1715
+TIMESTAMP=2020-1120-1752
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1628,8 +1628,10 @@ fi
 #update users config file fields 
 sed -i.bak 's/WINDOW_API=/SDL_API=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
 sed -i.bak 's/InstallR96=/InstallSGI=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
+sed -i.bak '/^REPO=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+sed -i.bak '/^OSX_BUILD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
 sed -i.bak '/^UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
-sed -i.bak '/^UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+sed -i.bak '/UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
 sed -i.bak '/^Linux=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
 sed -i.bak '/Linux must be set/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
 sed -i.bak '/Depracated/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
@@ -1644,6 +1646,9 @@ if [ ! "$MSYS" = 1 ] && command -v pip3 &> /dev/null; then # check new dependenc
  	fi
 	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
 		pip install numpy # this worked on ubuntu 16 
+	fi
+	if [ "$TARGET_OSX" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]; then
+		brew install PyQt5 
 	fi
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
