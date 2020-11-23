@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-1249
+TIMESTAMP=2020-1123-1253
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1909,7 +1909,7 @@ else   # The real start, the rest was script preperation and setup.
 		if [ ! -f "$SMLINUX"/config.py ]; then
 			wget -q https://raw.githubusercontent.com/enigma9o7/smlinux/master/config.py -P "$SMLINUX"
 		fi
-		if [ ! "MSYS" = 1 ]; then
+		if [ ! "$MSYS" = 1 ]; then
 			pip3 install --upgrade pip
  			pip3 install numpy PyQt5
  		fi
