@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-1531
+TIMESTAMP=2020-1123-1538
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1242,7 +1242,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			else
 				echo 'if [ `uname` = "Darwin" ]; then	
 					PATHDIR=/usr/local/bin
-				elif mapfile -t -d: <<<"$PATH"; then
+				elif mapfile -t -d: <<<"$PATH" >/dev/null 2>&1; then
 					PATHDIR="${MAPFILE[0]}"
 				else
 					PATHDIR="$HOME"/bin
@@ -1579,7 +1579,7 @@ if [ `uname` = "Darwin" ]; then
 	OPEN=open
 	OSX_BUILD=1
 elif command -v xdg-open &> /dev/null; then
-	if mapfile -t -d: <<<"$PATH"; then
+	if mapfile -t -d: <<<"$PATH" >/dev/null 2>&1; then
 		PATHDIR="${MAPFILE[0]}"
 	else
 		PATHDIR="$HOME"/bin
@@ -1595,9 +1595,12 @@ elif command -v firefox &> /dev/null; then
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
 	OPEN=firefox
-else 
-	mapfile -t -d: <<<"$PATH"
+elif mapfile -t -d: <<<"$PATH"; then
 	PATHDIR="${MAPFILE[0]}"
+	OPEN=echo
+else
+	PATHDIR="$HOME"/bin
+	export PATH="$HOME"/bin:$PATH
 	OPEN=echo
 fi
 if [ `uname -m` = "x86_64" ]; then
