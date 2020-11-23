@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-1239
+TIMESTAMP=2020-1123-1245
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1693,7 +1693,7 @@ if [ ! "$MSYS" = 1 ] && command -v pip3 &> /dev/null; then # check new dependenc
 		pip install numpy # this worked on ubuntu 16 
 	fi
 fi
-if [ "`pip3 list --format=columns | grep PyQt5`" = "" ]; then
+if [ ! "$MSYS" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]; then
 	echo Installing libraries for configuration editor...
 	pip3 install --upgrade pip
 	pip3 install PyQt5
