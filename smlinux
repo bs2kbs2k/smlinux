@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-0956
+TIMESTAMP=2020-1123-1239
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -177,6 +177,25 @@ elif [ "$LEGACY_RES" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARG
 fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ] && [ "$BuildMusic" = 1 ]; then
 	killall -q -y1h mplayer
+fi
+
+}
+
+msysdepends(){
+	for package in python3 python3-pip git make unzip zip unrar p7zip nano 
+do
+	pacman -S $package --noconfirm --needed
+done
+if [ "$BITS" = 64 ]; then
+	for package in mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc 
+do
+	pacman -S $package --noconfirm --needed
+done
+else #32-bit
+	for package in mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc 
+do
+	pacman -S $package --noconfirm --needed
+done
 fi
 }
 
@@ -1814,12 +1833,12 @@ else   # The real start, the rest was script preperation and setup.
 	echo "|  update: Update existing sm64 source & build (preserves modifications) |"
 	echo "|   build: Get/reset sm64 source repo & build (renames existing folder)  |"
 	echo "|   clone: Get/reset sm64 source repo & extract rom (no addons/build)    |"
-	echo "|  config: Opens smlinuxcfg.txt in a text editor (without building)      |"
+	echo "|  config: Opens smlinuxcfg.txt in an editor (without building)          |"
 	echo "|   reset: Resets smlinux configuration file to default settings         |"
 	echo "| depends: Install dependencies (automatic during smlinux installation)  |"
 	echo "| upgrade: Upgrade smlinux to latest version from github (no build)      |"
 	echo "|   purge: Remove all files and folders obtained or created by smlinux   |"
-	echo "|    help: Display all smlinux commands and options plus open faq url    |"
+	echo "|    help: Display all smlinux commands and options and open faq url     |"
 	if [ "$COMMAND" = "help" ]; then
 		echo "| rebuild: rebuild existing or previously failed build with no changes   |"
 		echo "|                                                                        |"
@@ -1874,11 +1893,7 @@ else   # The real start, the rest was script preperation and setup.
 			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
 		elif [ "$MSYS" = 1 ]; then
 			bluecho Downloading and installing needed dependencies...
-			if [ "$BITS" = 64 ]; then
-				pacman -S mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano --noconfirm --needed
-			else
-				pacman -S mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano --noconfirm --needed
-			fi
+			msysdepends
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then # i dont run arch
 			blueecho pacman found. trying dependencies for arch 
 			blueecho only tested on manjaro vm.  if u run arch plz lmk if u need anything else
