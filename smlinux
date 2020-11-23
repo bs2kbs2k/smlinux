@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1120-1950
+TIMESTAMP=2020-1123-0951
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -296,7 +296,7 @@ if [ "$TARGET" = "web" ]; then
 elif [ "$TARGET" = "dos" ]; then
 	echo
 	pinkecho Warning: djgpp environment is loaded.  Do not try to 
-	echo use this shell to build.  Exit and open new shell. 
+	pinkecho use this shell to build.  Exit and open new shell. 
 fi
 echo
 tput setab 0  # black background
@@ -308,7 +308,7 @@ if [ -d "$BASEPATH"/"$PRESET"/.git ]; then
 	cd "$BASEPATH"/"$PRESET"
 	git log -1 --format=%cd
 fi
-pinkecho Please exit or close this terminal window!
+greenecho You may close or exit this terminal window.
 tput setaf 7 # back to white
 
 if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then
@@ -930,10 +930,20 @@ else
 		if [ ! -d actors.bak ]; then
 			cp -r actors actors.bak
 		fi
-		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_Mario_Model.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ];  then
+		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_Mario_Model.zip ] && [ "$GIT" = "djoslin0/sm64ex-coop" ];  then
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip -P enhancements
 			bluecho Applying HD Mario...
-			unzip -o -q enhancements/Old_School_HD_Mario_Model
+			unzip -qo enhancements/Old_School_HD_Mario_Model.zip "actors/mario/*"
+			# Mario Include - thx filip
+			if ! grep -q '#include "mario/geo_header.h"' actors/group0.h; then
+				echo updating actors/group0.h
+				sed -i.bak '/#endif/i \
+#include "mario/geo_header.h"' actors/group0.h
+    		fi
+    	elif [ ! -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_Mario_Model.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ];  then
+			wget -q https://cdn.discordapp.com/attachments/716459185230970880/719758031990030427/Old_School_HD_Mario_Model.zip -P enhancements
+			bluecho Applying HD Mario...
+			unzip -oq enhancements/Old_School_HD_Mario_Model
 		fi
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ];  then
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar -P enhancements
@@ -992,7 +1002,7 @@ else
 				git clone --single-branch git://github.com/CrashCrod/Cleaner-Aesthetics &disown
 				bgdl=ca # background download in progress
 			else
-				bluecho Updating Cleaner Aesthetic Textures...
+				bluecho Starting Cleaner Aesthetic Texture Update...
 				cd Cleaner-Aesthetics
 				git pull --no-rebase &
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
