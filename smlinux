@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-1253
+TIMESTAMP=2020-1123-1531
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -828,7 +828,7 @@ fi
 editconfig(){
 if [ "$NANO" = 1 ]; then
 	nano "$SMLINUX"/smlinuxcfg.txt
-elif command -v pip3 &> /dev/null && [ -f "$SMLINUX"/config.py ] ; then
+elif [ -f "$SMLINUX"/config.py ] ; then
 	if [ ! "$PRESET" = "UserDefined" ]; then # clear values
 		sed -i.bak '/^BRANCH=/d' "$SMLINUX"/smlinuxcfg.txt # delete line
 		sed -i.bak '/^GIT=/d' "$SMLINUX"/smlinuxcfg.txt # delete line
@@ -836,6 +836,8 @@ elif command -v pip3 &> /dev/null && [ -f "$SMLINUX"/config.py ] ; then
 		echo "BRANCH=" >>"$SMLINUX"/smlinuxcfg.txt
 	fi
 	if ! python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt; then 
+		redecho Please run smlinux depends to install PyQt5 and numpy for GUI editor to work.
+		echo To avoid this message, use option --nano to force nano automatically.
 		EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
 		IFS=":"
 		for editor in $EDITORS; do
@@ -1682,28 +1684,6 @@ sed -i.bak '/Depracated/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
 if ! grep -q "FLAGS=" "$SMLINUX"/smlinuxcfg.txt; then
 	echo "FLAGS=" >>"$SMLINUX"/smlinuxcfg.txt
 fi
-if [ ! "$MSYS" = 1 ] && command -v pip3 &> /dev/null; then # check new dependencies for python config GUI
-	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
-		echo Installing libraries for configuration editor...
-		pip3 install --upgrade pip
- 		pip3 install numpy
- 		pip3 install PyQt5
- 	fi
-	if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
-		pip install numpy # this worked on ubuntu 16 
-	fi
-fi
-if [ ! "$MSYS" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]; then
-	echo Installing libraries for configuration editor...
-	pip3 install --upgrade pip
-	pip3 install PyQt5
-	if [ "$TARGET_OSX" = 1 ] && [ "`pip3 list --format=columns | grep PyQt5`" = "" ]; then
-		brew install PyQt5 
-		if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
-			pip install numpy # this worked on ubuntu 16 
-		fi
-	fi
-fi	
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$COMMAND" = "config" ]; then
 		editconfig
@@ -1869,7 +1849,7 @@ else   # The real start, the rest was script preperation and setup.
 				echo FATAL ERROR Could not install homebrew, thus cannot install other stuff.  
 				endnow
 			fi
-			brew install libxdg-basedir coreutils wget newt nano go zip unzip unrar p7zip python3 
+			brew install libxdg-basedir coreutils wget newt nano go zip unzip unrar p7zip python3 PyQt5
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 			go get github.com/machinebox/appify
 			if [ ! ~/.nanorc ]; then
@@ -1886,18 +1866,19 @@ else   # The real start, the rest was script preperation and setup.
 		elif command -v apt &> /dev/null && [ "$USER" = "root" ]; then
 			bluecho "Updating package list and installing dependencies..."
 			apt update
-			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
+			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 			bluecho "Updating package list and installing dependencies..."
 			sudo apt update
-			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip zenity mplayer zip unzip unrar p7zip
+			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip
 		elif [ "$MSYS" = 1 ]; then
 			bluecho Downloading and installing needed dependencies...
 			msysdepends
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then # i dont run arch
 			blueecho pacman found. trying dependencies for arch 
 			blueecho only tested on manjaro vm.  if u run arch plz lmk if u need anything else
-			sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar
+			redecho sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar --needed --noconfirm
+			sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar --needed --noconfirm
 		else
 			bluecho "Installing dependencies specified in smlinux configuration file:"
 			echo "$Linux"
@@ -1910,9 +1891,15 @@ else   # The real start, the rest was script preperation and setup.
 			wget -q https://raw.githubusercontent.com/enigma9o7/smlinux/master/config.py -P "$SMLINUX"
 		fi
 		if [ ! "$MSYS" = 1 ]; then
-			pip3 install --upgrade pip
- 			pip3 install numpy PyQt5
- 		fi
+			pip3 install numpy
+			if [ ! "OSX_BUILD" = 1]; then
+				pip3 install --upgrade pip
+				pip3 install PyQt5
+			fi
+			if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
+				pip install numpy # this worked on ubuntu 16 
+			fi
+		fi
 	elif ! command -v gcc &> /dev/null; then
 		redecho ERROR: The GNU Compiler Collection is not installed.  Please install dependencies.
 		endnow
