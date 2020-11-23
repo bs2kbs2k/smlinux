@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-0951
+TIMESTAMP=2020-1123-0956
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1074,7 +1074,7 @@ if  [ -d build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f enhancements/REN
 	echo Render 96 Models already installed.
 	return
 fi
-if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
+if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ] && [ ! "$GIT" = "s4Ys369/cheaterex" ]; then
 	bluecho Removing 3D coins...
 	git apply -R enhancements/3d_coin*.patch
 	rm enhancements/3d_coin*.patch
