@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-1538
+TIMESTAMP=2020-1123-2012
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1054,13 +1054,7 @@ dofps(){
 cd "$BASEPATH"/"$PRESET"
 if [ "$FPS60" = 1 ] && [ ! -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
 	bluecho Applying 60fps patch...
-	if [ "$GIT" = "render96/render96ex" ]; then
-		pinkecho Force applying 60fps patch with --reject...
-		git apply enhancements/60fps*.patch --reject
-	else
-		bluecho Applying 60fps patch...
-		git apply enhancements/60fps*.patch 
-	fi
+	git apply enhancements/60fps*.patch 
 	touch enhancements/60fps
 	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		bluecho Enabling Vsync...
