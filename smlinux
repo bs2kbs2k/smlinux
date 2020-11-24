@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-2157
+TIMESTAMP=2020-1123-2202
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1890,7 +1890,7 @@ else   # The real start, the rest was script preperation and setup.
 		fi
 		if [ ! "$MSYS" = 1 ]; then
 			pip3 install numpy
-			if [ ! "OSX_BUILD" = 1]; then
+			if [ ! "OSX_BUILD" = 1 ]; then
 				pip3 install --upgrade pip
 				pip3 install PyQt5
 			fi
