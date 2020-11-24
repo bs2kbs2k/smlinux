@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-2215
+TIMESTAMP=2020-1123-2221
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -496,10 +496,6 @@ if [ "$HASH" = "" ]; then
 	cd "$SMLINUX"
 	if [ ! -f n64swap.py ]; then
 		echo Getting conversion tools...
-		if ! command -v pip3 &> /dev/null; then
-			redecho ERROR: pip3 not installed.  Run smlinux depends or provide z64 rom.
-			endnow
-		fi
 		wget https://github.com/Brawl345/N64Swap/raw/master/n64swap.py
 	fi
 	# Try V64
@@ -1890,10 +1886,10 @@ else   # The real start, the rest was script preperation and setup.
 		fi
 		if [ ! "$MSYS" = 1 ]; then
 			python3 -m pip install --upgrade pip
-			pip3 install numpy
+			python3 -m pip install numpy
 			if [ ! "OSX_BUILD" = 1 ] && ! command -v apt &> /dev/null; then
-				pip3 install --upgrade pip
-				pip3 install PyQt5
+				python3 -m pip install --upgrade pip
+				python3 -m pip install PyQt5
 			fi
 			if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
 				pip install numpy # this worked on ubuntu 16 
@@ -1913,7 +1909,7 @@ else   # The real start, the rest was script preperation and setup.
 	fi
 	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		bluecho "Installing required build tools for sm64nx..."
-		pip3 install pillow zstandard tqdm xxhash
+		python3 -m pip install pillow zstandard tqdm xxhash
 		gcccheck
 	elif [ ! "$ANDROID" = 0 ]; then
 		bluecho "Loading Android SDK..."
