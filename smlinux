@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-2014
+TIMESTAMP=2020-1123-2021
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1668,18 +1668,19 @@ if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; 
 	# update paths from old versions of smlinux that shared sm64pc folder for configfile
 	pathupdate
 fi
-#update users config file fields 
-sed -i.bak 's/WINDOW_API=/SDL_API=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
-sed -i.bak 's/InstallR96=/InstallSGI=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
-sed -i.bak '/^REPO=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
-sed -i.bak '/^OSX_BUILD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
-sed -i.bak '/^UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
-sed -i.bak '/UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
-sed -i.bak '/^Linux=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
-sed -i.bak '/Linux must be set/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
-sed -i.bak '/Depracated/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
-if ! grep -q "FLAGS=" "$SMLINUX"/smlinuxcfg.txt; then
-	echo "FLAGS=" >>"$SMLINUX"/smlinuxcfg.txt
+if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then #update users config file fields 
+	sed -i.bak 's/WINDOW_API=/SDL_API=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
+	sed -i.bak 's/InstallR96=/InstallSGI=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
+	sed -i.bak '/^REPO=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+	sed -i.bak '/^OSX_BUILD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+	sed -i.bak '/^UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+	sed -i.bak '/UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+	sed -i.bak '/^Linux=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+	sed -i.bak '/Linux must be set/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+	sed -i.bak '/Depracated/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+	if ! grep -q "FLAGS=" "$SMLINUX"/smlinuxcfg.txt; then
+		echo "FLAGS=" >>"$SMLINUX"/smlinuxcfg.txt
+	fi
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$COMMAND" = "config" ]; then
