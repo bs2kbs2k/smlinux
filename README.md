@@ -204,11 +204,11 @@ Some build targets depend on additional packages not listed below, for example A
 
 If smlinux detects `apt`it is used to install the following packages:
 
-	zenity git python3 python3-pip wget unzip unrar p7zip build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
+	zenity git python3 python3-pip python3-pyqt5 wget unzip unrar p7zip-full build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
 
 If smlinux detects macOS the following packages are installed with brew:
 
-	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3
+	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3 PyQt5
 
 If smlinux detects msys2 the following packages are installed with pacman:  
   	
