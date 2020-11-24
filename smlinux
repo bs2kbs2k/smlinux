@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-2021
+TIMESTAMP=2020-1123-2157
 
 domake(){
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
@@ -1864,11 +1864,11 @@ else   # The real start, the rest was script preperation and setup.
 		elif command -v apt &> /dev/null && [ "$USER" = "root" ]; then
 			bluecho "Updating package list and installing dependencies..."
 			apt update
-			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip
+			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip-full
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 			bluecho "Updating package list and installing dependencies..."
 			sudo apt update
-			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip
+			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip-full
 		elif [ "$MSYS" = 1 ]; then
 			bluecho Downloading and installing needed dependencies...
 			msysdepends
@@ -2401,8 +2401,8 @@ elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res ]; then
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git ]; then
 		mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/.git "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
 	fi
-	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res
-	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
+	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/res/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res > /dev/null 2>&1
+	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old # first build there is no old build
 elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
 	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
