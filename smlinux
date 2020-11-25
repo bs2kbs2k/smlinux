@@ -5,13 +5,13 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1125-1016
+TIMESTAMP=2020-1125-1218
 
-SECONDS=0
+SECONDS=0 # reset bash timer to time prep
 
 domake(){
 PREPTIME="$SECONDS"
-SECONDS=0 # reset bash timer
+SECONDS=0 # reset bash timer to time build
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 		rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
@@ -387,7 +387,7 @@ exit
 
 
 endnow(){
-redecho "smlinux ending incomplete.  Contact #help-desk for support."
+redecho "smlinux ending incomplete after "$SECONDS" seconds.  Contact #help-desk for support."
 if [ "$TARGET_RPI" = 0 ]; then
 	"$OPEN" https://discord.gg/Ub6YHRm &
 fi
@@ -850,26 +850,18 @@ if [ "$2" = "--config" ] || [ "$3" = "--config" ] ||[ "$4" = "--config" ] ||[ "$
 	CONFIG=1
 elif [ "$2" = "config" ] || [ "$3" = "config" ] ||[ "$4" = "config" ] ||[ "$5" = "config" ]; then
 	CONFIG=1
+elif [ "$2" = "--go" ] || [ "$3" = "--go" ] ||[ "$4" = "--go" ] ||[ "$5" = "--go" ]; then
+	CONFIG=0
+elif [ "$2" = "go" ] || [ "$3" = "go" ] ||[ "$2" = "-go" ] ||[ "$3" = "-go" ]; then
+	CONFIG=0
 fi
+
 if [ "$2" = "--depends" ] || [ "$3" = "--depends" ] ||[ "$4" = "--depends" ] ||[ "$5" = "--depends" ]; then
 	DEPENDS=1
 fi
 }
 
 doconfig(){
-if ! command -v whiptail &> /dev/null; then
-    editconfig
-elif (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 24 80 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
-		if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open in an editor.\n\nWhen you save and exit configuration, smlinux will begin.\n(To exit pico/nano/micro editors use Control-X)\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
-		editconfig	
-	else
-		echo smlinux aborted.
-		exit
-	fi
-fi
-}
-
-editconfig(){
 if [ "$NANO" = 1 ]; then
 	nano "$SMLINUX"/smlinuxcfg.txt
 elif [ -f "$SMLINUX"/config.py ] ; then
@@ -879,17 +871,27 @@ elif [ -f "$SMLINUX"/config.py ] ; then
 		echo "GIT=" >>"$SMLINUX"/smlinuxcfg.txt
 		echo "BRANCH=" >>"$SMLINUX"/smlinuxcfg.txt
 	fi
+	echo Launching smlinux configuration editor...
 	if ! python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt; then 
 		redecho Please run smlinux depends to install PyQt5 and numpy for GUI editor to work.
 		echo To avoid this message, use option --nano to force nano automatically.
-		EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
-		IFS=":"
-		for editor in $EDITORS; do
-			$editor "$SMLINUX"/smlinuxcfg.txt
-			if [ $? -eq 0 ]; then
-				return
+		if command -v whiptail &> /dev/null; then
+			if (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 24 80 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
+				if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open a text editor.\n\nWhen you save and exit configuration, smlinux will begin.\nTo exit pico/nano/micro editors use Control-X\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
+					EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
+					IFS=":"
+					for editor in $EDITORS; do
+						$editor "$SMLINUX"/smlinuxcfg.txt
+						if [ $? -eq 0 ]; then
+							return
+						fi
+					done
+				else
+					echo smlinux aborted.
+					exit
+				fi
 			fi
-		done
+		fi
 	fi
 fi
 }
@@ -1072,9 +1074,6 @@ else
 				git pull --no-rebase &
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			fi
-		fi
-		if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes ]; then
-			rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx/textures/skyboxes
 		fi
 		if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/hq_sounds_v5.1.zip ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ] && [ "$BITS" = 64 ]; then
 			if [ ! -f "$SMLINUX"/hq_sounds_v5.1.zip ]; then
@@ -1548,6 +1547,9 @@ do
 done
 	ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 fi
+if [ -d "$SMLINUX"/Cleaner-Aesthetics/gfx/textures/skyboxes ]; then # causes warnings
+	rm -rf "$SMLINUX"/Cleaner-Aesthetics/gfx/textures/skyboxes
+fi
 if [ "$TARGET_WEB"  = 1 ]; then 
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	ln -s sm64.us.f3dex2e.html index.html
@@ -1689,6 +1691,13 @@ if [ "$2" = "--nano" ] || [ "$3" = "--nano" ] ||[ "$4" = "--nano" ] ||[ "$5" = "
 elif [ "$2" = "nano" ] || [ "$2" = "-nano" ] ||[ "$3" = "nano" ] ||[ "$3" = "-nano" ]; then
 	NANO=1
 fi
+if [ "$2" = "--noweb" ] || [ "$3" = "--noweb" ] ||[ "$4" = "--noweb" ] ||[ "$5" = "--noweb" ]; then
+	OP1="--noweb"
+	OPEN=echo
+elif [ "$2" = "noweb" ] || [ "$2" = "-noweb" ] ||[ "$3" = "noweb" ] ||[ "$3" = "-noweb" ]; then
+	OP1="--noweb"
+	OPEN=echo
+fi
 
 export NEWT_COLORS='
 roottext=magenta,black     # title on top
@@ -1727,7 +1736,7 @@ if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then #update users config file fields
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$COMMAND" = "config" ]; then
-		editconfig
+		doconfig
 		exit
 	elif [ "$COMMAND" = "reset" ]; then
 		rm "$SMLINUX"/smlinuxcfg.txt
@@ -1865,8 +1874,10 @@ else   # The real start, the rest was script preperation and setup.
 		echo "|                                                                        |"
 		echo "| Options:   --hd  install HD add-ons (ignore InstallHD=0)               |"
 		echo "|           --sgi  install Render96 SGI model pack (ignore InstallSGI=0) |"
+		echo "|            --go  skip configuration editor (ignore CONFIG=1)           |"
 		echo "|        --config  prompt to edit config before build (ignore CONFIG=0)  |"
 		echo "|          --nano  use nano instead of GUI to edit configuration file    |"
+		echo "|         --noweb  do not open urls in web browser                       |"
 		echo "|                                                                        |"
 		echo "--------------------------------------------------------------------------"
 		tput setaf 7 # white text
