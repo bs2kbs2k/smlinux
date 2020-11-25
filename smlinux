@@ -208,7 +208,7 @@ if [ ! -f "$SMLINUX"/"$VERSION"/textures/water/jrb_textures.0B800.rgba16.png ]; 
 		rm tools include
 	fi
 fi
-echo Copying assets previously extracted from rom...
+echo Copying assets extracted from rom...
 cp -rn "$SMLINUX"/"$VERSION"/* "$BASEPATH"/"$PRESET"
 }
 
