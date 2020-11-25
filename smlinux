@@ -5,9 +5,10 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1125-0952
+TIMESTAMP=2020-1125-1006
 
 SECONDS=0
+
 domake(){
 PREPTIME="$SECONDS"
 SECONDS=0 # reset bash timer
@@ -190,6 +191,27 @@ else
 fi
 }
 
+msysdepends(){
+	for package in python3 python3-pip git make unzip zip unrar p7zip nano 
+do
+	pacman -S $package --noconfirm --needed
+done
+if [ "$BITS" = 64 ]; then
+	for package in mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc 
+do
+	pacman -S $package --noconfirm --needed
+done
+else #32-bit
+	for package in mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc 
+do
+	pacman -S $package --noconfirm --needed
+done
+fi
+if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then
+	echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
+fi
+}
+
 extractrom(){
 if [ ! -f "$SMLINUX"/"$VERSION"/textures/water/jrb_textures.0B800.rgba16.png ]; then
 	mkdir "$SMLINUX"/"$VERSION"
@@ -214,25 +236,6 @@ cp -rn "$SMLINUX"/"$VERSION"/* "$BASEPATH"/"$PRESET"
 cp -rn "$SMLINUX"/"$VERSION"/.* "$BASEPATH"/"$PRESET"
 }
 
-msysdepends(){
-	for package in python3 python3-pip git make unzip zip unrar p7zip nano 
-do
-	pacman -S $package --noconfirm --needed
-done
-if [ "$BITS" = 64 ]; then
-	for package in mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc 
-do
-	pacman -S $package --noconfirm --needed
-done
-else #32-bit
-	for package in mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc 
-do
-	pacman -S $package --noconfirm --needed
-done
-if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then 
-	echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
-fi
-}
 
 pathupdate(){
 echo old smlinux file structure found....
