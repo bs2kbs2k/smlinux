@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1124-2243
+TIMESTAMP=2020-1125-0952
 
 SECONDS=0
 domake(){
@@ -207,9 +207,11 @@ if [ ! -f "$SMLINUX"/"$VERSION"/textures/water/jrb_textures.0B800.rgba16.png ]; 
 	else
 		rm tools include
 	fi
+else
+	bluecho Copying assets previously extracted from rom...	
 fi
-echo Copying assets extracted from rom...
 cp -rn "$SMLINUX"/"$VERSION"/* "$BASEPATH"/"$PRESET"
+cp -rn "$SMLINUX"/"$VERSION"/.* "$BASEPATH"/"$PRESET"
 }
 
 msysdepends(){
@@ -227,6 +229,8 @@ else #32-bit
 do
 	pacman -S $package --noconfirm --needed
 done
+if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then 
+	echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
 fi
 }
 
@@ -1914,12 +1918,8 @@ else   # The real start, the rest was script preperation and setup.
 			redecho sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar --needed --noconfirm
 			sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar --needed --noconfirm
 		else
-			bluecho "Installing dependencies specified in smlinux configuration file:"
-			echo "$Linux"
-			$Linux
-			if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then # for msys
-				echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
-			fi
+			pinkecho Warning: apt, pacman, and macOS not detected.  Skipping OS specific dependencies.
+			echo For a list of reccommended packages for other distributions, see smlinux FAQ.
 		fi
 		if [ ! -f "$SMLINUX"/config.py ]; then
 			wget -q https://raw.githubusercontent.com/enigma9o7/smlinux/master/config.py -P "$SMLINUX"
