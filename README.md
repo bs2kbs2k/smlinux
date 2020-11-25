@@ -202,7 +202,7 @@ Paste the command string recccommended below for your distribution directly into
 
 Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk`, dos targets require `djgpp`, web targets enscripten, sm64nx requires gcc version 8 or newer, or using sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of distros without apt will need to install appropriate gcc, sdl1.2, or JDK as needed for such targets in addition to what is listed below.
 
-If smlinux detects `apt`it is used to install the following packages:
+If smlinux detects `apt`it is used to install the following packages assuming a Debian/Ubuntu base:
 
 	zenity git python3 python3-pip python3-pyqt5 wget unzip unrar p7zip-full build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
 
@@ -215,15 +215,14 @@ If smlinux detects msys2 the following packages are installed with pacman:
 	64-bit: mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano
 	32-bit: mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano
 
-**For other Linux distibutions use the following:** and let me know if any additional packages or distros should be added.
-	
-Arch/Manjaro
-    
-	sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar 
+Otherwise if pacman is found the following packages are installed assuming an Arch base:  
 
+	 base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar 
+	 
+**For other Linux distibutions use the following:** and let me know if any additional packages or distros should be added.
 Fedora/Red Hat
 
-	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++
+	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++ newt
 openSuSE
 
 	sudo zypper in gcc make python3 glew-devel libSDL2-devel zenity libzstd-devel audiofile-devel
