@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1125-1218
+TIMESTAMP=2020-1125-1250
 
 SECONDS=0 # reset bash timer to time prep
 
@@ -1667,7 +1667,7 @@ elif command -v whiptail &> /dev/null; then
 	title=blue,black           # make choice with arrows
 	checkbox=brightcyan,black  # important list
 	compactbutton=blue,black   # ok button'
-	if ! COMMAND=$(whiptail --title "Make Choice with Arrows and [Space Bar]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
+	if ! COMMAND=$(whiptail --title "Make Choice with Arrows then [SPACE BAR]" --ok-button "[SPACE BAR] then [ENTER]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 14 60 7 \
 	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and macOS" \
 	"build" "get clean sm64 source and build it" ON \
 	"update" "update sm64 source and rebuild it" OFF \
