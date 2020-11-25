@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1125-1006
+TIMESTAMP=2020-1125-1016
 
 SECONDS=0
 
@@ -233,7 +233,7 @@ else
 	bluecho Copying assets previously extracted from rom...	
 fi
 cp -rn "$SMLINUX"/"$VERSION"/* "$BASEPATH"/"$PRESET"
-cp -rn "$SMLINUX"/"$VERSION"/.* "$BASEPATH"/"$PRESET"
+cp -n "$SMLINUX"/"$VERSION"/.assets-local.txt "$BASEPATH"/"$PRESET"
 }
 
 
