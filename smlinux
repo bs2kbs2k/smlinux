@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1124-2156
+TIMESTAMP=2020-1124-2243
 
 SECONDS=0
 domake(){
@@ -195,14 +195,20 @@ if [ ! -f "$SMLINUX"/"$VERSION"/textures/water/jrb_textures.0B800.rgba16.png ]; 
 	mkdir "$SMLINUX"/"$VERSION"
 	cd "$SMLINUX"/"$VERSION"
 	ln -s "$BASEPATH"/"$PRESET"/tools
+	ln -s "$BASEPATH"/"$PRESET"/include
 	ln -s "$BASEPATH"/"$PRESET"/sm64."$VERSION".sha1
 	ln -s "$BASEPATH"/"$PRESET"/assets.json
 	ln -s "$SMLINUX"/baserom."$VERSION".z64
-	bluecho Extracting ROM...
+	bluecho Extracting assets from rom...
 	time "$BASEPATH"/"$PRESET"/extract_assets.py "$VERSION"
-	rm tools sm64."$VERSION".sha1 assets.json
+	rm sm64."$VERSION".sha1 assets.json
+	if [ "$MSYS" = 1 ]; then
+		rm -rf tools include
+	else
+		rm tools include
+	fi
 fi
-echo Copying previously extracted assets...
+echo Copying assets previously extracted from rom...
 cp -rn "$SMLINUX"/"$VERSION"/* "$BASEPATH"/"$PRESET"
 }
 
@@ -1317,13 +1323,13 @@ elif [ "$DYNOS" = 1 ] && !( [ -f enhancements/DynOS.0.5.* ] || [ -f enhancements
 	else
     	bluecho Applying Dynamic Option System...
     fi
-    if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
-		rm "$SAVEDIR"/DynOSconfig.cfg
-	fi
     cd enhancements
     unzip -q "$SMLINUX"/DynOS*.zip
     cd ..
     git apply enhancements/DynOS*.patch
+fi
+if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
+	rm "$SAVEDIR"/DynOSconfig.cfg
 fi
 }
 
