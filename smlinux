@@ -348,7 +348,12 @@ tput setaf 6  # cyan text
 if [ "$COMMAND" = "update" ]; then
 	COMMAND=build
 fi
-echo Completed "$COMMAND" in "$BUILDTIME" after "$PREPTIME" seconds preparation.
+printf "Completed ""$COMMAND"" in " 
+if [ -z "$BUILDTIME" ]; then
+	echo "$SECONDS" seconds.
+else
+	echo "$BUILDTIME" after "$PREPTIME" seconds preparation.
+fi
 printf "smlinux:""$TIMESTAMP"" "
 if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ]); then
 	echo "$GIT"-"$BRANCH" last commit:
@@ -1588,7 +1593,6 @@ fi
 
 ####################################### The Beginning ########################################
 
-SECONDS=0 # time for things besides make
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/smlinux
 LAUNCH_DIR=$(pwd)
