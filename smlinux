@@ -5,9 +5,12 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1123-2338
+TIMESTAMP=2020-1124-2156
 
+SECONDS=0
 domake(){
+PREPTIME="$SECONDS"
+SECONDS=0 # reset bash timer
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 		rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
@@ -178,7 +181,29 @@ fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ] && [ "$BuildMusic" = 1 ]; then
 	killall -q -y1h mplayer
 fi
+if [ $(($SECONDS / 60)) = 0 ]; then
+	BUILDTIME="$(($SECONDS % 60)) seconds"
+elif [ $(($SECONDS / 60)) = 1 ]; then
+	BUILDTIME="one minute $(($SECONDS % 60)) seconds"
+else
+	BUILDTIME="$(($SECONDS / 60)) minutes $(($SECONDS % 60)) seconds"
+fi
+}
 
+extractrom(){
+if [ ! -f "$SMLINUX"/"$VERSION"/textures/water/jrb_textures.0B800.rgba16.png ]; then
+	mkdir "$SMLINUX"/"$VERSION"
+	cd "$SMLINUX"/"$VERSION"
+	ln -s "$BASEPATH"/"$PRESET"/tools
+	ln -s "$BASEPATH"/"$PRESET"/sm64."$VERSION".sha1
+	ln -s "$BASEPATH"/"$PRESET"/assets.json
+	ln -s "$SMLINUX"/baserom."$VERSION".z64
+	bluecho Extracting ROM...
+	time "$BASEPATH"/"$PRESET"/extract_assets.py "$VERSION"
+	rm tools sm64."$VERSION".sha1 assets.json
+fi
+echo Copying previously extracted assets...
+cp -rn "$SMLINUX"/"$VERSION"/* "$BASEPATH"/"$PRESET"
 }
 
 msysdepends(){
@@ -320,15 +345,20 @@ fi
 echo
 tput setab 0  # black background
 tput setaf 6  # cyan text
-echo smlinux is complete. 
-echo smlinux internal timestamp "$TIMESTAMP".
-if [ -d "$BASEPATH"/"$PRESET"/.git ]; then
+if [ "$COMMAND" = "update" ]; then
+	COMMAND=build
+fi
+echo Completed "$COMMAND" in "$BUILDTIME" after "$PREPTIME" seconds preparation.
+printf "smlinux:""$TIMESTAMP"" "
+if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ]); then
 	echo "$GIT"-"$BRANCH" last commit:
 	cd "$BASEPATH"/"$PRESET"
 	git log -1 --format=%cd
+else
+	echo
 fi
 greenecho You may close or exit this terminal window.
-tput setaf 7 # back to white
+tput sgr0 # reset colors
 
 if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then
 	zenity --info --text="Shits done yo." &disown
@@ -1040,8 +1070,6 @@ else
 		fi
 	elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$GIT" = "render96/render96ex" ] ||[ "$GIT" = "s4Ys369/cheaterex" ] ||[ "$GIT" = "djoslin0/sm64ex-coop" ] || [ "$PRESET" = "androidex" ]; then
 		pinkecho Warning: EXTERNAL_DATA=0 so skipping add-on textures and sounds
-	elif [ "$GIT" = "sm64-port/sm64-port" ]; then
-		echo External Data not supported for sm64-port repository, skipping.
 	fi
 fi
 }
@@ -1560,6 +1588,7 @@ fi
 
 ####################################### The Beginning ########################################
 
+SECONDS=0 # time for things besides make
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/smlinux
 LAUNCH_DIR=$(pwd)
@@ -1945,9 +1974,7 @@ else   # The real start, the rest was script preperation and setup.
 	else
 		echo "Prepared."
 	fi
-	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ] && [ -d "$BASEPATH"/"$PRESET" ] && [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
-		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
-	elif [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+	if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		echo "Verifying ROM..."
 		cd "$LAUNCH_DIR"
 		if [ -f "$1" ]; then 
@@ -1970,7 +1997,7 @@ else   # The real start, the rest was script preperation and setup.
 		fi
 		echo
 		if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-			echo Located and Verified.
+			echo Romfile located and verified.
 		elif [ -f "$1" ]; then
 			exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 			zenity --error --text="ERROR: Specified file is not original Super Mario 64 ROM image\nMake sure VERSION= is set to the correct region if not US romfile\n" --title="Your installation is incomplete." --width=640 &disown	
@@ -2263,12 +2290,13 @@ fi
 if [ "$OSX_BUILD" = 1 ]; then
 	macprep
 fi
-greenecho [4] Extracting Assets from ROM...
+greenecho [4] Preparing Assets from ROM...
 if [ "$PRESET" = "sm64nx" ]; then
 	prepnx
-else 	
-	cd "$BASEPATH"/"$PRESET"
-	time python3 extract_assets.py "$VERSION"
+else 
+	extractrom	
+	# cd "$BASEPATH"/"$PRESET"
+	# time python3 extract_assets.py "$VERSION"
 fi
 if [ "$COMMAND" = "clone" ]; then
 	theend
@@ -2405,13 +2433,13 @@ elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/romfs ]; then
 	mv -n "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old/* "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
 fi
+bluecho Build Succesful! 
 if [ "$TARGET" = "pc" ] && [ "$ANDROID" = 0 ]; then
-	greenecho [7] Creating Desktop Shortcut and Menu Entry...
+	greenecho [7] Checking shortcuts...
 	makedesktop
 else
-	greenecho [7] Skipping menu entry for non PC version.
+	greenecho [7] Skipping menu entry and shortcuts for non PC version.
 fi
-bluecho Build Succesful! 
 rungame
 if [ -f "$HOME"/.smlinuxNopath ]; then
 	rm "$HOME"/.smlinuxNopath
