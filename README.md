@@ -198,29 +198,9 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 *Developed under Bodhi 5.1 and tested on a Slax virtual machine so should work automatically on Ubuntu and Debian.  
 Arch Fedora OpenSuSE confirmed working by users. Please test and report other distributions!*
 
-Paste the command string recccommended below for your distribution directly into a terminal before running smlinux.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
+Paste the command string recccommended below for your distribution directly into a terminal before running smlinux.   If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
 
 Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk`, dos targets require `djgpp`, web targets enscripten, sm64nx requires gcc version 8 or newer, or using sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of distros without apt will need to install appropriate gcc, sdl1.2, or JDK as needed for such targets in addition to what is listed below.
-
-If smlinux detects `apt`it is used to install the following packages assuming a Debian/Ubuntu base:
-
-	zenity git python3 python3-pip python3-pyqt5 wget unzip unrar p7zip-full build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
-
-If smlinux detects macOS the following packages are installed with brew:
-
-	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3 PyQt5
-
-If smlinux detects msys2 the following packages are installed with pacman:  
-  	
-	64-bit: mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano
-	32-bit: mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano
-
-Otherwise if pacman is found the following packages are installed assuming an Arch base:  
-
-	 base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar 
-	 
-**Other Linux distibutions please use the following command:**  
-*please let me know any additional packages/distros to add*  
 
 Fedora/Red Hat
 
@@ -237,6 +217,29 @@ Void
 Alpine
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
+	
+Ubuntu/Debian/macOS/Arch/Manjaro/Msys should all be automatic as described below.
+
+If smlinux detects `apt`it is used to install the following packages:
+
+	zenity git python3 python3-pip python3-pyqt5 wget unzip unrar p7zip-full build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
+
+If smlinux detects macOS the following packages are installed with `brew`:
+
+	libxdg-basedir coreutils git wget nano mingw-w64 gcc@9 sdl2 pkg-config glew glfw3 libusb audiofile unzip unrar newt go python3 PyQt5
+
+If smlinux detects Msys the following packages are installed with `pacman`:  
+  	
+	64-bit: mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano
+	32-bit: mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano
+
+Otherwise if `pacman` is found the following packages are installed:  
+
+	 base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar 
+	 
+smlinux usually only installs these dependendencies automatically during the very first installation; if you wish to trigger installation again run 
+	
+	smlinux depends
 
 ## **How do I create my rom file?**
 
