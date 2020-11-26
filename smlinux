@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1125-2018
+TIMESTAMP=2020-1125-2058
 
 SECONDS=0 # reset bash timer to time prep
 
@@ -34,7 +34,7 @@ elif [ "$TARGET_WEB" = 1 ]; then
 	sed -i.bak 's/TOTAL_MEMORY=20MB/TOTAL_MEMORY=30MB/g' "$BASEPATH"/"$PRESET"/Makefile
 fi
 if [ ! "$ANDROID" = 0 ]; then
-	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+	exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 	checkphone
 	if [ "$GOTPHONE" = 1 ]; then
 		zenity --info --text='\nPhone Detected.  Be sure to grant it debugging permission.\n\nExisting copies must also be uninstalled before this window closes itself.' --title="Preparing for Android Installation...." --width=510 &disown
@@ -389,6 +389,7 @@ exit
 endnow(){
 redecho "smlinux ending incomplete after "$SECONDS" seconds.  Contact #help-desk for support."
 if [ "$TARGET_RPI" = 0 ]; then
+	exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 	"$OPEN" https://discord.gg/Ub6YHRm &
 fi
 echo Your smlinux internal timestamp is "$TIMESTAMP".
@@ -502,7 +503,7 @@ echo "gcc -dumpfullversion must report 8 or higher."
 echo "Please install it then rerun smlinux, or use another repo."
 echo "Sometimes its wrong - if you have gcc 8/9/10 and wish to continue, do so."
 echo
-exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 if zenity --question --text="sm64nx requires gcc 8 or newer and was not detected.\nDo you wish to continue anyway incase smlinux is reading gcc -dumpversion wrong,\nor abort so you can install it then run smlinux again?" --title "GCC 8 or newer not detected" --ok-label="Abort" --cancel-label="Continue" --width 550; then
 	exit
 fi
@@ -1573,6 +1574,7 @@ if [ "$TARGET_WEB"  = 1 ]; then
 	if [ -f /usr/bin/firefox ]; then
 		firefox --new-window http://localhost:8100&disown
 	else
+		exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 		"$OPEN" http://localhost:8100&disown
 	fi
 elif [ ! "$ANDROID" = 0 ] ; then
@@ -1592,6 +1594,7 @@ elif [ ! "$ANDROID" = 0 ] ; then
 		echo "Internal Storage/Android/data/com.vdavid003.sm64port/files"
 		echo 
 	fi
+	exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 	"$OPEN" "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
 elif [ "$GIT"  = "djoslin0/sm64ex-coop" ] && [ ! `nproc` = 1 ]; then
 	bluecho Testing Double Application Launch...
@@ -1613,6 +1616,7 @@ elif [ "$OSX_BUILD" = 1 ]; then
 	/Applications/'Super Mario 64 ('"$PRESET"')'.app/Contents/MacOS/'Super Mario 64 ('"$PRESET"')'.app &
 elif command -v gtk-launch &> /dev/null; then
 	bluecho Testing application launch...
+	exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 	gtk-launch "$PRESET" &disown
 elif [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.us.f3dex2e ]; then
 	bluecho Testing execution...
@@ -1900,6 +1904,7 @@ else   # The real start, the rest was script preperation and setup.
 		echo "--------------------------------------------------------------------------"
 		tput setaf 7 # white text
 		if [ ! "$OP1" = "--noweb" ]; then
+			exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 			"$OPEN" "https://github.com/enigma9o7/smlinux#frequently-asked-questions" &disown
 		fi
 		exit
