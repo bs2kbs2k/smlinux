@@ -28,7 +28,7 @@ smlinux will then run unattended and before the time you finish reading the FAQ 
 You must provide your own legally backed up Super Mario 64 ROM file.  
 *Do not run smlinux as root; you will be prompted for sudo password if needed.* 
 
-[<strong>Click here for Linux distributions that are not debian or arch based.</strong>](#what-about-distros-other-than-debian-or-arch)  
+[<strong>Click here for Linux distributions that are not debian or arch based.</strong>](#what-dependencies-are-needed-or-installed)  
 ## **How do I run smlinux again?**
 	smlinux
 	
@@ -65,7 +65,7 @@ sm64nx and Discord Rich Presence are not suppored.
 * [<strong>How do I apply external data such as textures?</strong>](#how-do-i-apply-external-data-such-as-textures)
 * [<strong>How to apply a patch?</strong>](#how-to-apply-a-patch)
 * [<strong>How to remove a patch?</strong>](#how-to-remove-a-patch)
-* [<strong>What about Linux distriubutions that are not Debian or Ubuntu based?</strong>](#what-about-distros-other-than-ubuntu)
+* [<strong>What depenencies are needed or installed?</strong>](#what-dependencies-are-needed-or-installed)
 * [<strong>How do I create my rom file?</strong>](#how-do-i-create-my-rom-file)
 * [<strong>How do I remove everything smlinux created during install?</strong>](#how-do-i-remove-everything-smlinux-created-during-install)
 * [<strong>How do I tell smlinux to download sm64 repositories to a folder other than home?</strong>](#how-do-i-tell-smlinux-to-download-sm64-repositories-to-a-folder-other-than-home)
@@ -194,7 +194,7 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 	smlinux update
 
 
-## **What about distros other than Debian or Arch?**
+## **What dependencies are needed or installed?**
 *Developed under Bodhi 5.1 and tested on a Slax virtual machine so should work automatically on Ubuntu and Debian.  
 Arch Fedora OpenSuSE confirmed working by users. Please test and report other distributions!*
 
