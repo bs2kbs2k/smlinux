@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1125-1258
+TIMESTAMP=2020-1125-1613
 
 SECONDS=0 # reset bash timer to time prep
 
@@ -1015,7 +1015,13 @@ else
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/hd_bowser.rar ];  then
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar -P enhancements
 			bluecho Applying HD Bowser...
-			unrar x -o+ -idq enhancements/hd_bowser
+			if command -v unrar &> /dev/null; then
+				unrar x -o+ -idq enhancements/hd_bowser.render96_android
+			elif command -v unar &> /dev/null; then
+				unrar -f -q enhancements/hd_bowser.rar
+			elif ! 7z x -aoa enhancements/hd_bowser.rar; then
+				redecho ERROR: Could not extract HD Bowser. Please install unrar, unar, or p7zip-rar.
+			fi
 		fi
 		if [ ! -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ] && [ "$ANDROID" = 0 ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ]; then
 			if [ "$PRESET" = "sm64pc" ]; then
