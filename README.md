@@ -198,8 +198,8 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 *Developed under Bodhi 5.1 and tested on a Slax virtual machine so should work automatically on Ubuntu and Debian.  
 Arch Fedora OpenSuSE confirmed working by users. Please test and report other distributions!*
 
-Paste the command string recccommended below for your distribution directly into a terminal before running smlinux.
-*If your distribution needs additional packages not listed here, please let me know their names so I can add them.  *
+Paste the command string recccommended below for your distribution directly into a terminal before running smlinux.  
+*If your distribution is missing or needs packages not listed here, please let me know their names so I can update.*
 
 **Fedora/Red Hat**
 
