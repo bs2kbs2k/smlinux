@@ -76,7 +76,7 @@ If you want to build for PC, the source repository from the team who decompiled 
 
 ## **What does the InstallHD option do?**
 
-This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch to most forks except dos and render96ex. 
+This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch to most forks except dos.  Render96ex instead gets the Render 96 SGI Model pack which includes mario, bowser, 3d coins, and much more.
 
 On sm64pc/sm64ex based forks upscaled textures will aslo be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.  On the render96ex fork, Render96's HD rextures will be used instead, which are over 500MB so require additional download time, as well as more than 2GB of free memory and additional time to precache before game launches.  
 
@@ -88,7 +88,7 @@ On the sm64nx fork, Arredondo's HD Mario & Bowser and Cleaner Aesthetics texture
 
 For the render96ex preset, this will apply Render96's SGI model pack version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is applied, while for sm64ex based forks, version 1.3 is applied.    For r96alpha and r96proto presets, the latest 2.0 modelpack is applied.
 
-For sm64nx, this option will add paks for Render96's SGI Models (version 1.3) and Render96's HD textures and set them as defaults.  Be aware this model pak for sm64nx has minor visual problems and is no longer mainained.
+For sm64nx, this option will add paks for Render96's SGI Models (version 1.3) and Render96's HD textures and set them as defaults.  Be aware this model pak for sm64nx has minor visual problems and is no longer mainained, but can easily be reverted to default or HD models with the in-game mod menu that *only* sm64nx offers.
 
 ## **What does the FPS60 option do?**
 
