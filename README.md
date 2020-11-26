@@ -219,7 +219,7 @@ Otherwise if pacman is found the following packages are installed assuming an Ar
 
 	 base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar 
 	 
-**Other Linux distibutions use the following:** and let me know if any additional packages or distros should be added.
+**Other Linux distibutions please use the following:** and let me know if any additional packages or distros should be added.  
 Fedora/Red Hat
 
 	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++ newt unar p7zip-plugins
