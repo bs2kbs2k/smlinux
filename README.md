@@ -222,7 +222,7 @@ Otherwise if pacman is found the following packages are installed assuming an Ar
 **For other Linux distibutions use the following:** and let me know if any additional packages or distros should be added.
 Fedora/Red Hat
 
-	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++ newt
+	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++ newt unar
 openSuSE
 
 	sudo zypper in gcc make python3 glew-devel libSDL2-devel zenity libzstd-devel audiofile-devel
