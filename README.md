@@ -251,8 +251,6 @@ Backup N64 cartridge with a dumper such as Retrode2 or Mr. Backup, from Wii with
 	smlinux purge
 This erases everything created using smlinux presets including game saves, config files, shortcuts, and icons.
 This does not uninstall any packages installed as dependencies; remove those with your package manager.
-(Development libraries can always safely be removed if you don not plan to build again, and binaries will still run.)
-This also does not remove any user-defined repositories; delete those folders manually from any file manager.
 
 ## **How do I tell smlinux to download sm64 repositories to a folder other than home?**
 
