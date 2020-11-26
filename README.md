@@ -22,13 +22,13 @@ Paste either of the following into a terminal then press Enter/Return (*whicheve
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **-OR-**  
 `wget https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux;bash smlinux;rm smlinux`
 	
-**That's all you have to do** for debian, ubuntu, macOS, or msys2! You may be prompted to:  
-(1) provide password to install build tools (2) specify your romfile (3)  approve or change build options.  
+**That's all you have to do** for ubuntu, debian, arch, macOS, or msys2! You may be prompted to:  
+(1) provide password to install build tools (2) approve or change build options (3) specify your romfile .  
 smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 You must provide your own legally backed up Super Mario 64 ROM file.  
 *Do not run smlinux as root; you will be prompted for sudo password if needed.* 
 
-[<strong>Click here for Linux distributions that are not ubuntu or debian based.</strong>](#what-about-distros-other-than-ubuntu)  
+[<strong>Click here for Linux distributions that are not debian or arch based.</strong>](#what-about-distros-other-than-debian-or-arch)  
 ## **How do I run smlinux again?**
 	smlinux
 	
@@ -53,7 +53,7 @@ sm64nx and Discord Rich Presence are not suppored.
 * [<strong>How do I run smlinux again? Where did it install itself to?</strong>](#how-do-i-run-smlinux-again)
 * [<strong>What preset/repo/branch should I chose?</strong>](#what-presetrepositorybranch-should-i-use)
 * [<strong>What does the InstallHD option do?</strong>](#what-does-the-install-option-do)
-* [<strong>What does the InstallR96 option do?</strong>](#what-does-the-installr96-option-do)
+* [<strong>What does the InstallSGI option do?</strong>](#what-does-the-installsgi-option-do)
 * [<strong>What does the FPS60 option do?</strong>](#what-does-the-fps60-option-do)
 * [<strong>What about other branches?</strong>](#what-about-other-branches)
 * [<strong>When to use RENDER_API=GL_LEGACY?</strong>](#when-to-use-render_apigl_legacy)
@@ -84,7 +84,7 @@ On the sm64nx fork, Arredondo's HD Mario & Bowser and Cleaner Aesthetics texture
 
 *Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released.*
 
-## **What does the InstallR96 option do?**
+## **What does the InstallSGI option do?**
 
 For the render96ex preset, this will apply Render96's SGI model pack version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is applied, while for sm64ex based forks, version 1.3 is applied.    For r96alpha and r96proto presets, the latest 2.0 modelpack is applied.
 
@@ -161,7 +161,7 @@ You can also just edit the configuration file with any text editor.
 
 ## **Are there any cheats?**
 
-On all forks besides sm64-port, some cheats are built in and enabled automatically if launched from shortcut and available in options menu.  On compatible sm64ex based forks additional cheats are applied with $4Y$'s CHEATER patch and PeachyPeaches Dynamic Option System.
+On all forks besides sm64-port, some cheats are built in and enabled automatically if launched from shortcut and available in options menu.  On compatible sm64ex based forks additional cheats are applied with $4Y$'s CHEATER patch and PeachyPeaches' Dynamic Option System.
 
 ## **How do I apply external data such as textures?**
 
@@ -174,7 +174,7 @@ sm64nx:
 Create a subdirectory in build/us_pc/romfs for each pak and place the pak file inside, and the next time you run the game it'll load that pak automatically. If you would prefer it to start disabled, use ~ at the beginning of the folder name.  Do not move or remove !!base.pak, it should remain in "romfs" as fallback.
 
 ## **How to apply a patch?**
-*change path from sm64pc to sm64-port or sm64ex for newer repos*
+*change path from sm64pc to sm64-port/sm64ex/etc as appaproriate*
 
 Put the patch file into ~/sm64pc/enhancements (or specify the path differently when applying):
    
@@ -194,11 +194,11 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 	smlinux update
 
 
-## **What about distros other than Ubuntu?**
+## **What about distros other than Debian or Arch?**
 *Developed under Bodhi 5.1 and tested under Slax so should work automatically on Ubuntu and Debian.  
 Arch Fedora OpenSuSE confirmed working by users.*
 
-Paste the command string recccommended below for your distribution directly into a terminal before running smlinux, or set your `Linux=` command string to one that works with your distribution such as those listed below.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
+Paste the command string recccommended below for your distribution directly into a terminal before running smlinux.  smlinux only installs dependendencies automatically during the very first installation; if you wish to trigger installation again run `smlinux depends` or append ` --depends` to `smlinux update` or `smlinux build`.  If your distribution needs additional dependencies not listed here, please let me know their names so I can add them.  
 
 Some build targets depend on additional packages not listed below, for example Android builds require `android-sdk`/`openjava-jdk`, dos targets require `djgpp`, web targets enscripten, sm64nx requires gcc version 8 or newer, or using sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of distros without apt will need to install appropriate gcc, sdl1.2, or JDK as needed for such targets in addition to what is listed below.
 
@@ -219,10 +219,10 @@ Otherwise if pacman is found the following packages are installed assuming an Ar
 
 	 base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar 
 	 
-**For other Linux distibutions use the following:** and let me know if any additional packages or distros should be added.
+**Other Linux distibutions use the following:** and let me know if any additional packages or distros should be added.
 Fedora/Red Hat
 
-	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++ newt unar
+	sudo dnf install make gcc python3 audiofile-devel glew-devel SDL2-devel zstd zenity g++ newt unar p7zip-plugins
 openSuSE
 
 	sudo zypper in gcc make python3 glew-devel libSDL2-devel zenity libzstd-devel audiofile-devel
