@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1126-1213
+TIMESTAMP=2020-1126-1332
 
 SECONDS=0 # reset bash timer
 
@@ -870,8 +870,8 @@ elif [ -f "$SMLINUX"/config.py ] ; then
 	fi
 	echo Launching smlinux configuration editor...
 	if ! python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt; then 
-		redecho ERROR: Python-QT5 based configuration GUI failed to start,
-		redecho Please make sure PyQt5 and numpy are installed. "Try: $ smlinux depends"
+		redecho ERROR: Python-QT5 based configuration GUI failed to start!
+		redecho Please make sure PyQt5 is installed. "Try: $ smlinux depends"
 		pinkecho To avoid this message specify option --nano to edit configuration with nano.
 		EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
 		IFS=":"
@@ -890,7 +890,8 @@ elif [ -f "$SMLINUX"/config.py ] ; then
 				fi
 			fi
 		else
-			pinkecho warning: whiptail not found.  Please install newt/whiptail package for prompts.
+			pinkecho WARNING: whiptail not found. 
+			pinkecho Please install newt/whiptail package for prompts.
 			for editor in $EDITORS; do
 				$editor "$SMLINUX"/smlinuxcfg.txt
 				if [ $? -eq 0 ]; then
