@@ -249,8 +249,7 @@ Backup N64 cartridge with a dumper such as Retrode2 or Mr. Backup, from Wii with
 ## **How do I remove everything smlinux created during install?**
  
 	smlinux purge
-This erases everything created using smlinux presets including game saves, config files, shortcuts, and icons.
-This does not uninstall any packages installed as dependencies; remove those with your package manager.
+This erases files and folders created by smlinux including source repositories, add-ons, builds, icons, shortcuts, game saves and config files. This does not uninstall any dependencies installed with pip or your package manager.
 
 ## **How do I tell smlinux to download sm64 repositories to a folder other than home?**
 
