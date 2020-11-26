@@ -217,7 +217,7 @@ Paste the command string recccommended below for your distribution directly into
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 	
-Some build targets depend on additional packages, for example Android builds require `android-sdk`/`openjava-jdk`, dos targets require `djgpp`, web targets enscripten, sm64nx requires gcc version 8 or newer, or using sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of distros without apt will need to install appropriate gcc, sdl1.2, or JDK as needed for such targets.  
+Some build targets depend on additional packages, for example Android builds require `android-sdk`/`openjava-jdk`, dos targets require `djgpp`, web targets enscripten, sm64nx requires gcc version 8 or newer, or using sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of distros without apt will need to install appropriate gcc, sdl, or JDK if needed.  
 
 **Ubuntu/Debian** If smlinux detects `apt`it is used to install the following packages:
 
@@ -261,5 +261,3 @@ Set `BASEPATH` to any existing directory that you have permission to write to, f
 
 	mkdir ~/mario
 	smlinux config
-
-
