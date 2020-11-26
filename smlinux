@@ -1805,7 +1805,7 @@ fi
 
 if [ "$COMMAND" = "purge" ]; then
 	redecho Wiping folder, backup, savedir, icon, and shortcuts...
-	for preset in sm64ex sm64nx sm64ex-coop render96ex cheaterex sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex sm64pc sm64-port r96proto r96alpha emm-ody coop-unstable
+	for preset in sm64ex sm64nx sm64ex-coop render96ex cheaterex sm64dos sm64-portweb sm64exweb sm64-port-android-base androidex sm64pc sm64-port r96proto r96alpha emm-ody coop-unstable userdef-*
 do
 	printf $preset
 	if [ -d "$BASEPATH"/$preset ]; then
@@ -1853,11 +1853,9 @@ done
 		rm -rf "$BASEPATH"/emsdk
 	fi
 	rm -rf "$SMLINUX"
-	echo	
-	echo Note this did not remove any packages installed as build tools or dependencies.
-	echo Remove those with your package manager.
-	echo And of course you must delete smlinux itself from "$PATHDIR"
-    exit
+	echo Done. You must delete "$PATHDIR"/smlinux manually for complete removal. 	
+	echo Note this did not remove dependencies installed with your package manager.
+	exit
 fi
 
 if [ -f ~/.smlinuxUpdate ]; then 
