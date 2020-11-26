@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1126-1156
+TIMESTAMP=2020-1126-1213
 
 SECONDS=0 # reset bash timer
 
@@ -351,8 +351,6 @@ elif [ "$TARGET" = "dos" ]; then
 fi
 if [ -z "$BUILDSEC" ]; then
 	SHOWTIME=$(( SECONDS ))
-	BUILDSEC=0
-	PREPSEC=0
 else
 	SHOWTIME=$BUILDSEC
 fi
@@ -363,24 +361,23 @@ elif [ $(($SECONDS / 60)) = 1 ]; then
 else
 	SHOWTIME="$(($SHOWTIME / 60)) minutes $(($SHOWTIME % 60)) seconds"
 fi
-pinkecho Completed "$COMMAND" in "$SHOWTIME". 
-echo You may close or exit this terminal window.
+pinkecho smlinux completed "$COMMAND" in "$SHOWTIME". 
 if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ] || [ "$COMMAND" = "update" ]); then
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
-	echo " Prep: " "$(($PREPSEC / 60))min $(($PREPSEC % 60))sec"
+	echo "Setup: " "$(($PREPSEC / 60))min $(($PREPSEC % 60))sec"
 	echo "Build: " "$(($BUILDSEC / 60))min $(($BUILDSEC % 60))sec"  
-	echo "Total: " "$(($(( SECONDS + PREPSEC )) / 60))min $(($(( SECONDS + PREPSEC )) % 60))sec"  
-	echo "smlinux:""$TIMESTAMP"
-	echo "$GIT"-"$BRANCH" last commit:
+	echo "Total: " "$(($(( BUILDSEC + PREPSEC )) / 60))min $(($(( BUILDSEC + PREPSEC )) % 60))sec"  
+	echo "$GIT"-"$BRANCH"" last commit: "
 	cd "$BASEPATH"/"$PRESET"
 	git log -1 --format=%cd
 fi
-tput sgr0 # reset colors
 if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then 
 	zenity --info --text="Shits done yo." &disown # homage to sm64pcbuilder2
 fi
 echo "smlinux ""$TIMESTAMP" done.  Type smlinux or smlinux "<command>" to use again.
+tput sgr0 # reset colors
+echo You may close or exit this terminal.
 exit
 }
 
