@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1125-1613
+TIMESTAMP=2020-1125-1638
 
 SECONDS=0 # reset bash timer to time prep
 
@@ -1617,6 +1617,7 @@ fi
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/smlinux
 LAUNCH_DIR=$(pwd)
+cd # just incase launched from folder that doesnt exist anymore
 
 if [ `uname` = "Darwin" ]; then
 	PATHDIR=/usr/local/bin
@@ -1682,7 +1683,7 @@ elif command -v whiptail &> /dev/null; then
 	"config" "edit smlinux config file only" OFF \
 	"depends" "install dependencies only" OFF \
 	"upgrade" "upgrade smlinux only" OFF \
-    "help" "display command line options & open faq" OFF \
+    "help" "show command line options & web faq" OFF \
 	3>&1 1>&2 2>&3); then
 		# echo User escape.
 		COMMAND=help
@@ -1875,9 +1876,10 @@ else   # The real start, the rest was script preperation and setup.
 	echo "| depends: Install dependencies (automatic during smlinux installation)  |"
 	echo "| upgrade: Upgrade smlinux to latest version from github (no build)      |"
 	echo "|   purge: Remove all files and folders obtained or created by smlinux   |"
-	echo "|    help: Display all smlinux commands and options and open faq url     |"
+	echo "|    help: Display all smlinux command line options and open online faq  |"
 	if [ "$COMMAND" = "help" ]; then
 		echo "| rebuild: rebuild existing or previously failed build with no changes   |"
+		echo "|<romfile> install smlinux using specified romfile then build (default)  |"
 		echo "|                                                                        |"
 		echo "| Options:   --hd  install HD add-ons (ignore InstallHD=0)               |"
 		echo "|           --sgi  install Render96 SGI model pack (ignore InstallSGI=0) |"
@@ -1939,8 +1941,8 @@ else   # The real start, the rest was script preperation and setup.
 			redecho sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar --needed --noconfirm
 			sudo pacman -S base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar --needed --noconfirm
 		else
-			pinkecho Warning: apt, pacman, and macOS not detected.  Skipping OS specific dependencies.
-			echo For a list of reccommended packages for other distributions, see smlinux FAQ.
+			pinkecho Warning: apt/pacman/macOS not detected. Skipping OS specific dependency install.
+			pinkecho For command to install reccommended packages for other distros see smlinux FAQ.
 		fi
 		if [ ! -f "$SMLINUX"/config.py ]; then
 			wget -q https://raw.githubusercontent.com/enigma9o7/smlinux/master/config.py -P "$SMLINUX"
