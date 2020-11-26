@@ -5,13 +5,13 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1125-2058
+TIMESTAMP=2020-1126-1156
 
-SECONDS=0 # reset bash timer to time prep
+SECONDS=0 # reset bash timer
 
 domake(){
-PREPTIME="$SECONDS"
-SECONDS=0 # reset bash timer to time build
+PREPSEC="$SECONDS"
+SECONDS=0 # reset bash timer for build
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 		rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
@@ -182,13 +182,7 @@ fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ] && [ "$BuildMusic" = 1 ]; then
 	killall -q -y1h mplayer
 fi
-if [ $(($SECONDS / 60)) = 0 ]; then
-	BUILDTIME="$(($SECONDS % 60)) seconds"
-elif [ $(($SECONDS / 60)) = 1 ]; then
-	BUILDTIME="one minute $(($SECONDS % 60)) seconds"
-else
-	BUILDTIME="$(($SECONDS / 60)) minutes $(($SECONDS % 60)) seconds"
-fi
+BUILDSEC="$SECONDS"
 }
 
 msysdepends(){
@@ -355,33 +349,38 @@ elif [ "$TARGET" = "dos" ]; then
 	pinkecho Warning: djgpp environment is loaded.  Do not try to 
 	pinkecho use this shell to build.  Exit and open new shell. 
 fi
-echo
-tput setab 0  # black background
-tput setaf 6  # cyan text
-if [ "$COMMAND" = "update" ]; then
-	COMMAND=build
-fi
-printf "Completed ""$COMMAND"" in " 
-if [ -z "$BUILDTIME" ]; then
-	echo "$SECONDS" seconds.
+if [ -z "$BUILDSEC" ]; then
+	SHOWTIME=$(( SECONDS ))
+	BUILDSEC=0
+	PREPSEC=0
 else
-	echo "$BUILDTIME" after "$PREPTIME" seconds preparation.
+	SHOWTIME=$BUILDSEC
 fi
-printf "smlinux:""$TIMESTAMP"" "
-if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ]); then
+if [ $(($SHOWTIME / 60)) = 0 ]; then
+	SHOWTIME="$(($SHOWTIME % 60)) seconds"
+elif [ $(($SECONDS / 60)) = 1 ]; then
+	SHOWTIME="one minute $(($SHOWTIME % 60)) seconds"
+else
+	SHOWTIME="$(($SHOWTIME / 60)) minutes $(($SHOWTIME % 60)) seconds"
+fi
+pinkecho Completed "$COMMAND" in "$SHOWTIME". 
+echo You may close or exit this terminal window.
+if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ] || [ "$COMMAND" = "update" ]); then
+	tput setab 0  # black background
+	tput setaf 6  # cyan text
+	echo " Prep: " "$(($PREPSEC / 60))min $(($PREPSEC % 60))sec"
+	echo "Build: " "$(($BUILDSEC / 60))min $(($BUILDSEC % 60))sec"  
+	echo "Total: " "$(($(( SECONDS + PREPSEC )) / 60))min $(($(( SECONDS + PREPSEC )) % 60))sec"  
+	echo "smlinux:""$TIMESTAMP"
 	echo "$GIT"-"$BRANCH" last commit:
 	cd "$BASEPATH"/"$PRESET"
 	git log -1 --format=%cd
-else
-	echo
 fi
-greenecho You may close or exit this terminal window.
 tput sgr0 # reset colors
-
-if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then
-	zenity --info --text="Shits done yo." &disown
+if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then 
+	zenity --info --text="Shits done yo." &disown # homage to sm64pcbuilder2
 fi
-echo
+echo "smlinux ""$TIMESTAMP" done.  Type smlinux or smlinux "<command>" to use again.
 exit
 }
 
@@ -1026,7 +1025,7 @@ else
 			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar -P enhancements
 			bluecho Applying HD Bowser...
 			if command -v unrar &> /dev/null; then
-				unrar x -o+ -idq enhancements/hd_bowser.render96_android
+				unrar x -o+ -idq enhancements/hd_bowser 
 			elif command -v unar &> /dev/null; then
 				unrar -f -q enhancements/hd_bowser.rar
 			elif ! 7z x -aoa enhancements/hd_bowser.rar; then
@@ -2017,7 +2016,7 @@ else   # The real start, the rest was script preperation and setup.
 			endnow
 		fi
 	elif [ ! "$COMMAND" = "depends" ] && [ ! "$DEPENDS" = 1 ] && [ -d "$SMLINUX"/.git ]; then
-		echo "This is not first build, skipping dependencies."
+		echo "smlinux already installed so skipping dependencies."
 	else
 		echo "Prepared."
 	fi
