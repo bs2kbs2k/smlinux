@@ -217,11 +217,7 @@ Paste the command string recccommended below for your distribution directly into
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 	
-Some build targets depend on additional packages, for example Android builds require `android-sdk`/`openjava-jdk`, dos targets require `djgpp`, web targets enscripten, sm64nx requires gcc version 8 or newer, or using sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of distros without apt will need to install appropriate gcc, sdl, or JDK if needed.  
-
-**Ubuntu/Debian** If smlinux detects `apt`it is used to install the following packages:
-
-	zenity git python3 python3-pip python3-pyqt5 wget unzip unrar p7zip-full build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
+Some build targets depend on additional packages, for example Android builds require `android-sdk`/`openjava-jdk`, DOS targets require `djgpp`, web targets emscripten, sm64nx requires gcc version 8 or newer, or using sdl1 requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of operating systems without advanced package tool may need the appropriate GCC/SDL/JDK pre-installed in such cases.  
 
 **macOS** If smlinux detects `Darwin` the following packages are installed with `brew`:
 
@@ -232,17 +228,21 @@ Some build targets depend on additional packages, for example Android builds req
 	64-bit: mingw-w64-x86_64-python-pyqt5 mingw-w64-x86_64-python-numpy mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 mingw-w64-x86_64-gcc python3 python3-pip git make unzip zip unrar p7zip nano
 	32-bit: mingw-w64-i686-python-pyqt5 mingw-w64-i686-python-numpy mingw-w64-i686-glew mingw-w64-i686-SDL2 mingw-w64-i686-gcc python3 python3-pip git make unzip zip unrar p7zip nano
 
+**Ubuntu/Debian** If smlinux detects `apt`it is used to install the following packages:
+
+	zenity git python3 python3-pip python3-pyqt5 wget unzip unrar p7zip-full build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
+
 **Arch** Otherwise if `pacman` is found the following packages are installed:  
 
 	 base-devel python audiofile sdl2 glew python-zstandard python-pip zstd zenity unzip zip unrar 
-	 
+
 smlinux usually only installs these dependendencies automatically during the very first installation; if you wish to trigger installation again run 
 	
 	smlinux depends
 
 ## **How do I create my rom file?**
 
-Backup N64 cartridge with a dumper such as Retrode2 or Mr. Backup, from Wii with vcromclaim, or buy for Wii U Virtual Console and extract with title dumper or other homebrew tools.  
+Backup N64 cartridge with a dumper such as Retrode2 or Mr. Backup, from Wii with vcromclaim, or buy for Wii U Virtual Console and extract with title dumper.  
 [Dragonbox Store](https://www.dragonbox.de/en/accessories/cartridge-dumper/retrode2-with-all-plugins) &nbsp; [Stoneage Gamer](https://stoneagegamer.com/retrode-2-cart-reader-rom-dumper-for-super-nintendo-genesis-more.html) &nbsp; 
 [Nintendo Wii U Store](https://www.nintendo.com/games/detail/super-mario-64-wii-u) &nbsp; [WiiU Title Dumper](https://gbatemp.net/threads/ddd-wiiu-title-dumper.418492) &nbsp; [Wii Virtual Console ROM Claim]( https://github.com/JanErikGunnar/vcromclaim)  
 *Note that 3D All-Stars contains the Shindou version of the ROM which isn't fully supported by PC port.*  
