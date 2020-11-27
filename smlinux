@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1126-1332
+TIMESTAMP=2020-1126-1838
 
 SECONDS=0 # reset bash timer
 
@@ -350,7 +350,7 @@ elif [ "$TARGET" = "dos" ]; then
 	pinkecho use this shell to build.  Exit and open new shell. 
 fi
 if [ -z "$BUILDSEC" ]; then
-	SHOWTIME=$(( SECONDS ))
+	SHOWTIME=$SECONDS
 else
 	SHOWTIME=$BUILDSEC
 fi
@@ -365,19 +365,21 @@ pinkecho smlinux completed "$COMMAND" in "$SHOWTIME".
 if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ] || [ "$COMMAND" = "update" ]); then
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
-	echo "Setup: " "$(($PREPSEC / 60))min $(($PREPSEC % 60))sec"
-	echo "Build: " "$(($BUILDSEC / 60))min $(($BUILDSEC % 60))sec"  
-	echo "Total: " "$(($(( BUILDSEC + PREPSEC )) / 60))min $(($(( BUILDSEC + PREPSEC )) % 60))sec"  
-	echo "$GIT"-"$BRANCH"" last commit: "
+	echo "setup: " "$(($PREPSEC / 60))min $(($PREPSEC % 60))sec"
+	echo "+make: " "$(($BUILDSEC / 60))min $(($BUILDSEC % 60))sec"  
+	echo "=done: " "$(($((LAUNCHSEC + PREPSEC)) / 60))min $(($((LAUNCHSEC + PREPSEC))% 60))sec"
+	echo "+wait: " "$(($(($SECONDS - LAUNCHSEC)) / 60))min $(($(($SECONDS - LAUNCHSEC))% 60))sec"     
+	echo "=full: " "$(($(($SECONDS + PREPSEC)) / 60))min $(($(($SECONDS + PREPSEC))% 60))sec"   
+	echo "$GIT"" last commit: "
 	cd "$BASEPATH"/"$PRESET"
 	git log -1 --format=%cd
 fi
 if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then 
 	zenity --info --text="Shits done yo." &disown # homage to sm64pcbuilder2
 fi
-echo "smlinux ""$TIMESTAMP" done.  Type smlinux or smlinux "<command>" to use again.
+greenecho "smlinux ""$TIMESTAMP" done.  Type smlinux or smlinux "<command>" to use again.
 tput sgr0 # reset colors
-echo You may close or exit this terminal.
+bluecho You may close or exit this terminal.
 exit
 }
 
@@ -1620,6 +1622,7 @@ elif [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64.us.f3dex2e ]; th
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 	./sm64.us.f3dex2e --cheats --savepath "$SAVEDIR" --skip-intro &disown
 fi
+LAUNCHSEC=$SECONDS
 }
 
 ####################################### The Beginning ########################################
@@ -2206,7 +2209,7 @@ elif [ "$COMMAND" = "update" ]; then
 	domymenu
 fi
 if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
-	greenecho [5] Recompiling "$PRESET"...
+	greenecho [5] Recompiling "$BRANCH"...
 	domake
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 		redecho ERROR: "$PRESET" Build Failure - output file not found.
@@ -2451,7 +2454,7 @@ if [ "$BRANCH" = "sm64ex_nightly" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/p
 	cp "$SMLINUX"/pro1.patch enhancements
 	git apply enhancements/pro1.patch
 fi
-greenecho [6] Compiling "$PRESET"...
+greenecho [6] Compiling "$BRANCH"...
 domake
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	echo
@@ -2501,10 +2504,10 @@ do
 done
 	kill -9 $PPID
 elif [ "$EXTERNAL_DATA" = 0 ]; then
-	sleep 4
+	sleep 5
 elif  [ "$GIT" = "render96/render96ex" ] && [ "$InstallHD" = 1 ]; then
-	sleep 28
+	sleep 30
 else
-	sleep 8
+	sleep 10
 fi
 theend
