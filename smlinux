@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1127-1145
+TIMESTAMP=2020-1127-1420
 
 SECONDS=0 # reset bash timer
 
@@ -922,7 +922,7 @@ elif [ -f "$SMLINUX"/config.py ] ; then
 		pinkecho To avoid this message specify option --nano to edit configuration with nano.
 		EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
 		IFS=":"
-		if command -v whiptail &> /dev/null; then
+		if [ ! "$COMMAND" = "config" ] && command -v whiptail &> /dev/null; then
 			if (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 24 80 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
 				if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open a text editor.\n\nWhen you save and exit configuration, smlinux will begin.\nTo exit pico/nano/micro editors use Control-X\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
 					for editor in $EDITORS; do
@@ -935,10 +935,14 @@ elif [ -f "$SMLINUX"/config.py ] ; then
 					echo smlinux aborted.  Try Enter instead of Esc next time.
 					exit
 				fi
+			else
+				echo Proceeding without changes...
 			fi
 		else
-			pinkecho WARNING: whiptail not found. 
-			pinkecho Please install newt/whiptail package for prompts.
+			if [ ! "$COMMAND" = "config" ]; then
+				pinkecho WARNING: whiptail not found. 
+				pinkecho Please install newt/whiptail package for prompts.
+			fi
 			for editor in $EDITORS; do
 				$editor "$SMLINUX"/smlinuxcfg.txt
 				if [ $? -eq 0 ]; then
