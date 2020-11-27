@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1127-1027
+TIMESTAMP=2020-1127-1145
 
 SECONDS=0 # reset bash timer
 
@@ -183,6 +183,42 @@ if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ] &
 	killall -q -y1h mplayer
 fi
 BUILDSEC="$SECONDS"
+}
+
+updateconfig(){
+if [ -f "$SMLINUX"/smlinuxcfg.txt ] || [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; then 
+	if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; then
+		# update paths from old versions of smlinux that shared sm64pc folder for configfile
+		pathupdate
+	fi
+	sed -i.bak 's/WINDOW_API=/SDL_API=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
+	sed -i.bak 's/InstallR96=/InstallSGI=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
+	sed -i.bak '/^REPO=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+	sed -i.bak '/^OSX_BUILD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+	sed -i.bak '/^UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+	sed -i.bak '/UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+	sed -i.bak '/^Linux=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
+	sed -i.bak '/Linux must be set/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+	sed -i.bak '/Depracated/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
+	if [ ! "$PRESET" = "UserDefined" ]; then # clear values
+		sed -i.bak '/^BRANCH=/d' "$SMLINUX"/smlinuxcfg.txt # delete line
+		sed -i.bak '/^GIT=/d' "$SMLINUX"/smlinuxcfg.txt # delete line
+		echo "GIT=" >>"$SMLINUX"/smlinuxcfg.txt
+		echo "BRANCH=" >>"$SMLINUX"/smlinuxcfg.txt
+	fi
+	if ! grep -q "FLAGS=" "$SMLINUX"/smlinuxcfg.txt; then
+		echo "FLAGS=" >>"$SMLINUX"/smlinuxcfg.txt
+	fi
+	if [ -f "$SMLINUX"/smlinuxcfg.txt.bak ]; then
+		rm "$SMLINUX"/smlinuxcfg.txt.bak
+	fi
+	touch "$SMLINUX"/.config0
+	pinkecho WARNING: An older version of smlinux config file was found.  
+	pinkecho It has been updated for compatibility and should continue to work.
+	pinkecho RECCOMMENDED: smlinux reset to install latest configuration file.
+	pinkecho RECCOMMENDED: smlinux depends to install latestet dependencies.
+	pinkecho This message will not repeat.
+fi
 }
 
 msysdepends(){
@@ -376,7 +412,7 @@ fi
 if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then 
 	zenity --info --text="Shits done yo." &disown # homage to sm64pcbuilder2
 fi
-greenecho "smlinux ""$TIMESTAMP" done.  Type smlinux or smlinux "<command>" to use again.
+greenecho "smlinux ""$TIMESTAMP" done.  Type smlinux or smlinux "[command]" to use again.
 tput sgr0 # reset colors
 bluecho You may close or exit this terminal.
 exit
@@ -578,6 +614,7 @@ makeconfig(){
 if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
+touch "$SMLINUX"/.config0
 echo '# PRESET supports: sm64pc sm64-port sm64nx sm64ex sm64ex-coop cheaterex 
 # ALSO render96ex r96alpha sm64dos sm64exweb androidex AND MORE IN FAQ!
 PRESET=cheaterex
@@ -878,12 +915,6 @@ doconfig(){
 if [ "$NANO" = 1 ]; then
 	nano "$SMLINUX"/smlinuxcfg.txt
 elif [ -f "$SMLINUX"/config.py ] ; then
-	if [ ! "$PRESET" = "UserDefined" ]; then # clear values
-		sed -i.bak '/^BRANCH=/d' "$SMLINUX"/smlinuxcfg.txt # delete line
-		sed -i.bak '/^GIT=/d' "$SMLINUX"/smlinuxcfg.txt # delete line
-		echo "GIT=" >>"$SMLINUX"/smlinuxcfg.txt
-		echo "BRANCH=" >>"$SMLINUX"/smlinuxcfg.txt
-	fi
 	echo Launching smlinux configuration editor...
 	if ! python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt; then 
 		redecho ERROR: Python-QT5 based configuration GUI failed to start!
@@ -1683,8 +1714,13 @@ fi
 
 if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then
 	COMMAND=build
-elif [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "/?" ]; then
+elif [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "--h" ]; then
 	COMMAND=help
+elif [ "$1" = "command" ] || [ "$1" = "[command]" ] || [ "$1" = "hell" ] || [ "$1" = "/?" ]; then
+	redecho Not a valid command.  Try smlinux build or smlinux update...
+	sleep 2
+	COMMAND=help
+	OP1=--noweb
 elif [ ! $# -eq 0 ]; then
 	COMMAND="$1"
 	OP1="$2"
@@ -1750,24 +1786,8 @@ fi
 if [ ! -d "$SHARE" ]; then 
 	mkdir "$SHARE"
 fi
-if [ ! -f "$SMLINUX"/smlinuxcfg.txt ] && [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; then
-	# update paths from old versions of smlinux that shared sm64pc folder for configfile
-	pathupdate
-fi
-if [ -f "$SMLINUX"/smlinuxcfg.txt ]; then #update users config file fields 
-	sed -i.bak 's/WINDOW_API=/SDL_API=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
-	sed -i.bak 's/InstallR96=/InstallSGI=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
-	sed -i.bak '/^REPO=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
-	sed -i.bak '/^OSX_BUILD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
-	sed -i.bak '/^UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
-	sed -i.bak '/UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
-	sed -i.bak '/^Linux=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
-	sed -i.bak '/Linux must be set/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
-	sed -i.bak '/Depracated/d' "$SMLINUX"/smlinuxcfg.txt # delete comment
-	if ! grep -q "FLAGS=" "$SMLINUX"/smlinuxcfg.txt; then
-		echo "FLAGS=" >>"$SMLINUX"/smlinuxcfg.txt
-	fi
-	rm "$SMLINUX"/smlinuxcfg.txt.bak
+if [ ! -f "$SMLINUX"/.config0 ]; then
+	updateconfig
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ "$COMMAND" = "config" ]; then
@@ -1905,14 +1925,12 @@ else   # The real start, the rest was script preperation and setup.
 	if [ "$COMMAND" = "help" ]; then
 		echo "| rebuild: rebuild existing or previously failed build with no changes   |"
 		echo "|<romfile> install smlinux using specified romfile then build (default)  |"
-		echo "|                                                                        |"
 		echo "| Options:   --hd  install HD add-ons (ignore InstallHD=0)               |"
 		echo "|           --sgi  install Render96 SGI model pack (ignore InstallSGI=0) |"
 		echo "|            --go  skip configuration editor (ignore CONFIG=1)           |"
 		echo "|        --config  prompt to edit config before build (ignore CONFIG=0)  |"
 		echo "|          --nano  use nano instead of GUI to edit configuration file    |"
 		echo "|         --noweb  do not open urls in web browser                       |"
-		echo "|                                                                        |"
 		echo "--------------------------------------------------------------------------"
 		tput setaf 7 # white text
 		if [ ! "$OP1" = "--noweb" ]; then
