@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1127-1016
+TIMESTAMP=2020-1127-1027
 
 SECONDS=0 # reset bash timer
 
@@ -858,11 +858,18 @@ if [ "$2" = "--depends" ] || [ "$3" = "--depends" ] ||[ "$4" = "--depends" ] ||[
 	DEPENDS=1
 fi
 if [ ! -d "$BASEPATH" ]; then
+	pinkecho WARNING: BASEPATH "$BASEPATH" not found.  Trying to create... 
 	mkdir "$BASEPATH"
 fi
 if [ ! -d "$BASEPATH" ]; then
-	redecho ERROR: User Defined BASEPATH "$BASEPATH" does not exist!
-	echo Setting BASEPATH="$HOME"
+	pinkecho Unsuccesful.  Trying "$HOME"/"$BASEPATH"...
+	BASEPATH="$HOME"/"$BASEPATH"
+	if [ ! -d "$BASEPATH" ]; then
+		mkdir "$BASEPATH"
+	fi
+fi
+if [ ! -d "$BASEPATH" ]; then
+	redecho ERROR: User Defined BASEPATH does not exist!  Setting BASEPATH="$HOME"
 	BASEPATH=$HOME
 fi
 }
@@ -2216,7 +2223,7 @@ elif [ "$COMMAND" = "update" ]; then
 	domymenu
 fi
 if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
-	greenecho [5] Recompiling "$PRESET" with "$GIT" "$BRANCH"...
+	greenecho [5] Recompiling "$GIT" "$BRANCH" in "$BASEPATH"/"$PRESET" 
 	domake
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 		redecho ERROR: "$PRESET" Build Failure - output file not found.
@@ -2461,7 +2468,7 @@ if [ "$BRANCH" = "sm64ex_nightly" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/p
 	cp "$SMLINUX"/pro1.patch enhancements
 	git apply enhancements/pro1.patch
 fi
-greenecho [6] Compiling "$PRESET" from "$GIT" "$BRANCH"...
+greenecho [6] Compiling "$GIT" "$BRANCH" in "$BASEPATH"/"$PRESET" 
 domake
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	echo
