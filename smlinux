@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1126-1838
+TIMESTAMP=2020-1126-2104
 
 SECONDS=0 # reset bash timer
 
@@ -207,24 +207,23 @@ fi
 }
 
 extractrom(){
-if [ ! -f "$SMLINUX"/"$VERSION"/textures/water/jrb_textures.0B800.rgba16.png ]; then
+if [ ! -d "$SMLINUX"/"$VERSION" ]; then
 	mkdir "$SMLINUX"/"$VERSION"
 	cd "$SMLINUX"/"$VERSION"
-	ln -s "$BASEPATH"/"$PRESET"/tools
-	ln -s "$BASEPATH"/"$PRESET"/include
-	ln -s "$BASEPATH"/"$PRESET"/sm64."$VERSION".sha1
-	ln -s "$BASEPATH"/"$PRESET"/assets.json
 	ln -s "$SMLINUX"/baserom."$VERSION".z64
 	bluecho Extracting assets from rom...
-	time "$BASEPATH"/"$PRESET"/extract_assets.py "$VERSION"
-	rm sm64."$VERSION".sha1 assets.json
-	if [ "$MSYS" = 1 ]; then
-		rm -rf tools include
-	else
-		rm tools include
-	fi
+else 
+	bluecho Updating assets previously extracted from rom...
+	cd "$SMLINUX"/"$VERSION"	
+fi
+ln -s "$BASEPATH"/"$PRESET"/tools "$BASEPATH"/"$PRESET"/include .
+cp "$BASEPATH"/"$PRESET"/sm64."$VERSION".sha1 "$BASEPATH"/"$PRESET"/assets.json .
+time "$BASEPATH"/"$PRESET"/extract_assets.py "$VERSION"
+rm sm64."$VERSION".sha1 assets.json
+if [ "$MSYS" = 1 ]; then
+	rm -rf tools include
 else
-	bluecho Copying assets previously extracted from rom...	
+	rm tools include
 fi
 cp -rn "$SMLINUX"/"$VERSION"/* "$BASEPATH"/"$PRESET"
 cp -n "$SMLINUX"/"$VERSION"/.assets-local.txt "$BASEPATH"/"$PRESET"
@@ -2209,7 +2208,7 @@ elif [ "$COMMAND" = "update" ]; then
 	domymenu
 fi
 if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
-	greenecho [5] Recompiling "$BRANCH"...
+	greenecho [5] Recompiling "$PRESET" with "$GIT" "$BRANCH"...
 	domake
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 		redecho ERROR: "$PRESET" Build Failure - output file not found.
@@ -2335,7 +2334,7 @@ fi
 if [ "$OSX_BUILD" = 1 ]; then
 	macprep
 fi
-greenecho [4] Preparing Assets from ROM...
+greenecho [4] Preparing assets from ROM...
 if [ "$PRESET" = "sm64nx" ]; then
 	prepnx
 else 
@@ -2346,7 +2345,7 @@ fi
 if [ "$COMMAND" = "clone" ]; then
 	theend
 fi
-greenecho [5] Applying Enhancements...
+greenecho [5] Applying enhancements...
 if [ ! -d "$SAVEDIR" ] && [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 	echo Creating "$SAVEDIR" for save files.
 	mkdir "$SAVEDIR"
@@ -2454,7 +2453,7 @@ if [ "$BRANCH" = "sm64ex_nightly" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/p
 	cp "$SMLINUX"/pro1.patch enhancements
 	git apply enhancements/pro1.patch
 fi
-greenecho [6] Compiling "$BRANCH"...
+greenecho [6] Compiling "$PRESET" from "$GIT" "$BRANCH"...
 domake
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	echo
