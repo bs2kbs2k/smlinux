@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1126-2104
+TIMESTAMP=2020-1127-1016
 
 SECONDS=0 # reset bash timer
 
@@ -856,6 +856,14 @@ fi
 
 if [ "$2" = "--depends" ] || [ "$3" = "--depends" ] ||[ "$4" = "--depends" ] ||[ "$5" = "--depends" ]; then
 	DEPENDS=1
+fi
+if [ ! -d "$BASEPATH" ]; then
+	mkdir "$BASEPATH"
+fi
+if [ ! -d "$BASEPATH" ]; then
+	redecho ERROR: User Defined BASEPATH "$BASEPATH" does not exist!
+	echo Setting BASEPATH="$HOME"
+	BASEPATH=$HOME
 fi
 }
 
