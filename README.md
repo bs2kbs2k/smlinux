@@ -126,7 +126,7 @@ You can also use this option to rebuild after you apply patches or edit your sou
 
 Note` --config` is only needed if `CONFIG=0` in your config file, otherwise it will come up automatically.
 
-Note` --hd` only needs to be applied if `UpdateHD=0` in smlinux configuration, and what was initally installed with`InstallHD=1` has changed/updated since you last built, or if you wish to add HD add-ons to an existing build that was made with `InstallHD=0`.
+Note` --hd` or `--sgi` only do anything if `InstallHD=0` or `InstallSGI=0` in smlinux configuration.  After these add-ons are installed, setting configuration value to 0 will not remove them, only prevent smlinux from reapplying them.
 
 Note smlinux automatically saves one previous build by adding the suffix .old to its foldername (and restores it if your update fails to build). If you want prevent it from being erased during the next update, rename it (anything) before running smlinux, for example: 
  
