@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1127-1420
+TIMESTAMP=2020-1129-1245
 
 SECONDS=0 # reset bash timer
 
@@ -412,7 +412,7 @@ fi
 if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then 
 	zenity --info --text="Shits done yo." &disown # homage to sm64pcbuilder2
 fi
-greenecho "smlinux ""$TIMESTAMP" done.  Type smlinux or smlinux "[command]" to use again.
+greenecho "smlinux ""$TIMESTAMP" done.  Enter smlinux or smlinux "[command]" to use again.
 tput sgr0 # reset colors
 bluecho You may close or exit this terminal.
 exit
@@ -1958,7 +1958,7 @@ else   # The real start, the rest was script preperation and setup.
 				echo FATAL ERROR Could not install homebrew, thus cannot install other stuff.  
 				endnow
 			fi
-			brew install libxdg-basedir coreutils wget newt nano go zip unzip unrar p7zip python3 PyQt5
+			brew install libxdg-basedir coreutils wget newt nano go unzip unrar p7zip python3 PyQt5
 			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 			go get github.com/machinebox/appify
 			if [ ! ~/.nanorc ]; then
