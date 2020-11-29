@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1129-1245
+TIMESTAMP=2020-1129-1254
 
 SECONDS=0 # reset bash timer
 
@@ -1971,6 +1971,9 @@ else   # The real start, the rest was script preperation and setup.
 				echo Installing Apple XCode Command Line Tools
 				xcode-select --install
 				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\n" 12 55 2>&1
+			fi
+			if [ "$COMMAND" = "depends" ]; then # fix if user updated brew and broke pyqt5
+				brew link pyqt --overwrite
 			fi
 		elif command -v apt &> /dev/null && [ "$USER" = "root" ]; then
 			bluecho "Updating package list and installing dependencies..."
