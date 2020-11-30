@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1129-1254
+TIMESTAMP=2020-1130-1057
 
 SECONDS=0 # reset bash timer
 
@@ -1685,6 +1685,11 @@ if [ `uname` = "Darwin" ]; then
 	PATHDIR=/usr/local/bin
 	OPEN=open
 	OSX_BUILD=1
+elif [ `uname -o` = "Msys" ]; then
+    MSYS=1
+	mapfile -t -d: <<<"$PATH"
+	PATHDIR="${MAPFILE[0]}"
+	OPEN=start
 elif command -v xdg-open &> /dev/null; then
 	if mapfile -t -d: <<<"$PATH" >/dev/null 2>&1; then
 		PATHDIR="${MAPFILE[0]}"
@@ -1693,11 +1698,6 @@ elif command -v xdg-open &> /dev/null; then
 		export PATH="$HOME"/bin:$PATH
 	fi
 	OPEN=xdg-open
-elif [ `uname -o` = "Msys" ]; then
-    MSYS=1
-	mapfile -t -d: <<<"$PATH"
-	PATHDIR="${MAPFILE[0]}"
-	OPEN=start
 elif command -v firefox &> /dev/null; then
 	mapfile -t -d: <<<"$PATH"
 	PATHDIR="${MAPFILE[0]}"
@@ -1716,7 +1716,7 @@ else
 	BITS=32
 fi
 
-if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then
+if [ -z "$1" ] && [ ! -d "$SMLINUX"/.git ]; then # new install
 	COMMAND=build
 elif [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "--h" ]; then
 	COMMAND=help
@@ -1915,26 +1915,26 @@ else   # The real start, the rest was script preperation and setup.
 	echo '/------------------------------'"$TIMESTAMP"'----------------------------\'
 	echo "|   Super Mario 64 Install * Build * Update Script for Linux and macOS   |"
 	echo "|                                                                        |"
-	echo "|          Command Line Usage: smlinux <command> <options>               |"
-	echo "| Commands                                                               |"
-	echo "|  update: Update existing sm64 source & build (preserves modifications) |"
-	echo "|   build: Get/reset sm64 source repo & build (renames existing folder)  |"
-	echo "|   clone: Get/reset sm64 source repo & extract rom (no addons/build)    |"
-	echo "|  config: Opens smlinuxcfg.txt in an editor (without building)          |"
-	echo "|   reset: Resets smlinux configuration file to default settings         |"
-	echo "| depends: Install dependencies (automatic during smlinux installation)  |"
-	echo "| upgrade: Upgrade smlinux to latest version from github (no build)      |"
-	echo "|   purge: Remove all files and folders obtained or created by smlinux   |"
-	echo "|    help: Display all smlinux command line options and open online faq  |"
+	echo "|           Command Line Usage: smlinux <command> <options>              |"
+	echo "|  Commands                                                              |"
+	echo "|   update: Update sm64 source repo & rebuild (preserves modifications)  |"
+	echo "|    build: Get/reset sm64 source repo & build (renames existing folder) |"
+	echo "|    clone: Get/reset sm64 source repo & extract rom (no addons/build)   |"
+	echo "|   config: Opens smlinuxcfg.txt in an editor (without building)         |"
+	echo "|    reset: Resets smlinux configuration file to default settings        |"
+	echo "|  depends: Install dependencies (automatic during smlinux installation) |"
+	echo "|    purge: Remove all files and folders obtained or created by smlinux  |"
+	echo "|     help: Display all smlinux command line options and open online faq |"
 	if [ "$COMMAND" = "help" ]; then
-		echo "| rebuild: rebuild existing or previously failed build with no changes   |"
-		echo "|<romfile> install smlinux using specified romfile then build (default)  |"
-		echo "| Options:   --hd  install HD add-ons (ignore InstallHD=0)               |"
-		echo "|           --sgi  install Render96 SGI model pack (ignore InstallSGI=0) |"
-		echo "|            --go  skip configuration editor (ignore CONFIG=1)           |"
-		echo "|        --config  prompt to edit config before build (ignore CONFIG=0)  |"
-		echo "|          --nano  use nano instead of GUI to edit configuration file    |"
-		echo "|         --noweb  do not open urls in web browser                       |"
+		echo "|  upgrade: Upgrade smlinux to latest version from github (no build)     |"
+		echo "|  rebuild: rebuild existing or previously failed build with no changes  |"
+		echo "| <romfile> install smlinux using specified romfile then build           |"
+		echo "|  Options:   --hd  install HD add-ons (ignore InstallHD=0)              |"
+		echo "|            --sgi  install R96 SGI model pack (ignore InstallSGI=0)     |"
+		echo "|             --go  skip configuration editor (ignore CONFIG=1)          |"
+		echo "|         --config  prompt to edit config before build (ignore CONFIG=0) |"
+		echo "|           --nano  use nano instead of GUI to edit configuration file   |"
+		echo "|          --noweb  do not open urls in web browser                      |"
 		echo "--------------------------------------------------------------------------"
 		tput setaf 7 # white text
 		if [ ! "$OP1" = "--noweb" ]; then
@@ -2079,16 +2079,16 @@ else   # The real start, the rest was script preperation and setup.
 			vettrom
 			fi
 		fi
+	fi
+	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+		echo Romfile located and verified.
+	elif [ -f "$1" ]; then
+		exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+		zenity --error --text="ERROR: Specified file is not original Super Mario 64 ROM image\nMake sure VERSION= is set to the correct region if not US romfile\n" --title="Your installation is incomplete." --width=640 &disown	
+		sleep 1			
+		redecho "ERROR: Specified file is not original Super Mario 64 ROM image or VERSION set wrong."
 		echo
-		if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-			echo Romfile located and verified.
-		elif [ -f "$1" ]; then
-			exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-			zenity --error --text="ERROR: Specified file is not original Super Mario 64 ROM image\nMake sure VERSION= is set to the correct region if not US romfile\n" --title="Your installation is incomplete." --width=640 &disown	
-			sleep 1			
-			redecho "ERROR: Specified file is not original Super Mario 64 ROM image or VERSION set wrong."
-			echo
-		fi
+	else
 		redecho "Please select Super Mario 64 romfile to begin."	
 		if [ "$OSX_BUILD" = 1 ]; then
 			cd $HOME
@@ -2101,27 +2101,27 @@ else   # The real start, the rest was script preperation and setup.
 			cp "$USERFILE" "$SMLINUX"/baserom."$VERSION".z64
 			vettrom
 		fi
-		if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-			echo
-			redecho "Error processing ROM: Something did not work like it was supposed to!"
-			echo "An unmodified Super Mario 64 romfile in big endian (Z64) format is needed."
-			echo "Try dragging and dropping romfile into this terminal window from file manager."
-			echo "If that does not work, some file managers (like pcmanfm) you can right click the"
-			echo "file to select \"copy path\" then paste it here followed by enter. "
-			echo "Lastly, you can try typing the full path and filename then press enter."
-			echo "If that still does not work, romfile must be corrupt or its a smlinux problem."
-			echo
-			printf "Filename? >"
-			read USERFILE
-			if [ -f "$USERFILE" ]; then
-				cp "$USERFILE" "$SMLINUX"/baserom."$VERSION".z64
-				vettrom
-			fi
+	fi
+	if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+		echo
+		redecho "Error processing ROM: Something did not work like it was supposed to!"
+		echo "An unmodified Super Mario 64 romfile in big endian (Z64) format is needed."
+		echo "Try dragging and dropping romfile into this terminal window from file manager."
+		echo "If that does not work, some file managers (like pcmanfm) you can right click the"
+		echo "file to select \"copy path\" then paste it here followed by enter. "
+		echo "Lastly, you can try typing the full path and filename then press enter."
+		echo "If that still does not work, romfile must be corrupt or its a smlinux problem."
+		echo
+		printf "Filename? >"
+		read USERFILE
+		if [ -f "$USERFILE" ]; then
+			cp "$USERFILE" "$SMLINUX"/baserom."$VERSION".z64
+			vettrom
 		fi
-		if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-			echo smlinux exiting incomplete. Need valid Super Mario 64 romfile to proceed.
-			endnow
-		fi
+	fi
+	if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
+		echo smlinux exiting incomplete. Need valid Super Mario 64 romfile to proceed.
+		endnow
 	fi
 	greenecho [2] Checking smlinux github repository for updates....
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
@@ -2131,7 +2131,6 @@ else   # The real start, the rest was script preperation and setup.
 		echo "For the latest fixes and features, please set AutoUpdate=1 in configuration."
 	fi
 fi
-
 if [ "$COMMAND" = "depends" ]; then
 		theend
 elif [ "$COMMAND" = "rebuild" ]; then
