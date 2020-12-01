@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1130-1907
+TIMESTAMP=2020-1130-1949
 
 STARTSEC=$SECONDS
 
@@ -1997,11 +1997,11 @@ else   # The real start, the rest was script preperation and setup.
 		elif command -v apt &> /dev/null && [ "$USER" = "root" ]; then
 			bluecho "Updating package list and installing dependencies..."
 			apt update
-			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip-full
+			apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip-full whiptail
 		elif command -v sudo &> /dev/null && command -v apt &> /dev/null; then
 			bluecho "Updating package list and installing dependencies..."
 			sudo apt update
-			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip-full
+			sudo apt install -y build-essential bsdmainutils binutils wget git python3 libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev python3-pip python3-pyqt5 zenity mplayer zip unzip unrar p7zip-full whiptail
 		elif [ "$MSYS" = 1 ]; then
 			bluecho Downloading and installing needed dependencies...
 			msysdepends
