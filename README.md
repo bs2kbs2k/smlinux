@@ -1,5 +1,5 @@
 #  smlinux -Super Mario Linux- Install Build Update Script
-[<strong>Click here to jump to Frequenty Asked Questions</strong>](#frequently-asked-questions)  
+[<strong>Click here to jump to Frequently Asked Questions</strong>](#frequently-asked-questions)  
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
 ## **What does smlinux do?**
 #
