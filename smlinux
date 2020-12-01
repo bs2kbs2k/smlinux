@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1130-1616
+TIMESTAMP=2020-1130-1643
 
 SECONDS=0 # reset bash timer
 
@@ -378,7 +378,8 @@ if [ ! -f skyconv ]; then
 fi
 if [ ! -f skyconv ]; then
 	pinkecho Warning: Tool build attempt failed with gcc-9.  Trying other compilers...
-	gmake OSX_BUILD=1 TARGET_OSX=1 -j"$MAXJOBS"
+	gmake OSX_BUILD=1 TARGET_OSX=1 
+	gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P"
 	make
 fi
 if [ ! -f skyconv ]; then
