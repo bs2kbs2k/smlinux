@@ -5,13 +5,12 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1130-1643
+TIMESTAMP=2020-1130-1907
 
-SECONDS=0 # reset bash timer
+STARTSEC=$SECONDS
 
 domake(){
 PREPSEC="$SECONDS"
-SECONDS=0 # reset bash timer for build
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ] && [ ! "$COMMAND" = "rebuild" ]; then
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old ]; then
 		rm -rf "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".old
@@ -182,7 +181,7 @@ fi
 if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ] && [ "$BuildMusic" = 1 ]; then
 	killall -q -y1h mplayer
 fi
-BUILDSEC="$SECONDS"
+BUILDSEC=$SECONDS
 }
 
 
@@ -193,10 +192,8 @@ do
 		PATHDIR="$HOME"/"$folder"
 		break
 	fi
+	PATHDIR=$HOME/bin
 done
-	if [ -z "$PATHDIR" ]; then
-		PATHDIR=$HOME/bin
-	fi
 }
 
 
@@ -401,9 +398,9 @@ elif [ "$TARGET" = "dos" ]; then
 	pinkecho use this shell to build.  Exit and open new shell. 
 fi
 if [ -z "$BUILDSEC" ]; then
-	SHOWTIME=$SECONDS
+	SHOWTIME=$(($SECONDS - STARTSEC))
 else
-	SHOWTIME=$BUILDSEC
+	SHOWTIME=$((BUILDSEC - PREPSEC))
 fi
 if [ $(($SHOWTIME / 60)) = 0 ]; then
 	SHOWTIME="$(($SHOWTIME % 60)) seconds"
@@ -416,11 +413,11 @@ pinkecho smlinux completed "$COMMAND" in "$SHOWTIME".
 if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ] || [ "$COMMAND" = "update" ]); then
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
-	echo "setup: " "$(($PREPSEC / 60))min $(($PREPSEC % 60))sec"
-	echo "+make: " "$(($BUILDSEC / 60))min $(($BUILDSEC % 60))sec"  
-	echo "=done: " "$(($((LAUNCHSEC + PREPSEC)) / 60))min $(($((LAUNCHSEC + PREPSEC))% 60))sec"
+	echo "setup: " "$(($((PREPSEC - STARTSEC)) / 60))min $(($((PREPSEC - STARTSEC))% 60))sec"  
+	echo "+make: " "$(($SHOWTIME / 60))min $(($SHOWTIME % 60))sec"  
+	echo "=done: " "$(($BUILDSEC / 60))min $(($BUILDSEC % 60))sec"  
 	echo "+wait: " "$(($(($SECONDS - LAUNCHSEC)) / 60))min $(($(($SECONDS - LAUNCHSEC))% 60))sec"     
-	echo "=full: " "$(($(($SECONDS + PREPSEC)) / 60))min $(($(($SECONDS + PREPSEC))% 60))sec"   
+	echo "=full: " "$(($(($SECONDS - STARTSEC)) / 60))min $(($(($SECONDS - STARTSEC))% 60))sec"   
 	echo "$GIT"" last commit: "
 	cd "$BASEPATH"/"$PRESET"
 	git log -1 --format=%cd
@@ -493,7 +490,7 @@ tput setaf 7 # white text
 
 androidsdk(){
 if command -v sudo &> /dev/null && command -v apt &> /dev/null && [ ! -d /usr/lib/android-sdk ]; then
-	sudo apt install android-sdk openjdk-8-jdk -y
+	sudo apt install android-sdk -y
 fi
 if [ ! -f "$BASEPATH"/android-sdk/tools/bin/sdkmanager ]; then
 	cd "$BASEPATH"
@@ -2517,12 +2514,10 @@ fi
 greenecho [6] Compiling "$GIT" "$BRANCH" in "$BASEPATH"/"$PRESET" 
 domake
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
-	echo
 	redecho ERROR: "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e was not built.
 	endnow
 elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
-	echo
-	echo ERROR: Build Failure.  Expected apk file not found.
+	redecho ERROR: Build Failure.  Expected apk file not found.
 	endnow
 elif [ ! "$ANDROID" = 0 ]; then
 	mv "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/sm64."$VERSION".f3dex2e.apk
