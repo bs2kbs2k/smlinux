@@ -230,7 +230,7 @@ Some build targets depend on additional packages, for example Android builds req
 
 **Ubuntu/Debian** If smlinux detects `apt`it is used to install the following packages:
 
-	zenity git python3 python3-pip python3-pyqt5 wget unzip unrar p7zip-full build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
+	whiptail zenity git python3 python3-pip python3-pyqt5 wget unzip unrar p7zip-full build-essential bsdmainutils binutils libaudiofile-dev libglew-dev libsdl2-dev libusb-1.0-0-dev libzstd-dev mplayer
 
 **Arch** Otherwise if smlinux detects `pacman` it is used to install the following packages:  
 
