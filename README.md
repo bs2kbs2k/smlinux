@@ -32,17 +32,17 @@ You must provide your own legally backed up Super Mario 64 ROM file.
 ## **How do I run smlinux again?**
 	smlinux
 	
-The first time smlinux installs itself to either the first directory in your path or ~/bin. After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to the skip menu.  
+The first time smlinux installs itself to a bin directory in your path, which you can find with `which smlinux`.  After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to the skip menu.  
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
-If for some reason the compilation freezes, perhaps on pc with low memory, then set `MAXJOBS=1`. When undefined, smlinux will allow make multiple jobs which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
+If for some reason the compilation freezes then set `MAXJOBS=1`. When undefined, smlinux will allow make multiple jobs which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 **_macOS notes_**
 sm64ex,r96ex,sm64ex-coop and cheaterex all confirmed working with Intel based macOS 10.12 Sierra and newer.  sm64nx and android builds are not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or Apple X-code command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  You may also be prompted to grant terminal permission to your Desktop or Applications folder for shortcut installation.  
 
 **Windows notes**
-For Android & DOS builds use WSL.  For native builds under Microsoft Windows, first install msys2 and run smlinux from the included mingw terminal. sm64nx builds are not working yet.  Because whiptail is not available for msys, smlinux will run in legacy mode with no prompts and config file will open automatically. 
+For Android & DOS builds use WSL.  For native builds under Microsoft Windows, first install msys2 and run smlinux from the included mingw terminal. sm64nx builds are not working yet.  Because whiptail is not available for msys, smlinux will run in with no menus or prompts and config file will open automatically. 
 
 **32-bit notes** 
 sm64nx and Discord Rich Presence are not suppored.
@@ -72,13 +72,13 @@ sm64nx and Discord Rich Presence are not suppored.
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/presets.png>
 
 ## **What preset/repository/branch should I use?**
-If you want to build for PC, the source repository from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks of sm64ex offer additional enhancements, such as render96ex with added Luigi Keys, sm64ex-coop for a 2 player network mode, or cheaterex for all the latest experimental add-ons. For android or web, presets are available based on sm64-port or sm64ex, while for for dos sm64-port based forks are used. 
+If you want to build for PC, the source repository from the team who decompiled the rom, sm64-port, offers the cleanest code and duplication of N64, with currently very few add-ons available.  The unofficial forks, sm64ex and sm64nx, include enhancements and support for many add-ons (which are optional on sm64ex).  sm64ex offers the most flexibility, but you are encouraged to build more than one and try for yourself.  Further forks of sm64ex offer additional enhancements, such as render96ex with additional language support and game features, sm64ex-coop for a 2 player network mode, or cheaterex for all the latest experimental add-ons. For android or web, presets are available based on sm64-port or sm64ex, while for for dos sm64-port based forks are used. 
 
 ## **What does the InstallHD option do?**
 
-This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch to most forks except dos.  Render96ex instead gets the Render 96 SGI Model pack which includes mario, bowser, 3d coins, and much more.
+This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch to most forks except dos.  Render96ex instead gets the Render 96 SGI Model pack which includes Mario, Bowser, 3D coins, and much more.
 
-On sm64pc/sm64ex based forks upscaled textures will aslo be added to your build from the Cleaner Aesthetics github repo, and hq sounds from MapAnon's github release.  On the render96ex fork, Render96's HD rextures will be used instead, which are over 500MB so require additional download time, as well as more than 2GB of free memory and additional time to precache before game launches.  
+On sm64pc/sm64ex based forks upscaled textures will aslo be added to your build from the Cleaner Aesthetics github repo, and high quality sounds from MapAnon's github release.  On the render96ex fork, Render96's HD rextures will be used instead, which are over 500MB so require additional download time, as well as more than 2GB of free memory and additional time to precache before game launches.  
 
 On the sm64nx fork, Arredondo's HD Mario & Bowser and Cleaner Aesthetics textures are set as defaults, along with a few other small add-on paks which can be enabled from the in-game mod selection menu, including an HD Luigi model replacement.
 
@@ -92,7 +92,7 @@ For sm64nx, this option will add paks for Render96's SGI Models (version 1.3) an
 
 ## **What does the FPS60 option do?**
 
-On repositories that provide a 60fps patch (currently sm64-port, render96ex, and sm64ex-nightly) it will be applied when this option set to 1, and reverse applied when set to 0.  Note that some forks (such as sm64ex-coop, cheaterex, and sm64nx) are already 60fps without a patch and this setting will have no effect.  The currently available patch for sm64ex uses interpolation and may require adjustments to in-game vsync setting for smooth performance, and may not work correctly on displays that aren't 60Hz and may not perform well on older computers.
+On repositories that provide a 60fps patch (currently sm64-port, render96ex, and sm64ex-nightly) it will be applied when this option set to 1, and reverse applied when set to 0.  Note that some forks (such as sm64ex-coop, cheaterex, and sm64nx) are already 60fps without a patch and this setting will have no effect.  The currently available patch for sm64ex uses interpolation and may require adjustments to in-game vsync setting for smooth performance, and may not work correctly on displays that aren't 60/120Hz and may not perform well on older computers.
 
 ## **What about other branches?**
 
@@ -152,16 +152,16 @@ You can also just edit the configuration file with any text editor.
 
 ~/.local/share/smlinux smlinux  
 ~/.local/share/sm64pc sm64pc/ex master  
-~/.local/share/sm64ex sm64pc/ex nightly  
-~/.local/share/render96ex render96ex *only if launched with shortcut*  
+~/.local/share/sm64ex sm64pc/ex nightly 
 ~/.local/share/sm64ex-coop sm64ex-coop   
+~/.local/share/render96ex render96ex *only if launched with shortcut*  
 ~/.local/share/cheaterex cheaterex *only if launched with shortcut*    
 ~/.local/share/sm64-port sm64-port *only if launched with shortcut*    
 ~/.local/share/sm64nx sm64nx *smlinux creates links in game dir*  
 
 ## **Are there any cheats?**
 
-On all forks besides sm64-port, some cheats are built in and enabled automatically if launched from shortcut and available in options menu.  On compatible sm64ex based forks additional cheats are applied with $4Y$'s CHEATER patch and PeachyPeaches' Dynamic Option System.
+On all forks besides sm64-port, some cheats are built in and enabled automatically if launched from shortcut, and can be found in-game in options menu accessible  when paused.  On compatible sm64ex based forks additional cheats are applied with $4Y$'s CHEATER patch and PeachyPeaches' Dynamic Option System.
 
 ## **How do I apply external data such as textures?**
 
