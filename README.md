@@ -217,7 +217,7 @@ Paste the command string recccommended below for your distribution directly into
 
 	sudo apk add build-base python3 audiofile-dev sdl2-dev glew-dev zenity
 	
-Some build targets depend on additional packages, for example Android builds require `android-sdk`/`openjava-jdk`, DOS targets require `djgpp`, web targets emscripten, sm64nx requires `g++` version 8 or newer, and using `sdl1` requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of operating systems without advanced package tool may need the appropriate GCC/SDL/SDK/JDK pre-installed.  
+Some build targets depend on additional packages, for example Android builds require `android-sdk`, DOS targets require `djgpp`, web targets emscripten, sm64nx requires `g++` version 8 or newer, and using `sdl1` requires additional libraries, all of which smlinux only installs when those targets are specified.  Users of operating systems without advanced package tool may need to install the appropriate GCC/SDL/SDK/JDK independeantly.  
 
 **macOS** If smlinux detects `Darwin` the following packages are installed with `brew`:
 
