@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1130-1057
+TIMESTAMP=2020-1130-1616
 
 SECONDS=0 # reset bash timer
 
@@ -184,6 +184,21 @@ if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ] &
 fi
 BUILDSEC="$SECONDS"
 }
+
+
+setpathdir(){
+	for folder in bin .local/bin .local/share/bin Applications/bin Applications/.bin .bin .local/share/.bin .local/.bin
+do
+	if [ ! `echo $PATH | grep "$HOME"/"$folder"` = "" ]; then
+		PATHDIR="$HOME"/"$folder"
+		break
+	fi
+done
+	if [ -z "$PATHDIR" ]; then
+		PATHDIR=$HOME/bin
+	fi
+}
+
 
 updateconfig(){
 if [ -f "$SMLINUX"/smlinuxcfg.txt ] || [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; then 
@@ -705,7 +720,7 @@ elif [ "$PRESET" = "UserDefined" ]; then
 fi
 if [ "$PRESET" = "sm64pc" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64pc" ]; then
 	PRESET=sm64pc
-	GIT=sm64ex/sm64pc
+	GIT=sm64pc/sm64ex
 	BRANCH=master
 	CHEATER=0
 	DYNOS=0
@@ -1301,8 +1316,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		fi
 		if [ ! -d "$SMLINUX"/.git ] ; then
 			redecho ERROR: Cannot connect to github. Run without AutoUpdate enabled.  
-			echo smlinux exiting incomplete.
-			exit
+			endnow
 		fi
 		if [ -d "$PATHDIR" ]; then
 			mv -f "$SMLINUX"/smlinux "$PATHDIR"/
@@ -1311,18 +1325,23 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		fi
 		touch $HOME/.smlinuxUpdate
 		if [ ! -f "$PATHDIR"/smlinux ]; then
-			pinkecho Warning: Could not write to first path directory.  Creating $HOME/bin.
+			pinkecho Warning: Could not write smlinux to path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
-			bluecho Adding $HOME/bin to bash path...
-			echo 'export PATH=$HOME/bin:$PATH' >>~/.bashrc
+			if [ -f "$HOME"/.bashrc ]; then
+				bluecho Adding $HOME/bin to bash path...
+				echo 'export PATH=$HOME/bin:$PATH' >>~/.bashrc
+			fi
+			if [ -f "$HOME"/.zshrc ]; then
+				bluecho Adding $HOME/bin to zsh path...
+				echo 'export PATH=$HOME/bin:$PATH' >>~/.zshrc
+			fi
 			export PATH=$HOME/bin:$PATH
 			PATHDIR=$HOME/bin
 			mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 			if [ ! -f "$PATHDIR"/smlinux ]; then
-				redecho ERROR - Could not add to path.  Run without AutoUpdate enabled.
-				echo smlinux exiting incomplete.
-				exit
+				redecho ERROR - Could not add to path.  Run with AutoUpdate=0. 
+				endnow
 			fi
 		else
 			bluecho smlinux succesfully added to path - enter smlinux to run anytime
@@ -1337,16 +1356,29 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			git merge
 			if [ ! -f "$SMLINUX"/smlinux ]; then
 				pinkecho "Warning: smlinux repository updated but new script not found"
-				echo This could be normal if only the readme, icons, or config editor updated.
+				echo This could be normal if only the readme or support files updated.
 			else
-				echo 'if [ `uname` = "Darwin" ]; then	
+				echo 'SMLINUX=${XDG_DATA_HOME:-$HOME/.local/share}/smlinux
+				if [ `uname` = "Darwin" ] || [ `uname -o` = "Msys" ]; then	
 					PATHDIR=/usr/local/bin
-				elif mapfile -t -d: <<<"$PATH" >/dev/null 2>&1; then
-					PATHDIR="${MAPFILE[0]}"
 				else
-					PATHDIR="$HOME"/bin
+					for folder in bin .local/bin .local/share/bin Applications/bin Applications/.bin .bin .local/share/.bin .local/.bin
+				do
+					if [ ! `echo $PATH | grep "$HOME"/"$folder"` = "" ]; then
+						PATHDIR="$HOME"/"$folder"
+						break
+					fi
+				done
 				fi
-				SMLINUX=${XDG_DATA_HOME:-$HOME/.local/share}/smlinux
+				if [ -z "$PATHDIR" ]; then
+					PATHDIR=$HOME/bin
+				fi
+				if [ ! -d "$PATHDIR" ]; then
+					mkdir "$PATHDIR"
+				fi
+				if mapfile -t -d: <<<"$PATH" >/dev/null 2>&1 && [ -f "${MAPFILE[0]}"/smlinux ]; then # get rid of one in old path
+					rm "${MAPFILE[0]}"/smlinux
+				fi
 				mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 				if [ ! -f "$PATHDIR"/smlinux ]; then
 					echo Warning: Could not write to first path directory.  Creating $HOME/bin.
@@ -1682,32 +1714,21 @@ LAUNCH_DIR=$(pwd)
 cd # just incase launched from folder that doesnt exist anymore
 
 if [ `uname` = "Darwin" ]; then
+	OSX_BUILD=1
 	PATHDIR=/usr/local/bin
 	OPEN=open
-	OSX_BUILD=1
 elif [ `uname -o` = "Msys" ]; then
     MSYS=1
-	mapfile -t -d: <<<"$PATH"
-	PATHDIR="${MAPFILE[0]}"
+	PATHDIR=/usr/local/bin
 	OPEN=start
 elif command -v xdg-open &> /dev/null; then
-	if mapfile -t -d: <<<"$PATH" >/dev/null 2>&1; then
-		PATHDIR="${MAPFILE[0]}"
-	else
-		PATHDIR="$HOME"/bin
-		export PATH="$HOME"/bin:$PATH
-	fi
 	OPEN=xdg-open
+	setpathdir
 elif command -v firefox &> /dev/null; then
-	mapfile -t -d: <<<"$PATH"
-	PATHDIR="${MAPFILE[0]}"
 	OPEN=firefox
-elif mapfile -t -d: <<<"$PATH"; then
-	PATHDIR="${MAPFILE[0]}"
-	OPEN=echo
+	setpathdir
 else
-	PATHDIR="$HOME"/bin
-	export PATH="$HOME"/bin:$PATH
+	setpathdir
 	OPEN=echo
 fi
 if [ `uname -m` = "x86_64" ]; then
@@ -1970,7 +1991,7 @@ else   # The real start, the rest was script preperation and setup.
 			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
 				echo Installing Apple XCode Command Line Tools
 				xcode-select --install
-				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\n" 12 55 2>&1
+				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\nIf this doesnt work you can install from Apple Developer website.\n" 13 55 2>&1
 			fi
 			if [ "$COMMAND" = "depends" ]; then # fix if user updated brew and broke pyqt5
 				brew link pyqt --overwrite
@@ -2120,7 +2141,7 @@ else   # The real start, the rest was script preperation and setup.
 		fi
 	fi
 	if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-		echo smlinux exiting incomplete. Need valid Super Mario 64 romfile to proceed.
+		redecho ERROR: Need valid Super Mario 64 romfile to proceed.
 		endnow
 	fi
 	greenecho [2] Checking smlinux github repository for updates....
