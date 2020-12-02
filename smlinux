@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1202-1129
+TIMESTAMP=2020-1202-1209
 
 STARTSEC=$SECONDS
 
@@ -1189,11 +1189,22 @@ if  [ -d build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f enhancements/REN
 	echo Render 96 Models already installed.
 	return
 fi
-if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ] && [ ! "$GIT" = "s4Ys369/cheaterex" ]; then
+if [ -d "$SMLINUX"/SGI ]; then
+	mkdir "$SMLINUX"/SGI
+fi
+cd "$BASEPATH"/"$PRESET"
+if [ -f enhancements/3d_coin*.patch ] && [ ! "$GIT" = "s4Ys369/cheaterex" ]; then
 	bluecho Removing 3D coins...
 	git apply -R enhancements/3d_coin*.patch
 	rm enhancements/3d_coin*.patch
+elif [ "$GIT" = "s4Ys369/cheaterex" ] && [ -f enhancements/captain_toad_stars*.patch ]; then
+	bluecho Removing Captain Toad Stars...
+	git apply -R enhancements/captain_toad_stars*.patch
+	rm enhancements/captain_toad_stars*.patch
+else
+	removecheater
 fi
+
 if [ "$PRESET" = "sm64nx" ]; then
 	bluecho Starting Render96 Texture Pak Download...
 	mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures"
@@ -1216,35 +1227,29 @@ if [ "$PRESET" = "sm64nx" ]; then
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak &
 	fi
 elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
-	cd "$BASEPATH"/"$PRESET"/enhancements
-	bluecho Downloading Render 96 SGI Model Pack V2.0
-	wget -q https://sm64pc.info/downloads/conversion_pack/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
 	SGIFILE=RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
-elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
-	cd "$BASEPATH"/"$PRESET"/enhancements
-	bluecho Downloading Render 96 SGI Model Pack V1.4.2
-	wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip
-	SGIFILE=RENDER96_V1.4.2_Luigi.zip
-elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
-	cd "$BASEPATH"/"$PRESET"/enhancements
-	wget https://sm64pc.info/downloads/model_pack/render96_coop.zip
-	SGIFILE=render96_coop.zip
-elif [ "$GIT" = "s4Ys369/cheaterex" ]; then
-	if [ -f "$BASEPATH"/"$PRESET"/enhancements/captain_toad_stars*.patch ]; then
-		cd "$BASEPATH"/"$PRESET"
-		git apply -R enhancements/captain_toad_stars*.patch
+	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
+		bluecho Downloading "$SGIFILE"...
+		wget -q https://sm64pc.info/downloads/conversion_pack/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip -P "$SMLINUX"/SGI
 	fi
-	cd "$BASEPATH"/"$PRESET"/enhancements
-	bluecho Downloading Render 96 SGI Model Pack V1.3
-	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
-	mv RENDER96_V1.3.7z RENDER96_V1.3.zip
-	SGIFILE=RENDER96_V1.3.zip
+elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
+	SGIFILE=RENDER96_V1.4.2_Luigi.zip
+	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
+		bluecho Downloading "$SGIFILE"...
+		wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip -P "$SMLINUX"/SGI
+	fi
+elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
+	SGIFILE=render96_coop.zip
+	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
+		bluecho Downloading "$SGIFILE"...
+		wget https://sm64pc.info/downloads/model_pack/render96_coop.zip -P "$SMLINUX"/SGI
+	fi
 else
-	cd "$BASEPATH"/"$PRESET"/enhancements
-	bluecho Downloading Render 96 SGI Model Pack V1.3
-	wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z
-	mv RENDER96_V1.3.7z RENDER96_V1.3.zip
 	SGIFILE=RENDER96_V1.3.zip
+	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
+		bluecho Downloading Render 96 SGI Model Pack V1.3
+		wget -q https://cdn.discordapp.com/attachments/727722992137666573/745038574918828112/RENDER96_V1.3.7z -O RENDER96_V1.3.zip -P "$SMLINUX"/SGI
+	fi
 fi
 if [ -d "$BASEPATH"/"$PRESET"/actors.bak ] && [ ! "$SGIFILE" = "render96_coop.zip" ]; then
 	echo Restoring default actors...
@@ -1263,14 +1268,14 @@ elif [ "$SGIFILE" = "render96_coop.zip" ]; then
 	cd "$BASEPATH"/"$PRESET"
 	cp -rn actors actors.bak
 fi
+cd "$BASEPATH"/"$PRESET"
 if [ ! "$PRESET" = "sm64nx" ]; then
-	removecheater
-	cd "$BASEPATH"/"$PRESET"
+	ln -s "$SMLINUX"/SGI/"$SGIFILE" "$BASEPATH"/"$PRESET"/enhancements
 	bluecho Applying Render96 SGI Models...
 	7z x -aoa enhancements/"$SGIFILE" >/dev/null
 fi
 if [ ! "$ANDROID" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/render96_android.patch ]; then
-	echo Applying Android patch for Render96 models
+	echo Applying Android patch for Render96 models...
 	git apply enhancements/render96_android.patch
 fi
 }
