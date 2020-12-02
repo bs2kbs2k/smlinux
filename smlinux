@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1202-1428
+TIMESTAMP=2020-1202-1505
 
 STARTSEC=$SECONDS
 
@@ -1776,7 +1776,7 @@ elif command -v whiptail &> /dev/null; then
 	title=blue,black           # make choice with arrows
 	checkbox=brightcyan,black  # important list
 	compactbutton=blue,black   # ok button'
-	if ! COMMAND=$(whiptail --title "Make Choice with Arrows then [SPACE BAR]" --ok-button "[SPACE BAR] then [ENTER]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 15 60 8 \
+	if ! COMMAND=$(whiptail --title "Make Choice with Arrows then [SPACE BAR]" --ok-button "[SPACE BAR] then [ENTER]" --nocancel --radiolist "        After spacebar press [Enter] to proceed." 16 60 9 \
 	 --backtitle "     Super Mario 64 Install * Build * Update Script for Linux and macOS" \
 	"build" "get clean sm64 source and build it" ON \
 	"update" "update sm64 source and rebuild it" OFF \
@@ -1785,6 +1785,7 @@ elif command -v whiptail &> /dev/null; then
 	"config" "edit smlinux config file only" OFF \
 	"depends" "install dependencies only" OFF \
 	"upgrade" "upgrade smlinux only" OFF \
+	"smconfig" "open sm64config.txt with nano" OFF \
     "help" "show command line options & web faq" OFF \
 	3>&1 1>&2 2>&3); then
 		# echo User escape.
@@ -1835,9 +1836,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 	elif [ "$COMMAND" = "reset" ]; then
 		rm "$SMLINUX"/smlinuxcfg.txt
 		makeconfig
-		echo
-		echo smlinux configuration file has been reset to default.
-		echo
+		bluecho smlinux configuration file has been reset to default.
 		exit
 	fi
 	bluecho Loading "$SMLINUX"/smlinuxcfg.txt...
@@ -1858,10 +1857,17 @@ else
 	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 fi
 SAVEDIR="$SHARE"/"$PRESET"
-if  [ "$COMMAND" = "reset" ] || [ "$COMMAND" = "config" ] || [ "$COMMAND" = "purge" ] || [ "$COMMAND" = "upgrade" ]; then
+if [ "$COMMAND" = "smconfig" ] && [ -f "$SAVEDIR"/sm64config.txt ] ; then
+	greenecho Editing "$SAVEDIR"/sm64config.txt with nano...
+	nano "$SAVEDIR"/sm64config.txt
+	exit 
+elif [ "$COMMAND" = "smconfig" ] && [ ! -f "$SAVEDIR"/sm64config.txt ] ; then
+	redecho ERROR: No "$SAVEDIR"/sm64config.txt
+	endnow
+elif  [ "$COMMAND" = "reset" ] || [ "$COMMAND" = "config" ] || [ "$COMMAND" = "purge" ] || [ "$COMMAND" = "upgrade" ]; then
 	echo smlinux:"$COMMAND" "$2" "$3" "$4" "$5" "$6"
 elif [ ! "$COMMAND" = "help" ]; then
-	echo smlinux:"$COMMAND" "$GIT"-"$BRANCH" "$PRESET" "$2" "$3" "$4" "$5" "$6"
+	echo smlinux:"$COMMAND" "$GIT"-"$BRANCH" "$BASEPATH"/"$PRESET" "$2" "$3" "$4" "$5" "$6"
 fi
 if [ -f "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin ] && [ ! -f "$SHARE"/sm64nx/conf.bin ]; then
 	mv "$BASEPATH"/sm64nx/build/"$VERSION"_"$TARGET"/conf.bin "$SHARE"/sm64nx/
@@ -1963,7 +1969,9 @@ else   # The real start, the rest was script preperation and setup.
 	if [ "$COMMAND" = "help" ]; then
 		echo "|  upgrade: Upgrade smlinux to latest version from github (no build)     |"
 		echo "|  rebuild: rebuild existing or previously failed build with no changes  |"
+		echo "| smconfig: open sm64config.txt with nano                                |"
 		echo "| <romfile> install smlinux using specified romfile then build           |"
+		echo "|                                                                        |"
 		echo "|  Options:   --hd  install HD add-ons (ignore InstallHD=0)              |"
 		echo "|            --sgi  install R96 SGI model pack (ignore InstallSGI=0)     |"
 		echo "|             --go  skip configuration editor (ignore CONFIG=1)          |"
