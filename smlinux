@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1202-1232
+TIMESTAMP=2020-1202-1349
 
 STARTSEC=$SECONDS
 
@@ -1439,20 +1439,20 @@ elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v3.
 	wget -q https://cdn.discordapp.com/attachments/755907254318006362/770448804512137236/CHEATER.coop.v3.patch.zip
 	ZIPFILE=CHEATER.coop.v3.patch.zip 
 	CHEATERFILE=CHEATER.coop.v3.patch
-elif [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.5.alpha.zip ] && [ "$DYNOS" = 1 ]; then
-	wget -q https://cdn.discordapp.com/attachments/716459185230970880/783167761164795914/CHEATERv11.5.alpha.zip
-	ZIPFILE=CHEATERv11.5.alpha.zip
-	CHEATERFILE=v11.5.alpha.patch
-elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ] && [ "$DYNOS" = 1 ]; then
-	wget -q https://cdn.discordapp.com/attachments/716459185230970880/773268203895783444/CHEATERv11.ex.zip
-	ZILFILE=CHEATERv11.ex.zip
-	CHEATERFILE=CHEATERv11.ex_dynos.patch 
-elif [ "$DYNOS" = 0 ] &&  ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ]; then
-	wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
-	ZIPFILE=CHEATERv10.zip 
-	CHEATERFILE=CHEATERv10.patch
-elif [ "$DYNOS" = 1 ] && [ ! "$PRESET" = "sm64ex" ] && [ ! "$PRESET" = "r96alpha" ]; then
-	if ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) && [ ! -f enhancements/CHEATERv10*.zip ]; then
+elif [ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]; then
+	if [ "$DYNOS" = 1 ] && [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.5.alpha.zip ]; then
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/783167761164795914/CHEATERv11.5.alpha.zip
+		ZIPFILE=CHEATERv11.5.alpha.zip
+		CHEATERFILE=v11.5.alpha.patch
+	elif [ "$DYNOS" = 1 ] && [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ]; then
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/773268203895783444/CHEATERv11.ex.zip
+		ZILFILE=CHEATERv11.ex.zip
+		CHEATERFILE=CHEATERv11.ex_dynos.patch 
+	elif [ "$DYNOS" = 0 ] && [ ! -f enhancements/CHEATERv10*.zip ]; then
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
+		ZIPFILE=CHEATERv10.zip 
+		CHEATERFILE=CHEATERv10.patch
+	elif [ "$DYNOS" = 1 ] && [ ! "$PRESET" = "sm64ex" ] && [ ! "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv10*.zip ]; then
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
 		ZIPFILE=CHEATERv10.zip 
 		CHEATERFILE=CHEATERv10_dynos.patch
