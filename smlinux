@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1202-1418
+TIMESTAMP=2020-1202-1425
 
 STARTSEC=$SECONDS
 
@@ -441,8 +441,8 @@ if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
 	echo "setup: " "$(($((PREPSEC - STARTSEC)) / 60))min $(($((PREPSEC - STARTSEC))% 60))sec"  
-	echo "+make: " "$(($((BUILDSEC - PREPSEC)) / 60))min $(($(($SECONDS - LAUNCHSEC))% 60))sec"  
-	echo "=done: " "$(($BUILDSEC / 60))min $(($BUILDSEC % 60))sec"  
+	echo "+make: " "$(($((BUILDSEC - PREPSEC)) / 60))min $(($((BUILDSEC - PREPSEC))% 60))sec"  
+	echo "+done: " "$(($((BUILDSEC - STARTSEC)) / 60))min $(($((BUILDSEC - STARTSEC))% 60))sec"  
 	echo "+wait: " "$(($(($SECONDS - LAUNCHSEC)) / 60))min $(($(($SECONDS - LAUNCHSEC))% 60))sec"     
 	echo "=full: " "$(($(($SECONDS - STARTSEC)) / 60))min $(($(($SECONDS - STARTSEC))% 60))sec"   
 	echo "$GIT"" last commit: "
