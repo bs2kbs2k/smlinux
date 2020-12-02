@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1202-1425
+TIMESTAMP=2020-1202-1428
 
 STARTSEC=$SECONDS
 
@@ -1234,7 +1234,7 @@ if  [ -d build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f enhancements/REN
 	echo Render 96 Models already installed.
 	return
 fi
-if [ -d "$SMLINUX"/SGI ]; then
+if [ ! -d "$SMLINUX"/SGI ]; then
 	mkdir "$SMLINUX"/SGI
 fi
 cd "$BASEPATH"/"$PRESET"
