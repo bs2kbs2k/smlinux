@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1202-1356
+TIMESTAMP=2020-1202-1410
 
 STARTSEC=$SECONDS
 
@@ -410,6 +410,52 @@ if [ ! -f skyconv ]; then
 	redecho Please report problem to smlinux development team for resolution.
 	endnow
 fi
+}
+
+theend(){
+if [ "$TARGET" = "web" ]; then
+	echo
+	echo Python webserver will remain running until you kill python3.
+	echo Unless you forward a port you cannot connect from outside your local network.
+	pinkecho Warning: emsdk environment is loaded.  Do not try to
+	echo use this shell to build.  Exit and open new shell. 
+elif [ "$TARGET" = "dos" ]; then
+	echo
+	pinkecho Warning: djgpp environment is loaded.  Do not try to 
+	pinkecho use this shell to build.  Exit and open new shell. 
+fi
+if [ -z "$BUILDSEC" ]; then
+	SHOWTIME=$(($SECONDS - STARTSEC))
+else
+	SHOWTIME=$((BUILDSEC - PREPSEC))
+fi
+if [ $(($SHOWTIME / 60)) = 0 ]; then
+	SHOWTIME="$(($SHOWTIME % 60)) seconds"
+elif [ $(($SECONDS / 60)) = 1 ]; then
+	SHOWTIME="one minute $(($SHOWTIME % 60)) seconds"
+else
+	SHOWTIME="$(($SHOWTIME / 60)) minutes $(($SHOWTIME % 60)) seconds"
+fi
+pinkecho smlinux completed "$COMMAND" in "$SHOWTIME". 
+if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ] || [ "$COMMAND" = "update" ]); then
+	tput setab 0  # black background
+	tput setaf 6  # cyan text
+	echo "setup: " "$(($((PREPSEC - STARTSEC)) / 60))min $(($((PREPSEC - STARTSEC))% 60))sec"  
+	echo "+make: " "$(($SHOWTIME / 60))min $(($SHOWTIME % 60))sec"  
+	echo "=done: " "$(($BUILDSEC / 60))min $(($BUILDSEC % 60))sec"  
+	echo "+wait: " "$(($(($SECONDS - LAUNCHSEC)) / 60))min $(($(($SECONDS - LAUNCHSEC))% 60))sec"     
+	echo "=full: " "$(($(($SECONDS - STARTSEC)) / 60))min $(($(($SECONDS - STARTSEC))% 60))sec"   
+	echo "$GIT"" last commit: "
+	cd "$BASEPATH"/"$PRESET"
+	git log -1 --format=%cd
+fi
+if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then 
+	zenity --info --text="Shits done yo." &disown # homage to sm64pcbuilder2
+fi
+greenecho "smlinux ""$TIMESTAMP" done.  Enter smlinux or smlinux "[command]" to use again.
+tput sgr0 # reset colors
+bluecho You may close or exit this terminal.
+exit
 }
 
 endnow(){
