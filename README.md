@@ -32,11 +32,11 @@ You must provide your own legally backed up Super Mario 64 ROM file.
 ## **How do I run smlinux again?**
 	smlinux
 	
-The first time smlinux installs itself to a bin directory in your path, which you can find with `which smlinux`.  After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to the skip menu.  
+smlinux puts a copy of itself into a bin folder in your path, which you can locate with `which smlinux`.  After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to the skip menu.  
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
-If for some reason the compilation freezes then set `MAXJOBS=1`. When undefined, smlinux will allow make multiple jobs which speeds up the build process on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
+If your pc of terminal freeze during build, set `MAXJOBS=1`. When undefined, smlinux will allow make to run multiple jobs which speeds up compilation on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
 **_macOS notes_**
 sm64ex,r96ex,sm64ex-coop and cheaterex all confirmed working with Intel based macOS 10.12 Sierra and newer.  sm64nx and android builds are not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or Apple X-code command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  You may also be prompted to grant terminal permission to your Desktop or Applications folder for shortcut installation.  
