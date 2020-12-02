@@ -3,7 +3,7 @@
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/MarioPC-small.png> 
 ## **What does smlinux do?**
 #
-1. Installs Required Packages (build tools & dependencies)
+1. Installs Required Packages (build tools & other dependencies)
 2. Installs latest version of itself to user path 
 3. Clones (downloads) sm64 source repository from Github
 4. Extract assets from ROM and prepares for use
