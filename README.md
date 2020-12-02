@@ -4,7 +4,7 @@
 ## **What does smlinux do?**
 #
 1. Installs Required Packages (build tools & other dependencies)
-2. Installs latest version of itself to user path 
+2. Installs latest version of itself to path 
 3. Clones (downloads) sm64 source repository from Github
 4. Extract assets from ROM and prepares for use
 5. Optionally applies community sourced upscale modifications 
