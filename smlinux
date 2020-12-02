@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1202-0709
+TIMESTAMP=2020-1202-1129
 
 STARTSEC=$SECONDS
 
@@ -184,7 +184,6 @@ fi
 BUILDSEC=$SECONDS
 }
 
-
 setpathdir(){
 	for folder in bin .local/bin .local/share/bin Applications/bin Applications/.bin .bin .local/share/.bin .local/.bin
 do
@@ -195,7 +194,6 @@ do
 	PATHDIR=$HOME/bin
 done
 }
-
 
 updateconfig(){
 if [ -f "$SMLINUX"/smlinuxcfg.txt ] || [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; then 
@@ -1106,10 +1104,12 @@ else
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ] && [ "$GIT" = "render96/render96ex" ]; then
 			bluecho Starting Render 96 texture update....
 			cd "$SMLINUX"/RENDER96-HD-TEXTURE-PACK
+			git stash
 			git pull --no-rebase &
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 			bluecho Staring Cleaner Aesthetics textures update...
 			cd "$SMLINUX"/Cleaner-Aesthetics
+			git stash
 			git pull --no-rebase &
 		fi
 		cd "$SMLINUX"
@@ -1389,7 +1389,7 @@ fi
 }
 
 dodynos(){
-# must be called after docheats to handle combined patch
+# must be called before docheats 
 cd "$BASEPATH"/"$PRESET"
 if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 	return
@@ -1397,7 +1397,7 @@ elif [ "$DYNOS" = 0 ] && [ -f enhancements/DynOS.0.*.patch ]; then
 	bluecho Removing Dynamic Option System...
 	git apply -R enhancements/DynOS*.patch
 	rm enhancements/DynOS*
-elif [ "$DYNOS" = 1 ] && !( [ -f enhancements/DynOS.0.5.* ] || [ -f enhancements/dynos.patch ]); then
+elif [ "$DYNOS" = 1 ] && [ ! -f enhancements/DynOS.0.5.* ] && [ ! -f enhancements/dynos.patch ]; then
 	if [ -f enhancements/DynOS.0.*.patch ]; then
 		bluecho Updating Dynamic Option System...
 		git apply -R enhancements/DynOS*.patch
@@ -1405,10 +1405,14 @@ elif [ "$DYNOS" = 1 ] && !( [ -f enhancements/DynOS.0.5.* ] || [ -f enhancements
 	else
     	bluecho Applying Dynamic Option System...
     fi
-    cd enhancements
-    unzip -q "$SMLINUX"/DynOS*.zip
-    cd ..
-    git apply enhancements/DynOS*.patch
+    if  ! ( [ "$PRESET" = "sm64ex" ] && [ "CHEATER" = 1 ]); then 
+    	cd enhancements
+    	unzip -q "$SMLINUX"/DynOS*.zip
+    	cd ..
+    	git apply enhancements/DynOS*.patch
+    else
+    	echo Skipping, will be installed combined with CHEATER.
+    fi
 fi
 if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
 	rm "$SAVEDIR"/DynOSconfig.cfg
@@ -1434,48 +1438,34 @@ elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v3.
 	wget -q https://cdn.discordapp.com/attachments/755907254318006362/770448804512137236/CHEATER.coop.v3.patch.zip
 	unzip -q CHEATER.coop.v3.patch.zip 
 	CHEATERFILE=CHEATER.coop.v3.patch
-elif [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.alpha.zip ]; then
+elif [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.5.alpha.zip ] && [ "$DYNOS" = 1 ]; then
 	removecheater
 	cd enhancements
-	wget -q https://cdn.discordapp.com/attachments/716459185230970880/773916280247549952/CHEATERv11.alpha.zip
-	unzip -jq CHEATERv11.alpha.zip CHEATERv11.alpha/CHEATERv11.alpha_dynos.patch
-	unzip -joq CHEATERv11.alpha.zip CHEATERv11.alpha/sound/samples/streamed_audio/23_custom_zawar.aiff -d ../sound/samples/streamed_audio
-	unzip -joq CHEATERv11.alpha.zip CHEATERv11.alpha/sound/sequences/us/23_custom_zawar.m64 -d ../sound/sequences/us
-	touch DynOS.0.5.cheater
-	if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
-		rm "$SAVEDIR"/DynOSconfig.cfg
-	fi
-	CHEATERFILE=CHEATERv11.alpha_dynos.patch
-elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ]; then
+	wget -q https://cdn.discordapp.com/attachments/716459185230970880/783167761164795914/CHEATERv11.5.alpha.zip
+	CHEATERFILE=v11.5.alpha.patch
+elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ] && [ "$DYNOS" = 1 ]; then
 	removecheater
 	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/773268203895783444/CHEATERv11.ex.zip
 	unzip -q CHEATERv11.ex.zip CHEATERv11.ex_dynos.patch
-	if [ -f DynOS.0.*.patch ]; then
-		cd ..
-		git apply -R enhancements/DynOS*.patch
-		cd enhancements
-		rm DynOS*
-	fi
-	if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
-		rm "$SAVEDIR"/DynOSconfig.cfg
-	fi
 	CHEATERFILE=CHEATERv11.ex_dynos.patch 
-elif ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ] && [ ! "$PRESET" = "sm64ex" ] && [ ! "$PRESET" = "r96alpha" ]; then
+elif [ "$DYNOS" = 0 ] &&  ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ]; then
 	removecheater
 	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
-	if [ "$DYNOS" = 1 ]; then
-		dodynos
+	unzip -q CHEATERv10.zip CHEATERv10.patch 
+	CHEATERFILE=CHEATERv10.patch
+elif [ "$DYNOS" = 1 ] && [ ! "$PRESET" = "sm64ex" ] && [ ! "$PRESET" = "r96alpha" ]; then
+	if ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) && [ ! -f enhancements/CHEATERv10*.zip ]; then
+		removecheater
+		cd "$BASEPATH"/"$PRESET"/enhancements
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
 		cd "$BASEPATH"/"$PRESET"/enhancements
 		unzip -q CHEATERv10.zip CHEATERv10_dynos.patch 
 		CHEATERFILE=CHEATERv10_dynos.patch
-	else
-		unzip -q CHEATERv10.zip CHEATERv10.patch 
-		CHEATERFILE=CHEATERv10.patch
 	fi
-fi
-if [ -f "$CHEATERFILE" ]; then
+fi	
+if [ -z "$CHEATERFILE" ] && [ -f "$CHEATERFILE" ]; then
 	bluecho Applying "$CHEATERFILE"...
 	cd "$BASEPATH"/"$PRESET"
 	git apply enhancements/"$CHEATERFILE" --reject 
@@ -1498,6 +1488,10 @@ elif [ -f enhancements/v9_*.patch ]; then
 	bluecho Removing CHEATER v9...
 	git apply -R enhancements/v9_*.patch
 	rm enhancements/v9_*.patch
+elif [ -f enhancements/v11.5.alpha.patch ]; then
+	bluecho Removing CHEATER...
+	git apply -R enhancements/v11.5.alpha.patch
+	rm enhancements/v11.5.alpha.patch
 elif [ -f enhancements/fix.CHEATER*.patch ]; then
 	bluecho Removing CHEATER...
 	git apply -R enhancements/fix.CHEATER*.patch
@@ -2243,8 +2237,8 @@ elif [ "$COMMAND" = "update" ]; then
 		# rm -rf gfx
 	fi
 	dofps
-	docheats
 	dodynos
+	docheats
 	domymenu
 fi
 if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
@@ -2478,8 +2472,8 @@ elif [ "$TARGET" = "pc" ]; then
 	pinkecho Warning: InstallHD Disabled so HD addons not being added.
 fi
 dofps
-docheats
 dodynos
+docheats
 domymenu
 if [ "$PRESET" = "emm-ody" ] && [ ! -f "$BASEPATH"/"$PRESET"smo.cappy_assets.zip ]; then
     echo Getting smo cappy assets...
