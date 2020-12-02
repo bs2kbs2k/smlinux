@@ -1458,7 +1458,7 @@ elif [ "$DYNOS" = 1 ] && [ ! "$PRESET" = "sm64ex" ] && [ ! "$PRESET" = "r96alpha
 		CHEATERFILE=CHEATERv10_dynos.patch
 	fi
 fi	
-if [ -z "$CHEATERFILE" ] && [ -f "$CHEATERFILE" ]; then
+if [ -z "$CHEATERFILE" ] && [ -f "$ZIPFILE" ]; then
 	removecheater
 	unzip -q "$ZIPFILE" "$CHEATERFILE"
 	bluecho Applying "$CHEATERFILE"...
