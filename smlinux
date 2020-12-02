@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1202-1209
+TIMESTAMP=2020-1202-1232
 
 STARTSEC=$SECONDS
 
@@ -1416,7 +1416,7 @@ elif [ "$DYNOS" = 1 ] && [ ! -f enhancements/DynOS.0.5.* ] && [ ! -f enhancement
     	cd ..
     	git apply enhancements/DynOS*.patch
     else
-    	echo Skipping, will be installed combined with CHEATER.
+    	echo Skipping DynOS patch, will be installed combined with CHEATER.
     fi
 fi
 if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
@@ -1425,52 +1425,42 @@ fi
 }
 
 docheats(){
-cd "$BASEPATH"/"$PRESET"
+cd "$BASEPATH"/"$PRESET"/enhancements
 if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 	return
 elif [ "$CHEATER" = 0 ]; then
 	removecheater
 	return
 elif [ "$ANDROID" = "androidex" ] && [ ! -f enhancements/CHEATERv9.zip ]; then
-	removecheater
-	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
-	unzip -q CHEATERv9.zip v9_r96ex.patch
+	ZIPFILE=CHEATERv9.zip
 	CHEATERFILE=v9_r96ex.patch 
 elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v3.patch.zip ]; then
-	removecheater
-	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/755907254318006362/770448804512137236/CHEATER.coop.v3.patch.zip
-	unzip -q CHEATER.coop.v3.patch.zip 
+	ZIPFILE=CHEATER.coop.v3.patch.zip 
 	CHEATERFILE=CHEATER.coop.v3.patch
 elif [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.5.alpha.zip ] && [ "$DYNOS" = 1 ]; then
-	removecheater
-	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/783167761164795914/CHEATERv11.5.alpha.zip
+	ZIPFILE=CHEATERv11.5.alpha.zip
 	CHEATERFILE=v11.5.alpha.patch
 elif [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ] && [ "$DYNOS" = 1 ]; then
-	removecheater
-	cd enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/773268203895783444/CHEATERv11.ex.zip
-	unzip -q CHEATERv11.ex.zip CHEATERv11.ex_dynos.patch
+	ZILFILE=CHEATERv11.ex.zip
 	CHEATERFILE=CHEATERv11.ex_dynos.patch 
 elif [ "$DYNOS" = 0 ] &&  ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) &&  [ ! -f enhancements/CHEATERv10*.zip ]; then
-	removecheater
-	cd "$BASEPATH"/"$PRESET"/enhancements
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
-	unzip -q CHEATERv10.zip CHEATERv10.patch 
+	ZIPFILE=CHEATERv10.zip 
 	CHEATERFILE=CHEATERv10.patch
 elif [ "$DYNOS" = 1 ] && [ ! "$PRESET" = "sm64ex" ] && [ ! "$PRESET" = "r96alpha" ]; then
 	if ([ "$GIT" = "sm64pc/sm64ex" ]  || [ "$GIT" = "render96/render96ex" ]) && [ ! -f enhancements/CHEATERv10*.zip ]; then
-		removecheater
-		cd "$BASEPATH"/"$PRESET"/enhancements
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
-		cd "$BASEPATH"/"$PRESET"/enhancements
-		unzip -q CHEATERv10.zip CHEATERv10_dynos.patch 
+		ZIPFILE=CHEATERv10.zip 
 		CHEATERFILE=CHEATERv10_dynos.patch
 	fi
 fi	
 if [ -z "$CHEATERFILE" ] && [ -f "$CHEATERFILE" ]; then
+	removecheater
+	unzip -q "$ZIPFILE" "$CHEATERFILE"
 	bluecho Applying "$CHEATERFILE"...
 	cd "$BASEPATH"/"$PRESET"
 	git apply enhancements/"$CHEATERFILE" --reject 
