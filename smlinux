@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1202-1505
+TIMESTAMP=2020-1203-1255
 
 STARTSEC=$SECONDS
 
@@ -1207,11 +1207,7 @@ if [ "$FPS60" = 1 ] && [ ! -f enhancements/60fps ] && [ -f enhancements/60fps*.p
 	fi
 elif [ "$FPS60" = 0 ] && [ -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
 	bluecho Removing 60fps patch...
-	if [ "$GIT" = "render96/render96ex" ]; then
-		git apply -R enhancements/60fps*.patch --reject
-	else
-		git apply -R enhancements/60fps*.patch 
-	fi
+	git apply -R enhancements/60fps*.patch 
 	rm enhancements/60fps
 	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Disabling Vsync...
@@ -1471,50 +1467,56 @@ fi
 
 docheats(){
 cd "$BASEPATH"/"$PRESET"/enhancements
-if [ "$GIT" = "s4Ys369/cheaterex" ]; then
+if [ "$GIT" = "s4Ys369/cheaterex" ] || [ "$GIT" = "teamsalta/sm64nx" ]; then
 	return
 elif [ "$CHEATER" = 0 ]; then
 	removecheater
 	return
-elif [ "$ANDROID" = "androidex" ] && [ ! -f enhancements/CHEATERv9.zip ]; then
+elif [ "$ANDROID" = "androidex" ] && [ ! -f CHEATERv9.zip ]; then
+	removecheater
 	wget -q https://cdn.discordapp.com/attachments/716459185230970880/762071729069359114/CHEATERv9.zip
 	ZIPFILE=CHEATERv9.zip
 	CHEATERFILE=v9_r96ex.patch 
-elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f enhancements/CHEATER.coop.v3.patch.zip ]; then
+elif [ "$GIT" = "djoslin0/sm64ex-coop" ] && [ ! -f CHEATER.coop.v3.patch.zip ]; then
+	removecheater
 	wget -q https://cdn.discordapp.com/attachments/755907254318006362/770448804512137236/CHEATER.coop.v3.patch.zip
 	ZIPFILE=CHEATER.coop.v3.patch.zip 
 	CHEATERFILE=CHEATER.coop.v3.patch
 elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$GIT" = "render96/render96ex" ]; then
-	if [ "$DYNOS" = 1 ] && [ "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv11.5.alpha.zip ]; then
+	if [ "$DYNOS" = 1 ] && [ "$PRESET" = "r96alpha" ] && [ ! -f CHEATERv11.5.alpha.zip ]; then
+		removecheater
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/783167761164795914/CHEATERv11.5.alpha.zip
 		ZIPFILE=CHEATERv11.5.alpha.zip
 		CHEATERFILE=v11.5.alpha.patch
-	elif [ "$DYNOS" = 1 ] && [ "$PRESET" = "sm64ex" ] && [ ! -f enhancements/CHEATERv11.ex.zip ]; then
+	elif [ "$DYNOS" = 1 ] && [ "$PRESET" = "sm64ex" ] && [ ! -f CHEATERv11.ex.zip ]; then
+		removecheater
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/773268203895783444/CHEATERv11.ex.zip
-		ZILFILE=CHEATERv11.ex.zip
+		ZIPFILE=CHEATERv11.ex.zip
 		CHEATERFILE=CHEATERv11.ex_dynos.patch 
-	elif [ "$DYNOS" = 0 ] && [ ! -f enhancements/CHEATERv10*.zip ]; then
+	elif [ "$DYNOS" = 0 ] && [ ! -f CHEATERv10*.zip ]; then
+		removecheater
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
 		ZIPFILE=CHEATERv10.zip 
 		CHEATERFILE=CHEATERv10.patch
-	elif [ "$DYNOS" = 1 ] && [ ! "$PRESET" = "sm64ex" ] && [ ! "$PRESET" = "r96alpha" ] && [ ! -f enhancements/CHEATERv10*.zip ]; then
+	elif [ "$DYNOS" = 1 ] && [ ! "$PRESET" = "sm64ex" ] && [ ! "$PRESET" = "r96alpha" ] && [ ! -f CHEATERv10*.zip ]; then
+		removecheater
 		wget -q https://cdn.discordapp.com/attachments/716459185230970880/767558856385495090/CHEATERv10.zip
 		ZIPFILE=CHEATERv10.zip 
 		CHEATERFILE=CHEATERv10_dynos.patch
 	fi
 fi	
-if [ -z "$CHEATERFILE" ] && [ -f "$ZIPFILE" ]; then
-	removecheater
+if [ ! -z "$CHEATERFILE" ] && [ -f "$ZIPFILE" ]; then
+	cd "$BASEPATH"/"$PRESET"/enhancements
 	unzip -q "$ZIPFILE" "$CHEATERFILE"
 	bluecho Applying "$CHEATERFILE"...
-	cd "$BASEPATH"/"$PRESET"
+	cd ..
 	git apply enhancements/"$CHEATERFILE" --reject 
 fi
 }
 
 removecheater(){
 cd "$BASEPATH"/"$PRESET"
-if [ "$GIT" = "s4Ys369/cheaterex" ]; then
+if [ "$GIT" = "s4Ys369/cheaterex" ] || [ "$GIT" = "teamsalta/sm64nx" ]; then
 	return
 elif [ -f enhancements/CHEATER*.patch ]; then
 	bluecho Removing CHEATER...
@@ -1546,6 +1548,7 @@ fi
 if [ -f enhancements/DynOS.0.5.cheater ]; then
 	rm enhancements/DynOS.0.5.cheater
 fi
+cd enhancements
 }
 
 makedesktop(){
