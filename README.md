@@ -194,7 +194,7 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 	smlinux update
 
 ## **How do I apply a patch after 60fps but before Dynamic Options or CHEATER?**  
-*The following are examples for advanced users to use as reference*
+*The following are examples for advanced users to use as reference, change filenames as needed*
 
 **Method One**: Starting from scratch
 
