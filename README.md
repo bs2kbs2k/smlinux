@@ -64,7 +64,7 @@ sm64nx and Discord Rich Presence are not suppored.
 * [<strong>Are there any cheats?</strong>](#are-there-any-cheats)
 * [<strong>How do I apply external data such as textures?</strong>](#how-do-i-apply-external-data-such-as-textures)
 * [<strong>How do I apply a patch?</strong>](#how-do-i-apply-a-patch)
-* [<strong>How do I remove a patch?</strong>](#how-do-i-remove-a-patch)
+* [<strong>How do I remove a patch?</strong>](#how-do-i-reverse-remove-a-patch)
 * [<strong>What depenencies are needed or installed?</strong>](#what-dependencies-are-needed-or-installed)
 * [<strong>How do I create my rom file?</strong>](#how-do-i-create-my-rom-file)
 * [<strong>How do I remove everything smlinux created during install?</strong>](#how-do-i-remove-everything-smlinux-created-during-install)
