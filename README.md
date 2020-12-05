@@ -194,17 +194,17 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 	smlinux update
 
 ## **How do I apply a patch after 60fps but before Dynamic Options or CHEATER?**  
-*The following are examples for advanced users to use as reference, change filenames as needed*
+*The following are examples for advanced users to use as reference; change filenames as needed.*
 
 **Method One**: Starting from scratch
 
 1. Prepare clean source: `smlinux clone`  
 2. Change to folder you just prepared: `cd ~/sm64ex`  
 3. Apply 60fps: `git apply enhancements/60fps*.patch`  
-4. Apply custom patch: `git apply enhancements/custom.patch`  
+4. Put custom patchfile in enhancements folder then apply it: `git apply enhancements/custom.patch`  
 5. Build with 60fps disabled in smlinux configuration: `smlinux update`  
 
-If you enable 60fps in smlinux configuration, smlinux will attempt to apply as it does not know you have already applied it.  
+If you enable 60fps in smlinux configuration, smlinux will attempt to apply as it is not aware when you applied included patches.  
 
 **Method Two**: Starting from previous build with 60fps already applied - and maybe CHEATER and/or DynOS too:  
 
@@ -213,10 +213,10 @@ If you enable 60fps in smlinux configuration, smlinux will attempt to apply as i
 2. Remove CHEATER patchfile: `rm enhancements/CHEATER.patch`  
 3. Reverse apply DynOS `git apply -R enhancements/DynOS*.patch`  
 3. Remove DynOS patchfile: `rm enhancements/DynOS*.patch`  
-4. Apply your custom patch: `git apply enhancements/custom.patch`  
+4. Put custom patchfile in enhancements folder then apply it: `git apply enhancements/custom.patch`  
 5. Build with same settings: `smlinux update`  
 
-This works because when smlinux applied the 60fps patch it touched a file called 60fps, so knows not to reapply.  However, because the dynos and cheater patch files are no longer present, smlinux will add and apply them if the option is selected.  Alternatively, you could reapply them after your custom patch instead of deleting them.  
+This works because when smlinux applies the 60fps patch it touches a file called 60fps to track application.  However, because the dynos and cheater patch files are no longer present, smlinux will add and apply them before building if the option is selected.  Alternatively, you could reapply them after your custom patch instead of deleting them.  
 
 ## **What dependencies are needed or installed?**
 *Developed under Bodhi 5.1 and tested on a Slax virtual machine so should work automatically on Ubuntu and Debian.  
