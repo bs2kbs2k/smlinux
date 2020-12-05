@@ -193,7 +193,7 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 	git apply -R enhancements/filename.patch
 	smlinux update
 
-## ** How do I apply a patch after 60fps but before Dynamic Options or CHEATER?**  
+## **How do I apply a patch after 60fps but before Dynamic Options or CHEATER?**  
 
 The following are examples for advanced users to use as reference:
 
@@ -217,7 +217,6 @@ Starting from previous build with 60fps already applied - and maybe cheater or a
 6. Build with same settings: `smlinux update`  
 
 This works because when smlinux applied the 60fps patch it touched a file called 60fps.  It will apply cheater or dynos if they are enabled but no patchfile is present.  
-
 
 ## **What dependencies are needed or installed?**
 *Developed under Bodhi 5.1 and tested on a Slax virtual machine so should work automatically on Ubuntu and Debian.  
