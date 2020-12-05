@@ -63,8 +63,8 @@ sm64nx and Discord Rich Presence are not suppored.
 * [<strong>Where are my configuration files and saved games stored?</strong>](#where-are-my-configuration-files-and-saved-games-stored)
 * [<strong>Are there any cheats?</strong>](#are-there-any-cheats)
 * [<strong>How do I apply external data such as textures?</strong>](#how-do-i-apply-external-data-such-as-textures)
-* [<strong>How to apply a patch?</strong>](#how-to-apply-a-patch)
-* [<strong>How to remove a patch?</strong>](#how-to-remove-a-patch)
+* [<strong>How do I apply a patch?</strong>](#how-do-i-apply-a-patch)
+* [<strong>How do I remove a patch?</strong>](#how-do-i-remove-a-patch)
 * [<strong>What depenencies are needed or installed?</strong>](#what-dependencies-are-needed-or-installed)
 * [<strong>How do I create my rom file?</strong>](#how-do-i-create-my-rom-file)
 * [<strong>How do I remove everything smlinux created during install?</strong>](#how-do-i-remove-everything-smlinux-created-during-install)
@@ -198,23 +198,29 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 
 **Method One**: Starting from scratch
 
-01. Prepare clean source: `smlinux clone`  
-02. Change to folder you just prepared: `cd ~/sm64ex`  
-03. Apply 60fps: `git apply enhancements/60fps*.patch`  
-04. Apply custom patch: `git apply enhancements/custom.patch`  
-05. Build with 60fps disabled in smlinux configuration: `smlinux update`  
+1. Prepare clean source: `smlinux clone`  
+2. Change to folder you just prepared: `cd ~/sm64ex`  
+3. Apply 60fps: `git apply enhancements/60fps*.patch`  
+4. Apply custom patch: `git apply enhancements/custom.patch`  
+5. Build with 60fps disabled in smlinux configuration: `smlinux update`  
 
 If you enable 60fps in smlinux configuration, smlinux will attempt to apply as it does not know you have already applied it.  
 
 **Method Two**: Starting from previous build with 60fps already applied - and maybe CHEATER and/or DynOS too:  
 
-01. Change to existing folder: `cd ~/sm64ex`  
+1. Change to existing folder: `cd ~/sm64ex`
+
 2a. Reverse apply CHEATER: `git apply -R enhancements/CHEATER*.patch`  
+
 2b. Remove CHEATER patchfile: `rm enhancements/CHEATER.patch`  
+
 3a. Reverse apply DynOS `git apply -R enhancements/DynOS*.patch`  
+
 3b. Remove DynOS patchfile: `rm enhancements/DynOS*.patch`  
-04. Apply your custom patch: `git apply enhancements/custom.patch`  
-05. Build with same settings: `smlinux update`  
+
+4. Apply your custom patch: `git apply enhancements/custom.patch`  
+
+5. Build with same settings: `smlinux update`  
 
 This works because when smlinux applied the 60fps patch it touched a file called 60fps.  It will apply cheater or dynos if they are enabled but no patchfile is present.  
 
