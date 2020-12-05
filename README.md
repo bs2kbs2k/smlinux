@@ -208,7 +208,7 @@ If you enable 60fps in smlinux configuration, smlinux will attempt to apply as i
 
 **Method Two**: Starting from previous build with 60fps already applied - and maybe CHEATER and/or DynOS too:  
 
-1. Change to existing folder: `cd ~/sm64ex`
+1. Change to existing folder: `cd ~/sm64ex`  
 2a. Reverse apply CHEATER: `git apply -R enhancements/CHEATER*.patch`  
 2b. Remove CHEATER patchfile: `rm enhancements/CHEATER.patch`  
 3a. Reverse apply DynOS `git apply -R enhancements/DynOS*.patch`  
