@@ -210,17 +210,17 @@ If you enable 60fps in smlinux configuration, smlinux will attempt to apply as i
 
 1. Change to existing folder: `cd ~/sm64ex`
 
-2a. Reverse apply CHEATER: `git apply -R enhancements/CHEATER*.patch`  
+2a. Reverse apply CHEATER: `git apply -R enhancements/CHEATER*.patch`
 
-2b. Remove CHEATER patchfile: `rm enhancements/CHEATER.patch`  
+2b. Remove CHEATER patchfile: `rm enhancements/CHEATER.patch`
 
-3a. Reverse apply DynOS `git apply -R enhancements/DynOS*.patch`  
+3a. Reverse apply DynOS `git apply -R enhancements/DynOS*.patch`
 
-3b. Remove DynOS patchfile: `rm enhancements/DynOS*.patch`  
+3b. Remove DynOS patchfile: `rm enhancements/DynOS*.patch`
 
-4. Apply your custom patch: `git apply enhancements/custom.patch`  
+4. Apply your custom patch: `git apply enhancements/custom.patch`
 
-5. Build with same settings: `smlinux update`  
+5. Build with same settings: `smlinux update`
 
 This works because when smlinux applied the 60fps patch it touched a file called 60fps.  It will apply cheater or dynos if they are enabled but no patchfile is present.  
 
