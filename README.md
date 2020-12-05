@@ -194,10 +194,9 @@ If the patch errors when you try to apply it, and you want to use it anyway, you
 	smlinux update
 
 ## **How do I apply a patch after 60fps but before Dynamic Options or CHEATER?**  
+*The following are examples for advanced users to use as reference*
 
-The following are examples for advanced users to use as reference:
-
-Starting from scratch:
+**Method One**: Starting from scratch
 
 1. Prepare clean source: `smlinux clone`  
 2. Change to folder you just prepared: `cd ~/sm64ex`  
@@ -207,7 +206,7 @@ Starting from scratch:
 
 If you enable 60fps in smlinux configuration, smlinux will attempt to apply as it does not know you have already applied it.  
 
-Starting from previous build with 60fps already applied - and maybe cheater or and dynos too:  
+**Method Two**: Starting from previous build with 60fps already applied - and maybe CHEATER and/or DynOS too:  
 
 1. Reverse apply CHEATER: `git apply -R enhancements/CHEATER*.patch`  
 2. Remove CHEATER patchfile: `rm enhancements/CHEATER.patch`  
