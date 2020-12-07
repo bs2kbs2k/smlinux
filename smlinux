@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1203-1255
+TIMESTAMP=2020-1206-1732
 
 STARTSEC=$SECONDS
 
@@ -71,7 +71,7 @@ if [ "$OSX_BUILD" = 1 ]; then
 	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
 		cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib
 	fi
-elif [ "$TARGET_RPI" = 1 ] && [ `uname -m` = "aarch64" ]; then
+elif [ "$TARGET_RPI" = 1 ] && [ "$BITS" = 64 ]; then
 	echo TARGET_ARCH=arm64
 	time make TARGET_ARCH=arm64 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API> "$SMLINUX"/buildlog.txt
 else
@@ -436,8 +436,8 @@ elif [ $(($SECONDS / 60)) = 1 ]; then
 else
 	SHOWTIME="$(($SHOWTIME / 60)) minutes $(($SHOWTIME % 60)) seconds"
 fi
-pinkecho smlinux completed "$COMMAND" in "$SHOWTIME". 
-if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ] || [ "$COMMAND" = "update" ]); then
+greenecho smlinux completed "$COMMAND" in "$SHOWTIME". 
+if [ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ] || [ "$COMMAND" = "update" ]; then
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
 	echo "setup: " "$(($((PREPSEC - STARTSEC)) / 60))min $(($((PREPSEC - STARTSEC))% 60))sec"  
@@ -445,9 +445,11 @@ if [ -d "$BASEPATH"/"$PRESET"/.git ] && ([ "$COMMAND" = "build" ] || [ "$COMMAND
 	echo "+done: " "$(($((BUILDSEC - STARTSEC)) / 60))min $(($((BUILDSEC - STARTSEC))% 60))sec"  
 	echo "+wait: " "$(($(($SECONDS - LAUNCHSEC)) / 60))min $(($(($SECONDS - LAUNCHSEC))% 60))sec"     
 	echo "=full: " "$(($(($SECONDS - STARTSEC)) / 60))min $(($(($SECONDS - STARTSEC))% 60))sec"   
-	echo "$GIT"" last commit: "
-	cd "$BASEPATH"/"$PRESET"
-	git log -1 --format=%cd
+	if [ -d "$BASEPATH"/"$PRESET"/.git ]; then
+		echo "$GIT"" last commit: "
+		cd "$BASEPATH"/"$PRESET"
+		git log -1 --format=%cd
+	fi
 fi
 if [ "$MSYS" = 1 ] && command -v zenity &> /dev/null; then 
 	zenity --info --text="Shits done yo." &disown # homage to sm64pcbuilder2
@@ -1312,7 +1314,7 @@ fi
 cd "$BASEPATH"/"$PRESET"
 if [ ! "$PRESET" = "sm64nx" ]; then
 	ln -s "$SMLINUX"/SGI/"$SGIFILE" "$BASEPATH"/"$PRESET"/enhancements
-	bluecho Applying Render96 SGI Models...
+	bluecho Applying "$SGIFILE"...
 	7z x -aoa enhancements/"$SGIFILE" >/dev/null
 fi
 if [ ! "$ANDROID" = 0 ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/render96_android.patch ]; then
@@ -1679,17 +1681,14 @@ elif [ ! "$ANDROID" = 0 ] ; then
 		bluecho Testing application launch...
 		adb shell am start -n com.vdavid003.sm64port/.sm64portActivity
 		if [ "$EXTERNAL_DATA" = 1 ]; then
-			echo 
 			echo When SM64 is launched screen will appear blank while external assets are loaded.
 			echo Just wait...
 		fi
 	elif [ "$EXTERNAL_DATA" = 1 ]; then
 		zenity --info --text="Your Android device was not detected so app could not be installed.\nYou must put base assets (base.zip or hdbase.zip) into\nInternal Storage/Android/data/com.vdavid003.sm64port/files\nThis folder will be created when you launch the apk." --title="Transfer External Resources!" --width=470
-		echo
-		echo "Your Android device was not detected so app could not be installed."
-		echo "You must put base assets (base.zip or hdbase.zip) into"
-		echo "Internal Storage/Android/data/com.vdavid003.sm64port/files"
-		echo 
+		pinkecho "Your Android device was not detected so app could not be installed."
+		pinkecho "You must put base assets (base.zip or hdbase.zip) into"
+		pinkecho "Internal Storage/Android/data/com.vdavid003.sm64port/files"
 	fi
 	exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 	"$OPEN" "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
@@ -1728,7 +1727,7 @@ LAUNCHSEC=$SECONDS
 SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
 SMLINUX="$SHARE"/smlinux
 LAUNCH_DIR=$(pwd)
-cd # just incase launched from folder that doesnt exist anymore
+cd # prevent errors if launched from folder that may not always exist
 
 if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
@@ -1748,7 +1747,7 @@ else
 	setpathdir
 	OPEN=echo
 fi
-if [ `uname -m` = "x86_64" ]; then
+if [ `uname -m` = "x86_64" ] || [ `uname -m` = "aarch64" ]; then
 	BITS=64
 else
 	BITS=32
@@ -2265,7 +2264,7 @@ elif [ "$COMMAND" = "update" ]; then
 	if [ ! "$ANDROID" = 0 ]; then
 		git submodule init
 		git submodule update	
-		if [ -d "$BASEPATH"/"$ANDROID"/app/build ]; then
+		if [ -d "$BASEPATH"/"$ANDROID"/app/build ] && [ ! "$COMMAND" = "rebuild" ]; then
 			echo Wiping old Android Build...
 			rm -rf "$BASEPATH"/"$ANDROID"/app/build
 			rm -rf "$BASEPATH"/"$ANDROID"/app/.externalNativeBuild
@@ -2293,7 +2292,7 @@ elif [ "$COMMAND" = "update" ]; then
 	domymenu
 fi
 if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
-	greenecho [5] Recompiling "$GIT" "$BRANCH" in "$BASEPATH"/"$PRESET" 
+	greenecho [5] Recompiling "$GIT" "$BRANCH" from "$BASEPATH"/"$PRESET" 
 	domake
 	if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 		redecho ERROR: "$PRESET" Build Failure - output file not found.
@@ -2339,7 +2338,7 @@ if [ "$COMMAND" = "update" ]|| [ "$COMMAND" = "rebuild" ]; then
 	fi
 	if [ "$TARGET" = "web" ]; then
 		greenecho [7] "$COMMAND" complete.  
-	elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/*.apk ]; then
+	elif [ ! "$ANDROID" = 0 ] && [ ! -f "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/app-debug.apk ]; then
 		echo
 		redecho "ERROR: Build Failure.  Android Package Kit (apk) not found."
 		endnow
@@ -2538,7 +2537,7 @@ if [ "$BRANCH" = "sm64ex_nightly" ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/p
 	cp "$SMLINUX"/pro1.patch enhancements
 	git apply enhancements/pro1.patch
 fi
-greenecho [6] Compiling "$GIT" "$BRANCH" in "$BASEPATH"/"$PRESET" 
+greenecho [6] Compiling "$GIT" "$BRANCH" from "$BASEPATH"/"$PRESET" 
 domake
 if [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2* ]; then
 	redecho ERROR: "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/sm64."$VERSION".f3dex2e was not built.
