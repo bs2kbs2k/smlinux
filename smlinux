@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.  
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1206-1747
+TIMESTAMP=2020-1208-1010
 
 STARTSEC=$SECONDS
 
@@ -1439,7 +1439,7 @@ fi
 dodynos(){
 # must be called before docheats 
 cd "$BASEPATH"/"$PRESET"
-if [ "$GIT" = "s4Ys369/cheaterex" ]; then
+if [ "$GIT" = "s4Ys369/cheaterex" ] || [ "$GIT" = "teamsalta/sm64nx" ]; then
 	return
 elif [ "$DYNOS" = 0 ] && [ -f enhancements/DynOS.0.*.patch ]; then
 	bluecho Removing Dynamic Option System...
@@ -1453,14 +1453,14 @@ elif [ "$DYNOS" = 1 ] && [ ! -f enhancements/DynOS.0.5.* ] && [ ! -f enhancement
 	else
     	bluecho Applying Dynamic Option System...
     fi
-    if  ! ( [ "$PRESET" = "sm64ex" ] && [ "CHEATER" = 1 ]); then 
+    if  [ "$PRESET" = "sm64ex" ] && [ "CHEATER" = 1 ]; then 
+    	echo Skipping DynOS patch, will be installed combined with CHEATER.
+    else
     	cd enhancements
     	unzip -q "$SMLINUX"/DynOS*.zip
     	cd ..
-    	git apply enhancements/DynOS*.patch
-    else
-    	echo Skipping DynOS patch, will be installed combined with CHEATER.
-    fi
+    	git apply --whitespace=fix enhancements/DynOS*.patch
+      fi
 fi
 if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
 	rm "$SAVEDIR"/DynOSconfig.cfg
@@ -1691,7 +1691,7 @@ elif [ ! "$ANDROID" = 0 ] ; then
 		pinkecho "Internal Storage/Android/data/com.vdavid003.sm64port/files"
 	fi
 	exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
-	"$OPEN" "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug &disown
+	"$OPEN" "$BASEPATH"/"$ANDROID"/app/build/outputs/apk/debug/ &disown
 elif [ "$GIT"  = "djoslin0/sm64ex-coop" ] && [ ! `nproc` = 1 ]; then
 	bluecho Testing Double Application Launch...
 	cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
