@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1211-1341
+TIMESTAMP=2020-1211-1445
 
 STARTSEC=$SECONDS
 
@@ -795,6 +795,7 @@ elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lowe
 	BRANCH=master
 	TEXTSAVES=1
 	LEGACY_RES=1
+	DYNOS=0
 elif [ "$PRESET" = "r96proto" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96proto" ]; then
 	PRESET=r96proto
 	GIT=render96/render96ex
@@ -1352,6 +1353,8 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		if [ ! -d "$SMLINUX"/.git ] ; then
 			redecho ERROR: Cannot connect to github. Run without AutoUpdate enabled.
 			endnow
+		else
+			touch "$SMLINUX"/.config0 # new install doesnt need update
 		fi
 		if [ -d "$PATHDIR" ]; then
 			mv -f "$SMLINUX"/smlinux "$PATHDIR"/
@@ -1454,7 +1457,7 @@ elif [ "$DYNOS" = 0 ]; then
 elif [ -f enhancements/DynOS.0.6.1.patch ]; then
 	echo DynOS 0.6 patchtfile already present, skipping application.
 elif [ "$PRESET" = "r96alpha" ]; then
-	if [ -f enhancements/DynOS.0.5 patch ]; then
+	if [ -f enhancements/DynOS.0.5.patch ]; then
 		echo DynOS 0.5 patchtfile already present, skipping application.
 	else
 		removedynos
@@ -1468,7 +1471,10 @@ else
   	removedynos
    	cp "$SMLINUX"/DynOS.0.6.1.patch enhancements
    	bluecho Applying Dynamic Option System 0.6...
-   	git apply --whitespace=nowarn enhancements/DynOS*.patch
+   	if ! git apply --whitespace=nowarn enhancements/DynOS*.patch; then
+   		redecho error: DynOS did not apply clean.  Attempting to force application with --reject
+   		git apply --whitespace=nowarn --reject enhancements/DynOS*.patch
+   	fi
 fi
 }
 
@@ -1768,11 +1774,17 @@ LAUNCHSEC=$SECONDS
 }
 
 ####################################### The Beginning ########################################
-
-SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
-SMLINUX="$SHARE"/smlinux
 LAUNCH_DIR=$(pwd)
 cd # prevent errors if launched from folder that may not always exist
+# Make sure folders exist, if not create them (for non systemd os)
+if [ ! -d $HOME/.local ]; then
+	mkdir $HOME/.local
+fi
+if [ ! -d "$SHARE" ]; then
+	mkdir "$SHARE"
+fi
+SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
+SMLINUX="$SHARE"/smlinux
 
 if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
@@ -1789,8 +1801,8 @@ elif command -v firefox &> /dev/null; then
 	OPEN=firefox
 	setpathdir
 else
-	setpathdir
 	OPEN=echo
+	setpathdir
 fi
 if [ `uname -m` = "x86_64" ] || [ `uname -m` = "aarch64" ]; then
 	BITS=64
@@ -1840,7 +1852,7 @@ elif command -v whiptail &> /dev/null; then
 		OP1="--noweb"
 	fi
 else
-	redecho Error: whiptail is not installed so command menu cannot be displayed.
+	redecho error: whiptail is not installed so command menu cannot be displayed.
 	greenecho You must specify a command, for example smlinux help or smlinux build.
 	exit
 fi
@@ -1866,14 +1878,8 @@ textbox=brightcyan,black   # editor text
 title=blue,black           # make choice with arrows
 checkbox=brightcyan,black  # important list
 compactbutton=blue,black   # ok button'
-# Make sure folders and installer config file exist, if not create them.
-if [ ! -d $HOME/.local ]; then
-	mkdir $HOME/.local
-fi
-if [ ! -d "$SHARE" ]; then
-	mkdir "$SHARE"
-fi
-if [ ! -f "$SMLINUX"/.config0 ]; then
+
+if [ ! -f "$SMLINUX"/.config0 ] && [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
 	updateconfig
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
