@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1211-1709
+TIMESTAMP=2020-1211-1832
 
 STARTSEC=$SECONDS
 
@@ -183,6 +183,14 @@ if [ -f /usr/bin/mplayer ] && [ -f "$SMLINUX"/File_Select_64_slowed_down.mp3 ] &
 fi
 BUILDSEC=$SECONDS
 }
+
+gitstash(){
+if ! git stash --quiet; then
+	pinkecho WARNING: Stash failure. Setting username and trying again
+	git config user.name "smlinux"
+	git config user.email "mario@ms64.com"
+	git stash --quiet
+fi
 
 setpathdir(){
 	for folder in bin .local/bin .local/share/bin Applications/bin Applications/.bin .bin .local/share/.bin .local/.bin
@@ -1157,12 +1165,12 @@ else
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ] && [ "$GIT" = "render96/render96ex" ]; then
 			bluecho Starting Render 96 texture update....
 			cd "$SMLINUX"/RENDER96-HD-TEXTURE-PACK
-			git stash --quiet
+			gitstash
 			git pull --quiet --no-rebase &
 		elif [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 			bluecho Starting Cleaner Aesthetics textures update...
 			cd "$SMLINUX"/Cleaner-Aesthetics
-			git stash --quiet
+			gitstash
 			git pull --quiet --no-rebase &
 		fi
 		cd "$SMLINUX"
