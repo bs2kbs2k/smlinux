@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1211-1832
+TIMESTAMP=2020-1211-1838
 
 STARTSEC=$SECONDS
 
@@ -191,6 +191,7 @@ if ! git stash --quiet; then
 	git config user.email "mario@ms64.com"
 	git stash --quiet
 fi
+}
 
 setpathdir(){
 	for folder in bin .local/bin .local/share/bin Applications/bin Applications/.bin .bin .local/share/.bin .local/.bin
