@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1211-1445
+TIMESTAMP=2020-1211-1608
 
 STARTSEC=$SECONDS
 
@@ -1334,7 +1334,6 @@ fi
 scriptUpdate(){
 if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ ! -f "$PATHDIR"/smlinux ] || [ ! -d "$SMLINUX"/.git ] ; then
-		bluecho Installing smlinux into "$PATHDIR"...
 		if [ "$USER" = "root" ]; then
 			redecho WARNING: smlinux being installed as root.
 			pinkecho smlinux updates may not work correctly if you run again as a regular user.
@@ -1356,6 +1355,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		else
 			touch "$SMLINUX"/.config0 # new install doesnt need update
 		fi
+		bluecho Installing smlinux in "$PATHDIR"...
 		if [ -d "$PATHDIR" ]; then
 			mv -f "$SMLINUX"/smlinux "$PATHDIR"/
 		elif mkdir "$PATHDIR"; then
@@ -1777,14 +1777,14 @@ LAUNCHSEC=$SECONDS
 LAUNCH_DIR=$(pwd)
 cd # prevent errors if launched from folder that may not always exist
 # Make sure folders exist, if not create them (for non systemd os)
+SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
+SMLINUX="$SHARE"/smlinux
 if [ ! -d $HOME/.local ]; then
 	mkdir $HOME/.local
 fi
 if [ ! -d "$SHARE" ]; then
 	mkdir "$SHARE"
 fi
-SHARE=${XDG_DATA_HOME:-$HOME/.local/share}
-SMLINUX="$SHARE"/smlinux
 
 if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
