@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1211-1917
+TIMESTAMP=2020-1213-1417
 
 STARTSEC=$SECONDS
 
@@ -450,10 +450,10 @@ if [ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ] || [ "$COMMAND" = "upd
 	tput setab 0  # black background
 	tput setaf 6  # cyan text
 	echo "setup: " "$(($((PREPSEC - STARTSEC)) / 60))min $(($((PREPSEC - STARTSEC))% 60))sec"
-	echo "+make: " "$(($((BUILDSEC - PREPSEC)) / 60))min $(($((BUILDSEC - PREPSEC))% 60))sec"
-	echo "+done: " "$(($((BUILDSEC - STARTSEC)) / 60))min $(($((BUILDSEC - STARTSEC))% 60))sec"
+	echo "build: " "$(($((BUILDSEC - PREPSEC)) / 60))min $(($((BUILDSEC - PREPSEC))% 60))sec"
+	echo "=done: " "$(($((BUILDSEC - STARTSEC)) / 60))min $(($((BUILDSEC - STARTSEC))% 60))sec"
 	echo "+wait: " "$(($(($SECONDS - LAUNCHSEC)) / 60))min $(($(($SECONDS - LAUNCHSEC))% 60))sec"
-	echo "=full: " "$(($(($SECONDS - STARTSEC)) / 60))min $(($(($SECONDS - STARTSEC))% 60))sec"
+	echo "total: " "$(($(($SECONDS - STARTSEC)) / 60))min $(($(($SECONDS - STARTSEC))% 60))sec"
 	if [ -d "$BASEPATH"/"$PRESET"/.git ]; then
 		echo "$GIT"" last commit: "
 		cd "$BASEPATH"/"$PRESET"
@@ -804,7 +804,7 @@ elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lowe
 	BRANCH=master
 	TEXTSAVES=1
 	LEGACY_RES=1
-	DYNOS=0
+	#DYNOS=0
 elif [ "$PRESET" = "r96proto" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96proto" ]; then
 	PRESET=r96proto
 	GIT=render96/render96ex
@@ -1463,22 +1463,20 @@ if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 	return
 elif [ "$DYNOS" = 0 ]; then
 	removedynos
-elif [ -f enhancements/DynOS.0.6.1.patch ]; then
+elif [ -f enhancements/DynOS.0.6.patch ]; then
 	echo DynOS 0.6 patchtfile already present, skipping application.
 elif [ "$PRESET" = "r96alpha" ]; then
 	if [ -f enhancements/DynOS.0.5.patch ]; then
 		echo DynOS 0.5 patchtfile already present, skipping application.
 	else
 		removedynos
-		cd enhancements
-    	unzip -q "$SMLINUX"/DynOS.0.5.zip
-   		cd ..
+		unzip -q "$SMLINUX"/DynOS.0.5.zip -d enhancements
    		bluecho Applying Dynamic Option System 0.5...
    		git apply --whitespace=nowarn enhancements/DynOS*.patch
    	fi
 else
   	removedynos
-   	cp "$SMLINUX"/DynOS.0.6.1.patch enhancements
+   	unzip -q "$SMLINUX"/DynOS.0.5.zip -d enhancements
    	bluecho Applying Dynamic Option System 0.6...
    	if ! git apply --whitespace=nowarn enhancements/DynOS*.patch; then
    		redecho error: DynOS did not apply clean.  Attempting to force application with --reject
