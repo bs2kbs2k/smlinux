@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-1212
+TIMESTAMP=2020-1214-1552
 
 STARTSEC=$SECONDS
 
@@ -1476,7 +1476,7 @@ elif [ "$DYNOS" = 0 ]; then
 	removedynos
 elif [ -f enhancements/DynOS.0.6.patch ]; then
 	echo DynOS 0.6 patchtfile already present, skipping application.
-elif [ "$PRESET" = "r96alpha" ]; then
+elif [ "$PRESET" = "r96alpha" ] || [ "$BITS" = 32 ]; then
 	if [ -f enhancements/DynOS.0.5.patch ]; then
 		echo DynOS 0.5 patchtfile already present, skipping application.
 	else
@@ -1485,13 +1485,17 @@ elif [ "$PRESET" = "r96alpha" ]; then
    		bluecho Applying Dynamic Option System 0.5...
    		git apply --whitespace=nowarn enhancements/DynOS*.patch
    	fi
-else
-  	removedynos
-   	unzip -q "$SMLINUX"/DynOS.0.6.zip -d enhancements
-   	bluecho Applying Dynamic Option System 0.6...
-   	if ! git apply --whitespace=nowarn enhancements/DynOS*.patch; then
-   		redecho error: DynOS did not apply clean.  Attempting to force application with --reject
-   		git apply --whitespace=nowarn --reject enhancements/DynOS*.patch
+elif [ "$BITS" = 64 ]; then
+	if [ -f enhancements/DynOS.0.6.patch ]; then
+		echo DynOS 0.6 patchtfile already present, skipping application.
+	else
+  		removedynos
+   		unzip -q "$SMLINUX"/DynOS.0.6.zip -d enhancements
+   		bluecho Applying Dynamic Option System 0.6...
+   		if ! git apply --whitespace=nowarn enhancements/DynOS*.patch; then
+   			redecho error: DynOS did not apply clean.  Attempting to force application with --reject
+   			git apply --whitespace=nowarn --reject enhancements/DynOS*.patch
+   		fi
    	fi
 fi
 }
@@ -1547,7 +1551,7 @@ elif [ "$DYNOS" = 1 ] && [ "$PRESET" = "r96alpha" ]; then
 		ZIPFILE=CHEATERv11.5.alpha.zip
 		CHEATERFILE=v11.5.alpha.patch
 	fi
-elif [ "$DYNOS" = 1 ] && ([ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ]); then
+elif [ "$DYNOS" = 1 ] && [ "$BITS" = 64 ] && ([ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ]); then
 	if [ -f CHEATERv11.5.ex.zip ]; then
 		echo CHEATER 11.5 already present, skipping application.
 	else
@@ -1557,7 +1561,7 @@ elif [ "$DYNOS" = 1 ] && ([ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex"
 		CHEATERFILE=v11.5.ex.patch
 	fi
 elif [ "$GIT" = "sm64pc/sm64ex" ] || [ "$GIT" = "render96/render96ex" ]; then
-	if [ "$DYNOS" = 1 ] && [ -f CHEATERv10_dynos.patch ]; then
+	if [ "$DYNOS" = 1 ] && [ -f CHEATERv10_dynos.patch ] && [ ! "$PRESET" = "r96alpha" ]; then
 		echo CHEATER 10 patchfile already present, skipping application.
 	elif [ "$DYNOS" = 0 ] && [ -f CHEATERv10.patch ]; then
 		echo CHEATER 10 patchfile already present, skipping application.
