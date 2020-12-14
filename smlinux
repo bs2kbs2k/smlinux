@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-1101
+TIMESTAMP=2020-1214-1118
 
 STARTSEC=$SECONDS
 
@@ -2643,24 +2643,7 @@ else
 	greenecho [7] Skipping menu entry and shortcuts for non PC version.
 fi
 rungame
-if [ -f "$HOME"/.smlinuxNopath ]; then
-	rm "$HOME"/.smlinuxNopath
-	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
-	zenity --info --text="You did not have a home folder in your path so "$HOME"/bin was created.\n\nRestart terminal before running smlinux again." --title="Your installation is complete." --width=500 &disown
-	echo You did not have a home folder in your path so "$HOME"/bin was created.
-	echo Restart terminal before running smlinux again.
-	echo
-	greenecho smlinux is complete
-	for i in {1..30}
-do
-	tput setab 0  # black background
-	tput setaf 1  # red text
-	tput bold
-	printf "Please close this terminal.  "
-	sleep 30
-done
-	kill -9 $PPID
-elif [ "$EXTERNAL_DATA" = 0 ]; then
+if [ "$EXTERNAL_DATA" = 0 ]; then
 	sleep 5
 elif  [ "$GIT" = "render96/render96ex" ] && [ "$InstallHD" = 1 ]; then
 	sleep 30
@@ -2668,3 +2651,20 @@ else
 	sleep 10
 fi
 theend
+if [ -f "$HOME"/.smlinuxNopath ]; then
+	rm "$HOME"/.smlinuxNopath
+	exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+	zenity --info --text="You did not have a home folder in your path the following was created\n"$HOME"/bin\n\nRestart terminal before running smlinux again." --title="Your installation is complete." --width=500 &disown
+	echo You did not have a home folder in your path so "$HOME"/bin was created.
+	redecho You must restart terminal before running smlinux again.
+	echo
+	for i in {1..30}
+do
+	tput setab 0  # black background
+	tput setaf 1  # red text
+	tput bold
+	printf "Please close this terminal.  "
+	sleep 60
+done
+	kill -9 $PPID
+fi
