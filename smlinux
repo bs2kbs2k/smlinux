@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-1552
+TIMESTAMP=2020-1214-1556
 
 STARTSEC=$SECONDS
 
@@ -1242,7 +1242,7 @@ elif [ "$FPS60" = 1 ] && [ -f enhancements/60fps*.patch ]; then
 	fi
 elif [ "$FPS60" = 0 ] && [ -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
 	bluecho Removing 60fps patch...
-	git apply -R enhancements/60fps*.patch
+	git apply -R --whitespace=nowarn enhancements/60fps*.patch
 	rm enhancements/60fps
 	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
 		echo Disabling Vsync...
@@ -1271,11 +1271,11 @@ fi
 cd "$BASEPATH"/"$PRESET"
 if [ -f enhancements/3d_coin*.patch ] && [ ! "$GIT" = "s4Ys369/cheaterex" ]; then
 	bluecho Removing 3D coins...
-	git apply -R enhancements/3d_coin*.patch
+	git apply -R --whitespace=nowarn enhancements/3d_coin*.patch
 	rm enhancements/3d_coin*.patch
 elif [ "$GIT" = "s4Ys369/cheaterex" ] && [ -f enhancements/captain_toad_stars*.patch ]; then
 	bluecho Removing Captain Toad Stars...
-	git apply -R enhancements/captain_toad_stars*.patch
+	git apply -R --whitespace=nowarn enhancements/captain_toad_stars*.patch
 	rm enhancements/captain_toad_stars*.patch
 else
 	removecheater
@@ -1504,7 +1504,7 @@ removedynos(){
 # must be in PRESET folder
 if [ -f enhancements/DynOS*.patch ]; then
 	bluecho Removing Dynamic Option System...
-	git apply -R enhancements/DynOS*.patch
+	git apply -R --whitespace=nowarn enhancements/DynOS*.patch
 	rm enhancements/DynOS*.patch
 fi
 if [ -f "$SAVEDIR"/DynOSconfig.cfg ]; then
@@ -1595,23 +1595,23 @@ if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 	return
 elif [ -f enhancements/CHEATER*.patch ]; then
 	bluecho Removing CHEATER...
-	git apply -R enhancements/CHEATER*.patch
+	git apply -R --whitespace=nowarn enhancements/CHEATER*.patch
 	rm enhancements/CHEATER*
 elif [ -f enhancements/cheater*.patch ]; then
 	bluecho Removing CHEATER...
-	git apply -R enhancements/cheater*.patch
+	git apply -R --whitespace=nowarn enhancements/cheater*.patch
 	rm enhancements/cheater*
 elif [ -f enhancements/v9_*.patch ]; then
 	bluecho Removing CHEATER v9...
-	git apply -R enhancements/v9_*.patch
+	git apply -R --whitespace=nowarn enhancements/v9_*.patch
 	rm enhancements/v9_*.patch
 elif [ -f enhancements/v11.5.*.patch ]; then
 	bluecho Removing CHEATER...
-	git apply -R enhancements/v11.5.*.patch
+	git apply -R --whitespace=nowarn enhancements/v11.5.*.patch
 	rm enhancements/v11.5.*.patch
 elif [ -f enhancements/fix.CHEATER*.patch ]; then
 	bluecho Removing CHEATER...
-	git apply -R enhancements/fix.CHEATER*.patch
+	git apply -R --whitespace=nowarn enhancements/fix.CHEATER*.patch
 	rm enhancements/fix.CHEATER*
 fi
 if [ -f enhancements/CHEATER*.zip ]; then
@@ -2306,17 +2306,17 @@ elif [ "$COMMAND" = "update" ]; then
 		cd "$BASEPATH"/"$PRESET"
 		bluecho Source update attempt failed, removing patches...
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin*.patch ]; then
-			git apply -R enhancements/3d_coin*.patch
+			git apply -R --whitespace=nowarn enhancements/3d_coin*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-			git apply -R enhancements/60fps*.patch
+			git apply -R --whitespace=nowarn enhancements/60fps*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/DynOS*.patch ]; then
-			git apply -R enhancements/DynOS*.patch
+			git apply -R --whitespace=nowarn enhancements/DynOS*.patch
 		fi
 		removecheater
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/menu-arrows.patch ]; then
-			git apply -R enhancements/menu-arrows.patch
+			git apply -R --whitespace=nowarn enhancements/menu-arrows.patch
 		fi
 		git merge
 		if [ "$?" = "1" ]; then
