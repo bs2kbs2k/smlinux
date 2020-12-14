@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-1118
+TIMESTAMP=2020-1214-1125
 
 STARTSEC=$SECONDS
 
@@ -1410,7 +1410,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		if [ "$(git diff HEAD origin/HEAD -- smlinux)" != "" ]; then
 			git merge
 			if [ ! -f "$SMLINUX"/smlinux ]; then
-				echo "Warning: smlinux repository updated but new script not found"
+				pinkecho "Warning: smlinux repository updated but new script not found"
 				echo This could be normal if only the readme or support files updated.
 			else
 				echo 'SMLINUX=${XDG_DATA_HOME:-$HOME/.local/share}/smlinux
@@ -1454,10 +1454,10 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 				exec ~/.smlinuxUpdate "$COMMAND" "$OP1" "$OP2" "$OP3" "$OP4"
 			fi
 		elif [ "$COMMAND" = "upgrade" ]; then
-			echo smlinux is up to date.
+			echo smlinux is already the latest version "$TIMESTAMP".
 			exit
 		else
-			echo smlinux is up to date.
+			echo smlinux is already the latest version "$TIMESTAMP".
 		fi
 	fi
 fi
