@@ -268,7 +268,7 @@ smlinux usually only installs these dependendencies automatically during the ver
 
 ## **How do I create my rom file?**
 
-Backup N64 cartridge with a dumper such as Retrode2 or Mr. Backup, from Wii with vcromclaim, or from Wii U Virtual Console with title dumper.  
+Backup N64 cartridge with a dumper such as Retrode2 or Mr. Backup, from Wii with vcromclaim, or from Wii U with ddd.  
 [Dragonbox Store](https://www.dragonbox.de/en/accessories/cartridge-dumper/retrode2-with-all-plugins) &nbsp; [Stoneage Gamer](https://stoneagegamer.com/retrode-2-cart-reader-rom-dumper-for-super-nintendo-genesis-more.html) &nbsp; 
 [Nintendo Wii U Store](https://www.nintendo.com/games/detail/super-mario-64-wii-u) &nbsp; [WiiU Title Dumper](https://gbatemp.net/threads/ddd-wiiu-title-dumper.418492) &nbsp; [Wii Virtual Console ROM Claim]( https://github.com/JanErikGunnar/vcromclaim)  
 *Note that 3D All-Stars contains the Shindou version of the ROM which isn't fully supported by PC port.*  
