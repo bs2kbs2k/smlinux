@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-0950
+TIMESTAMP=2020-1214-1042
 
 STARTSEC=$SECONDS
 
@@ -194,14 +194,31 @@ fi
 }
 
 setpathdir(){
+if [ "$OSX_BUILD" = 1 ] || [ "$MSYS" =1 ]; then
+	PATHDIR=/usr/local/bin
+else
 	for folder in bin .local/bin .local/share/bin Applications/bin Applications/.bin .bin .local/share/.bin .local/.bin
 do
 	if [ ! `echo $PATH | grep "$HOME"/"$folder"` = "" ]; then
 		PATHDIR="$HOME"/"$folder"
 		break
 	fi
+	if [ ! -d "$HOME"/bin ]; then
+		mkdir "$HOME"/bin
+	fi
+	export PATH=$HOME/bin:$PATH
 	PATHDIR=$HOME/bin
+	touch "$HOME"/.smlinuxNopath
+	if [ -f "$HOME"/.bashrc ]; then
+		bluecho Adding $HOME/bin to bash path...
+		echo 'export PATH=$HOME/bin:$PATH' >>~/.bashrc
+	fi
+	if [ -f "$HOME"/.zshrc ]; then
+		bluecho Adding $HOME/bin to zsh path...
+		echo 'export PATH=$HOME/bin:$PATH' >>~/.zshrc
+	fi
 done
+fi
 }
 
 updateconfig(){
@@ -1344,7 +1361,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 	if [ ! -f "$PATHDIR"/smlinux ] || [ ! -d "$SMLINUX"/.git ] ; then
 		if [ "$USER" = "root" ]; then
 			redecho WARNING: smlinux being installed as root.
-			pinkecho smlinux updates may not work correctly if you run again as a regular user.
+			redecho smlinux updates may not work correctly if you run again as a regular user.
 		fi
 		if [ -d "$SMLINUX" ]; then
 			if [ -d "$SMLINUX".baq ]; then
@@ -1374,14 +1391,6 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			pinkecho Warning: Could not write smlinux to path directory.  Creating $HOME/bin.
 			touch "$HOME"/.smlinuxNopath
 			mkdir $HOME/bin
-			if [ -f "$HOME"/.bashrc ]; then
-				bluecho Adding $HOME/bin to bash path...
-				echo 'export PATH=$HOME/bin:$PATH' >>~/.bashrc
-			fi
-			if [ -f "$HOME"/.zshrc ]; then
-				bluecho Adding $HOME/bin to zsh path...
-				echo 'export PATH=$HOME/bin:$PATH' >>~/.zshrc
-			fi
 			export PATH=$HOME/bin:$PATH
 			PATHDIR=$HOME/bin
 			mv -f "$SMLINUX"/smlinux "$PATHDIR"/
@@ -1401,7 +1410,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		if [ "$(git diff HEAD origin/HEAD -- smlinux)" != "" ]; then
 			git merge
 			if [ ! -f "$SMLINUX"/smlinux ]; then
-				pinkecho "Warning: smlinux repository updated but new script not found"
+				echo "Warning: smlinux repository updated but new script not found"
 				echo This could be normal if only the readme or support files updated.
 			else
 				echo 'SMLINUX=${XDG_DATA_HOME:-$HOME/.local/share}/smlinux
@@ -1794,22 +1803,18 @@ fi
 
 if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
-	PATHDIR=/usr/local/bin
 	OPEN=open
 elif [ `uname -o` = "Msys" ]; then
     MSYS=1
-	PATHDIR=/usr/local/bin
 	OPEN=start
 elif command -v xdg-open &> /dev/null; then
 	OPEN=xdg-open
-	setpathdir
 elif command -v firefox &> /dev/null; then
 	OPEN=firefox
-	setpathdir
 else
 	OPEN=echo
-	setpathdir
 fi
+setpathdir
 if [ `uname -m` = "x86_64" ] || [ `uname -m` = "aarch64" ]; then
 	BITS=64
 else
