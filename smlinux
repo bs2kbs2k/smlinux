@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-1603
+TIMESTAMP=2020-1214-1636
 
 STARTSEC=$SECONDS
 
@@ -487,7 +487,7 @@ exit
 }
 
 endnow(){
-redecho "smlinux ending incomplete after "$SECONDS" seconds.  Contact #help-desk for support."
+redecho smlinux ending incomplete after $(($SECONDS - STARTSEC)) seconds.  "Contact #help-desk for support."
 if [ "$TARGET_RPI" = 0 ] && [ ! "$MAXJOBS" = 1 ]; then
 	exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 	"$OPEN" https://discord.gg/Ub6YHRm &
