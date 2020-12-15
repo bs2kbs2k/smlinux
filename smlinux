@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-1648
+TIMESTAMP=2020-1214-1733
 
 STARTSEC=$SECONDS
 
@@ -2538,6 +2538,13 @@ elif [ "$TARGET_WEB" = 0 ] && [ "$ANDROID" = 0 ]; then
 	fi
 	if [ "$GIT" = "s4Ys369/cheaterex" ] && [ -f "$SAVEDIR"/sm64config.txt ]; then
 		mv "$SAVEDIR"/sm64config.txt "$SAVEDIR"/CHEATER64config.txt
+	fi
+	if [ "PRESET" = "r96alpha"]; then
+		echo Settings default game language to English.
+		if [ -f "$SAVEDIR"/sm64config.txt ]; then
+			sed -i.bak '/^language/d' "$SMLINUX"/smlinuxcfg.txt # delete line
+		fi
+		echo "language 1" >> "$SAVEDIR"/sm64config.txt
 	fi
 fi
 if [ -f "$SAVEDIR"/sm64_save_file.bin ] || [ -f "$SAVEDIR"/CHEATER64_save_file.bin ] || [ -f "$SAVEDIR"/sm64.sav ] || [ -f "$SAVEDIR"/render96_save_file_0.sav ] ; then
