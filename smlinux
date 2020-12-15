@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-1556
+TIMESTAMP=2020-1214-1603
 
 STARTSEC=$SECONDS
 
@@ -2266,7 +2266,7 @@ elif [ "$COMMAND" = "rebuild" ]; then
 	if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 		echo
 		redecho ERROR: No "$BASEPATH"/"$PRESET" folder to rebuild!
-		echo Specify smlinux build for a fresh build.
+		echo Specify smlinux build --go for a fresh build.
 		exit
 	fi
 	if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET".failed ]; then
