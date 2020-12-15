@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-1636
+TIMESTAMP=2020-1214-1648
 
 STARTSEC=$SECONDS
 
@@ -732,7 +732,6 @@ ENABLE_OPENGL_LEGACY=1
 # [ GIT and BRANCH are ignored when PRESET is known ]
 GIT=
 BRANCH=
-# [ Depracated Linux dependencies installation command string. ]
 FLAGS=' >"$SMLINUX"/smlinuxcfg.txt
 }
 
