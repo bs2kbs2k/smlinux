@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1217-1115
+TIMESTAMP=2020-1217-1152
 
 STARTSEC=$SECONDS
 
@@ -2493,6 +2493,7 @@ if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	redecho "ERROR: Could not reach github."
 	endnow
 elif [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
+	echo Linking romfile...
 	ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 fi
 if [ "$OSX_BUILD" = 1 ]; then
