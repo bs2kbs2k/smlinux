@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1214-1824
+TIMESTAMP=2020-1217-1028
 
 STARTSEC=$SECONDS
 
@@ -416,9 +416,9 @@ sed -i '' '59i\
 sed -i '' '60i\
 endef
 ' "$BASEPATH"/"$PRESET"/tools/Makefile
-sed -i '' '62i\
-$(foreach p,$(CLANG_PROGRAMS),$(eval $(call CLANG_COMPILE,$(p))))
-' "$BASEPATH"/"$PRESET"/tools/Makefile
+#sed -i '' '62i\
+#$(foreach p,$(CLANG_PROGRAMS),$(eval $(call CLANG_COMPILE,$(p))))
+#' "$BASEPATH"/"$PRESET"/tools/Makefile
 # CHANGES END HERE
 cd "$BASEPATH"/"$PRESET"/tools
 if [ ! -f skyconv ]; then
@@ -2033,16 +2033,16 @@ else   # The real start, the rest was script preperation and setup.
 	echo "|                                                                        |"
 	echo "|           Command Line Usage: smlinux <command> <options>              |"
 	echo "|  Commands                                                              |"
-	echo "|   update: Update sm64 source repo & rebuild (preserves modifications)  |"
-	echo "|    build: Get/reset sm64 source repo & build (renames existing folder) |"
-	echo "|    clone: Get/reset sm64 source repo & extract rom (no addons/build)   |"
-	echo "|   config: Opens smlinuxcfg.txt in an editor (without building)         |"
-	echo "|    reset: Resets smlinux configuration file to default settings        |"
-	echo "|  depends: Install dependencies (automatic during smlinux installation) |"
-	echo "|    purge: Remove all files and folders obtained or created by smlinux  |"
-	echo "|     help: Display all smlinux command line options and open online faq |"
+	echo "|   update: update sm64 source repo & rebuild (preserves modifications)  |"
+	echo "|    build: get/reset sm64 source repo & build (renames existing folder) |"
+	echo "|    clone: get/reset sm64 source repo & extract rom (no addons/build)   |"
+	echo "|   config: open smlinuxcfg.txt in an editor (without building)          |"
+	echo "|    reset: reset smlinux configuration file to default settings         |"
+	echo "|  depends: install dependencies (automatic during smlinux installation) |"
+	echo "|    purge: remove all files and folders obtained or created by smlinux  |"
+	echo "|     help: display all smlinux command line options and open online faq |"
 	if [ "$COMMAND" = "help" ]; then
-		echo "|  upgrade: Upgrade smlinux to latest version from github (no build)     |"
+		echo "|  upgrade: upgrade smlinux to latest version from github (no build)     |"
 		echo "|  rebuild: rebuild existing or previously failed build with no changes  |"
 		echo "| smconfig: open sm64config.txt with nano                                |"
 		echo "| <romfile> install smlinux using specified romfile then build           |"
