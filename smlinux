@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1220-1515
+TIMESTAMP=2020-1221-1041
 
 STARTSEC=$SECONDS
 
@@ -276,6 +276,13 @@ fi
 if [ ! -f "$HOME"/.nanorc ] && [ -d /usr/share/nano ]; then
 	echo 'include /usr/share/nano/*.nanorc' >~/.nanorc
 fi
+}
+
+brewdepends(){
+	for package in libxdg-basedir coreutils wget newt nano go unzip unrar p7zip python3 PyQt5 git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
+do
+	brew install $package
+done
 }
 
 extractrom(){
@@ -2074,9 +2081,12 @@ else   # The real start, the rest was script preperation and setup.
 				echo FATAL ERROR Could not install homebrew, thus cannot install other stuff.
 				endnow
 			fi
-			brew install libxdg-basedir coreutils wget newt nano go unzip unrar p7zip python3 PyQt5
-			brew install git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
+			brewdepends
 			go get github.com/machinebox/appify
+			if [ "$COMMAND" = "depends" ]; then # fix if user updated brew and broke pyqt5
+				brew upgrade
+				brew link pyqt --overwrite
+			fi
 			if [ ! ~/.nanorc ]; then
 				echo 'include /usr/local/share/nano/*.nanorc' >"$HOME"/.nanorc
 			fi
@@ -2087,9 +2097,6 @@ else   # The real start, the rest was script preperation and setup.
 				echo Installing Apple XCode Command Line Tools
 				xcode-select --install
 				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\nIf this doesnt work you can install from Apple Developer website.\n" 13 55 2>&1
-			fi
-			if [ "$COMMAND" = "depends" ]; then # fix if user updated brew and broke pyqt5
-				brew link pyqt --overwrite
 			fi
 		elif command -v apt &> /dev/null && [ "$USER" = "root" ]; then
 			bluecho "Updating package list and installing dependencies..."
@@ -2128,10 +2135,9 @@ else   # The real start, the rest was script preperation and setup.
 			python3 -m pip install --upgrade pip
 			python3 -m pip install numpy
 			if [ ! "OSX_BUILD" = 1 ] && ! command -v apt &> /dev/null; then
-				python3 -m pip install --upgrade pip
 				python3 -m pip install PyQt5
 			fi
-			if [ "`pip3 list --format=columns | grep numpy`" = "" ]; then
+			if [ "`pip3 list --format=columns | grep numpy`" = "" ] && command -v pip &> /dev/null; then
 				pip install numpy # this worked on ubuntu 16
 			fi
 		fi
