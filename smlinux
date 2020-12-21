@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1221-1202
+TIMESTAMP=2020-1221-1208
 
 STARTSEC=$SECONDS
 
@@ -1052,6 +1052,10 @@ export PATH="$BASEPATH"/djgpp/bin:$PATH
 }
 
 prepnx(){
+if [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
+	echo Linking romfile...
+	ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
+fi
 mkdir "$BASEPATH"/"$PRESET"/build
 mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"
 mkdir "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs
@@ -2499,9 +2503,6 @@ fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
 	redecho "ERROR: Could not reach github."
 	endnow
-elif [ ! -f "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64 ]; then
-	echo Linking romfile...
-	ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/baserom."$VERSION".z64
 fi
 if [ "$OSX_BUILD" = 1 ]; then
 	macprep
@@ -2511,8 +2512,6 @@ if [ "$PRESET" = "sm64nx" ]; then
 	prepnx
 else
 	extractrom
-	# cd "$BASEPATH"/"$PRESET"
-	# time python3 extract_assets.py "$VERSION"
 fi
 if [ "$COMMAND" = "clone" ]; then
 	theend
