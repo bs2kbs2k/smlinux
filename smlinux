@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1221-1208
+TIMESTAMP=2020-1222-1123
 
 STARTSEC=$SECONDS
 
@@ -279,10 +279,14 @@ fi
 }
 
 brewdepends(){
+	brew unlink md5sha1sum
+	brew upgrade
 	for package in libxdg-basedir coreutils wget newt nano go unzip unrar p7zip python3 PyQt5 git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 do
 	brew install $package
 done
+	brew link pyqt --overwrite  # fix if brew upgrade broke pyqt5 HighSierra
+	brew link python3 # fix for 3.9
 }
 
 extractrom(){
@@ -2081,16 +2085,16 @@ else   # The real start, the rest was script preperation and setup.
     			bluecho Installing Homebrew package manager...
 				bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 			fi
-			if ! command -v brew &> /dev/null; then
-				echo FATAL ERROR Could not install homebrew, thus cannot install other stuff.
+			if command -v brew &> /dev/null; then
+				brewdepends
+			else
+				redecho FATAL ERROR Could not install homebrew, thus cannot install other stuff.
 				endnow
 			fi
-			brewdepends
-			go get github.com/machinebox/appify
-			if [ "$COMMAND" = "depends" ]; then
-				brew upgrade
-				brew link pyqt --overwrite  # fix if brew upgrade broke pyqt5 HighSierra
-				brew link python3 # fix for 3.9
+			if command -v go &> /dev/null; then
+				go get github.com/machinebox/appify
+			else
+				redecho ERROR: go not installed so will not be able to make into macOS appbundle for shortcut.
 			fi
 			if [ ! ~/.nanorc ]; then
 				echo 'include /usr/local/share/nano/*.nanorc' >"$HOME"/.nanorc
