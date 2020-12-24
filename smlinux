@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1223-2026
+TIMESTAMP=2020-1223-2119
 
 STARTSEC=$SECONDS
 
@@ -400,12 +400,14 @@ fi
 # DROPBEAR's CHANGES BEGIN HERE - Thanks!
 sed -i '' 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
 sed -i '' 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
-#sed -i '' '855i\
-#        elif a == "-Wno-implicit-function-declaration":
-#' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
-#sed -i '' '856i\
-#            print("Warning flag; ignoring")
-#' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
+sed -i.bak '855i\
+8spaces8elif a == "-Wno-implicit-function-declaration":
+' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py # thanks dropbear
+sed -i.bak '856i\
+12spaces1212print("ignoring")
+' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py # thanks dropbear
+sed -i.bak 's|8spaces8elif|        elif|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
+sed -i.bak 's|12spaces1212print|            print|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
 sed -i '' 's|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc tabledesign extract_data_for_mio skyconv||g' "$BASEPATH"/"$PRESET"/tools/Makefile
 sed -i '' '1i\
 PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc extract_data_for_mio skyconv
