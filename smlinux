@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1223-2119
+TIMESTAMP=2020-1226-1514
 
 STARTSEC=$SECONDS
 
@@ -284,12 +284,12 @@ brewdepends(){
  	if ! command -v unzip &> /dev/null; then
  		brew install unzip
  	fi
-	for package in libxdg-basedir coreutils wget newt nano go unrar p7zip python3 PyQt5 git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
+	for package in libxdg-basedir coreutils wget newt nano go unar p7zip python@3.8 PyQt5 git make gcc@9 mingw-w64 sdl2 pkg-config glew glfw3 libusb audiofile zstd
 do
 	brew install $package
 done
 	brew link pyqt --overwrite  # fix if brew upgrade broke pyqt5 HighSierra
-	brew link python3 # fix for 3.9
+	# brew link python3 # fix for 3.9
 }
 
 extractrom(){
