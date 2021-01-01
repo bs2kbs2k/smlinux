@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2020-1226-1514
+TIMESTAMP=2020-1231-2151
 
 STARTSEC=$SECONDS
 
@@ -58,7 +58,7 @@ if [ -f "$SMLINUX"/buildlog.txt ]; then
 	mv -f "$SMLINUX"/buildlog.txt "$SMLINUX"/buildlog.old
 fi
 cd "$BASEPATH"/"$PRESET"
-echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI OSX_BUILD=$OSX_BUILD TEXTSAVES=$TEXTSAVES  -j"$MAXJOBS"
+echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI TEXTSAVES=$TEXTSAVES  -j"$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SDK ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL
 echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API
@@ -1278,8 +1278,8 @@ if  [ "$TARGET_WEB" = 1 ] || ([ "$EXTERNAL_DATA" = 0 ] && [ ! "$PRESET" = "sm64n
 	fi
 fi
 	cd "$BASEPATH"/"$PRESET"
-if  [ -d build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f enhancements/RENDER96_V1* ] || [ -f enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f enhancements/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip ]; then
-	echo Render 96 Models already installed.
+if  [ -d build/"$VERSION"_"$TARGET"/romfs/"Render 96" ] || [ -f enhancements/Render96_* ] || [ -f enhancements/RENDER96_* ] || [ -f enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ]; then
+	echo Render 96 SGI Models have already been applied.
 	return
 fi
 if [ ! -d "$SMLINUX"/SGI ]; then
@@ -1320,10 +1320,10 @@ if [ "$PRESET" = "sm64nx" ]; then
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak &
 	fi
 elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
-	SGIFILE=RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip
+	SGIFILE=Render96_v2.1.7z
 	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
 		bluecho Downloading "$SGIFILE"...
-		wget -q https://sm64pc.info/downloads/conversion_pack/RENDER96_V2.0_Hotfix_HUD_Keys_Fix.zip -P "$SMLINUX"/SGI
+		wget -q https://cdn.discordapp.com/attachments/730551213376143431/794366035871924244/Render96_v2.1.7z -P "$SMLINUX"/SGI
 	fi
 elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 	SGIFILE=RENDER96_V1.4.2_Luigi.zip
