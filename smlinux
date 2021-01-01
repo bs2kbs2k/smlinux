@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0101-1237
+TIMESTAMP=2021-0101-1243
 
 STARTSEC=$SECONDS
 
@@ -305,7 +305,7 @@ else
 fi
 ln -s "$BASEPATH"/"$PRESET"/tools "$BASEPATH"/"$PRESET"/include .
 cp "$BASEPATH"/"$PRESET"/sm64."$VERSION".sha1 "$BASEPATH"/"$PRESET"/assets.json .
-time "$BASEPATH"/"$PRESET"/extract_assets.py "$VERSION"
+time python3 "$BASEPATH"/"$PRESET"/extract_assets.py "$VERSION"
 rm sm64."$VERSION".sha1 assets.json
 if [ "$MSYS" = 1 ]; then
 	rm -rf tools include
