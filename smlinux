@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0101-1243
+TIMESTAMP=2021-0101-1824
 
 STARTSEC=$SECONDS
 
@@ -61,8 +61,8 @@ cd "$BASEPATH"/"$PRESET"
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI TEXTSAVES=$TEXTSAVES  --jobs "$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SDK ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL
-echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API TARGET_N64=0 TARGET_GAME_CONSOLE=0
-echo $FLAGS
+echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API
+echo TARGET_N64=0 TARGET_GAME_CONSOLE=0 $FLAGS
 if [ "$OSX_BUILD" = 1 ]; then
 	echo CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" TARGET_OSX=1 OSX_BUILD=1
 	if [ "$EXTERNAL_DATA" = 1 ]; then
@@ -747,7 +747,7 @@ ENABLE_OPENGL_LEGACY=1
 # [ GIT and BRANCH are ignored when PRESET is known ]
 GIT=
 BRANCH=
-FLAGS=' >"$SMLINUX"/smlinuxcfg.txt
+FLAGS=""' >"$SMLINUX"/smlinuxcfg.txt
 }
 
 loadconfig(){
@@ -1217,6 +1217,7 @@ else
 			elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 				bluecho Starting Render96 Textures Update...
 				cd RENDER96-HD-TEXTURE-PACK
+				gitstash
 				git pull --quiet --no-rebase &
 				ln -s "$SMLINUX"/RENDER96-HD-TEXTURE-PACK/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			elif [ ! -d "$SMLINUX"/Cleaner-Aesthetics ]; then
@@ -1226,6 +1227,7 @@ else
 			else
 				bluecho Starting Cleaner Aesthetic texture update...
 				cd Cleaner-Aesthetics
+				gitstash
 				git pull --quiet --no-rebase &
 				ln -s "$SMLINUX"/Cleaner-Aesthetics/gfx "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx
 			fi
@@ -2493,7 +2495,7 @@ if [ -d "$BASEPATH"/"$PRESET" ]; then
 			cd "$BASEPATH"
 			rm -rf "$PRESET"
 		fi
-		pinkecho Previous "$PRESET" folder was saved as "$PRESET".old and is safe to delete.
+		pinkecho Previous folder was saved as "$PRESET".old and is safe to delete.
 	fi
 fi
 if [ ! -d "$BASEPATH"/"$PRESET" ]; then
