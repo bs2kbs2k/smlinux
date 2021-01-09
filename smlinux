@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0101-1824
+TIMESTAMP=2021-0109-0858
 
 STARTSEC=$SECONDS
 
@@ -1323,10 +1323,12 @@ if [ "$PRESET" = "sm64nx" ]; then
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak &
 	fi
 elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
-	SGIFILE=Render96_v2.1.7z
+	SGIFILE=Render96_v2.1_Switch_Support.7z
+	# SGIFILE=Render96_v2.1.7z
 	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
 		bluecho Downloading "$SGIFILE"...
-		wget -q https://cdn.discordapp.com/attachments/730551213376143431/794366035871924244/Render96_v2.1.7z -P "$SMLINUX"/SGI
+		# wget -q https://cdn.discordapp.com/attachments/730551213376143431/794366035871924244/Render96_v2.1.7z -P "$SMLINUX"/SGI
+		wget -q https://cdn.discordapp.com/attachments/730551213376143431/796298074833289226/Render96_v2.1_Switch_Support.7z -P "$SMLINUX"/SGI
 	fi
 elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 	SGIFILE=RENDER96_V1.4.2_Luigi.zip
