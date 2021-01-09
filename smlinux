@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0109-0858
+TIMESTAMP=2021-0109-0908
 
 STARTSEC=$SECONDS
 
@@ -1565,13 +1565,14 @@ elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 		CHEATERFILE=CHEATER.coop.v3.patch
 	fi
 elif [ "$DYNOS" = 1 ] && [ "$PRESET" = "r96alpha" ]; then
-	if [ -f CHEATERv11.5.alpha.zip ]; then
+	if [ -f v11.6.alpha_switch.hotfix.zip ]; then
 		echo CHEATER 11.5 already present, skipping application.
 	else
 		removecheater
-		wget -q https://cdn.discordapp.com/attachments/716459185230970880/783167761164795914/CHEATERv11.5.alpha.zip
-		ZIPFILE=CHEATERv11.5.alpha.zip
-		CHEATERFILE=v11.5.alpha.patch
+		wget -q https://cdn.discordapp.com/attachments/716459185230970880/796250394791378954/v11.6.alpha_switch.hotfix.zip
+		# wget -q https://cdn.discordapp.com/attachments/716459185230970880/783167761164795914/CHEATERv11.5.alpha.zip
+		ZIPFILE=v11.6.alpha_switch.hotfix.zip
+		CHEATERFILE=v11.6.alpha.patch
 	fi
 elif [ "$DYNOS" = 1 ] && [ "$BITS" = 64 ] && ([ "$PRESET" = "sm64ex" ] || [ "$PRESET" = "render96ex" ]); then
 	if [ -f CHEATERv11.5.ex.zip ]; then
@@ -1627,10 +1628,10 @@ elif [ -f enhancements/v9_*.patch ]; then
 	bluecho Removing CHEATER v9...
 	git apply -R --whitespace=nowarn enhancements/v9_*.patch
 	rm enhancements/v9_*.patch
-elif [ -f enhancements/v11.5.*.patch ]; then
+elif [ -f enhancements/v11.*.patch ]; then
 	bluecho Removing CHEATER...
-	git apply -R --whitespace=nowarn enhancements/v11.5.*.patch
-	rm enhancements/v11.5.*.patch
+	git apply -R --whitespace=nowarn enhancements/v11.*.patch
+	rm enhancements/v11.*.patch
 elif [ -f enhancements/fix.CHEATER*.patch ]; then
 	bluecho Removing CHEATER...
 	git apply -R --whitespace=nowarn enhancements/fix.CHEATER*.patch
