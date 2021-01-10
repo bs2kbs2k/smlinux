@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0109-0908
+TIMESTAMP=2021-0109-1005
 
 STARTSEC=$SECONDS
 
@@ -1861,7 +1861,7 @@ elif [ "$1" = "command" ] || [ "$1" = "[command]" ] || [ "$1" = "hell" ] || [ "$
 	COMMAND=help
 	OP1=--noweb
 elif [ ! $# -eq 0 ]; then
-	if [ "$1" = "build" ] || [ "$1" = "update" ] || [ "$1" = "clone" ] || [ "$1" = "reset" ] ||  [ "$1" = "config" ] ||  [ "$1" = "depends" ] || [ "$1" = "upgrade" ] || [ "$1" = "smconfig" ] || [ "$1" = "rebuild" ] || [ "$1" = "purge" ]; then
+	if [ "$1" = "build" ] || [ "$1" = "update" ] || [ "$1" = "clone" ] || [ "$1" = "reset" ] ||  [ "$1" = "config" ] ||  [ "$1" = "depends" ] || [ "$1" = "upgrade" ] || [ "$1" = "smconfig" ] || [ "$1" = "rebuild" ] || [ "$1" = "purge" ] || [ "$1" = "help" ]; then
 		COMMAND="$1"
 		OP1="$2"
 		OP2="$3"
