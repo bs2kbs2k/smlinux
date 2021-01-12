@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0109-1005
+TIMESTAMP=2021-0111-1832
 
 STARTSEC=$SECONDS
 
@@ -202,8 +202,9 @@ else
 do
 	if [ ! `echo $PATH | grep "$HOME"/"$folder"` = "" ]; then
 		PATHDIR="$HOME"/"$folder"
-		break
+		return
 	fi
+done
 	if [ ! -d "$HOME"/bin ]; then
 		mkdir "$HOME"/bin
 	fi
@@ -218,7 +219,6 @@ do
 		bluecho Adding $HOME/bin to zsh path...
 		echo 'export PATH=$HOME/bin:$PATH' >>~/.zshrc
 	fi
-done
 fi
 }
 
