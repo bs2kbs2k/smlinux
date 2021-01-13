@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0112-1500
+TIMESTAMP=2021-0113-1204
 
 STARTSEC=$SECONDS
 
@@ -290,7 +290,8 @@ do
 	brew install $package
 done
 	brew link pyqt --overwrite  # fix if brew upgrade broke pyqt5 HighSierra
-	# brew link python3 # fix for 3.9
+	brew link gcc@9 --overwrite
+	brew link python@3.8 --overwrite
 }
 
 extractrom(){
