@@ -32,7 +32,7 @@ You must provide your own legally backed up Super Mario 64 ROM file.
 ## **How do I run smlinux again?**
 	smlinux
 	
-smlinux puts a copy of itself into a bin folder in your path, which you can locate with `which smlinux`.  After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to the skip menu.  
+smlinux puts a copy of itself into a bin folder in your path, which you can locate with `which smlinux`.  After initial installation, just enter`smlinux`into a new terminal and you will be presented with a menu (as shown in above screenshot) or use command line options (as shown in following screenshot) to skip the menu.  
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
@@ -52,7 +52,7 @@ sm64nx and Discord Rich Presence are not suppored.
 * [<strong>How do I download and install smlinux?</strong>](#download--installation-instructions)      
 * [<strong>How do I run smlinux again? Where did it install itself to?</strong>](#how-do-i-run-smlinux-again)
 * [<strong>What preset/repo/branch should I chose?</strong>](#what-presetrepositorybranch-should-i-use)
-* [<strong>What does the InstallHD option do?</strong>](#what-does-the-install-option-do)
+* [<strong>What does the InstallHD option do?</strong>](#what-does-the-installhd-option-do)
 * [<strong>What does the InstallSGI option do?</strong>](#what-does-the-installsgi-option-do)
 * [<strong>What does the FPS60 option do?</strong>](#what-does-the-fps60-option-do)
 * [<strong>How do I build other branches or from repositories not defined by preset?</strong>](#how-do-i-build-other-branches-or-from-repositories-not-defined-by-preset)
