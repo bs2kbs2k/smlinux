@@ -36,16 +36,16 @@ smlinux puts a copy of itself into a bin folder in your path, which you can loca
 
 <img src=https://github.com/enigma9o7/smlinux/raw/screenshot/screenshot1.jpg>
 
-**Frozen Terminal?**
+**Frozen terminal:**
 If your pc or terminal completely freeze during build, set `MAXJOBS=1`. When undefined, smlinux will allow make to run multiple jobs which speeds up compilation on PCs with multiple cores and plenty of memory, but occasionally causes issues on under-powered systems (that can still run the game just fine).
 
-**_macOS notes_**
+**macOS notes:**
 sm64ex,r96ex,sm64ex-coop and cheaterex all confirmed working with Intel based macOS 10.12 Sierra and newer.  sm64nx and android builds are not working yet.  DOS builds will not be supported.  If you do not already have homebrew and/or Apple X-code command line tools installed, smlinux will install homebrew and homebrew will install the xcode tools, but you may have to enter your password twice and it can take quite a while.  You may also be prompted to grant terminal permission to your Desktop or Applications folder for shortcut installation.  
 
-**Windows notes**
+**Windows notes:**
 For Android & DOS builds use WSL.  For native builds under Microsoft Windows, first install msys2 and run smlinux from the included mingw terminal. sm64nx builds are not working yet.  Because whiptail is not available for msys, smlinux will run in with no menus or prompts and config file will open automatically. 
 
-**32-bit notes** 
+**32-bit notes:** 
 sm64nx and Discord Rich Presence are not suppored.
 
 # Frequently Asked Questions
