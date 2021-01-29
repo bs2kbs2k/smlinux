@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0113-1204
+TIMESTAMP=2021-0129-1253
 
 STARTSEC=$SECONDS
 
@@ -504,7 +504,7 @@ exit
 
 endnow(){
 redecho smlinux ending incomplete after $(($SECONDS - STARTSEC)) seconds.  "Contact #help-desk for support."
-if [ "$TARGET_RPI" = 0 ] && [ ! "$MAXJOBS" = 1 ]; then
+if [ "$TARGET_RPI" = 0 ] && [ ! "$MAXJOBS" = 1 ] && [ ! OP1="--noweb" ]; then
 	exec 2> >(grep -v Gtk >&2) # Supress GTK Warnings
 	"$OPEN" https://discord.gg/Ub6YHRm &
 fi
@@ -851,6 +851,8 @@ elif [ "$PRESET" = "r96alpha" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:
 	TEXTSAVES=1
 	DISCORDRPC=0
 	EXTERNAL_DATA=1
+	CHEATER=0
+	DYNOS=0
 elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "cheaterex" ]; then
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
@@ -941,7 +943,7 @@ elif [ ! "$TARGET" = "dos" ]; then
 fi
 if [ -z "$MAXJOBS" ] && [ ! `nproc` = 1 ] && ([ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]); then
 	MAXJOBS=$((`nproc` - 1))
-else
+elif [ -z "$MAXJOBS" ]; then
 	MAXJOBS=`nproc`
 fi
 if [ "$RENDER_API" = "D3D11" ]; then
@@ -1324,12 +1326,14 @@ if [ "$PRESET" = "sm64nx" ]; then
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak &
 	fi
 elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
-	SGIFILE=Render96_v2.1_Switch_Support.7z
+	SGIFILE=Render96_v2.1_Updated_Goddard.7z
+	# SGIFILE=Render96_v2.1_Switch_Support.7z
 	# SGIFILE=Render96_v2.1.7z
 	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
 		bluecho Downloading "$SGIFILE"...
 		# wget -q https://cdn.discordapp.com/attachments/730551213376143431/794366035871924244/Render96_v2.1.7z -P "$SMLINUX"/SGI
-		wget -q https://cdn.discordapp.com/attachments/730551213376143431/796298074833289226/Render96_v2.1_Switch_Support.7z -P "$SMLINUX"/SGI
+		# wget -q https://cdn.discordapp.com/attachments/730551213376143431/796298074833289226/Render96_v2.1_Switch_Support.7z -P "$SMLINUX"/SGI
+		wget -q https://cdn.discordapp.com/attachments/730551213376143431/800692030354489344/Render96_v2.1_Updated_Goddard.7z -P "$SMLINUX"/SGI
 	fi
 elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 	SGIFILE=RENDER96_V1.4.2_Luigi.zip
