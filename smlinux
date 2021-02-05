@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0205-1022
+TIMESTAMP=2021-0205-1126
 
 STARTSEC=$SECONDS
 
@@ -281,7 +281,7 @@ fi
 }
 
 brewdepends(){
-	brew unlink md5sha1sum
+	brew unlink md5sha1sum >/dev/null
 	brew upgrade
  	if ! command -v unzip &> /dev/null; then
  		brew install unzip
@@ -2102,10 +2102,15 @@ else   # The real start, the rest was script preperation and setup.
     			bluecho Installing Homebrew package manager...
 				bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 			fi
-			if command -v brew &> /dev/null; then
+			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
+				echo Installing Apple XCode Command Line Tools
+				xcode-select --install
+				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\nIf this doesnt work you can install from Apple Developer website.\n" 13 55 2>&1
+			fi
+			if command -v brew &> /dev/null && [ -d /Library/Developer/CommandLineTools/usr/bin ] ; then
 				brewdepends
 			else
-				redecho FATAL ERROR Could not install homebrew, thus cannot install other stuff.
+				redecho FATAL ERROR Could not install homebrew and xcode, thus cannot install other stuff.
 				endnow
 			fi
 			if command -v go &> /dev/null; then
@@ -2119,11 +2124,7 @@ else   # The real start, the rest was script preperation and setup.
 			touch /Applications/writetest # requests permission, used for shortcut later
 			touch "$HOME"/Desktop/writetest # requests permission, used for shortcut later
 			rm /Applications/writetest "$HOME"/Desktop/writetest
-			if [ ! -d /Library/Developer/CommandLineTools/usr/bin ]; then
-				echo Installing Apple XCode Command Line Tools
-				xcode-select --install
-				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\nIf this doesnt work you can install from Apple Developer website.\n" 13 55 2>&1
-			fi
+
 		elif command -v apt &> /dev/null && [ "$USER" = "root" ]; then
 			bluecho "Updating package list and installing dependencies..."
 			apt update
