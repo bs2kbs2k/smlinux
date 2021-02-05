@@ -25,7 +25,7 @@ Arguments:
 	'settingName' is the name of the setting as it appears in the menu
 	'settingType' is "check" for a checkbox, "line" for text entry,
 		or "dropdown" for a dropdown box.
- 
+
 Optional arguments:
 	'tooltip' lets you set the text you see when you hover over the setting
 	'dropdownOptions' is a list containing options for the dropdown box
@@ -111,10 +111,10 @@ class ConfigWindow(QMainWindow):
 			"BASEPATH": ConfigSetting("Base Folder", "line", tooltip = "Must be valid existing path.\nFolders for each repo cloned will be placed there."),
 			"InstallHD": ConfigSetting("Install HD Add-ons", "check", tooltip = "Install HD Add-ons when applicable including\nHD Mario & Bowser Models, 3D Coins,\nUpscaled Textures & High Quality Sounds - see FAQ"),
 			"InstallSGI": ConfigSetting("Install SGI Models", "check", tooltip = "Install Render 96 SGI Model Pack\n(sm64ex-based repos only)"),
-			"FPS60": ConfigSetting("60fps patch", "check", tooltip="Apply 60fps patch if included in repository"),
-			"DYNOS": ConfigSetting("DynOS patch", "check", tooltip = "Apply Dynamic Option System by PeachyPeach\n(sm64ex-based repos only)"),
-			"CHEATER": ConfigSetting("CHEATER patch", "check", tooltip = "Apply CHEATER by s4ys\n(sm64ex-based repos only)"),
-			
+			"HIGHFPS": ConfigSetting("60fps", "check", tooltip="Apply 60fps patch if included in repository"),
+			"DYNOS": ConfigSetting("Dynamic Options", "check", tooltip = "Apply Dynamic Option System by PeachyPeach\n(sm64ex-based repos only)"),
+			"CHEATER": ConfigSetting("CHEATER", "check", tooltip = "Apply CHEATER by s4ys\n(sm64ex-based repos only)"),
+
 			"NODRAWINGDISTANCE": ConfigSetting("NODRAWINGDISTANCE", "check", tooltip = "Don't hide faraway objects\n(sm64ex-based repos only)"),
 			"EXTERNAL_DATA": ConfigSetting("EXTERNAL_DATA", "check", tooltip = "Allow add-on texture and soundpacks\n(sm64ex-based repos only)"),
 			"BETTERCAMERA": ConfigSetting("BETTERCAMERA", "check", tooltip = "Adds Camera Settings to options menu\n(sm64ex-based repos only)"),
@@ -138,7 +138,7 @@ class ConfigWindow(QMainWindow):
 			"CONFIG": ConfigSetting("Prompt to configure before each build", "check", tooltip = "CONFIG"),
 			"BuildMusic": ConfigSetting("Play background music during build", "check", tooltip = "BuildMusic"),
 			"AutoUpdate": ConfigSetting("Update smlinux before each build", "check", tooltip = "AutoUpdate"),
-			
+
 		}
 
 		# Change this variable to adjust the layout of the options.
@@ -168,7 +168,7 @@ class ConfigWindow(QMainWindow):
 		#cancelButton.setText("Exit Config Editor without Saving Changes")
 		#cancelButton.clicked.connect(self.close)
 		#saveAndCancelLayout.addWidget(cancelButton)
-		
+
 		saveButton = QPushButton()
 		saveButton.setText("Okay")
 		saveButton.clicked.connect(self.saveAndExit)
@@ -188,7 +188,7 @@ class ConfigWindow(QMainWindow):
 				continue
 			configFileStrNew += i.split("=")[0] + '='
 			configFileStrNew += self.configDict[i.split("=")[0]].getSetting() + '\n'
-		
+
 		configFile = open(sys.argv[1], "w")
 		configFile.write(configFileStrNew)
 		configFile.close()

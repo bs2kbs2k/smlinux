@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0129-1253
+TIMESTAMP=2021-0205-1022
 
 STARTSEC=$SECONDS
 
@@ -61,22 +61,22 @@ cd "$BASEPATH"/"$PRESET"
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI TEXTSAVES=$TEXTSAVES  --jobs "$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SDK ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL
-echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API
+echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API HIGHFPS=$HIGHFPS
 echo TARGET_N64=0 TARGET_GAME_CONSOLE=0 $FLAGS
 if [ "$OSX_BUILD" = 1 ]; then
 	echo CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" TARGET_OSX=1 OSX_BUILD=1
 	if [ "$EXTERNAL_DATA" = 1 ]; then
 	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
 	fi
-	time PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
+	time PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" HIGHFPS=$HIGHFPS OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
 	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
 		cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib
 	fi
 elif [ "$TARGET_RPI" = 1 ] && [ "$BITS" = 64 ]; then
 	echo TARGET_ARCH=arm64
-	time make TARGET_ARCH=arm64 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
+	time make HIGHFPS=$HIGHFPS TARGET_ARCH=arm64 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
 else
-	time make $FLAGS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
+	time make $FLAGS HIGHFPS=$HIGHFPS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
 fi
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
 	cp "$SMLINUX"/smlinuxcfg.txt "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/smlinuxcfg.logged
@@ -228,6 +228,7 @@ if [ -f "$SMLINUX"/smlinuxcfg.txt ] || [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; th
 		# update paths from old versions of smlinux that shared sm64pc folder for configfile
 		pathupdate
 	fi
+	sed -i.bak 's/FPS60=/HIGHFPS=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
 	sed -i.bak 's/WINDOW_API=/SDL_API=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
 	sed -i.bak 's/InstallR96=/InstallSGI=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
 	sed -i.bak '/^REPO=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
@@ -249,10 +250,10 @@ if [ -f "$SMLINUX"/smlinuxcfg.txt ] || [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; th
 	if [ -f "$SMLINUX"/smlinuxcfg.txt.bak ]; then
 		rm "$SMLINUX"/smlinuxcfg.txt.bak
 	fi
-	touch "$SMLINUX"/.config0
+	touch "$SMLINUX"/.config1
 	pinkecho WARNING: An older version of smlinux config file was found.
 	pinkecho It has been updated for compatibility and should continue to work.
-	pinkecho RECCOMMENDED: smlinux reset to install latest configuration file.
+	pinkecho RECCOMMENDED: smlinux reset to install latest default configuration file.
 	pinkecho RECCOMMENDED: smlinux depends to install latestet dependencies.
 	pinkecho This message will not repeat.
 fi
@@ -703,7 +704,7 @@ echo '# PRESET supports: sm64pc sm64-port sm64nx sm64ex sm64ex-coop cheaterex
 PRESET=cheaterex
 InstallHD=1
 InstallSGI=0
-FPS60=0
+HIGHFPS=0
 # [ Options for sm64ex and its forks ]
 DYNOS=1
 CHEATER=1
@@ -766,7 +767,7 @@ ENABLE_OPENGL_LEGACY=1
 ANDROID=0
 InstallSGI=0
 DISCORD_SDK=1
-FPS60=0
+HIGHFPS=0
 CHEATER=0
 DYNOS=0
 GIT=sm64pc/sm64ex
@@ -810,7 +811,7 @@ elif [ "$PRESET" = "sm64exweb" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower
 	TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
-	FPS60=0
+	HIGHFPS=0
 elif [ "$PRESET" = "sm64-portweb" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64-portweb" ]; then
 	PRESET=sm64-portweb
 	GIT=sm64-port/sm64-port
@@ -819,7 +820,7 @@ elif [ "$PRESET" = "sm64-portweb" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lo
 	TARGET_RPI=0
 	EXTERNAL_DATA=0
 	DISCORDRPC=0
-	FPS60=0
+	HIGHFPS=0
 	CHEATER=0
 	DYNOS=0
 elif [ "$PRESET" = "sm64nx" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64nx" ]; then
@@ -827,7 +828,7 @@ elif [ "$PRESET" = "sm64nx" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]'
 	GIT=teamsalta/sm64nx
 	BRANCH=master
 	EXTERNAL_DATA=0
-	FPS60=0
+	HIGHFPS=0
 	CHEATER=0
 	DYNOS=0
 elif [ "$PRESET" = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96ex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "render96" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96ex" ]; then
@@ -857,14 +858,14 @@ elif [ "$PRESET" = "cheaterex" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower
 	PRESET=cheaterex
 	GIT=s4Ys369/cheaterex
 	BRANCH=nightly
-	FPS60=0
+	HIGHFPS=0
 	CHEATER=0
 	DYNOS=0
 elif [ "$PRESET" = "emm-ody" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "EMM-ODY" ]; then
 	PRESET=emm-ody
 	GIT=s4Ys369/cheaterex
 	BRANCH=emm-ody
-	FPS60=0
+	HIGHFPS=0
 	CHEATER=0
 	DYNOS=0
 elif  [ "$PRESET" = "coop-unstable" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "coop-unstable" ]; then
@@ -872,14 +873,14 @@ elif  [ "$PRESET" = "coop-unstable" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=unstable
 	NODRAWINGDISTANCE=1
-	FPS60=0
+	HIGHFPS=0
 	CHEATER=0
 	DYNOS=0
 elif  [ "$PRESET" = "sm64ex-coop" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "sm64ex-coop" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "coop" ] ; then
 	GIT=djoslin0/sm64ex-coop
 	BRANCH=coop
 	NODRAWINGDISTANCE=1
-	FPS60=0
+	HIGHFPS=0
 elif [ "$PRESET" = "r96droid" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96droid" ]; then
 	ANDROID="$PRESET"
 	PRESET="r96droid/app/jni/src"
@@ -1253,9 +1254,13 @@ fi
 
 dofps(){
 cd "$BASEPATH"/"$PRESET"
-if [ "$FPS60" = 1 ] && [ -f enhancements/60fps ]; then
+if [ "$GIT" = "render96/render96ex" ] && [ ! "$BRANCH" = "master " ]; then
+	if [ "$HIGHFPS" = 1 ]; then
+		echo This repository supports 60fps build option so skipping patch application...
+	fi
+elif [ "$HIGHFPS" = 1 ] && [ -f enhancements/60fps ]; then
 	echo smlinux already applied 60fps patch, skipping reapplication...
-elif [ "$FPS60" = 1 ] && [ -f enhancements/60fps*.patch ]; then
+elif [ "$HIGHFPS" = 1 ] && [ -f enhancements/60fps*.patch ]; then
 	bluecho Applying 60fps patch...
 	git apply --whitespace=nowarn enhancements/60fps*.patch
 	touch enhancements/60fps
@@ -1263,14 +1268,10 @@ elif [ "$FPS60" = 1 ] && [ -f enhancements/60fps*.patch ]; then
 		bluecho Enabling Vsync...
 		sed -i.bak 's/vsync false/vsync true/g' "$SAVEDIR"/sm64config.txt
 	fi
-elif [ "$FPS60" = 0 ] && [ -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
+elif [ "$HIGHFPS" = 0 ] && [ -f enhancements/60fps ] && [ -f enhancements/60fps*.patch ]; then
 	bluecho Removing 60fps patch...
 	git apply -R --whitespace=nowarn enhancements/60fps*.patch
 	rm enhancements/60fps
-	if [ -f "$SAVEDIR"/sm64config.txt ] && [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-		echo Disabling Vsync...
-		sed -i.bak 's/vsync true/vsync valse/g' "$SAVEDIR"/sm64config.txt
-	fi
 fi
 }
 
@@ -1930,7 +1931,7 @@ title=blue,black           # make choice with arrows
 checkbox=brightcyan,black  # important list
 compactbutton=blue,black   # ok button'
 
-if [ ! -f "$SMLINUX"/.config0 ] && [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
+if [ ! -f "$SMLINUX"/.config1 ] && [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
 	updateconfig
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
@@ -2356,7 +2357,7 @@ elif [ "$COMMAND" = "update" ]; then
 		fi
 		bluecho Reapplying previously removed patches...
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/60fps ]; then
-			echo FPS60...
+			echo 60fps...
 			git apply --whitespace=nowarn enhancements/60fps*.patch
 		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/DynOS*.patch ]; then
