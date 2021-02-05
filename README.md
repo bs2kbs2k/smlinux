@@ -55,7 +55,7 @@ sm64nx and Discord Rich Presence are not suppored.
 * [<strong>What preset/repo/branch should I chose?</strong>](#what-presetrepositorybranch-should-i-use)
 * [<strong>What does the InstallHD option do?</strong>](#what-does-the-installhd-option-do)
 * [<strong>What does the InstallSGI option do?</strong>](#what-does-the-installsgi-option-do)
-* [<strong>What does the FPS60 option do?</strong>](#what-does-the-fps60-option-do)
+* [<strong>What does the HIGHFPS option do?</strong>](#what-does-the-fps60-option-do)
 * [<strong>How do I build other branches or from repositories not defined by preset?</strong>](#how-do-i-build-other-branches-or-from-repositories-not-defined-by-preset)
 * [<strong>When to use RENDER_API=GL_LEGACY?</strong>](#when-to-use-render_apigl_legacy)
 * [<strong>How to update, rebuild, or change build options later?</strong>](#how-to-update-rebuild-or-change-build-options-later)
@@ -91,9 +91,9 @@ For the render96ex preset, this will apply Render96's SGI model pack version 1.4
 
 For sm64nx, this option will add paks for Render96's SGI Models (version 1.3) and Render96's HD textures and set them as defaults.  Be aware this model pak for sm64nx has minor visual problems and is no longer mainained, but can easily be reverted to default or HD models with the in-game mod menu that *only* sm64nx offers.
 
-## **What does the FPS60 option do?**
+## **What does the HIGHFPS option do?**
 
-On repositories that provide a 60fps patch (currently sm64-port, render96ex, and sm64ex-nightly) it will be applied when this option set to 1, and reverse applied when set to 0.  Note that some forks (such as sm64ex-coop, cheaterex, and sm64nx) are already 60fps without a patch and this setting will have no effect.  The currently available patch for sm64ex uses interpolation and may require adjustments to in-game vsync setting for smooth performance, and may not work correctly on displays that aren't 60/120Hz and may not perform well on older computers.
+On branches that support HIGHFPS as a build flag (currently render96ex alpha and testing) it will enabled for 60fps support.On repositories that provide a 60fps patch (currently sm64-port, render96ex master, and sm64ex-nightly) it will be applied when this option set to 1, and reverse applied when set to 0.  Note that some forks (such as sm64ex-coop, cheaterex, and sm64nx) are already 60fps without a patch and this setting will have no effect.  The currently available patch for sm64ex uses interpolation and may require adjustments to in-game vsync setting for smooth performance, and may not work correctly on displays that aren't 60/120Hz and may not perform well on older computers.
 
 ## **How do I build other branches or from repositories not defined by preset?**
 
