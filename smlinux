@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0206-1144
+TIMESTAMP=2021-0206-1234
 
 STARTSEC=$SECONDS
 
@@ -61,22 +61,22 @@ cd "$BASEPATH"/"$PRESET"
 echo VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TARGET_RPI=$TARGET_RPI TEXTSAVES=$TEXTSAVES  --jobs "$MAXJOBS"
 echo BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC
 echo LEGACY_RES=$LEGACY_RES IMMEDIATELOAD=$IMMEDIATELOAD DISCORD_SDK=$DISCORD_SDK ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL
-echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API HIGHFPS=$HIGHFPS
+echo DEBUG=$DEBUG WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API HIGHFPS=$HIGHFPS MODELPACK=$MODELPACK
 echo TARGET_N64=0 TARGET_GAME_CONSOLE=0 $FLAGS
 if [ "$OSX_BUILD" = 1 ]; then
 	echo CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" TARGET_OSX=1 OSX_BUILD=1
 	if [ "$EXTERNAL_DATA" = 1 ]; then
 	sed -i.bak 's/@echo -n > $(BASEPACK_LST)/#/g' "$BASEPATH"/"$PRESET"/Makefile
 	fi
-	time PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" HIGHFPS=$HIGHFPS OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
+	time PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ gmake CC=gcc-9 CXX=g++-9 CPP="cpp-9 -P" MODELPACK=$MODELPACK HIGHFPS=$HIGHFPS OSX_BUILD=1 TARGET_OSX=1 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
 	if [ -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib ] && [ ! -f "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib ]; then
 		cp "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/libdiscord_game_sdk.dylib "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/discord_game_sdk.dylib
 	fi
 elif [ "$TARGET_RPI" = 1 ] && [ "$BITS" = 64 ]; then
 	echo TARGET_ARCH=arm64
-	time make HIGHFPS=$HIGHFPS TARGET_ARCH=arm64 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
+	time make $FLAGS MODELPACK=$MODELPACK HIGHFPS=$HIGHFPS TARGET_ARCH=arm64 BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
 else
-	time make $FLAGS HIGHFPS=$HIGHFPS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API  TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
+	time make $FLAGS MODELPACK=$MODELPACK HIGHFPS=$HIGHFPS BETTERCAMERA=$BETTERCAMERA NODRAWINGDISTANCE=$NODRAWINGDISTANCE TEXTURE_FIX=$TEXTURE_FIX EXTERNAL_DATA=$EXTERNAL_DATA DISCORDRPC=$DISCORDRPC VERSION=$VERSION RENDER_API=$RENDER_API TARGET_WEB=$TARGET_WEB TEXTSAVES=$TEXTSAVES -j"$MAXJOBS" LEGACY_RES=$LEGACY_RES DEBUG=$DEBUG IMMEDIATELOAD=$IMMEDIATELOAD TARGET_RPI=$TARGET_RPI ENABLE_OPENGL_LEGACY=$ENABLE_OPENGL_LEGACY DOS_GL=$DOS_GL DISCORD_SDK=$DISCORD_SDK WINDOW_API=$WINDOW_API CONTROLLER_API=$SDL_API AUDIO_API=$SDL_API TARGET_N64=0 TARGET_GAME_CONSOLE=0> "$SMLINUX"/buildlog.txt
 fi
 if [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET" ]; then
 	cp "$SMLINUX"/smlinuxcfg.txt "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/smlinuxcfg.logged
@@ -229,8 +229,9 @@ if [ -f "$SMLINUX"/smlinuxcfg.txt ] || [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; th
 		pathupdate
 	fi
 	sed -i.bak 's/FPS60=/HIGHFPS=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
+	sed -i.bak 's/InstallR96=/MODELPACK=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
+	sed -i.bak 's/InstallSGI=/MODELPACK=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
 	sed -i.bak 's/WINDOW_API=/SDL_API=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
-	sed -i.bak 's/InstallR96=/InstallSGI=/g' "$SMLINUX"/smlinuxcfg.txt # rename field
 	sed -i.bak '/^REPO=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
 	sed -i.bak '/^OSX_BUILD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
 	sed -i.bak '/^UpdateHD=/d' "$SMLINUX"/smlinuxcfg.txt # delete field
@@ -250,7 +251,7 @@ if [ -f "$SMLINUX"/smlinuxcfg.txt ] || [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; th
 	if [ -f "$SMLINUX"/smlinuxcfg.txt.bak ]; then
 		rm "$SMLINUX"/smlinuxcfg.txt.bak
 	fi
-	touch "$SMLINUX"/.config1
+	touch "$SMLINUX"/.config2
 	pinkecho WARNING: An older version of smlinux config file was found.
 	pinkecho It has been updated for compatibility and should continue to work.
 	pinkecho RECCOMMENDED: smlinux reset to install latest default configuration file.
@@ -698,7 +699,7 @@ makeconfig(){
 if [ ! -d "$SMLINUX" ]; then
 	mkdir "$SMLINUX"
 fi
-touch "$SMLINUX"/.config0
+touch "$SMLINUX"/.config2
 echo '# PRESET supports: sm64pc sm64-port sm64nx sm64ex sm64ex-coop cheaterex
 # ALSO render96ex r96alpha sm64dos sm64exweb androidex AND MORE IN FAQ!
 PRESET=cheaterex
@@ -765,7 +766,7 @@ IMMEDIATELOAD=1
 DOS_GL=osmesa
 ENABLE_OPENGL_LEGACY=1
 ANDROID=0
-InstallSGI=0
+MODELPACK=0
 DISCORD_SDK=1
 HIGHFPS=0
 CHEATER=0
@@ -841,6 +842,14 @@ elif [ "$PRESET" = "r96proto" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:
 	PRESET=r96proto
 	GIT=render96/render96ex
 	BRANCH=fastbuild_prototype
+	TEXTSAVES=1
+	DISCORDRPC=0
+	CHEATER=0
+	DYNOS=0
+elif [ "$PRESET" = "r96tester" ] || [ $(echo "$PRESET" | tr '[:upper:]' '[:lower:]') = "r96tester" ]; then
+	PRESET=r96tester
+	GIT=render96/render96ex
+	BRANCH=tester
 	TEXTSAVES=1
 	DISCORDRPC=0
 	CHEATER=0
@@ -960,10 +969,10 @@ if [ "$2" = "--hd" ] || [ "$3" = "--hd" ] ||[ "$4" = "--hd" ] ||[ "$5" = "--hd" 
 fi
 if [ "$2" = "--sgi" ] || [ "$3" = "--sgi" ] ||[ "$4" = "--sgi" ] ||[ "$5" = "--sgi" ]; then
 	EXTERNAL_DATA=1
-	InstallSGI=1
+	MODELPACK=1
 elif [ "$2" = "--SGI" ] || [ "$3" = "--SGI" ] ||[ "$4" = "--SGI" ] ||[ "$5" = "--SGI" ]; then
 	EXTERNAL_DATA=1
-	InstallSGI=1
+	MODELPACK=1
 fi
 if [ "$2" = "--config" ] || [ "$3" = "--config" ] ||[ "$4" = "--config" ] ||[ "$5" = "--config" ]; then
 	CONFIG=1
@@ -1129,13 +1138,13 @@ if [ "$PRESET" = "sm64nx" ]; then
 		cd "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Cleaner Aesthetics"
 		wget -q https://cdn.discordapp.com/attachments/730416836780490752/730430152957362191/cleaner.pak &disown
 	fi
-	if [ "$InstallSGI" = 1 ] && [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures" ]; then
+	if [ "$MODELPACK" = 1 ] && [ ! -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/romfs/"Render96 Textures" ]; then
 		dosgi
 	fi
 else
 	if  [ -f "$BASEPATH"/"$PRESET"/enhancements/Old_School_HD_SGI_Base_Models_V1.3_Refresh_11* ] || [ -f "$BASEPATH"/"$PRESET"/enhancements/RENDER96_V* ]; then
 		echo "Render 96 SGI model pack found, skipping model application."
-	elif [ "$EXTERNAL_DATA" = 1 ] && ( [ "$InstallSGI" = 1 ] || [ "$PRESET" = "render96ex" ] || [ "$PRESET" = "r96alpha" ] ); then
+	elif [ "$EXTERNAL_DATA" = 1 ] && [ "$MODELPACK" = 1 ]; then
 		dosgi
 	elif [ ! "$TARGET" = "dos" ] &&  [ ! "$GIT" = "render96/render96ex" ] ; then
 		cd "$BASEPATH"/"$PRESET"
@@ -1406,7 +1415,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 			redecho ERROR: Cannot connect to github. Run without AutoUpdate enabled.
 			endnow
 		else
-			touch "$SMLINUX"/.config0 # new install doesnt need update
+			touch "$SMLINUX"/.config2 # new install doesnt need update
 		fi
 		bluecho Installing smlinux in "$PATHDIR"...
 		if [ -d "$PATHDIR" ]; then
@@ -1931,7 +1940,7 @@ title=blue,black           # make choice with arrows
 checkbox=brightcyan,black  # important list
 compactbutton=blue,black   # ok button'
 
-if [ ! -f "$SMLINUX"/.config1 ] && [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
+if [ ! -f "$SMLINUX"/.config2 ] && [ -f "$SMLINUX"/smlinuxcfg.txt ]; then
 	updateconfig
 fi
 if [ ! -f ~/.smlinuxUpdate ]; then
@@ -2078,7 +2087,7 @@ else   # The real start, the rest was script preperation and setup.
 		echo "| <romfile> install smlinux using specified romfile then build           |"
 		echo "|                                                                        |"
 		echo "|  Options:   --hd  install HD add-ons (ignore InstallHD=0)              |"
-		echo "|            --sgi  install R96 SGI model pack (ignore InstallSGI=0)     |"
+		echo "|            --sgi  install R96 SGI model pack (ignore MODELPACK=0)     |"
 		echo "|             --go  skip configuration editor (ignore CONFIG=1)          |"
 		echo "|         --config  prompt to edit config before build (ignore CONFIG=0) |"
 		echo "|           --nano  use nano instead of GUI to edit configuration file   |"
@@ -2386,8 +2395,8 @@ elif [ "$COMMAND" = "update" ]; then
 	greenecho [4] Applying pre-build modifications...
 	if [ "$InstallHD" = 1 ]; then
 		dohd
-	elif [ "$InstallSGI" = 1 ]; then
-		pinkecho Warning: Render96 models selected without InstallHD.
+	elif [ "$MODELPACK" = 1 ]; then
+		pinkecho Warning: MODELPACK selected without InstallHD.
 		dosgi
 	else
 		pinkecho Warning: InstallHD=0 so HD add-ons will not be applied or updated.
@@ -2631,7 +2640,7 @@ elif [ "$ANDROID" = 0 ] && [ "$TARGET_WEB" = 0 ]; then
 fi
 if [ "$InstallHD" = 1 ]; then
 	dohd
-elif [ "$InstallSGI" = 1 ]; then
+elif [ "$MODELPACK" = 1 ]; then
 	dosgi
 elif [ "$TARGET" = "pc" ]; then
 	pinkecho Warning: InstallHD=0 so HD add-ons will not be applied or updated.

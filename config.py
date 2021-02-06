@@ -103,17 +103,17 @@ class ConfigWindow(QMainWindow):
 		# as seen in the config file. This is what you edit to add more settings.
 		# Check the comment for "ConfigSetting()" to see the arguments.
 		self.configDict = {
-			"PRESET": ConfigSetting("Preset", "dropdown", dropdownOptions = [ "UserDefined", "sm64pc", "sm64-port", "sm64-portweb", "sm64dos", "sm64nx", "sm64ex", "sm64exweb", "sm64ex-coop", "androidex", "cheaterex", "render96ex","r96proto","r96alpha","sm64-port-android-base"],tooltip="Unless Userdefined, overrides settings including GIT and BRANCH (see FAQ)."),
-			"VERSION": ConfigSetting("ROM Version", "dropdown", tooltip = "Must correspond to ROM region", dropdownOptions = ["us","jp","eu"]),
+			"PRESET": ConfigSetting("Preset", "dropdown", dropdownOptions = [ "UserDefined", "sm64pc", "sm64-port", "sm64-portweb", "sm64dos", "sm64nx", "sm64ex", "sm64exweb", "sm64ex-coop", "androidex", "cheaterex", "render96ex","r96proto","r96alpha", "r96tester", "sm64-port-android-base"],tooltip="Unless Userdefined, overrides settings including GIT and BRANCH (see FAQ)."),
+			"VERSION": ConfigSetting("ROM VERSION", "dropdown", tooltip = "Must correspond to ROM region", dropdownOptions = ["us","jp","eu"]),
 			"RENDER_API": ConfigSetting("RENDER_API", "dropdown", tooltip = "Linux and macOS support GL (OpenGL 2.1+) or GL_LEGACY (OpenGL 1.1+).\nD3D11 (DirectX 11) is also offered for Windows.\n(sm64ex-based repos only)", dropdownOptions = ["GL","GL_LEGACY","D3D11"]),
 			"SDL_API": ConfigSetting("SDL API", "dropdown", tooltip = "CONTROLLER_API AUDIO_API Support SDL2 or SDL 1.2 (sm64ex-based repos only)", dropdownOptions = ["SDL2","SDL1"]),
 			"MAXJOBS": ConfigSetting("Maximum Jobs", "dropdown", dropdownOptions = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "12", "15", "" ], tooltip = "Maximum cpu threads used during compile.\nUndefined will try to use all."),
 			"BASEPATH": ConfigSetting("Base Folder", "line", tooltip = "Must be valid existing path.\nFolders for each repo cloned will be placed there."),
 			"InstallHD": ConfigSetting("Install HD Add-ons", "check", tooltip = "Install HD Add-ons when applicable including\nHD Mario & Bowser Models, 3D Coins,\nUpscaled Textures & High Quality Sounds - see FAQ"),
-			"InstallSGI": ConfigSetting("Install SGI Models", "check", tooltip = "Install Render 96 SGI Model Pack\n(sm64ex-based repos only)"),
-			"HIGHFPS": ConfigSetting("60fps", "check", tooltip="Apply 60fps patch if included in repository"),
-			"DYNOS": ConfigSetting("Dynamic Options", "check", tooltip = "Apply Dynamic Option System by PeachyPeach\n(sm64ex-based repos only)"),
+			"MODELPACK": ConfigSetting("Install R96 MODELPACK", "check", tooltip = "Install Render 96 SGI Model Pack\n(sm64ex-based repos only)"),
+			"DYNOS": ConfigSetting("Dynamic Option System", "check", tooltip = "Apply Dynamic Option System by PeachyPeach\n(sm64ex-based repos only)"),
 			"CHEATER": ConfigSetting("CHEATER", "check", tooltip = "Apply CHEATER by s4ys\n(sm64ex-based repos only)"),
+			"HIGHFPS": ConfigSetting("60fps", "check", tooltip="enable HIGHFPS (r96ex) or apply 60fps patch if included in repository"),
 
 			"NODRAWINGDISTANCE": ConfigSetting("NODRAWINGDISTANCE", "check", tooltip = "Don't hide faraway objects\n(sm64ex-based repos only)"),
 			"EXTERNAL_DATA": ConfigSetting("EXTERNAL_DATA", "check", tooltip = "Allow add-on texture and soundpacks\n(sm64ex-based repos only)"),
