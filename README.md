@@ -22,7 +22,7 @@ Paste either of the following into a terminal then press Enter/Return (*whicheve
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **-OR-**  
 `wget https://raw.githubusercontent.com/enigma9o7/smlinux/master/smlinux;bash smlinux;rm smlinux`
 	
-**That's all you have to do** for ubuntu, debian, arch, macOS, or msys2! You may be prompted to:  
+**That's all you have to do** for ubuntu, debian, arch, macOS, or msys2 mingw! You may be prompted to:  
 (1) provide password to install build tools (2) approve or change build options (3) specify your romfile .  
 smlinux will then run unattended and before the time you finish reading the FAQ you will hear "It's me, Mario!".  
 You must provide your own legally backed up Super Mario 64 ROM file.  
