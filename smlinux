@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0206-1013
+TIMESTAMP=2021-0206-1144
 
 STARTSEC=$SECONDS
 
@@ -2214,8 +2214,6 @@ else   # The real start, the rest was script preperation and setup.
 		fi
 	elif [ ! "$COMMAND" = "depends" ] && [ ! "$DEPENDS" = 1 ] && [ -d "$SMLINUX"/.git ]; then
 		echo "smlinux already installed so skipping dependencies."
-	else
-		echo "Prepared."
 	fi
 	if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		echo "Verifying ROM..."
@@ -2240,7 +2238,7 @@ else   # The real start, the rest was script preperation and setup.
 		fi
 	fi
 	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
-		echo romfile located and verified.
+		echo Super Mario 64 romfile located and verified.
 	elif [ -f "$1" ]; then
 		exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
 		zenity --error --text="ERROR: Specified file is not original Super Mario 64 ROM image\nMake sure VERSION= is set to the correct region if not US romfile\n" --title="Your installation is incomplete." --width=640 &disown
