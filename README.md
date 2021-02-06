@@ -54,7 +54,7 @@ sm64nx and Discord Rich Presence are not suppored.
 * [<strong>How do I run smlinux again? Where did it install itself to?</strong>](#how-do-i-run-smlinux-again)
 * [<strong>What preset/repo/branch should I chose?</strong>](#what-presetrepositorybranch-should-i-use)
 * [<strong>What does the InstallHD option do?</strong>](#what-does-the-installhd-option-do)
-* [<strong>What does the InstallSGI option do?</strong>](#what-does-the-installsgi-option-do)
+* [<strong>What does the MODELPACK option do?</strong>](#what-does-the-installsgi-option-do)
 * [<strong>What does the HIGHFPS option do?</strong>](#what-does-the-fps60-option-do)
 * [<strong>How do I build other branches or from repositories not defined by preset?</strong>](#how-do-i-build-other-branches-or-from-repositories-not-defined-by-preset)
 * [<strong>When to use RENDER_API=GL_LEGACY?</strong>](#when-to-use-render_apigl_legacy)
@@ -77,7 +77,7 @@ If you want to build for PC, the source repository from the team who decompiled 
 
 ## **What does the InstallHD option do?**
 
-This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch to most forks except dos.  Render96ex instead gets the Render 96 SGI Model pack which includes Mario, Bowser, 3D coins, and much more.
+This will apply HD Mario (Old School V2) and HD Bowser character models and the 3D Coin Patch to most forks except dos. 
 
 On sm64pc/sm64ex based forks upscaled textures will aslo be added to your build from the Cleaner Aesthetics github repo, and high quality sounds from MapAnon's github release.  On the render96ex fork, Render96's HD rextures will be used instead, which are over 500MB so require additional download time, as well as more than 2GB of free memory and additional time to precache before game launches.  
 
@@ -85,7 +85,7 @@ On the sm64nx fork, Arredondo's HD Mario & Bowser and Cleaner Aesthetics texture
 
 *Some of these addons require files remaining available in discord or github, so not gauranteed to work.  What is included with this option may periodically change as new mods are released.*
 
-## **What does the InstallSGI option do?**
+## **What does the MODELPACK option do?**
 
 For the render96ex preset, this will apply Render96's SGI model pack version 1.42.  On sm64ex-coop a co-op specific version that includes Luigi is applied, while for sm64ex based forks, version 1.3 is applied.    For r96alpha and r96proto presets, version 2.1 is applied.
 
