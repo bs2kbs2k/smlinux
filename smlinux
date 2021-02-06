@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0205-1126
+TIMESTAMP=2021-0206-1013
 
 STARTSEC=$SECONDS
 
@@ -254,7 +254,7 @@ if [ -f "$SMLINUX"/smlinuxcfg.txt ] || [ -f "$SHARE"/sm64pc/smlinuxcfg.txt ]; th
 	pinkecho WARNING: An older version of smlinux config file was found.
 	pinkecho It has been updated for compatibility and should continue to work.
 	pinkecho RECCOMMENDED: smlinux reset to install latest default configuration file.
-	pinkecho RECCOMMENDED: smlinux depends to install latestet dependencies.
+	pinkecho RECCOMMENDED: smlinux depends to install latest dependencies.
 	pinkecho This message will not repeat.
 fi
 }
@@ -281,7 +281,7 @@ fi
 }
 
 brewdepends(){
-	brew unlink md5sha1sum >/dev/null
+	brew unlink md5sha1sum &>/dev/null
 	brew upgrade
  	if ! command -v unzip &> /dev/null; then
  		brew install unzip
