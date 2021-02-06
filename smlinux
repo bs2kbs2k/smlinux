@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0206-1234
+TIMESTAMP=2021-0206-1349
 
 STARTSEC=$SECONDS
 
@@ -704,7 +704,7 @@ echo '# PRESET supports: sm64pc sm64-port sm64nx sm64ex sm64ex-coop cheaterex
 # ALSO render96ex r96alpha sm64dos sm64exweb androidex AND MORE IN FAQ!
 PRESET=cheaterex
 InstallHD=1
-InstallSGI=0
+MODELPACK=0
 HIGHFPS=0
 # [ Options for sm64ex and its forks ]
 DYNOS=1
