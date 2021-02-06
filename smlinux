@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0206-1349
+TIMESTAMP=2021-0206-1444
 
 STARTSEC=$SECONDS
 
@@ -261,6 +261,7 @@ fi
 }
 
 msysdepends(){
+	pacman -Syuu
 	for package in python3 python3-pip git make unzip zip unrar p7zip nano
 do
 	pacman -S $package --noconfirm --needed
@@ -1012,8 +1013,7 @@ elif [ -f "$SMLINUX"/config.py ] ; then
 	if ! python3 "$SMLINUX"/config.py "$SMLINUX"/smlinuxcfg.txt; then
 		redecho ERROR: Python-QT5 based configuration GUI failed to start! Try: smlinux depends
 		redecho To avoid this message specify option --nano to edit configuration with nano.
-		EDITORS=nano:kate:epad:gedit:notepadqq:bluefish:geany:lime:medit:leafpad:pico:micro:jed:emacs:vim:vi
-		IFS=":"
+		EDITORS=nano mousepad leadpad kate epad gedit notepadqq bluefish geany lime medit pico micro jed emacs vim vi
 		if [ ! "$COMMAND" = "config" ] && command -v whiptail &> /dev/null; then
 			if (whiptail --title "Build Options" --yesno "$(cat "$SMLINUX"/smlinuxcfg.txt)" 24 80 --yes-button "Edit Options" --no-button "Proceed" --defaultno); then
 				if whiptail --title "smlinux paused until you exit editor" --msgbox "Your configuration file will open a text editor.\n\nWhen you save and exit configuration, smlinux will begin.\nTo exit pico/nano/micro editors use Control-X\n\nFor first build, default options which include community enhancements are reccommended.\n\nIf you mess up your settings,\nrun smlinux reset to restore to latest defaults." 16 60 2>&1; then
@@ -1033,7 +1033,11 @@ elif [ -f "$SMLINUX"/config.py ] ; then
 		else
 			if [ ! "$COMMAND" = "config" ]; then
 				pinkecho WARNING: whiptail not found.
-				pinkecho Please install newt/whiptail package for prompts.
+				if [ "$MSYS" = 1 ]; then
+					pinkecho Sorry windows user, no prompts for you.
+				else
+					pinkecho Please install newt/whiptail package for prompts.
+				fi
 			fi
 			for editor in $EDITORS; do
 				$editor "$SMLINUX"/smlinuxcfg.txt
