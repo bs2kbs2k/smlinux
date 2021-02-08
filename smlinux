@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0208-1224
+TIMESTAMP=2021-0208-1231
 
 STARTSEC=$SECONDS
 
@@ -2253,18 +2253,19 @@ else   # The real start, the rest was script preperation and setup.
 	if [ -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		echo Super Mario 64 romfile located and verified.
 	elif [ -f "$1" ]; then
-		exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+		exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warning
 		zenity --error --text="ERROR: Specified file is not original Super Mario 64 ROM image\nMake sure VERSION= is set to the correct region if not US romfile\n" --title="Your installation is incomplete." --width=640 &disown
 		sleep 1
 		redecho "ERROR: Specified file is not original Super Mario 64 ROM image or VERSION set wrong."
 		echo
 	else
+		exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warning
 		redecho "Please select Super Mario 64 romfile to begin."
 		if [ "$OSX_BUILD" = 1 ]; then
 			cd $HOME
 			USERFILE=$(osascript -e 'set macpath to choose file' -e 'set unixpath to posix path of macpath')
 		else
-			exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warnings
+			exec 2> >(grep -v GtkDialog >&2) # Supress GTK Dialog Warning
 			USERFILE=`zenity --file-selection --title="Select your Super Mario 64 romfile" --filename $HOME/ --file-filter='romfiles | *.z64 *.v64 *.n64' --file-filter='allfiles | *'`
 		fi
 		if [ -f "$USERFILE" ]; then
