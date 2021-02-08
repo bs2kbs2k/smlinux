@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0208-1231
+TIMESTAMP=2021-0208-1406
 
 STARTSEC=$SECONDS
 
@@ -2172,10 +2172,10 @@ else   # The real start, the rest was script preperation and setup.
 			wget -q https://raw.githubusercontent.com/enigma9o7/smlinux/master/config.py -P "$SMLINUX"
 		fi
 		if [ ! "$MSYS" = 1 ]; then
-			python3 -m pip install --no-warn-script-location --upgrade pip
-			python3 -m pip install --no-warn-script-location numpy
+			python3 -m pip install --upgrade pip
+			python3 -m pip install numpy
 			if [ ! "OSX_BUILD" = 1 ] && ! command -v apt &> /dev/null; then
-				python3 -m pip install --no-warn-script-location PyQt5
+				python3 -m pip install PyQt5
 			fi
 			if [ "`pip3 list --format=columns | grep numpy`" = "" ] && command -v pip &> /dev/null; then
 				pip install numpy # this worked on ubuntu 16
@@ -2195,7 +2195,7 @@ else   # The real start, the rest was script preperation and setup.
 	fi
 	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		bluecho "Installing required build tools for sm64nx..."
-		python3 -m pip install --no-warn-script-location pillow zstandard tqdm xxhash
+		python3 -m pip install pillow zstandard tqdm xxhash
 		gcccheck
 	elif [ ! "$ANDROID" = 0 ]; then
 		bluecho "Loading Android SDK..."
