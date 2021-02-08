@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0208-1207
+TIMESTAMP=2021-0208-1224
 
 STARTSEC=$SECONDS
 
@@ -1339,7 +1339,7 @@ if [ "$PRESET" = "sm64nx" ]; then
 		cd "SGI Models"
 		wget -q https://sm64pc.info/downloads/sgi13_fixed.pak &
 	fi
-elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ]; then
+elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ] || [ "$PRESET" = "r96tester" ]; then
 	SGIFILE=Render96_v2.1_Updated_Goddard.7z
 	# SGIFILE=Render96_v2.1_Switch_Support.7z
 	# SGIFILE=Render96_v2.1.7z
