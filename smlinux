@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0208-1406
+TIMESTAMP=2021-0208-1842
 
 STARTSEC=$SECONDS
 
@@ -1854,6 +1854,11 @@ if [ `uname` = "Darwin" ]; then
 	OSX_BUILD=1
 	OPEN=open
 elif [ `uname -o` = "Msys" ]; then
+	if [ "`uname|grep MINGW`" = "" ]; then
+		redecho ERROR: MSYS users must use Minimal GNU for Windows terminal.
+		redecho Close your MSYS2 MSYS terminal and open MSYS2 MINGW64 or MSYS2 MINGW32
+		endnow
+	fi
     MSYS=1
 	OPEN=start
 elif command -v xdg-open &> /dev/null; then
