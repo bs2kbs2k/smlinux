@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0208-1842
+TIMESTAMP=2021-0208-1849
 
 STARTSEC=$SECONDS
 
@@ -1855,8 +1855,8 @@ if [ `uname` = "Darwin" ]; then
 	OPEN=open
 elif [ `uname -o` = "Msys" ]; then
 	if [ "`uname|grep MINGW`" = "" ]; then
-		redecho ERROR: MSYS users must use Minimal GNU for Windows terminal.
-		redecho Close your MSYS2 MSYS terminal and open MSYS2 MINGW64 or MSYS2 MINGW32
+		redecho ERROR: MSYS2 users must use Minimal GNU for Windows (mingw).
+		redecho Close MSYS terminal and run smlinux from MINGW64 or MINGW32.
 		endnow
 	fi
     MSYS=1
@@ -2187,7 +2187,8 @@ else   # The real start, the rest was script preperation and setup.
 			fi
 		fi
 	elif ! command -v gcc &> /dev/null; then
-		redecho ERROR: The GNU Compiler Collection is not installed.  Please install dependencies.
+		redecho ERROR: The GNU Compiler Collection is not installed.
+		redecho Please install dependencies.  For supported OS try: smlinux depends
 		endnow
 	elif [ "$OSX_BUILD" = 1 ] && [ ! -d /Library/Developer/CommandLineTools/usr/bin ] ; then
 		pinkecho Warning: Apple X-code command line tools not found.  Triggering installation...
