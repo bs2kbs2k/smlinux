@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0208-1849
+TIMESTAMP=2021-0208-1904
 
 STARTSEC=$SECONDS
 
@@ -1855,7 +1855,7 @@ if [ `uname` = "Darwin" ]; then
 	OPEN=open
 elif [ `uname -o` = "Msys" ]; then
 	if [ "`uname|grep MINGW`" = "" ]; then
-		redecho ERROR: MSYS2 users must use Minimal GNU for Windows (mingw).
+		redecho "ERROR: MSYS2 users must use Minimal GNU for Windows (mingw)."
 		redecho Close MSYS terminal and run smlinux from MINGW64 or MINGW32.
 		endnow
 	fi
