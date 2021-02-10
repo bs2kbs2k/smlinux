@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0209-1612
+TIMESTAMP=2021-0210-1232
 
 STARTSEC=$SECONDS
 
@@ -186,12 +186,13 @@ BUILDSEC=$SECONDS
 }
 
 gitstash(){
-if ! git stash --quiet; then
+if ! git stash push --quiet; then
 	pinkecho WARNING: Stash failure. Setting username and trying again
 	git config user.name "smlinux"
 	git config user.email "mario@ms64.com"
-	git stash --quiet
+	git stash push --quiet
 fi
+git stash drop --quiet
 }
 
 setpathdir(){
