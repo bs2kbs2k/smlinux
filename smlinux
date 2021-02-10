@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0208-1904
+TIMESTAMP=2021-0209-1601
 
 STARTSEC=$SECONDS
 
@@ -413,28 +413,28 @@ sed -i.bak '856i\
 ' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py # thanks dropbear
 sed -i.bak 's|8spaces8elif|        elif|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
 sed -i.bak 's|12spaces1212print|            print|g' "$BASEPATH"/"$PRESET"/tools/assemble_sound.py
-sed -i '' 's|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc tabledesign extract_data_for_mio skyconv||g' "$BASEPATH"/"$PRESET"/tools/Makefile
-sed -i '' '1i\
-PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc extract_data_for_mio skyconv
-' "$BASEPATH"/"$PRESET"/tools/Makefile
-sed -i '' '2i\
-CLANG := /usr/bin/clang
-' "$BASEPATH"/"$PRESET"/tools/Makefile
-sed -i '' '3i\
-CLANG_PROGRAMS := tabledesign
-' "$BASEPATH"/"$PRESET"/tools/Makefile
-sed -i '' '57i\
-define CLANG_COMPILE
-' "$BASEPATH"/"$PRESET"/tools/Makefile
-sed -i '' '58i\
-$(1): $($1_SOURCES)
-' "$BASEPATH"/"$PRESET"/tools/Makefile
-sed -i '' '59i\
-	$(CLANG) $(CFLAGS) $($1_CFLAGS) $$^ -o $$@ $(LDFLAGS) $($1_LDFLAGS)
-' "$BASEPATH"/"$PRESET"/tools/Makefile
-sed -i '' '60i\
-endef
-' "$BASEPATH"/"$PRESET"/tools/Makefile
+#sed -i '' 's|PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc tabledesign extract_data_for_mio skyconv||g' "$BASEPATH"/"$PRESET"/tools/Makefile
+#sed -i '' '1i\
+#PROGRAMS := n64graphics n64graphics_ci mio0 n64cksum textconv patch_libultra_math aifc_decode aiff_extract_codebook vadpcm_enc extract_data_for_mio skyconv
+#' "$BASEPATH"/"$PRESET"/tools/Makefile
+#sed -i '' '2i\
+#CLANG := /usr/bin/clang
+#' "$BASEPATH"/"$PRESET"/tools/Makefile
+#sed -i '' '3i\
+#CLANG_PROGRAMS := tabledesign
+#' "$BASEPATH"/"$PRESET"/tools/Makefile
+#sed -i '' '57i\
+#define CLANG_COMPILE
+#' "$BASEPATH"/"$PRESET"/tools/Makefile
+#sed -i '' '58i\
+#$(1): $($1_SOURCES)
+#' "$BASEPATH"/"$PRESET"/tools/Makefile
+#sed -i '' '59i\
+#	$(CLANG) $(CFLAGS) $($1_CFLAGS) $$^ -o $$@ $(LDFLAGS) $($1_LDFLAGS)
+#' "$BASEPATH"/"$PRESET"/tools/Makefile
+#sed -i '' '60i\
+#endef
+#' "$BASEPATH"/"$PRESET"/tools/Makefile
 #sed -i '' '62i\
 #$(foreach p,$(CLANG_PROGRAMS),$(eval $(call CLANG_COMPILE,$(p))))
 #' "$BASEPATH"/"$PRESET"/tools/Makefile
@@ -1857,7 +1857,7 @@ elif [ `uname -o` = "Msys" ]; then
 	if [ "`uname|grep MINGW`" = "" ]; then
 		redecho "ERROR: MSYS2 users must use Minimal GNU for Windows (mingw)."
 		redecho Close MSYS terminal and run smlinux from MINGW64 or MINGW32.
-		endnow
+		exit
 	fi
     MSYS=1
 	OPEN=start
