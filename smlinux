@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0209-1601
+TIMESTAMP=2021-0209-1612
 
 STARTSEC=$SECONDS
 
@@ -483,7 +483,7 @@ else
 fi
 greenecho smlinux completed "$COMMAND" in "$SHOWTIME".
 if [ "$COMMAND" = "build" ] || [ "$COMMAND" = "rebuild" ] || [ "$COMMAND" = "update" ]; then
-	tput setab 0  # black background
+	#tput setab 0  # black background
 	tput setaf 6  # cyan text
 	echo "setup: " "$(($((PREPSEC - STARTSEC)) / 60))min $(($((PREPSEC - STARTSEC))% 60))sec"
 	echo "build: " "$(($((BUILDSEC - PREPSEC)) / 60))min $(($((BUILDSEC - PREPSEC))% 60))sec"
@@ -525,7 +525,7 @@ exit
 # 6    cyan      COLOR_CYAN      0,1,1
 # 7    white     COLOR_WHITE     1,1,1
 greenecho(){
-tput setab 0  # black background
+#tput setab 0  # black background
 tput setaf 2  # greeen text
 tput bold
 echo "$@"
@@ -534,7 +534,7 @@ tput setab 0  # black background
 tput setaf 7 # white text
 }
 pinkecho(){
-tput setab 0  # black background
+#tput setab 0  # black background
 tput setaf 5  # magenta text
 tput bold
 echo "$@"
@@ -543,21 +543,21 @@ tput setab 0  # black background
 tput setaf 7 # white text
 }
 redecho(){
-tput setab 0  # black background
+#tput setab 0  # black background
 tput setaf 1  # red text
 tput bold
 echo "$@"
 tput sgr0 # reset
-tput setab 0  # black background
+#tput setab 0  # black background
 tput setaf 7 # white text
 }
 bluecho(){
-tput setab 0  # black background
+#tput setab 0  # black background
 tput setaf 4  # red text
 tput bold
 echo "$@"
 tput sgr0 # reset
-tput setab 0  # black background
+#tput setab 0  # black background
 tput setaf 7 # white text
 }
 
@@ -2074,7 +2074,7 @@ elif [ "$COMMAND" = "upgrade" ]; then
 	greenecho Checking smlinux github repository for updates....
 	scriptUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 else   # The real start, the rest was script preperation and setup.
-	tput setab 0  # black background
+	# tput setab 0  # black background
 	tput setaf 6  # cyan text
 	echo '/------------------------------'"$TIMESTAMP"'----------------------------\'
 	echo "|   Super Mario 64 Install * Build * Update Script for Linux and macOS   |"
@@ -2720,7 +2720,7 @@ if [ -f "$HOME"/.smlinuxNopath ]; then
 	echo
 	for i in {1..30}
 do
-	tput setab 0  # black background
+	# tput setab 0  # black background
 	tput setaf 1  # red text
 	tput bold
 	printf "Please close this terminal.  "
