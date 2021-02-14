@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0210-1232
+TIMESTAMP=2021-0213-1705
 
 STARTSEC=$SECONDS
 
@@ -403,6 +403,10 @@ fi
 if [ -d /usr/local/opt/sdl2/include/SDL2 ] && [ ! -d "$BASEPATH"/"$PRESET"/include/SDL2 ]; then
 	ln -s /usr/local/opt/sdl2/include/SDL2 "$BASEPATH"/"$PRESET"/include
 fi
+# MLGari Suggestion Begins Here - Thanks!
+sed -i '' '1i\
+#include <stdio.h>
+' "$BASEPATH"/"$PRESET"/tools/aiff_extract_codebook.c
 # DROPBEAR's CHANGES BEGIN HERE - Thanks!
 sed -i '' 's|VERSION_CFLAGS += -DOSX_BUILD|VERSION_CFLAGS += -DOSX_BUILD -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/Makefile
 sed -i '' 's|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter|CFLAGS := -I../include -I. -Wall -Wextra -Wno-unused-parameter -Wno-implicit-function-declaration|g' "$BASEPATH"/"$PRESET"/tools/Makefile
@@ -952,11 +956,6 @@ if [ "$TARGET_WEB" = 1 ]; then
 	TARGET=web
 elif [ ! "$TARGET" = "dos" ]; then
 	TARGET=pc
-fi
-if [ -z "$MAXJOBS" ] && [ ! `nproc` = 1 ] && ([ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]); then
-	MAXJOBS=$((`nproc` - 1))
-elif [ -z "$MAXJOBS" ]; then
-	MAXJOBS=`nproc`
 fi
 if [ "$RENDER_API" = "D3D11" ]; then
 	WINDOW_API=DXGI
@@ -1895,6 +1894,8 @@ elif [ ! $# -eq 0 ]; then
 	else
 		COMMAND=dunno
 	fi
+else
+	COMMAND=dunno
 fi
 if [ "$COMMAND" = "dunno" ] && command -v whiptail &> /dev/null; then
 	export NEWT_COLORS='
@@ -2300,6 +2301,11 @@ else   # The real start, the rest was script preperation and setup.
 	if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		redecho ERROR: Need valid Super Mario 64 romfile to proceed.
 		endnow
+	fi
+	if [ -z "$MAXJOBS" ] && [ ! `nproc` = 1 ] && ([ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]); then
+		MAXJOBS=$((`nproc` - 1))
+	elif [ -z "$MAXJOBS" ]; then
+		MAXJOBS=`nproc`
 	fi
 	greenecho [2] Checking smlinux github repository for updates....
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
