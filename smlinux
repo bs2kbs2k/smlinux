@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0213-1818
+TIMESTAMP=2021-0213-1909
 
 STARTSEC=$SECONDS
 
@@ -2127,6 +2127,9 @@ else   # The real start, the rest was script preperation and setup.
 				echo Installing Apple XCode Command Line Tools
 				xcode-select --install
 				whiptail --title "smlinux paused" --msgbox "  Apple Xcode Command Line Tools were not found.\n\n     smlinux has started the Apple installer\n          but you must finish it.\n\nSelect OK to proceed when installation complete.\nIf this doesnt work you can install from Apple Developer website.\n" 13 55 2>&1
+			fi
+			if [ -f /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg ]; then
+				open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
 			fi
 			if command -v brew &> /dev/null && [ -d /Library/Developer/CommandLineTools/usr/bin ] ; then
 				brewdepends
