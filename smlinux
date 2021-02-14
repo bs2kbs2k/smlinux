@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0213-1705
+TIMESTAMP=2021-0213-1818
 
 STARTSEC=$SECONDS
 
@@ -285,6 +285,7 @@ fi
 
 brewdepends(){
 	brew unlink md5sha1sum &>/dev/null
+	brew update
 	brew upgrade
  	if ! command -v unzip &> /dev/null; then
  		brew install unzip
@@ -535,7 +536,7 @@ tput setaf 2  # greeen text
 tput bold
 echo "$@"
 tput sgr0 # reset
-tput setab 0  # black background
+#tput setab 0  # black background
 tput setaf 7 # white text
 }
 pinkecho(){
