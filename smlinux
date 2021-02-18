@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0215-1351
+TIMESTAMP=2021-0217-1908
 
 STARTSEC=$SECONDS
 
@@ -203,6 +203,20 @@ else
 do
 	if [ ! `echo $PATH | grep "$HOME"/"$folder"` = "" ]; then
 		PATHDIR="$HOME"/"$folder"
+		if [ ! -d "$PATHDIR" ]; then
+			if ! mkdir "$PATHDIR"; then
+				if [ "$folder" = "Applications/bin"]; then
+					mkdir "$HOME"/Applications
+					mkdir "$PATHDIR"
+				else
+					mkdir "$HOME"/.local
+					if ! mkdir "$PATHDIR"; then
+						mkdir "$HOME"/.local/share
+						mkdir "$PATHDIR"
+					fi
+				fi
+			fi
+		fi
 		return
 	fi
 done
@@ -210,10 +224,11 @@ done
 		mkdir "$HOME"/bin
 	fi
 	export PATH=$HOME/bin:$PATH
+	PATH=$HOME/bin:$PATH
 	PATHDIR=$HOME/bin
 	touch "$HOME"/.smlinuxNopath
 	if [ -f "$HOME"/.bashrc ]; then
-		bluecho Adding $HOME/bin to bash path...
+		bluecho Adding $HOME/bin to bash/zsh path...
 		echo 'export PATH=$HOME/bin:$PATH' >>~/.bashrc
 	fi
 	if [ -f "$HOME"/.zshrc ]; then
@@ -2077,7 +2092,6 @@ elif [ "$COMMAND" = "upgrade" ]; then
 	greenecho Checking smlinux github repository for updates....
 	scriptUpdate "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 else   # The real start, the rest was script preperation and setup.
-	# tput setab 0  # black background
 	tput setaf 6  # cyan text
 	echo '/------------------------------'"$TIMESTAMP"'----------------------------\'
 	echo "|   Super Mario 64 Install * Build * Update Script for Linux and macOS   |"
