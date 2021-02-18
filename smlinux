@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0217-1908
+TIMESTAMP=2021-0217-1927
 
 STARTSEC=$SECONDS
 
@@ -205,7 +205,7 @@ do
 		PATHDIR="$HOME"/"$folder"
 		if [ ! -d "$PATHDIR" ]; then
 			if ! mkdir "$PATHDIR"; then
-				if [ "$folder" = "Applications/bin"]; then
+				if [ "$folder" = "Applications/bin"] || [ "$folder" = "Applications/.bin"]; then
 					mkdir "$HOME"/Applications
 					mkdir "$PATHDIR"
 				else
