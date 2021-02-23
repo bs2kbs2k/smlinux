@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-0217-1927
+TIMESTAMP=2021-02-22-1900
 
 STARTSEC=$SECONDS
 
@@ -1372,10 +1372,11 @@ elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
 		wget -q https://cdn.discordapp.com/attachments/727722992137666573/768506877436755988/RENDER96_V1.4.2_Luigi.zip -P "$SMLINUX"/SGI
 	fi
 elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
-	SGIFILE=render96_coop.zip
+	SGIFILE=RENDER96_2.1_COOP.7z
 	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
 		bluecho Downloading "$SGIFILE"...
-		wget https://sm64pc.info/downloads/model_pack/render96_coop.zip -P "$SMLINUX"/SGI
+		wget https://cdn.discordapp.com/attachments/752628516075470998/795348384399097866/RENDER96_2.1_COOP.7z -P "$SMLINUX"/SGI
+		# wget https://sm64pc.info/downloads/model_pack/render96_coop.zip -P "$SMLINUX"/SGI
 	fi
 else
 	SGIFILE=RENDER96_V1.3.zip
@@ -1981,7 +1982,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		exit
 	fi
 	bluecho Loading "$SMLINUX"/smlinuxcfg.txt...
-	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
+	loadconfig
 	#Play a sound clip for no reason - thank you for playing my game.
 	if [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ]; then
 		if [ -f "$BASEPATH"/sm64pc/sound/samples/sfx_mario_peach/0D.aiff ]; then
@@ -1995,7 +1996,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		fi
 	fi
 else
-	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
+	loadconfig
 fi
 SAVEDIR="$SHARE"/"$PRESET"
 if [ "$COMMAND" = "smconfig" ] && [ -f "$SAVEDIR"/sm64config.txt ] ; then
@@ -2217,7 +2218,12 @@ else   # The real start, the rest was script preperation and setup.
 	fi
 	if [ ! "$COMMAND" = "help" ] && [ ! "$COMMAND" = "depends" ] && [ "$CONFIG" = 1 ]; then
 		doconfig
-		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
+		loadconfig
+	fi
+	if [ -z "$MAXJOBS" ] && [ ! `nproc` = 1 ] && ([ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]); then
+		MAXJOBS=$((`nproc` - 1))
+	elif [ -z "$MAXJOBS" ]; then
+		MAXJOBS=`nproc`
 	fi
 	if [ "$PRESET" = "sm64nx" ] && ([ ! -d "$BASEPATH"/"$PRESET/build" ] || [ "$COMMAND" = "depends" ]); then
 		bluecho "Installing required build tools for sm64nx..."
@@ -2319,11 +2325,6 @@ else   # The real start, the rest was script preperation and setup.
 	if [ ! -f "$SMLINUX"/baserom."$VERSION".z64 ]; then
 		redecho ERROR: Need valid Super Mario 64 romfile to proceed.
 		endnow
-	fi
-	if [ -z "$MAXJOBS" ] && [ ! `nproc` = 1 ] && ([ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]); then
-		MAXJOBS=$((`nproc` - 1))
-	elif [ -z "$MAXJOBS" ]; then
-		MAXJOBS=`nproc`
 	fi
 	greenecho [2] Checking smlinux github repository for updates....
 	if [ "$AutoUpdate" = 1 ] || [ "$COMMAND" = "upgrade" ]; then
@@ -2435,8 +2436,8 @@ elif [ "$COMMAND" = "update" ]; then
 		pinkecho Warning: MODELPACK selected without InstallHD.
 		dosgi
 	else
-		pinkecho Warning: InstallHD=0 so HD add-ons will not be applied or updated.
-		pinkecho NOTE:    InstallHD=0 does not remove addons applied before update.
+		pinkecho NOTE: InstallHD=0 so HD add-ons will not be applied or updated.
+		pinkecho NOTE: InstallHD=0 does not remove addons applied before update.
 	fi
 	if [ ! "$ANDROID" = 0 ] && [ -d "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/res/gfx ]; then
 		echo Updating Android basepack...
