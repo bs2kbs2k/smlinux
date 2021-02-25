@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-02-25-0944
+TIMESTAMP=2021-02-25-1032
 
 STARTSEC=$SECONDS
 
@@ -341,7 +341,7 @@ cp -n "$SMLINUX"/"$VERSION"/.assets-local.txt "$BASEPATH"/"$PRESET"
 pathupdate(){
 echo old smlinux file structure found....
 SMLINUX="$SHARE"/sm64pc
-loadconfig
+loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 SMLINUX="$SHARE"/smlinux
 if [ ! -d "$SHARE"/smlinux/.git ] &&  [ -d "$SHARE"/sm64pc/.git ]; then
 	echo Moving smlinux repository to "$SMLINUX"
@@ -1166,7 +1166,7 @@ else
 		echo "Render 96 SGI model pack found, skipping model application."
 	elif [ "$EXTERNAL_DATA" = 1 ] && [ "$MODELPACK" = 1 ]; then
 		dosgi
-	elif [ ! "$TARGET" = "dos" ] &&  [ ! "$GIT" = "render96/render96ex" ] ; then
+	elif [ ! "$TARGET" = "dos" ]; then
 		cd "$BASEPATH"/"$PRESET"
 		if [ ! -d actors.bak ]; then
 			cp -r actors actors.bak
@@ -1201,20 +1201,20 @@ else
 				redecho ERROR: Could not extract HD Bowser. Please install unrar, unar, or p7zip-rar.
 			fi
 		fi
+	fi
+	if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
+		echo 3D coin V2 patchfile found, skipping application.
+	else
+		if [ "$PRESET" = "sm64pc" ]; then
+			wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch -P enhancements
+		elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
+			wget -q https://cdn.discordapp.com/attachments/710311726708686900/814441166879195146/3d_coin_v2_nightly_coop.patch -P enhancements
+		elif [ "$ANDROID" = 0 ]; then
+			wget -q https://cdn.discordapp.com/attachments/721806706547490868/725041183700680807/3d_coin_v2_nightly.patch -P enhancements
+		fi
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
-			echo 3D coin V2 patchfile found, skipping application.
-		else
-			if [ "$PRESET" = "sm64pc" ]; then
-				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch -P enhancements
-			elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
-				wget -q https://cdn.discordapp.com/attachments/710311726708686900/814441166879195146/3d_coin_v2_nightly_coop.patch -P enhancements
-			elif [ "$ANDROID" = 0 ]; then
-				wget -q https://cdn.discordapp.com/attachments/721806706547490868/725041183700680807/3d_coin_v2_nightly.patch -P enhancements
-			fi
-			if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
-				bluecho Applying 3D Coin Patch...
-				git apply --whitespace=nowarn enhancements/3d_coin_v2*.patch
-			fi
+			bluecho Applying 3D Coin Patch...
+			git apply --whitespace=nowarn enhancements/3d_coin_v2*.patch
 		fi
 	fi
 	if [ "$EXTERNAL_DATA" = 1 ]; then
@@ -1359,12 +1359,8 @@ if [ "$PRESET" = "sm64nx" ]; then
 	fi
 elif [ "$PRESET" = "r96alpha" ] || [ "$PRESET" = "r96proto" ] || [ "$PRESET" = "r96tester" ]; then
 	SGIFILE=Render96_v2.1_Updated_Goddard.7z
-	# SGIFILE=Render96_v2.1_Switch_Support.7z
-	# SGIFILE=Render96_v2.1.7z
 	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
 		bluecho Downloading "$SGIFILE"...
-		# wget -q https://cdn.discordapp.com/attachments/730551213376143431/794366035871924244/Render96_v2.1.7z -P "$SMLINUX"/SGI
-		# wget -q https://cdn.discordapp.com/attachments/730551213376143431/796298074833289226/Render96_v2.1_Switch_Support.7z -P "$SMLINUX"/SGI
 		wget -q https://cdn.discordapp.com/attachments/730551213376143431/800692030354489344/Render96_v2.1_Updated_Goddard.7z -P "$SMLINUX"/SGI
 	fi
 elif [ "$GIT" = "render96/render96ex" ] || [ "$PRESET" = "r96droid" ]; then
@@ -1378,7 +1374,6 @@ elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
 	if [ ! -f "$SMLINUX"/SGI/"$SGIFILE" ]; then
 		bluecho Downloading "$SGIFILE"...
 		wget https://cdn.discordapp.com/attachments/752628516075470998/795348384399097866/RENDER96_2.1_COOP.7z -P "$SMLINUX"/SGI
-		# wget https://sm64pc.info/downloads/model_pack/render96_coop.zip -P "$SMLINUX"/SGI
 	fi
 else
 	SGIFILE=RENDER96_V1.3.zip
@@ -1984,7 +1979,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		exit
 	fi
 	bluecho Loading "$SMLINUX"/smlinuxcfg.txt...
-	loadconfig
+	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	#Play a sound clip for no reason - thank you for playing my game.
 	if [ -f /usr/bin/mplayer ] || [ -f /bin/mplayer ]; then
 		if [ -f "$BASEPATH"/sm64pc/sound/samples/sfx_mario_peach/0D.aiff ]; then
@@ -1998,7 +1993,7 @@ if [ ! -f ~/.smlinuxUpdate ]; then
 		fi
 	fi
 else
-	loadconfig
+	loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 fi
 SAVEDIR="$SHARE"/"$PRESET"
 if [ "$COMMAND" = "smconfig" ] && [ -f "$SAVEDIR"/sm64config.txt ] ; then
@@ -2220,7 +2215,7 @@ else   # The real start, the rest was script preperation and setup.
 	fi
 	if [ ! "$COMMAND" = "help" ] && [ ! "$COMMAND" = "depends" ] && [ "$CONFIG" = 1 ]; then
 		doconfig
-		loadconfig
+		loadconfig "$COMMAND" "$2" "$3" "$4" "$5" "$6"
 	fi
 	if [ -z "$MAXJOBS" ] && [ ! `nproc` = 1 ] && ([ "$PRESET" = "sm64nx" ] || [ "$OSX_BUILD" = 1 ]); then
 		MAXJOBS=$((`nproc` - 1))
