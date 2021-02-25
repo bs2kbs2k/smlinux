@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-02-25-1032
+TIMESTAMP=2021-02-25-1450
 
 STARTSEC=$SECONDS
 
@@ -2359,7 +2359,9 @@ elif [ "$COMMAND" = "update" ]; then
 		redecho ERROR: No "$BASEPATH"/"$PRESET" folder to update!
 		echo Specify smlinux build for a fresh build.
 		exit
-	fi
+	elif [ ! -d "$BASEPATH"/"$PRESET" ]; then
+		ln -s "$SMLINUX"/baserom."$VERSION".z64 "$BASEPATH"/"$PRESET"/build/"$VERSION"_"$TARGET"/baserom."$VERSION".z64
+ 	fi
 	greenecho [3] Checking "$PRESET" github repository for updates...
 	if [ ! "$ANDROID" = 0 ]; then
 		cd "$BASEPATH"/"$ANDROID"
