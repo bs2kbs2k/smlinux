@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-02-22-1900
+TIMESTAMP=2021-02-25-0858
 
 STARTSEC=$SECONDS
 
@@ -1206,7 +1206,9 @@ else
 		else
 			if [ "$PRESET" = "sm64pc" ]; then
 				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch -P enhancements
-			elif [ "$ANDROID" = 0 ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ]; then
+			elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
+				wget -q https://cdn.discordapp.com/attachments/710311726708686900/814441166879195146/3d_coin_v2_nightly_coop.patch -p enhancements
+			elif [ "$ANDROID" = 0 ]; then
 				wget -q https://cdn.discordapp.com/attachments/721806706547490868/725041183700680807/3d_coin_v2_nightly.patch -P enhancements
 			fi
 			if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
