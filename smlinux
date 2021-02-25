@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-02-25-0858
+TIMESTAMP=2021-02-25-0940
 
 STARTSEC=$SECONDS
 
@@ -1204,10 +1204,11 @@ else
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
 			echo 3D coin V2 patchfile found, skipping application.
 		else
+			echo YO BITCH GIT IS $GIT PWD is $pwd
 			if [ "$PRESET" = "sm64pc" ]; then
 				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch -P enhancements
 			elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
-				wget -q https://cdn.discordapp.com/attachments/710311726708686900/814441166879195146/3d_coin_v2_nightly_coop.patch -p enhancements
+				wget -q https://cdn.discordapp.com/attachments/710311726708686900/814441166879195146/3d_coin_v2_nightly_coop.patch -P enhancements
 			elif [ "$ANDROID" = 0 ]; then
 				wget -q https://cdn.discordapp.com/attachments/721806706547490868/725041183700680807/3d_coin_v2_nightly.patch -P enhancements
 			fi
@@ -1215,6 +1216,7 @@ else
 				bluecho Applying 3D Coin Patch...
 				git apply --whitespace=nowarn enhancements/3d_coin_v2*.patch
 			fi
+			exit
 		fi
 	fi
 	if [ "$EXTERNAL_DATA" = 1 ]; then
