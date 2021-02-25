@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-02-25-0940
+TIMESTAMP=2021-02-25-0944
 
 STARTSEC=$SECONDS
 
@@ -1326,7 +1326,7 @@ if [ ! -d "$SMLINUX"/SGI ]; then
 	mkdir "$SMLINUX"/SGI
 fi
 cd "$BASEPATH"/"$PRESET"
-if [ -f enhancements/3d_coin*.patch ] && [ ! "$GIT" = "s4Ys369/cheaterex" ]; then
+if [ -f enhancements/3d_coin*.patch ] && [ ! "$GIT" = "s4Ys369/cheaterex" ] && [ ! "$GIT" = "djoslin0/sm64ex-coop" ]; then
 	bluecho Removing 3D coins...
 	git apply -R --whitespace=nowarn enhancements/3d_coin*.patch
 	rm enhancements/3d_coin*.patch
