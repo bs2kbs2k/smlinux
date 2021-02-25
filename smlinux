@@ -1204,7 +1204,6 @@ else
 		if [ -f "$BASEPATH"/"$PRESET"/enhancements/3d_coin_v2*.patch ]; then
 			echo 3D coin V2 patchfile found, skipping application.
 		else
-			echo YO BITCH GIT IS $GIT PWD is $pwd
 			if [ "$PRESET" = "sm64pc" ]; then
 				wget -q https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch -P enhancements
 			elif [ "$GIT" = "djoslin0/sm64ex-coop" ]; then
@@ -1216,7 +1215,6 @@ else
 				bluecho Applying 3D Coin Patch...
 				git apply --whitespace=nowarn enhancements/3d_coin_v2*.patch
 			fi
-			exit
 		fi
 	fi
 	if [ "$EXTERNAL_DATA" = 1 ]; then
