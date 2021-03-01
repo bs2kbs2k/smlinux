@@ -5,7 +5,7 @@
 # Dependencies for many distros are listed on the github FAQ.
 # Please let me know if incorrect or if you have another distro to add.
 # Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-02-25-1450
+TIMESTAMP=2021-03-01-1500
 
 STARTSEC=$SECONDS
 
@@ -1527,6 +1527,8 @@ cd "$BASEPATH"/"$PRESET"
 if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 	echo The Dynamic Options System is included with cheaterex, skipping patch.
 	return
+elif [ ! "VERSION" = "us" ]; then
+	echo The Dynamic Options System is only supported with US ROM, skipping patch.
 elif [ "$DYNOS" = 0 ]; then
 	removedynos
 elif [ -f enhancements/DynOS.0.6.patch ]; then
