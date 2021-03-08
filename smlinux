@@ -1,11 +1,12 @@
 #!/bin/bash
-# Super Mario 64 Install * Build * Update Script for Linux and macOS
-# This script will build & install Super Mario 64 under Ubuntu or macOS.
-# Other distros must edit config file when prompted to set Linux= command.
-# Dependencies for many distros are listed on the github FAQ.
-# Please let me know if incorrect or if you have another distro to add.
-# Script updates from github.com/enigma9o7/smlinux unless AutoUpdate=0.
-TIMESTAMP=2021-03-01-1500
+# Super Mario 64 Install * Build * Update Script for the bourne again shell.
+# This script will build & install Super Mario 64 using mainly GNU tools
+# Depenency installation using apt/pacman/brew [debian/ubuntu/arch/mingw/macOS] included.
+# Dependencies for distros with other package managers are listed in github FAQ.
+# Please let me know if incorrect or if you have anything to add.
+# This script automatically updates itself using git from github.com/enigma9o7/smlinux unless AutoUpdate=0.
+# If you are making local changes you will want to disable automatic updates.
+TIMESTAMP=2021-03-08-1118
 
 STARTSEC=$SECONDS
 
@@ -1527,7 +1528,7 @@ cd "$BASEPATH"/"$PRESET"
 if [ "$GIT" = "s4Ys369/cheaterex" ]; then
 	echo The Dynamic Options System is included with cheaterex, skipping patch.
 	return
-elif [ ! "VERSION" = "us" ]; then
+elif [ ! "$VERSION" = "us" ]; then
 	echo The Dynamic Options System is only supported with US ROM, skipping patch.
 elif [ "$DYNOS" = 0 ]; then
 	removedynos
